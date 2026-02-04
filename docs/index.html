@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -27,7 +28,10 @@
         }
     </script>
     <style>
-        body { background-color: #F8FAFC; }
+        body {
+            background-color: #F8FAFC;
+        }
+
         .blob {
             position: absolute;
             filter: blur(80px);
@@ -35,66 +39,90 @@
             opacity: 0.4;
             animation: float 10s infinite ease-in-out;
         }
+
         @keyframes float {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
+            0% {
+                transform: translate(0px, 0px) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+
+            100% {
+                transform: translate(0px, 0px) scale(1);
+            }
         }
+
         .glass {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
+
         .phone-mockup {
             box-shadow: 0 20px 50px -12px rgba(0, 128, 128, 0.25);
             border: 8px solid white;
         }
     </style>
 </head>
+
 <body class="text-slate-800 antialiased overflow-x-hidden selection:bg-primary/20">
 
     <div class="blob bg-primary w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
-    <div class="blob bg-accent w-80 h-80 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3 animation-delay-2000"></div>
+    <div
+        class="blob bg-accent w-80 h-80 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3 animation-delay-2000">
+    </div>
 
     <nav class="w-full py-6 px-6 flex justify-between items-center max-w-6xl mx-auto">
         <div class="flex items-center gap-2">
             <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
                 <i data-lucide="flame" class="w-5 h-5"></i>
             </div>
-            <span class="font-bold text-xl tracking-tight">MehrChain</span>
+            <span class="font-bold text-xl tracking-tight text-slate-800">MehrChain</span>
         </div>
-        <a href="https://github.com/farzad-bahadorifar/mehrchain" target="_blank" class="text-sm font-medium text-slate-500 hover:text-primary transition-colors flex items-center gap-2">
-            <i data-lucide="github" class="w-4 h-4"></i> GitHub
+
+        <a href="https://github.com/farzad-bahadorifar/mehrchain" target="_blank"
+            class="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 transition-all shadow-md hover:shadow-lg">
+            <i data-lucide="github" class="w-4 h-4"></i>
+            <span>Contribute on GitHub</span>
         </a>
     </nav>
 
     <main class="flex flex-col lg:flex-row items-center justify-between max-w-6xl mx-auto px-6 py-12 lg:py-24 gap-12">
-        
+
         <div class="flex-1 text-center lg:text-left space-y-8">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
                 <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                 </span>
                 Active Development
             </div>
-            
+
             <h1 class="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
                 Small Acts.<br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Big Change.</span>
             </h1>
-            
+
             <p class="text-lg text-slate-500 max-w-lg mx-auto lg:mx-0 leading-relaxed">
                 "You, light your own lamp." — Rumi.<br>
                 A mindful companion designed to help you commit to positive goals and build empowering habits.
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <a href="#" class="px-8 py-4 bg-primary text-white rounded-2xl font-bold text-lg shadow-lg shadow-primary/30 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
+                <a href="#"
+                    class="px-8 py-4 bg-primary text-white rounded-2xl font-bold text-lg shadow-lg shadow-primary/30 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
                     Launch Web App <i data-lucide="sparkles" class="w-5 h-5"></i>
                 </a>
-                <a href="#features" class="px-8 py-4 bg-white text-slate-600 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all">
+                <a href="#features"
+                    class="px-8 py-4 bg-white text-slate-600 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all">
                     How it works
                 </a>
             </div>
@@ -102,22 +130,24 @@
 
         <div class="flex-1 relative w-full max-w-sm lg:max-w-md mx-auto">
             <div class="relative z-10 bg-white rounded-[2.5rem] overflow-hidden phone-mockup aspect-[9/19.5]">
+
                 <div class="w-full h-full bg-slate-50 flex flex-col items-center justify-center text-center p-8">
-                    <img src="https://raw.githubusercontent.com/farzad-bahadorifar/mehrchain-frontend/main/src/public/assets/mero.png" alt="Mero" class="w-32 h-32 object-contain mb-4 drop-shadow-xl animate-bounce">
+                    <img src="https://cdn.jsdelivr.net/gh/farzad-bahadorifar/mehrchain-frontend@main/src/public/assets/mero.png"
+                        alt="Mero" class="w-32 max-w-[120px] h-auto object-contain mb-6 drop-shadow-xl animate-bounce">
+
                     <h3 class="font-bold text-primary text-xl">MehrChain</h3>
                     <p class="text-sm text-slate-400 mt-2">App Screenshot Goes Here</p>
                 </div>
             </div>
-            
-            <div class="absolute top-1/4 -right-12 glass p-4 rounded-2xl shadow-sm animate-pulse hidden lg:block">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                        <i data-lucide="check" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-bold uppercase">Streak</p>
-                        <p class="font-bold text-slate-700">12 Days 🔥</p>
-                    </div>
+
+            <div
+                class="absolute top-1/4 -right-12 glass p-4 rounded-2xl shadow-sm animate-pulse hidden lg:flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                    <i data-lucide="check" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase">Streak</p>
+                    <p class="font-bold text-slate-700">12 Days 🔥</p>
                 </div>
             </div>
         </div>
@@ -126,26 +156,33 @@
     <section id="features" class="py-24 bg-white/50">
         <div class="max-w-6xl mx-auto px-6">
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+                <div
+                    class="p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
                     <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6">
                         <i data-lucide="zap" class="w-6 h-6"></i>
                     </div>
                     <h3 class="font-bold text-xl mb-3">Guest-First</h3>
-                    <p class="text-slate-500 leading-relaxed">No login walls. Start your journey immediately. We respect your time and privacy.</p>
+                    <p class="text-slate-500 leading-relaxed">No login walls. Start your journey immediately. We respect
+                        your time and privacy.</p>
                 </div>
-                <div class="p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-                    <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-500 mb-6">
+                <div
+                    class="p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+                    <div
+                        class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-500 mb-6">
                         <i data-lucide="flame" class="w-6 h-6"></i>
                     </div>
                     <h3 class="font-bold text-xl mb-3">Chain Effects</h3>
-                    <p class="text-slate-500 leading-relaxed">Visualize how small, consistent acts create a massive ripple effect in your life.</p>
+                    <p class="text-slate-500 leading-relaxed">Visualize how small, consistent acts create a massive
+                        ripple effect in your life.</p>
                 </div>
-                <div class="p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+                <div
+                    class="p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
                     <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-500 mb-6">
                         <i data-lucide="smartphone" class="w-6 h-6"></i>
                     </div>
                     <h3 class="font-bold text-xl mb-3">PWA Ready</h3>
-                    <p class="text-slate-500 leading-relaxed">Install on any device. Works offline. An app store experience, without the store.</p>
+                    <p class="text-slate-500 leading-relaxed">Install on any device. Works offline. An app store
+                        experience, without the store.</p>
                 </div>
             </div>
         </div>
@@ -163,4 +200,5 @@
         lucide.createIcons();
     </script>
 </body>
+
 </html>
