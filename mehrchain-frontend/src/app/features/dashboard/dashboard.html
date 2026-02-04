@@ -41,4 +41,9 @@
     <lucide-icon name="plus" class="w-8 h-8"></lucide-icon>
   </button>
 
+  @if (isModalOpen()) {
+  <app-new-commitment-modal (close)="isModalOpen.set(false)" (submit)="handleNewCommitment($event)">
+  </app-new-commitment-modal>
+  }
+
 </div>
