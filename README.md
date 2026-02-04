@@ -1,4 +1,4 @@
-# 🐧 MehrChain
+# MehrChain
 
 **Small Acts. Big Change.**
 
