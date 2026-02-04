@@ -4,69 +4,59 @@
 
 MehrChain is a mindful companion designed to help you commit to positive goals, track your progress, and build empowering habits through small, consistent actions.
 
-> 🚀 **Project Status:** Frontend MVP Completed | Backend Planning Phase
+Built with the latest web technologies, it focuses on a clean UI, smooth interactions, and a supportive user experience.
+
+> 🚀 **Project Status:** Active Development (MVP Phase)
 
 ---
 
-## 📸 Screenshots
+## ✨ Features (So Far)
 
-*(You can upload your screenshots to the 'public/assets' folder later and link them here)*
+* **Onboarding:** A smooth, interactive welcome flow with our mascot, Mero.
+* **Dashboard:** Visualize your active commitments and overall streak.
+* **Commitment Tracking:** Simple "I did it today" check-ins.
+* **Smart Modal:** Create custom commitments with flexible durations and categories.
+* **PWA Ready:** Installable on mobile devices with a native app-like feel.
 
----
+## 🛠 Tech Stack
 
-## 🛠 Tech Stack & Roadmap
+We are using the cutting-edge Angular ecosystem:
 
-We aim for a robust, type-safe full-stack architecture using a Monorepo approach.
-
-### 🎨 Frontend (Current State - Done)
 * **Framework:** [Angular 21+](https://angular.dev/) (Standalone Components, Signals, Control Flow)
 * **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
 * **Icons:** [Lucide Angular](https://lucide.dev/)
-* **State Management:** Angular Native Signals
-* **Platform:** PWA (Progressive Web App) - Installable on Mobile
+* **Architecture:** Feature-Sliced Design (Core/Features/Shared)
+* **State Management:** Angular Signals (Native)
 
-### ⚙️ Backend (Help Wanted! 🚧)
-We are planning to build the backend using the following stack. **We are actively looking for contributors to help initialize and build this layer.**
+## 🚀 Getting Started
 
-* **Framework:** [NestJS](https://nestjs.com/) (Highly compatible with Angular architecture)
-* **Database:** [PostgreSQL](https://www.postgresql.org/)
-* **ORM:** [Prisma](https://www.prisma.io/)
-* **Authentication:** JWT / Firebase Auth
-* **Architecture:** Nx Monorepo (Planned)
-
----
-
-## 🤝 Call for Contributors
-
-**Are you a Backend Developer or a Full-stack Engineer?**
-
-We have built a beautiful, functional Frontend PWA using the latest Angular features. Now, we need to bring it to life with a real backend.
-
-We are looking for contributors who can help with:
-1.  **Setting up NestJS:** Initializing the backend structure.
-2.  **Database Design:** Designing the schema for Users, Commitments, and Journey logs using PostgreSQL & Prisma.
-3.  **API Development:** Creating RESTful APIs to replace our frontend mock services.
-
-If you are passionate about building mindful technology and want to work with a modern stack, please open an Issue or submit a Pull Request!
-
----
-
-## 🚀 Running Locally
+Want to contribute or run it locally?
 
 1.  **Clone the repo:**
     ```bash
-    git clone [https://github.com/farzad-bahadorifar/mehrchain-frontend.git](https://github.com/farzad-bahadorifar/mehrchain-frontend.git)
+    git clone [https://github.com/your-username/mehrchain-frontend.git](https://github.com/your-username/mehrchain-frontend.git)
     ```
 2.  **Install dependencies:**
     ```bash
     npm install
     ```
-3.  **Run the frontend:**
+3.  **Run the development server:**
     ```bash
     ng serve
     ```
     Navigate to `http://localhost:4200/`.
 
+## 🤝 Contributing
+
+We are building an open-source community focused on **mindful technology**. We welcome contributors of all levels!
+
+**Where we need help right now:**
+* 🎨 **UI/UX:** Polishing the "Journey" page and animations.
+* ⚙️ **Features:** Implementing gamification and history tracking.
+* 🐛 **Testing:** Writing unit and E2E tests.
+
+Feel free to open an Issue or submit a Pull Request!
+
 ---
 
-*Made with ❤️ and ☕ by the MehrChain Community.*
+*Made with ❤️ and ☕ by the MehrChain Team.*
