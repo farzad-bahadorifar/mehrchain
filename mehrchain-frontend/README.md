@@ -1,59 +1,72 @@
-# MehrchainFrontend
+# 🐧 MehrChain
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.
+**Small Acts. Big Change.**
 
-## Development server
+MehrChain is a mindful companion designed to help you commit to positive goals, track your progress, and build empowering habits through small, consistent actions.
 
-To start a local development server, run:
+> 🚀 **Project Status:** Frontend MVP Completed | Backend Planning Phase
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 📸 Screenshots
 
-## Code scaffolding
+*(You can upload your screenshots to the 'public/assets' folder later and link them here)*
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 🛠 Tech Stack & Roadmap
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+We aim for a robust, type-safe full-stack architecture using a Monorepo approach.
 
-```bash
-ng generate --help
-```
+### 🎨 Frontend (Current State - Done)
+* **Framework:** [Angular 21+](https://angular.dev/) (Standalone Components, Signals, Control Flow)
+* **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
+* **Icons:** [Lucide Angular](https://lucide.dev/)
+* **State Management:** Angular Native Signals
+* **Platform:** PWA (Progressive Web App) - Installable on Mobile
 
-## Building
+### ⚙️ Backend (Help Wanted! 🚧)
+We are planning to build the backend using the following stack. **We are actively looking for contributors to help initialize and build this layer.**
 
-To build the project run:
+* **Framework:** [NestJS](https://nestjs.com/) (Highly compatible with Angular architecture)
+* **Database:** [PostgreSQL](https://www.postgresql.org/)
+* **ORM:** [Prisma](https://www.prisma.io/)
+* **Authentication:** JWT / Firebase Auth
+* **Architecture:** Nx Monorepo (Planned)
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🤝 Call for Contributors
 
-## Running unit tests
+**Are you a Backend Developer or a Full-stack Engineer?**
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+We have built a beautiful, functional Frontend PWA using the latest Angular features. Now, we need to bring it to life with a real backend.
 
-```bash
-ng test
-```
+We are looking for contributors who can help with:
+1.  **Setting up NestJS:** Initializing the backend structure.
+2.  **Database Design:** Designing the schema for Users, Commitments, and Journey logs using PostgreSQL & Prisma.
+3.  **API Development:** Creating RESTful APIs to replace our frontend mock services.
 
-## Running end-to-end tests
+If you are passionate about building mindful technology and want to work with a modern stack, please open an Issue or submit a Pull Request!
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## 🚀 Running Locally
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+1.  **Clone the repo:**
+    ```bash
+    git clone [https://github.com/farzad-bahadorifar/mehrchain-frontend.git](https://github.com/farzad-bahadorifar/mehrchain-frontend.git)
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Run the frontend:**
+    ```bash
+    ng serve
+    ```
+    Navigate to `http://localhost:4200/`.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+*Made with ❤️ and ☕ by the MehrChain Community.*
