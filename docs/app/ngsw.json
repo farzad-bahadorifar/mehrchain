@@ -1,0 +1,87 @@
+{
+  "configVersion": 1,
+  "timestamp": 1770366057690,
+  "index": "mehrchain/app/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "mehrchain/app/chunk-DK4XJVIK.js",
+        "mehrchain/app/chunk-IIFQNX7Y.js",
+        "mehrchain/app/chunk-LJVRMDT4.js",
+        "mehrchain/app/chunk-P6TSKXLI.js",
+        "mehrchain/app/favicon.ico",
+        "mehrchain/app/index.html",
+        "mehrchain/app/main-BZTXL77F.js",
+        "mehrchain/app/manifest.webmanifest",
+        "mehrchain/app/styles-5RCOYF25.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "mehrchain/app/assets/mero.png",
+        "mehrchain/app/icons/icon-128x128.png",
+        "mehrchain/app/icons/icon-144x144.png",
+        "mehrchain/app/icons/icon-152x152.png",
+        "mehrchain/app/icons/icon-192x192.png",
+        "mehrchain/app/icons/icon-384x384.png",
+        "mehrchain/app/icons/icon-512x512.png",
+        "mehrchain/app/icons/icon-72x72.png",
+        "mehrchain/app/icons/icon-96x96.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "mehrchain/app/assets/mero.png": "c7f37226a36fed044d7e129c0dffa067c9cecea8",
+    "mehrchain/app/chunk-DK4XJVIK.js": "993c10903dc6e47a4a941fc04595bf789b7b04ab",
+    "mehrchain/app/chunk-IIFQNX7Y.js": "6fba253103d1324468cac5ef717eabc77e7af18a",
+    "mehrchain/app/chunk-LJVRMDT4.js": "8fbfedb9afa1a1e5916f2d59104cf7eb5316d8c1",
+    "mehrchain/app/chunk-P6TSKXLI.js": "31fd21dc5b706cf9d03379807913653ff8b20d4e",
+    "mehrchain/app/favicon.ico": "00e2e6486939f73d94267025c2fe0a6a013062f1",
+    "mehrchain/app/icons/icon-128x128.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
+    "mehrchain/app/icons/icon-144x144.png": "b155fd5f2fd5d2ea7760721063003c4cd95fd783",
+    "mehrchain/app/icons/icon-152x152.png": "eae6e0f0c8afb8aaae339e2a569b43e9238e5e6c",
+    "mehrchain/app/icons/icon-192x192.png": "15c4180454633880d98674aa7394656196c91584",
+    "mehrchain/app/icons/icon-384x384.png": "94a915751ef6c9282df9aea405ad679230631814",
+    "mehrchain/app/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
+    "mehrchain/app/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
+    "mehrchain/app/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
+    "mehrchain/app/index.html": "d73e9235eceb3cb376f15a105cddacd3891bab09",
+    "mehrchain/app/main-BZTXL77F.js": "88ce7d27e9a9351ddb4b53c2d545c529c95c52e1",
+    "mehrchain/app/manifest.webmanifest": "3995ca1a89a2c6932cded89e56ee1e63341a6355",
+    "mehrchain/app/styles-5RCOYF25.css": "4f037ffcf9874046596ac1fdd536b4a11974295b"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
