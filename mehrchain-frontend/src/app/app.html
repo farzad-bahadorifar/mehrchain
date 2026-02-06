@@ -1,17 +1,19 @@
 <router-outlet />
 
-<nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-border/50 px-6 py-3 flex justify-around items-center z-40 safe-bottom">
-  
-  <a routerLink="/dashboard" routerLinkActive="text-primary bg-primary/10" class="flex flex-col items-center gap-1 p-2 rounded-xl text-muted-foreground transition-all">
-    <lucide-icon name="home" class="w-6 h-6"></lucide-icon>
-    <span class="text-[10px] font-bold">Home</span>
-  </a>
+@if (showNavbar()) {
+  <nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-border/50 px-6 py-3 flex justify-around items-center z-40 safe-bottom animate-fade-in">
+    
+    <a routerLink="/dashboard" routerLinkActive="text-primary bg-primary/10" class="flex flex-col items-center gap-1 p-2 rounded-xl text-muted-foreground transition-all">
+      <lucide-icon name="home" class="w-6 h-6"></lucide-icon>
+      <span class="text-[10px] font-bold">Home</span>
+    </a>
 
-  <div class="w-12"></div>
+    <div class="w-12"></div>
 
-  <a routerLink="/journey" routerLinkActive="text-primary bg-primary/10" class="flex flex-col items-center gap-1 p-2 rounded-xl text-muted-foreground transition-all">
-    <lucide-icon name="trending-up" class="w-6 h-6"></lucide-icon>
-    <span class="text-[10px] font-bold">Journey</span>
-  </a>
+    <a routerLink="/journey" routerLinkActive="text-primary bg-primary/10" class="flex flex-col items-center gap-1 p-2 rounded-xl text-muted-foreground transition-all">
+      <lucide-icon name="trending-up" class="w-6 h-6"></lucide-icon>
+      <span class="text-[10px] font-bold">Journey</span>
+    </a>
 
-</nav>
+  </nav>
+}

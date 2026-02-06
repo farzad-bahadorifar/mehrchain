@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,14 @@ import { LucideAngularModule } from 'lucide-angular';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('mehrchain-frontend');
+  private router = inject(Router);
+  showNavbar = signal(false);
+
+  constructor() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.showNavbar.set(event.urlAfterRedirects !== '/');
+    });
+  }
 }
