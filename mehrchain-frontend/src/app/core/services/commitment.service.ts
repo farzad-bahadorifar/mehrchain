@@ -52,7 +52,8 @@ export class CommitmentService {
       category: data.category as any,
       why: data.why,
       rippleEffects: data.rippleEffects,
-      startDate: new Date().toISOString()
+      startDate: new Date().toISOString(),
+      history: []
     };
 
     this.commitmentsSignal.update(list => [newCommitment, ...list]);
@@ -63,12 +64,14 @@ export class CommitmentService {
     this.commitmentsSignal.update(list =>
       list.map(c => {
         if (c.id === id && !c.isCompletedToday) {
+          const currentHistory = c.history || [];
           return {
             ...c,
             isCompletedToday: true,
             currentStreak: c.currentStreak + 1,
             currentDay: Math.min(c.currentDay + 1, c.totalDays),
-            lastCompletedDate: todayStr
+            lastCompletedDate: todayStr,
+            history: [...currentHistory, todayStr]
           };
         }
         return c;

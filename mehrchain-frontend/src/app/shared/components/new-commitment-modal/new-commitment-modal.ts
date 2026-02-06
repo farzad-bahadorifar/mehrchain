@@ -22,7 +22,7 @@ export class NewCommitmentModal {
   categories = [
     { id: 'health', icon: 'heart', label: 'Health' },
     { id: 'environment', icon: 'leaf', label: 'Nature' },
-    { id: 'community', icon: 'users', label: 'People' },
+    { id: 'community', icon: 'users', label: 'Community' },
     { id: 'growth', icon: 'trending-up', label: 'Growth' }
   ];
 

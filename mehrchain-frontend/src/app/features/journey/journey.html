@@ -1,0 +1,63 @@
+<div class="min-h-screen bg-background pb-24 px-5 pt-6 font-sans">
+
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-foreground">My Journey</h1>
+            <p class="text-sm text-muted-foreground">Every step matters.</p>
+        </div>
+        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <lucide-icon name="trending-up" class="w-5 h-5"></lucide-icon>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-border/50 mb-6">
+        <div class="flex items-center gap-2 mb-4">
+            <lucide-icon name="flame" class="w-5 h-5 text-orange-500"></lucide-icon>
+            <h2 class="font-bold text-lg">Activity Log</h2>
+        </div>
+
+        <app-heatmap-calendar [completedDates]="allHistory()" />
+
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="bg-white p-4 rounded-2xl border border-border/50">
+            <p class="text-xs text-muted-foreground font-bold uppercase mb-1">Total Activities</p>
+            <p class="text-2xl font-bold text-foreground">{{ totalActivities() }}</p>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-border/50">
+            <p class="text-xs text-muted-foreground font-bold uppercase mb-1">Longest Streak</p>
+            <p class="text-2xl font-bold text-foreground">{{ longestStreak() }}</p>
+        </div>
+    </div>
+
+    <div class="space-y-4">
+        <h3 class="font-bold text-lg px-1">Recent Activity</h3>
+
+        @if (recentActivities().length === 0) {
+        <div class="text-center py-8 text-muted-foreground text-sm bg-muted/30 rounded-2xl">
+            No activities yet. Start a commitment!
+        </div>
+        } @else {
+
+        @for (log of recentActivities(); track log.title + log.date) {
+        <div class="bg-white p-4 rounded-2xl border border-border/50 flex items-center justify-between animate-fade-in">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <lucide-icon [name]="log.icon" class="w-4 h-4"></lucide-icon>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-foreground">{{ log.title }}</p>
+                    <p class="text-[10px] text-muted-foreground">{{ log.date }}</p>
+                </div>
+            </div>
+            <div class="text-green-500">
+                <lucide-icon name="check-circle-2" class="w-4 h-4"></lucide-icon>
+            </div>
+        </div>
+        }
+
+        }
+    </div>
+
+</div>
