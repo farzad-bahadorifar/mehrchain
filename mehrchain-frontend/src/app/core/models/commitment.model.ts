@@ -10,4 +10,5 @@ export interface Commitment {
   rippleEffects?: string[];
   startDate: string;
   lastCompletedDate?: string;
+  history?: string[];
 }

@@ -2,7 +2,7 @@ import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core
 import { provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app.routes';
-import { LucideAngularModule, Home, Plus, Flame, Check, Sparkles, Heart, Leaf, Users, TrendingUp, ArrowRight, X, Globe, Lock } from 'lucide-angular';
+import { LucideAngularModule, Home, Plus, Flame, Check, Sparkles, Heart, Leaf, Users, TrendingUp, ArrowRight, X, Globe, Lock, CheckCircle2 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +15,7 @@ export const appConfig: ApplicationConfig = {
       Home, Plus, Flame, Check, Sparkles, Heart, Leaf, Users, TrendingUp, ArrowRight,
       X,
       Globe,
-      Lock
+      Lock, CheckCircle2
     }))
   ]
 };
