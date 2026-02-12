@@ -14,7 +14,13 @@
         "assets": [
           {
             "glob": "**/*",
-            "input": "public"
+            "input": "apps/mehrchain-frontend/public",
+            "output": "/"
+          },
+          {
+            "glob": "favicon.ico",
+            "input": "apps/mehrchain-frontend/public",
+            "output": "/"
           }
         ],
         "styles": ["apps/mehrchain-frontend/src/styles.css"],
