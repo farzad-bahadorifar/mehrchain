@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "start": "nx serve",
+    "build": "nx build",
+    "watch": "nx build --watch --configuration development",
+    "test": "nx test"
   },
   "prettier": {
     "printWidth": 100,
@@ -38,11 +38,17 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@angular-devkit/core": "^21.0.0",
+    "@angular-devkit/schematics": "^21.0.0",
     "@angular/build": "^21.0.0",
     "@angular/cli": "^21.0.0",
     "@angular/compiler-cli": "^21.0.0",
+    "@nx/angular": "22.5.0",
+    "@nx/workspace": "22.5.0",
+    "@schematics/angular": "^21.0.0",
     "@tailwindcss/postcss": "^4.1.12",
     "jsdom": "^27.1.0",
+    "nx": "22.5.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.12",
     "typescript": "~5.9.2",
