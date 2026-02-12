@@ -1,77 +1,62 @@
-# 🔥 MehrChain
+# MehrChain
 
-**"You, light your own lamp." — Rumi**
+**Small Acts. Big Change.**
 
 MehrChain is a mindful companion designed to help you commit to positive goals, track your progress, and build empowering habits through small, consistent actions.
 
-> 🚀 **Project Status:** Active Development | Full-Stack MVP Phase
+Built with the latest web technologies, it focuses on a clean UI, smooth interactions, and a supportive user experience.
+
+> 🚀 **Project Status:** Active Development (MVP Phase)
 
 ---
 
-## 🌟 Our Philosophy
+## ✨ Features (So Far)
 
-In a world filled with chaos, it's easy to feel helpless. MehrChain is built on the belief that **value isn't just found; it's created.**
-
-* **Be the Spark:** Inspired by Rumi's poetry, we believe change starts from within. You don't need to wait for the world to change; you light your own lamp first.
-* **Chain Effects:** Every small positive act—whether reading a page, watering a plant, or helping a neighbor—creates a chain effect. We help you visualize these chains.
-* **Passion over Pressure:** We are not a strict drill sergeant. We are a supportive companion. Growth should feel like a plant reaching for the sun, not a stone being pushed up a hill.
-
----
-
-## 📸 Screenshots
-
-<img width="384" height="837" alt="image" src="https://github.com/user-attachments/assets/de96cda6-1b47-45c7-b609-3fac88a4e6ae" />
-
----
-
-## 🗺️ The Vision
-
-MehrChain is evolving from a simple habit tracker into a **DeSoc (Decentralized Social) Ecosystem** for social good.
-
-1.  **Phase 1: The Inner Spark (Current Focus)**
-    * A seamless, single-player experience.
-    * **Guest-First:** No login walls. Start your journey immediately.
-    * **Mero:** Our mascot that reacts to your consistency.
-    * **PWA:** Installable on any device, independent of app stores.
-
-2.  **Phase 2: The Social Nudge**
-    * Share your "Journey" publicly.
-    * Friends can "nudge" (encourage) your goals without toxic competition.
-
-3.  **Phase 3: The Economy of Good**
-    * A "Proof-of-Support" mechanism where the community creates value.
-    * Patronage system for funding real-world positive impacts using Crypto.
-
----
+* **Onboarding:** A smooth, interactive welcome flow with our mascot, Mero.
+* **Dashboard:** Visualize your active commitments and overall streak.
+* **Commitment Tracking:** Simple "I did it today" check-ins.
+* **Smart Modal:** Create custom commitments with flexible durations and categories.
+* **PWA Ready:** Installable on mobile devices with a native app-like feel.
 
 ## 🛠 Tech Stack
 
-We are building on the **Bleeding Edge** to ensure performance, scalability, and a world-class Developer Experience (DX).
+We are using the cutting-edge Angular ecosystem:
 
-### **Frontend (The Face)**
-* **Framework:** Angular 21+ (Zoneless, Signals Architecture)
-* **Styling:** Tailwind CSS 4
-* **Icons:** Lucide Angular
-* **Platform:** PWA (Progressive Web App).
+* **Framework:** [Angular 21+](https://angular.dev/) (Standalone Components, Signals, Control Flow)
+* **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
+* **Icons:** [Lucide Angular](https://lucide.dev/)
+* **Architecture:** Feature-Sliced Design (Core/Features/Shared)
+* **State Management:** Angular Signals (Native)
 
-### **Backend (The Engine) - *In Development***
-* **Framework:** NestJS (Modular, TypeScript-first)
-* **Database:** PostgreSQL
-* **ORM:** Prisma
-* **Architecture:** Nx Monorepo (Unified workspace for Frontend & Backend)
+## 🚀 Getting Started
+
+Want to contribute or run it locally?
+
+1.  **Clone the repo:**
+    ```bash
+    git clone [https://github.com/your-username/mehrchain-frontend.git](https://github.com/your-username/mehrchain-frontend.git)
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Run the development server:**
+    ```bash
+    ng serve
+    ```
+    Navigate to `http://localhost:4200/`.
+
+## 🤝 Contributing
+
+We are building an open-source community focused on **mindful technology**. We welcome contributors of all levels!
+
+**Where we need help right now:**
+* 🎨 **UI/UX:** Polishing the "Journey" page and animations.
+* ⚙️ **Features:** Implementing gamification and history tracking.
+* 🐛 **Testing:** Writing unit and E2E tests.
+
+Feel free to open an Issue or submit a Pull Request!
 
 ---
 
-## 🤝 Join the Journey
-
-We are an open-source community building technology with a conscience.
-If you are an Angular/NestJS developer, UI/UX designer, or just someone who believes in this vision, **we need you.**
-
-* Clone the repo.
-* Check the Issues tab.
-* Submit a PR.
-
-Let's build a kinder digital world, one line of code at a time.
-
----
-*Made with ❤️ by the MehrChain Community.*
+*Made with ❤️ and ☕ by the MehrChain Team.*

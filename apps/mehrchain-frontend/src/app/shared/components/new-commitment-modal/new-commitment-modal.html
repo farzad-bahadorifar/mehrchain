@@ -1,0 +1,130 @@
+<div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4">
+  <div
+    class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
+    (click)="close.emit()"
+  ></div>
+
+  <div
+    class="relative w-full max-w-md bg-card rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-white/10 overflow-hidden"
+  >
+    <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 opacity-50"></div>
+
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-bold text-foreground">New Commitment</h2>
+
+      <div class="flex items-center gap-2">
+        <button
+          (click)="isPublic.set(!isPublic())"
+          class="w-8 h-8 rounded-full flex items-center justify-center transition-all border"
+          [class]="
+            isPublic()
+              ? 'bg-blue-100 text-blue-600 border-blue-200'
+              : 'bg-gray-100 text-gray-400 border-gray-200'
+          "
+        >
+          <lucide-icon [name]="isPublic() ? 'globe' : 'lock'" class="w-4 h-4"></lucide-icon>
+        </button>
+
+        <button
+          (click)="close.emit()"
+          class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors text-gray-500"
+        >
+          <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex gap-3 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+      @for (cat of categories; track cat.id) {
+        <button
+          (click)="category.set(cat.id)"
+          class="flex flex-col items-center justify-center min-w-[70px] py-3 rounded-2xl border-2 transition-all duration-200"
+          [class]="
+            category() === cat.id
+              ? 'border-primary bg-primary/10 text-primary shadow-sm'
+              : 'border-gray-200 text-gray-500 hover:border-primary/30 hover:bg-gray-50'
+          "
+        >
+          <lucide-icon [name]="cat.icon" class="w-6 h-6 mb-1"></lucide-icon>
+          <span class="text-[10px] font-bold">{{ cat.label }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="mb-6 relative">
+      <textarea
+        [(ngModel)]="title"
+        class="w-full bg-gray-50 rounded-2xl p-4 text-foreground placeholder:text-gray-400 border-2 border-transparent focus:border-primary/50 focus:bg-white focus:outline-none resize-none transition-all h-28 text-lg font-medium shadow-inner"
+        placeholder="What is your new spark?"
+      ></textarea>
+
+      <div class="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-hide">
+        @for (s of suggestions; track s) {
+          <button
+            (click)="selectSuggestion(s)"
+            class="px-3 py-1.5 rounded-lg bg-gray-100 text-xs font-medium text-gray-600 border border-transparent hover:border-primary/30 hover:text-primary hover:bg-white transition-all whitespace-nowrap"
+          >
+            {{ s }}
+          </button>
+        }
+      </div>
+
+      <div
+        class="absolute bottom-16 right-3 text-[10px] text-gray-400 font-bold uppercase tracking-wider"
+      >
+        {{ title().length }}/50
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <label class="block text-xs font-bold text-gray-500 uppercase mb-3 ml-1">Duration</label>
+
+      <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        @for (d of [7, 14, 21]; track d) {
+          <button
+            (click)="duration.set(d); isCustomDuration.set(false)"
+            class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2"
+            [class]="
+              duration() === d && !isCustomDuration()
+                ? 'border-primary bg-primary text-white shadow-md'
+                : 'border-gray-200 text-gray-500 hover:border-primary/30 hover:bg-gray-50'
+            "
+          >
+            {{ d }}
+          </button>
+        }
+
+        @if (isCustomDuration()) {
+          <div
+            class="flex-1 min-w-[50px] flex items-center justify-center p-0.5 rounded-xl border-2 border-primary bg-white animate-fade-in"
+          >
+            <input
+              #durInput
+              type="number"
+              class="w-full text-center font-bold text-sm outline-none bg-transparent h-full py-1"
+              placeholder="#"
+              (keyup.enter)="confirmCustomDuration(durInput.value)"
+              (blur)="confirmCustomDuration(durInput.value)"
+              autoFocus
+            />
+          </div>
+        } @else {
+          <button
+            (click)="toggleCustomDuration()"
+            class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2 border-gray-200 text-gray-400 hover:border-primary hover:text-primary hover:bg-white flex items-center justify-center"
+          >
+            <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+          </button>
+        }
+      </div>
+    </div>
+
+    <button
+      (click)="handleSubmit()"
+      [disabled]="title().length < 3"
+      class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all active:scale-95 flex items-center justify-center gap-2"
+    >
+      Start Journey <lucide-icon name="sparkles" class="w-5 h-5"></lucide-icon>
+    </button>
+  </div>
+</div>

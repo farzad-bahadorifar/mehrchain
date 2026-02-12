@@ -1,0 +1,58 @@
+<div class="min-h-screen bg-background pb-24 px-5 pt-6 font-sans">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-foreground">My Dashboard</h1>
+      <p class="text-sm text-muted-foreground">Keep your lights burning.</p>
+    </div>
+    <div class="w-10 h-10 rounded-full bg-primary/10 p-1">
+      <img src="assets/mero.png" class="w-full h-full object-cover rounded-full" />
+    </div>
+  </div>
+
+  <div
+    class="bg-white rounded-2xl p-4 shadow-sm border border-border/50 flex justify-between items-center mb-6"
+  >
+    <div class="flex items-center gap-3">
+      <div
+        class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-500"
+      >
+        <lucide-icon name="flame" class="w-6 h-6"></lucide-icon>
+      </div>
+      <div>
+        <p class="text-xs text-muted-foreground font-bold uppercase">Overall Streak</p>
+        <p class="text-xl font-bold text-foreground">
+          {{ commitmentService.overallStreak() }} Days
+        </p>
+      </div>
+    </div>
+    <span class="text-2xl">🔥</span>
+  </div>
+
+  <div class="space-y-4">
+    @if (commitmentService.commitments().length === 0) {
+      <div class="text-center py-10 text-muted-foreground">
+        <p>No active commitments.</p>
+      </div>
+    } @else {
+      @for (c of commitmentService.commitments(); track c.id) {
+        <app-commitment-card [commitment]="c" (onComplete)="handleComplete($event)">
+        </app-commitment-card>
+      }
+    }
+  </div>
+
+  <button
+    (click)="openNewCommitment()"
+    class="fixed bottom-24 right-5 w-14 h-14 bg-primary text-white rounded-full shadow-float flex items-center justify-center active:scale-90 transition-transform z-50"
+  >
+    <lucide-icon name="plus" class="w-8 h-8"></lucide-icon>
+  </button>
+
+  @if (isModalOpen()) {
+    <app-new-commitment-modal
+      (close)="isModalOpen.set(false)"
+      (submit)="handleNewCommitment($event)"
+    >
+    </app-new-commitment-modal>
+  }
+</div>
