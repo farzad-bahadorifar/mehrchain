@@ -1,5 +1,5 @@
 export interface Commitment {
-  id: string; // تغییر به string برای پشتیبانی از UUID در دیتابیس
+  id: string;
   title: string;
   totalDays: number;
   currentDay: number;
