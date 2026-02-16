@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
-import { Commitment } from '../../../core/models/commitment.model';
+import { Commitment } from '@mehrchain/shared-data';
 
 @Component({
   selector: 'app-commitment-card',
@@ -12,7 +12,7 @@ import { Commitment } from '../../../core/models/commitment.model';
 export class CommitmentCardComponent {
   commitment = input.required<Commitment>();
 
-  onComplete = output<number>();
+  onComplete = output<string>();
 
   get progressPercent() {
     return Math.round((this.commitment().currentDay / this.commitment().totalDays) * 100);

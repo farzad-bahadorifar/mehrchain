@@ -1,5 +1,5 @@
 import { Injectable, computed, signal, effect } from '@angular/core';
-import { Commitment } from '../models/commitment.model';
+import { Commitment } from '@mehrchain/shared-data';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +42,7 @@ export class CommitmentService {
 
   addCommitment(data: Partial<Commitment>) {
     const newCommitment: Commitment = {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       title: data.title!,
       totalDays: data.totalDays || 21,
       currentDay: 1,
@@ -58,7 +58,7 @@ export class CommitmentService {
     this.commitmentsSignal.update((list) => [newCommitment, ...list]);
   }
 
-  completeCommitment(id: number) {
+  completeCommitment(id: string) {
     const todayStr = new Date().toDateString();
     this.commitmentsSignal.update((list) =>
       list.map((c) => {

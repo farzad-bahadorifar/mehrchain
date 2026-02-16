@@ -1,0 +1,36 @@
+// File: apps/mehrchain-backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Defining the literal types from your interface as a Postgres Enum
+enum Category {
+  health
+  growth
+  community
+  environment
+}
+
+model Commitment {
+  id                String    @id @default(uuid()) // UUID String format
+  title             String
+  category          Category
+  why               String?
+  totalDays         Int
+  currentDay        Int       @default(0)
+  currentStreak     Int       @default(0)
+  startDate         DateTime  @default(now())
+  lastCompletedDate DateTime?
+  rippleEffects     String[]  // Postgres supports string arrays natively
+  history           String[]  // Storing dates as string arrays
+
+  // Standard tracking timestamps
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}

@@ -6,6 +6,9 @@
     "target": "ES2022",
     "module": "preserve",
     "skipLibCheck": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@mehrchain/shared-data": ["libs/shared-data/src/index.ts"]
+    }
   }
 }

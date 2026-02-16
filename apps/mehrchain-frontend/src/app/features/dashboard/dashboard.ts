@@ -36,7 +36,7 @@ export class DashboardComponent {
     setTimeout(() => this.meroService.setState('idle'), 3000);
   }
 
-  handleComplete(id: number) {
+  handleComplete(id: string) {
     this.commitmentService.completeCommitment(id);
     this.meroService.setState('happy');
     if (navigator.vibrate) navigator.vibrate(50);

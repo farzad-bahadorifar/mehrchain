@@ -2,7 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { HeatmapCalendar } from '../../shared/components/heatmap-calendar/heatmap-calendar';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommitmentService } from '../../core/services/commitment.service';
-import { ActivityLog } from '../../core/models/activity-log.model';
+import { ActivityLog } from '@mehrchain/shared-data';
 
 @Component({
   selector: 'app-journey',
@@ -19,7 +19,7 @@ export class Journey {
 
     commitments.forEach((c) => {
       if (c.history) {
-        c.history.forEach((dateStr) => {
+        c.history.forEach((dateStr: string) => {
           logs.push({
             title: c.title,
             date: dateStr,
