@@ -1,77 +1,66 @@
 # 🔥 MehrChain
 
-**"You, light your own lamp." — Rumi**
+**"Small acts, big changes. Light your own lamp first."**
 
-MehrChain is a mindful companion designed to help you commit to positive goals, track your progress, and build empowering habits through small, consistent actions.
+MehrChain is a mindful companion designed to help you commit to positive goals, track your progress, and build empowering habits. It connects your personal growth to a supportive circle, visualizing how your internal changes ripple outward into the world.
 
-> 🚀 **Project Status:** Active Development | Full-Stack MVP Phase
+> 🚀 **Project Status:** Active Development | Full-Stack MVP Phase (Nx Monorepo)
 
 ---
 
 ## 🌟 Our Philosophy
 
-In a world filled with chaos, it's easy to feel helpless. MehrChain is built on the belief that **value isn't just found; it's created.**
+In a world filled with noisy, competitive social networks, MehrChain is a quiet space for action. We believe that a better world starts with a better you.
 
-* **Be the Spark:** Inspired by Rumi's poetry, we believe change starts from within. You don't need to wait for the world to change; you light your own lamp first.
-* **Chain Effects:** Every small positive act—whether reading a page, watering a plant, or helping a neighbor—creates a chain effect. We help you visualize these chains.
-* **Passion over Pressure:** We are not a strict drill sergeant. We are a supportive companion. Growth should feel like a plant reaching for the sun, not a stone being pushed up a hill.
-
----
-
-## 📸 Screenshots
-
-<img width="384" height="837" alt="image" src="https://github.com/user-attachments/assets/de96cda6-1b47-45c7-b609-3fac88a4e6ae" />
+* **Start with Yourself:** Real change begins with tiny, daily habits. You don't need to save the whole world today; just light your own lamp.
+* **The "Why" & Chain Effects:** Every habit has a purpose. MehrChain encourages you to define *why* you are doing something and shows how that small act links to broader positive impacts.
+* **Supportive Circles, Not Toxic Feeds:** Share your journey with true friends. No likes-chasing, no endless scrolling—just mutual encouragement, shared energy, and silent accountability.
+* **Passion over Pressure:** Growth should feel rewarding. Our mascot, **Mero**, acts as your nurturing companion, guiding you based on your personal goals and glowing brighter as you stay consistent.
 
 ---
 
 ## 🗺️ The Vision
 
-MehrChain is evolving from a simple habit tracker into a **DeSoc (Decentralized Social) Ecosystem** for social good.
+MehrChain is evolving from an action-oriented personal tracker into a supportive ecosystem.
 
 1.  **Phase 1: The Inner Spark (Current Focus)**
-    * A seamless, single-player experience.
-    * **Guest-First:** No login walls. Start your journey immediately.
-    * **Mero:** Our mascot that reacts to your consistency.
+    * A seamless personal habit-tracking environment.
+    * **Secure Entry:** Smooth onboarding with Email/OTP verification, moving to a secure personal account.
+    * **Mero:** Our companion mascot that reacts to your consistency and reminds you of your "Why".
     * **PWA:** Installable on any device, independent of app stores.
 
-2.  **Phase 2: The Social Nudge**
-    * Share your "Journey" publicly.
-    * Friends can "nudge" (encourage) your goals without toxic competition.
+2.  **Phase 2: The Supportive Circle**
+    * Invite friends to view your active commitments.
+    * Send and receive positive energy and support without the noise of a traditional social network.
 
 3.  **Phase 3: The Economy of Good**
-    * A "Proof-of-Support" mechanism where the community creates value.
-    * Patronage system for funding real-world positive impacts using Crypto.
+    * A "Proof-of-Support" ecosystem.
+    * Decentralized patronage systems for funding real-world positive impacts.
 
 ---
 
-## 🛠 Tech Stack
-
-We are building on the **Bleeding Edge** to ensure performance, scalability, and a world-class Developer Experience (DX).
+## 🛠 Tech Stack (Bleeding Edge)
 
 ### **Frontend (The Face)**
 * **Framework:** Angular 21+ (Zoneless, Signals Architecture)
 * **Styling:** Tailwind CSS 4
 * **Icons:** Lucide Angular
-* **Platform:** PWA (Progressive Web App).
+* **Platform:** PWA (Progressive Web App)
 
-### **Backend (The Engine) - *In Development***
-* **Framework:** NestJS (Modular, TypeScript-first)
-* **Database:** PostgreSQL
-* **ORM:** Prisma
+### **Backend (The Engine)**
+* **Framework:** NestJS 11 (Modular, TypeScript-first)
+* **Database:** PostgreSQL via Prisma ORM 6
 * **Architecture:** Nx Monorepo (Unified workspace for Frontend & Backend)
 
 ---
 
 ## 🤝 Join the Journey
 
-We are an open-source community building technology with a conscience.
-If you are an Angular/NestJS developer, UI/UX designer, or just someone who believes in this vision, **we need you.**
+We are an open-source community building technology with a conscience. If you believe in using code to foster real-world positive habits, **we need you.**
 
 * Clone the repo.
 * Check the Issues tab.
-* Submit a PR.
-
-Let's build a kinder digital world, one line of code at a time.
+* Let's build a kinder digital world, one line of code at a time.
 
 ---
 *Made with ❤️ by the MehrChain Community.*
