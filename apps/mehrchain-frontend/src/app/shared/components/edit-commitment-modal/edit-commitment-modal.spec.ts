@@ -40,6 +40,12 @@ describe('EditCommitmentModal', () => {
     expect(component.reminderTime()).toBe('21:00');
   });
 
+  it('should allow selecting standard 14 days duration', () => {
+    component.setStandardDuration(14);
+    expect(component.duration()).toBe(14);
+    expect(component.isCustomDuration()).toBe(false);
+  });
+
   it('should emit save with updated data upon onSubmit', () => {
     const saveSpy = vi.fn();
     component.save.subscribe(saveSpy);

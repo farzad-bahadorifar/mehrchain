@@ -1,0 +1,57 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    name: 📱 Build & Package Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: ☕ Setup Java 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: 📦 Install Node Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🧬 Generate Prisma Client
+        run: npx prisma generate --schema=apps/mehrchain-backend/prisma/schema.prisma || true
+
+      - name: 🧪 Run Frontend Automated Tests
+        run: npx nx test mehrchain-frontend
+
+      - name: 🛠️ Build Web App & Sync Capacitor Assets
+        run: npm run mobile:build
+
+      - name: 🤖 Build Android APK (Debug)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: 🚀 Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mehrchain-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+          retention-days: 14

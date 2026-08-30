@@ -63,44 +63,20 @@
           Target Duration
         </label>
         <div class="grid grid-cols-4 gap-2">
-          <button
-            type="button"
-            (click)="setStandardDuration(7)"
-            class="py-2.5 rounded-xl border text-xs font-bold transition-all"
-            [class]="
-              duration() === 7 && !isCustomDuration()
-                ? 'border-primary bg-primary text-white shadow-sm'
-                : 'border-border bg-card text-foreground hover:bg-muted/50'
-            "
-          >
-            7 Days
-          </button>
-
-          <button
-            type="button"
-            (click)="setStandardDuration(21)"
-            class="py-2.5 rounded-xl border text-xs font-bold transition-all relative overflow-hidden"
-            [class]="
-              duration() === 21 && !isCustomDuration()
-                ? 'border-primary bg-primary text-white shadow-sm'
-                : 'border-border bg-card text-foreground hover:bg-muted/50'
-            "
-          >
-            21 Days
-          </button>
-
-          <button
-            type="button"
-            (click)="setStandardDuration(30)"
-            class="py-2.5 rounded-xl border text-xs font-bold transition-all"
-            [class]="
-              duration() === 30 && !isCustomDuration()
-                ? 'border-primary bg-primary text-white shadow-sm'
-                : 'border-border bg-card text-foreground hover:bg-muted/50'
-            "
-          >
-            30 Days
-          </button>
+          @for (d of [7, 14, 21]; track d) {
+            <button
+              type="button"
+              (click)="setStandardDuration(d)"
+              class="py-2.5 rounded-xl border text-xs font-bold transition-all"
+              [class]="
+                duration() === d && !isCustomDuration()
+                  ? 'border-primary bg-primary text-white shadow-sm'
+                  : 'border-border bg-card text-foreground hover:bg-muted/50'
+              "
+            >
+              {{ d }} Days
+            </button>
+          }
 
           @if (!isCustomDuration()) {
             <button

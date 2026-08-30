@@ -46,7 +46,7 @@ export class EditCommitmentModal {
         this.duration.set(c.totalDays);
         this.category.set(c.category);
         this.reminderTime.set(c.reminderTime || '08:30');
-        if (![7, 21, 30].includes(c.totalDays)) {
+        if (![7, 14, 21].includes(c.totalDays)) {
           this.isCustomDuration.set(true);
         }
       }
