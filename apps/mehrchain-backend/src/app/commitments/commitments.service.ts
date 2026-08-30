@@ -7,6 +7,13 @@ import { UpdateCommitmentDto } from './dto/update-commitment.dto';
 export class CommitmentsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  /**
+   * Retrieves all active (non-archived) habit commitments for the specified user,
+   * including recent completion logs and dynamic isCompletedToday flag.
+   *
+   * @param userId - Unique user identifier.
+   * @returns Array of active user commitments with real-time completion state.
+   */
   async getUserCommitments(userId: string) {
     const commitments = await this.prisma.commitment.findMany({
       where: {
@@ -38,6 +45,13 @@ export class CommitmentsService {
     });
   }
 
+  /**
+   * Creates a new habit commitment initialized with currentDay 0 and currentStreak 0.
+   *
+   * @param userId - Owner user ID.
+   * @param dto - New commitment parameters (title, category, duration, optional why and reminder).
+   * @returns The newly created Commitment record.
+   */
   async createCommitment(userId: string, dto: CreateCommitmentDto) {
     return this.prisma.commitment.create({
       data: {
@@ -54,6 +68,17 @@ export class CommitmentsService {
     });
   }
 
+  /**
+   * Records a habit completion for today. Increments currentDay, advances streak,
+   * stores an immutable completion log, and prevents duplicate completions on the same calendar day.
+   *
+   * @param userId - Requesting user ID for ownership validation.
+   * @param commitmentId - Target commitment UUID.
+   * @param note - Optional personal reflection or celebration note.
+   * @returns The updated commitment with isCompletedToday marked true.
+   * @throws {NotFoundException} If the commitment does not exist.
+   * @throws {ForbiddenException} If the commitment belongs to another user.
+   */
   async completeCommitment(userId: string, commitmentId: string, note?: string) {
     const commitment = await this.prisma.commitment.findUnique({
       where: { id: commitmentId },
@@ -104,6 +129,16 @@ export class CommitmentsService {
     };
   }
 
+  /**
+   * Updates habit attributes (title, category, why reflection, target days, reminder time).
+   *
+   * @param userId - Owner user ID for permission check.
+   * @param commitmentId - Target commitment UUID.
+   * @param dto - Partial update fields.
+   * @returns Updated Commitment record.
+   * @throws {NotFoundException} If commitment does not exist.
+   * @throws {ForbiddenException} If commitment belongs to a different user.
+   */
   async updateCommitment(userId: string, commitmentId: string, dto: UpdateCommitmentDto) {
     const commitment = await this.prisma.commitment.findUnique({
       where: { id: commitmentId },
@@ -129,6 +164,16 @@ export class CommitmentsService {
     });
   }
 
+  /**
+   * Soft-archives a commitment by setting isArchived to true.
+   * Preserves all completion history, logs, and calendar statistics.
+   *
+   * @param userId - Owner user ID.
+   * @param commitmentId - Target commitment UUID.
+   * @returns The updated commitment record marked as archived.
+   * @throws {NotFoundException} If commitment does not exist.
+   * @throws {ForbiddenException} If user does not have permission.
+   */
   async deleteCommitment(userId: string, commitmentId: string) {
     const commitment = await this.prisma.commitment.findUnique({
       where: { id: commitmentId },
@@ -148,6 +193,12 @@ export class CommitmentsService {
     });
   }
 
+  /**
+   * Retrieves all archived commitments for the specified user.
+   *
+   * @param userId - Unique user identifier.
+   * @returns Array of archived commitments ordered by latest updated date.
+   */
   async getArchivedCommitments(userId: string) {
     const commitments = await this.prisma.commitment.findMany({
       where: {
@@ -165,6 +216,15 @@ export class CommitmentsService {
     }));
   }
 
+  /**
+   * Restores an archived commitment back to active status (isArchived = false).
+   *
+   * @param userId - Owner user ID.
+   * @param commitmentId - Target commitment UUID.
+   * @returns Restored Commitment record.
+   * @throws {NotFoundException} If commitment does not exist.
+   * @throws {ForbiddenException} If user does not have permission.
+   */
   async restoreCommitment(userId: string, commitmentId: string) {
     const commitment = await this.prisma.commitment.findUnique({
       where: { id: commitmentId },

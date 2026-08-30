@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideIonicAngular } from '@ionic/angular';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { routes } from './app.routes';
 import {
   LucideAngularModule,
@@ -46,7 +47,7 @@ import {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     provideIonicAngular({ mode: 'ios' }),
     provideRouter(routes),
     provideServiceWorker('ngsw-worker.js', {

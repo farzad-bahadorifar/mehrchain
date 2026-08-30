@@ -12,6 +12,13 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  /**
+   * Registers a new user account with securely hashed credentials and issues a JWT token.
+   *
+   * @param dto - User registration payload containing name, email, and password.
+   * @returns Object containing the created user profile and the signed JWT accessToken.
+   * @throws {ConflictException} If the email is already registered in the system.
+   */
   async register(dto: RegisterDto) {
     const cleanEmail = dto.email.trim().toLowerCase();
 
@@ -53,6 +60,13 @@ export class AuthService {
     };
   }
 
+  /**
+   * Authenticates user credentials and returns a signed JWT session token.
+   *
+   * @param dto - Login credentials containing email and plaintext password.
+   * @returns Object containing the authenticated user profile and the signed JWT accessToken.
+   * @throws {UnauthorizedException} If credentials do not match any existing record.
+   */
   async login(dto: LoginDto) {
     const cleanEmail = dto.email.trim().toLowerCase();
 

@@ -83,7 +83,14 @@ export class AuthService {
   }
 
   /**
-   * Registers a new user account with the backend API.
+   * Registers a new user account with the backend API, persists the auth session,
+   * and broadcasts the current user profile signal.
+   *
+   * @param name - Display name of the user.
+   * @param email - Primary user email address.
+   * @param password - Account password.
+   * @returns Resolves with the saved UserProfile upon successful registration.
+   * @throws {Error} If registration fails due to duplicate email or validation errors.
    */
   async register(name: string, email: string, password?: string): Promise<UserProfile> {
     try {
@@ -104,6 +111,7 @@ export class AuthService {
       return res.user;
     } catch (err: any) {
       const message =
+        err?.message ||
         err?.error?.message ||
         (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
         'Registration failed. Please check your network connection.';
@@ -113,6 +121,11 @@ export class AuthService {
 
   /**
    * Authenticates an existing user account with the backend API.
+   *
+   * @param email - User account email.
+   * @param password - Account password.
+   * @returns Resolves with the authenticated UserProfile.
+   * @throws {Error} If credentials are invalid or user does not exist.
    */
   async login(email: string, password?: string): Promise<UserProfile> {
     try {
@@ -132,6 +145,7 @@ export class AuthService {
       return res.user;
     } catch (err: any) {
       const message =
+        err?.message ||
         err?.error?.message ||
         'Invalid email or password. Please try again.';
       throw new Error(message);
