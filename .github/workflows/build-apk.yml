@@ -18,10 +18,10 @@ jobs:
       - name: 🛎️ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 🟢 Setup Node.js 20
+      - name: 🟢 Setup Node.js 22 (LTS)
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: ☕ Setup Java 21 (Temurin)
@@ -42,6 +42,9 @@ jobs:
 
       - name: 🛠️ Build Web App & Sync Capacitor Assets
         run: npm run mobile:build
+
+      - name: 📱 Accept Android SDK Licenses
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: 🤖 Build Android APK (Debug)
         run: |
