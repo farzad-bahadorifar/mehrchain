@@ -46,3 +46,11 @@ Thumbs.db
 
 .nx/cache
 .nx/workspace-data
+
+# Mobile & Capacitor build outputs
+/android/.gradle/
+/android/app/build/
+/android/build/
+/ios/App/Pods/
+/ios/App/build/
+/ios/App/DerivedData/

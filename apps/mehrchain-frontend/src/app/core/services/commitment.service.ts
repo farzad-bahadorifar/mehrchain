@@ -40,7 +40,7 @@ export class CommitmentService {
     }
   }
 
-  addCommitment(data: Partial<Commitment>) {
+  addCommitment(data: Partial<Commitment>): Commitment {
     const newCommitment: Commitment = {
       id: crypto.randomUUID(),
       title: data.title!,
@@ -52,10 +52,12 @@ export class CommitmentService {
       why: data.why,
       rippleEffects: data.rippleEffects,
       startDate: new Date().toISOString(),
+      reminderTime: data.reminderTime,
       history: [],
     };
 
     this.commitmentsSignal.update((list) => [newCommitment, ...list]);
+    return newCommitment;
   }
 
   completeCommitment(id: string) {

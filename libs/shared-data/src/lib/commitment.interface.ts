@@ -11,4 +11,5 @@ export interface Commitment {
   startDate: string;
   lastCompletedDate?: string;
   history?: string[];
+  reminderTime?: string;
 }

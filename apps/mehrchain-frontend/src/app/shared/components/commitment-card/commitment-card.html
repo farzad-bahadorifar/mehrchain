@@ -1,68 +1,105 @@
 <div
-  class="bg-card rounded-[1.5rem] p-5 shadow-soft border border-border/50 relative overflow-hidden transition-all duration-300 hover:shadow-lg"
+  class="bg-white rounded-3xl p-5 shadow-soft border border-slate-100 relative overflow-hidden transition-all duration-300 hover:shadow-md text-left"
 >
+  <!-- Top Row: Category and Today's Status -->
   <div class="flex justify-between items-start mb-3">
-    <div>
+    <div class="flex items-center gap-2">
       <span
-        class="inline-block px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider mb-1"
-        [class]="'bg-primary/10 text-primary'"
+        class="inline-block px-2.5 py-1 rounded-lg text-xs font-bold border"
+        [class]="categoryInfo.bg"
       >
-        {{ commitment().category }}
+        {{ categoryInfo.label }}
       </span>
-      <h3 class="text-lg font-bold text-foreground">{{ commitment().title }}</h3>
+
+      @if (commitment().reminderTime) {
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-semibold bg-slate-100 text-slate-500">
+          <lucide-icon name="bell" class="w-3 h-3 text-teal-700"></lucide-icon>
+          <span>{{ commitment().reminderTime }}</span>
+        </span>
+      }
     </div>
 
     @if (commitment().isCompletedToday) {
       <div
-        class="w-8 h-8 rounded-full bg-primary flex items-center justify-center animate-scale-in"
+        class="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center animate-scale-in shadow-xs"
       >
         <lucide-icon name="check" class="w-5 h-5 text-white"></lucide-icon>
       </div>
     }
   </div>
 
-  <div class="flex justify-between text-xs text-muted-foreground mb-3 font-medium">
+  <!-- Habit Title -->
+  <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1">
+    {{ commitment().title }}
+  </h3>
+
+  <!-- User's Purpose (Why) -->
+  @if (commitment().why) {
+    <p class="text-xs text-slate-500 mb-3 line-clamp-2 leading-relaxed bg-slate-50 p-2 rounded-xl border border-slate-100">
+      💡 <span class="font-medium text-slate-700">My Why:</span> {{ commitment().why }}
+    </p>
+  }
+
+  <!-- Stats: Day Progress and Streak -->
+  <div class="flex justify-between text-xs text-slate-500 mb-2 font-medium">
     <span>Day {{ commitment().currentDay }} of {{ commitment().totalDays }}</span>
-    <span class="flex items-center gap-1 text-primary">
-      <lucide-icon name="sparkles" class="w-3 h-3"></lucide-icon>
-      {{ commitment().currentStreak }} day streak
+    <span class="flex items-center gap-1 text-teal-700 font-bold">
+      <lucide-icon name="sparkles" class="w-3.5 h-3.5"></lucide-icon>
+      <span>{{ commitment().currentStreak }} day streak</span>
     </span>
   </div>
 
-  <div class="h-2 w-full bg-muted rounded-full overflow-hidden mb-4">
+  <!-- Progress Bar -->
+  <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden mb-3.5">
     <div
-      class="h-full bg-primary transition-all duration-1000 ease-out rounded-full"
+      class="h-full bg-teal-600 transition-all duration-1000 ease-out rounded-full"
       [style.width.%]="progressPercent"
     ></div>
   </div>
 
-  <div class="flex gap-1.5 mb-5 justify-center opacity-60">
-    @for (dot of weekDots; track $index) {
-      <div
-        class="w-2 h-2 rounded-full transition-colors"
-        [class.bg-primary]="dot === 'filled'"
-        [class.bg-primary-30]="dot === 'current'"
-        [class.bg-muted]="dot === 'empty'"
-        [class.animate-pulse]="dot === 'current'"
-      ></div>
+  <!-- Weekly Mini-Calendar Dots -->
+  <div class="flex gap-1.5 mb-4 justify-between bg-slate-50/70 p-2 rounded-2xl border border-slate-100">
+    @for (item of weekDots; track $index) {
+      <div class="flex flex-col items-center gap-1 flex-1">
+        <span class="text-[10px] text-slate-400 font-medium">{{ item.dayName }}</span>
+        <div
+          class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] transition-all"
+          [class]="
+            item.state === 'filled'
+              ? 'bg-teal-600 text-white font-bold'
+              : item.state === 'current'
+              ? 'bg-teal-100 text-teal-800 border-2 border-teal-600 font-bold animate-pulse'
+              : 'bg-slate-200/70 text-transparent'
+          "
+        >
+          @if (item.state === 'filled') {
+            ✓
+          } @else if (item.state === 'current') {
+            •
+          }
+        </div>
+      </div>
     }
   </div>
 
+  <!-- Action Button -->
   <button
+    type="button"
     (click)="onComplete.emit(commitment().id)"
     [disabled]="commitment().isCompletedToday"
-    class="w-full py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
+    class="w-full py-3.5 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 active:scale-98"
     [class]="
       commitment().isCompletedToday
-        ? 'bg-primary/10 text-primary cursor-default'
-        : 'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-accent'
+        ? 'bg-teal-50 text-teal-800 border border-teal-200 cursor-default'
+        : 'bg-teal-700 hover:bg-teal-800 text-white shadow-md shadow-teal-700/25'
     "
   >
     @if (commitment().isCompletedToday) {
-      <span>Completed</span>
+      <lucide-icon name="check-circle2" class="w-4 h-4 text-teal-700"></lucide-icon>
+      <span>Done today! Your lamp is glowing ✨</span>
     } @else {
       <lucide-icon name="check" class="w-5 h-5"></lucide-icon>
-      <span>I did it today</span>
+      <span>I did it today!</span>
     }
   </button>
 </div>

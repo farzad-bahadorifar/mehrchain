@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MehrChain</string>
+    <string name="title_activity_main">MehrChain</string>
+    <string name="package_name">com.mehrchain.app</string>
+    <string name="custom_url_scheme">com.mehrchain.app</string>
+</resources>

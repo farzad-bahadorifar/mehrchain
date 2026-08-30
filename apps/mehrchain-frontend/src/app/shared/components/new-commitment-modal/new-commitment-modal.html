@@ -1,107 +1,104 @@
-<div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4">
+<div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4 text-left">
   <div
-    class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
+    class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
     (click)="close.emit()"
   ></div>
 
   <div
-    class="relative w-full max-w-md bg-card rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-white/10 overflow-hidden"
+    class="relative w-full max-w-md bg-white rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-black/5 overflow-hidden max-h-[85vh] overflow-y-auto custom-scrollbar"
   >
-    <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 opacity-50"></div>
+    <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-4 opacity-70"></div>
 
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-xl font-bold text-foreground">New Commitment</h2>
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="text-lg font-bold text-slate-900">New Commitment ✨</h2>
 
-      <div class="flex items-center gap-2">
-        <button
-          (click)="isPublic.set(!isPublic())"
-          class="w-8 h-8 rounded-full flex items-center justify-center transition-all border"
-          [class]="
-            isPublic()
-              ? 'bg-blue-100 text-blue-600 border-blue-200'
-              : 'bg-gray-100 text-gray-400 border-gray-200'
-          "
-        >
-          <lucide-icon [name]="isPublic() ? 'globe' : 'lock'" class="w-4 h-4"></lucide-icon>
-        </button>
-
-        <button
-          (click)="close.emit()"
-          class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors text-gray-500"
-        >
-          <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
-        </button>
-      </div>
+      <button
+        (click)="close.emit()"
+        class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors text-slate-500"
+      >
+        <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+      </button>
     </div>
 
-    <div class="flex gap-3 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+    <!-- Category Selector -->
+    <div class="grid grid-cols-4 gap-2 mb-4">
       @for (cat of categories; track cat.id) {
         <button
-          (click)="category.set(cat.id)"
-          class="flex flex-col items-center justify-center min-w-[70px] py-3 rounded-2xl border-2 transition-all duration-200"
+          type="button"
+          (click)="setCategory(cat.id)"
+          class="flex flex-col items-center justify-center py-2.5 rounded-2xl border transition-all duration-200"
           [class]="
             category() === cat.id
-              ? 'border-primary bg-primary/10 text-primary shadow-sm'
-              : 'border-gray-200 text-gray-500 hover:border-primary/30 hover:bg-gray-50'
+              ? 'border-teal-600 bg-teal-50 text-teal-800 font-bold shadow-xs'
+              : 'border-slate-200 text-slate-500 hover:bg-slate-50'
           "
         >
-          <lucide-icon [name]="cat.icon" class="w-6 h-6 mb-1"></lucide-icon>
-          <span class="text-[10px] font-bold">{{ cat.label }}</span>
+          <lucide-icon [name]="cat.icon" class="w-5 h-5 mb-1"></lucide-icon>
+          <span class="text-[11px]">{{ cat.label }}</span>
         </button>
       }
     </div>
 
-    <div class="mb-6 relative">
-      <textarea
+    <!-- Habit Title -->
+    <div class="mb-4">
+      <label class="block text-xs font-bold text-slate-700 mb-1.5">Habit Title:</label>
+      <input
+        type="text"
         [(ngModel)]="title"
-        class="w-full bg-gray-50 rounded-2xl p-4 text-foreground placeholder:text-gray-400 border-2 border-transparent focus:border-primary/50 focus:bg-white focus:outline-none resize-none transition-all h-28 text-lg font-medium shadow-inner"
-        placeholder="What is your new spark?"
-      ></textarea>
+        class="w-full bg-slate-50 rounded-2xl p-3 text-slate-800 placeholder:text-slate-400 border border-slate-200 focus:border-teal-600 focus:bg-white focus:outline-none text-sm font-medium transition-all"
+        placeholder="e.g. Drink water after waking up"
+      />
 
-      <div class="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-hide">
+      <!-- Quick suggestions -->
+      <div class="flex gap-1.5 mt-2 overflow-x-auto pb-1 scrollbar-hide">
         @for (s of suggestions; track s) {
           <button
+            type="button"
             (click)="selectSuggestion(s)"
-            class="px-3 py-1.5 rounded-lg bg-gray-100 text-xs font-medium text-gray-600 border border-transparent hover:border-primary/30 hover:text-primary hover:bg-white transition-all whitespace-nowrap"
+            class="px-2.5 py-1 rounded-lg bg-slate-100 text-[11px] font-medium text-slate-600 border border-transparent hover:border-teal-300 hover:text-teal-700 hover:bg-teal-50 transition-all whitespace-nowrap"
           >
             {{ s }}
           </button>
         }
       </div>
-
-      <div
-        class="absolute bottom-16 right-3 text-[10px] text-gray-400 font-bold uppercase tracking-wider"
-      >
-        {{ title().length }}/50
-      </div>
     </div>
 
-    <div class="mb-8">
-      <label class="block text-xs font-bold text-gray-500 uppercase mb-3 ml-1">Duration</label>
+    <!-- Why -->
+    <div class="mb-4">
+      <label class="block text-xs font-bold text-slate-700 mb-1">Your Purpose (Why):</label>
+      <textarea
+        [(ngModel)]="why"
+        rows="2"
+        class="w-full bg-slate-50 rounded-2xl p-2.5 text-slate-800 placeholder:text-slate-400 border border-slate-200 focus:border-teal-600 focus:bg-white focus:outline-none text-xs leading-relaxed resize-none transition-all"
+        placeholder="The intention that keeps you consistent..."
+      ></textarea>
+    </div>
 
-      <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+    <!-- Duration -->
+    <div class="mb-4">
+      <label class="block text-xs font-bold text-slate-700 mb-2">Duration:</label>
+      <div class="grid grid-cols-4 gap-2">
         @for (d of [7, 14, 21]; track d) {
           <button
+            type="button"
             (click)="duration.set(d); isCustomDuration.set(false)"
-            class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2"
+            class="py-2 rounded-xl text-xs font-bold transition-all border"
             [class]="
               duration() === d && !isCustomDuration()
-                ? 'border-primary bg-primary text-white shadow-md'
-                : 'border-gray-200 text-gray-500 hover:border-primary/30 hover:bg-gray-50'
+                ? 'border-teal-700 bg-teal-700 text-white shadow-xs'
+                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
             "
           >
-            {{ d }}
+            {{ d }} Days
           </button>
         }
 
         @if (isCustomDuration()) {
-          <div
-            class="flex-1 min-w-[50px] flex items-center justify-center p-0.5 rounded-xl border-2 border-primary bg-white animate-fade-in"
-          >
+          <div class="flex items-center justify-center p-0.5 rounded-xl border-2 border-teal-600 bg-white">
             <input
               #durInput
               type="number"
-              class="w-full text-center font-bold text-sm outline-none bg-transparent h-full py-1"
+              class="w-full text-center font-bold text-xs outline-none bg-transparent py-1"
               placeholder="#"
               (keyup.enter)="confirmCustomDuration(durInput.value)"
               (blur)="confirmCustomDuration(durInput.value)"
@@ -110,21 +107,42 @@
           </div>
         } @else {
           <button
+            type="button"
             (click)="toggleCustomDuration()"
-            class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2 border-gray-200 text-gray-400 hover:border-primary hover:text-primary hover:bg-white flex items-center justify-center"
+            class="py-2 rounded-xl text-xs font-bold border border-slate-200 text-slate-500 hover:border-teal-600 hover:text-teal-700 hover:bg-white flex items-center justify-center gap-1"
           >
-            <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+            <lucide-icon name="plus" class="w-3.5 h-3.5"></lucide-icon>
+            <span>Custom</span>
           </button>
         }
       </div>
     </div>
 
+    <!-- Daily Reminder Time -->
+    <div class="mb-6">
+      <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1">
+        <lucide-icon name="bell" class="w-3.5 h-3.5 text-teal-700"></lucide-icon>
+        <span>Daily Reminder Time:</span>
+      </label>
+      <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl p-2">
+        <lucide-icon name="clock" class="w-4 h-4 text-slate-400"></lucide-icon>
+        <input
+          type="time"
+          [(ngModel)]="reminderTime"
+          class="bg-transparent text-xs font-bold text-slate-800 outline-none w-full cursor-pointer"
+        />
+      </div>
+    </div>
+
+    <!-- Submit Button -->
     <button
+      type="button"
       (click)="handleSubmit()"
-      [disabled]="title().length < 3"
-      class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all active:scale-95 flex items-center justify-center gap-2"
+      [disabled]="title().length < 2"
+      class="w-full bg-teal-700 hover:bg-teal-800 text-white py-3.5 rounded-2xl font-bold text-sm shadow-md shadow-teal-700/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-98 flex items-center justify-center gap-2"
     >
-      Start Journey <lucide-icon name="sparkles" class="w-5 h-5"></lucide-icon>
+      <span>Light My Lamp</span>
+      <lucide-icon name="sparkles" class="w-4 h-4"></lucide-icon>
     </button>
   </div>
 </div>

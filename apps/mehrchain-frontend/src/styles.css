@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import '@ionic/angular/css/core.css';
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
 @import 'tailwindcss';
 
 @theme {
@@ -37,7 +41,7 @@
   --shadow-float: 0 8px 24px -8px rgba(0, 128, 128, 0.25);
 
   /* Fonts */
-  --font-sans: 'Poppins', sans-serif;
+  --font-sans: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Base Styles */

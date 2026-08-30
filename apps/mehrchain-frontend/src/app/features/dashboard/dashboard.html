@@ -1,37 +1,88 @@
-<div class="min-h-screen bg-background pb-24 px-5 pt-6 font-sans">
-  <div class="flex justify-between items-center mb-6">
+<div class="min-h-screen bg-gradient-to-b from-slate-50 to-teal-50/20 pb-28 px-4 pt-5 font-sans max-w-md mx-auto text-left select-none safe-bottom">
+
+  <!-- Header: User status and Mero avatar -->
+  <div class="flex justify-between items-center mb-5 bg-white/80 backdrop-blur-md p-4 rounded-3xl border border-slate-100 shadow-soft">
     <div>
-      <h1 class="text-2xl font-bold text-foreground">My Dashboard</h1>
-      <p class="text-sm text-muted-foreground">Keep your lights burning.</p>
+      <div class="flex items-center gap-1.5 mb-1">
+        <span class="text-xs font-bold text-teal-700">MehrChain</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-ping"></span>
+      </div>
+      <h1 class="text-lg sm:text-xl font-black text-slate-900 leading-tight">My Commitments</h1>
+      <p class="text-xs text-slate-500 mt-0.5">Light your own lamp first ✨</p>
     </div>
-    <div class="w-10 h-10 rounded-full bg-primary/10 p-1">
-      <img src="assets/mero.png" class="w-full h-full object-cover rounded-full" />
+
+    <!-- Mero Avatar with State -->
+    <div class="flex flex-col items-center">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-teal-100 to-amber-100 border-2 border-white flex items-center justify-center text-2xl shadow-xs">
+        {{ meroService.getAvatar() }}
+      </div>
+      <span class="text-[10px] font-bold text-slate-600 mt-0.5">Mero</span>
     </div>
   </div>
 
-  <div
-    class="bg-white rounded-2xl p-4 shadow-sm border border-border/50 flex justify-between items-center mb-6"
-  >
+  <!-- Mero Speech Bubble -->
+  <div class="mb-5 p-3 rounded-2xl bg-teal-50/80 border border-teal-200/60 flex items-center gap-2.5 text-left shadow-xs">
+    <div class="w-2 h-2 rounded-full bg-teal-600 shrink-0"></div>
+    <p class="text-xs text-teal-900 font-medium leading-relaxed">
+      {{ meroMessage }}
+    </p>
+  </div>
+
+  <!-- Overall Streak Card -->
+  <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-3xl p-4 text-white shadow-md mb-6 flex justify-between items-center">
     <div class="flex items-center gap-3">
-      <div
-        class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-500"
-      >
-        <lucide-icon name="flame" class="w-6 h-6"></lucide-icon>
+      <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-2xl">
+        🔥
       </div>
       <div>
-        <p class="text-xs text-muted-foreground font-bold uppercase">Overall Streak</p>
-        <p class="text-xl font-bold text-foreground">
-          {{ commitmentService.overallStreak() }} Days
-        </p>
+        <span class="text-[11px] font-bold opacity-90 block">Overall Consistency</span>
+        <span class="text-xl sm:text-2xl font-black block tracking-tight">
+          {{ commitmentService.overallStreak() }} Days Streak
+        </span>
       </div>
     </div>
-    <span class="text-2xl">🔥</span>
+
+    <div class="text-right text-xs opacity-90">
+      <span class="block font-medium">Glowing Chain</span>
+      <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full inline-block mt-0.5">
+        {{ commitmentService.commitments().length }} active
+      </span>
+    </div>
   </div>
 
+  <!-- Habits Section Title -->
+  <div class="flex justify-between items-center mb-3 px-1">
+    <h2 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+      <span>Today's Habits</span>
+      <span class="text-xs bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full">
+        {{ commitmentService.commitments().length }}
+      </span>
+    </h2>
+
+    <button
+      (click)="openNewCommitment()"
+      class="text-xs font-bold text-teal-700 hover:text-teal-800 flex items-center gap-1"
+    >
+      <lucide-icon name="plus" class="w-3.5 h-3.5"></lucide-icon>
+      <span>New Spark</span>
+    </button>
+  </div>
+
+  <!-- Habit Cards List -->
   <div class="space-y-4">
     @if (commitmentService.commitments().length === 0) {
-      <div class="text-center py-10 text-muted-foreground">
-        <p>No active commitments.</p>
+      <div class="bg-white rounded-3xl p-8 text-center border border-slate-100 shadow-soft space-y-3">
+        <div class="text-4xl">🌱</div>
+        <h3 class="text-sm font-bold text-slate-700">No active habits yet!</h3>
+        <p class="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
+          Start your transformation today by defining your first spark.
+        </p>
+        <button
+          (click)="openNewCommitment()"
+          class="bg-teal-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl shadow-xs"
+        >
+          Create First Commitment
+        </button>
       </div>
     } @else {
       @for (c of commitmentService.commitments(); track c.id) {
@@ -41,13 +92,17 @@
     }
   </div>
 
+  <!-- Floating Action Button (FAB) -->
   <button
+    type="button"
     (click)="openNewCommitment()"
-    class="fixed bottom-24 right-5 w-14 h-14 bg-primary text-white rounded-full shadow-float flex items-center justify-center active:scale-90 transition-transform z-50"
+    class="fixed bottom-24 right-5 w-14 h-14 bg-teal-700 text-white rounded-full shadow-lg shadow-teal-700/30 flex items-center justify-center active:scale-90 transition-all z-40"
+    aria-label="Add new habit"
   >
-    <lucide-icon name="plus" class="w-8 h-8"></lucide-icon>
+    <lucide-icon name="plus" class="w-7 h-7"></lucide-icon>
   </button>
 
+  <!-- Modal -->
   @if (isModalOpen()) {
     <app-new-commitment-modal
       (close)="isModalOpen.set(false)"
@@ -55,4 +110,5 @@
     >
     </app-new-commitment-modal>
   }
+
 </div>
