@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { LucideAngularModule, Plus, Flame, Sparkles, CheckCircle2, Heart } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { MeroService } from '../../core/services/mero.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -19,22 +19,12 @@ export class DashboardComponent {
   meroService = inject(MeroService);
   notificationService = inject(NotificationService);
   router = inject(Router);
-
   isModalOpen = signal(false);
 
-  // Mero's contextual dialog messages based on current mood
-  get meroMessage(): string {
-    const state = this.meroService.state();
-    switch (state) {
-      case 'celebrating':
-        return 'Wonderful! Your light shone brightly today 🌟';
-      case 'happy':
-        return 'Proud of your consistency! Small steps build our world ✨';
-      case 'waiting':
-        return 'Looking forward to lighting your lamp today 🌱';
-      default:
-        return 'Hello friend! Ready to ignite today’s spark? 🙂';
-    }
+  constructor() {
+    effect(() => {
+      console.log('Dashboard Commitments:', this.commitmentService.commitments());
+    });
   }
 
   openNewCommitment() {
@@ -46,7 +36,7 @@ export class DashboardComponent {
     this.isModalOpen.set(false);
     this.meroService.setState('celebrating');
 
-    // Schedule local notification for new habit
+    // Schedule notification if reminder time exists
     if (data.reminderTime) {
       const [hourStr, minuteStr] = data.reminderTime.split(':');
       const hour = parseInt(hourStr, 10) || 8;
@@ -62,17 +52,15 @@ export class DashboardComponent {
       });
     }
 
-    setTimeout(() => this.meroService.setState('idle'), 3500);
+    setTimeout(() => this.meroService.setState('idle'), 3000);
   }
 
   handleComplete(id: string) {
     this.commitmentService.completeCommitment(id);
-    this.meroService.setState('celebrating');
-
+    this.meroService.setState('happy');
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
-      navigator.vibrate([40, 60, 40]);
+      navigator.vibrate(50);
     }
-
-    setTimeout(() => this.meroService.setState('happy'), 3000);
+    setTimeout(() => this.meroService.setState('idle'), 2000);
   }
 }

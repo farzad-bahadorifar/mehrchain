@@ -1,8 +1,7 @@
-import { Component, output, signal, inject } from '@angular/core';
+import { Component, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Heart, Leaf, Users, TrendingUp, X, Sparkles, Plus, Clock, Bell } from 'lucide-angular';
-import { NotificationService } from '../../../core/services/notification.service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-new-commitment-modal',
@@ -13,38 +12,33 @@ import { NotificationService } from '../../../core/services/notification.service
 export class NewCommitmentModal {
   close = output<void>();
   submit = output<any>();
-  notificationService = inject(NotificationService);
-
   isCustomDuration = signal(false);
 
   title = signal('');
   why = signal('');
   duration = signal(21);
-  category = signal<'health' | 'growth' | 'community' | 'environment'>('health');
+  category = signal('health');
+  isPublic = signal(false);
   reminderTime = signal('08:30');
 
-  categories: Array<{ id: 'health' | 'growth' | 'community' | 'environment'; icon: string; label: string }> = [
+  categories = [
     { id: 'health', icon: 'heart', label: 'Health' },
-    { id: 'growth', icon: 'trending-up', label: 'Growth' },
-    { id: 'community', icon: 'users', label: 'Community' },
     { id: 'environment', icon: 'leaf', label: 'Nature' },
+    { id: 'community', icon: 'users', label: 'Community' },
+    { id: 'growth', icon: 'trending-up', label: 'Growth' },
   ];
-
-  setCategory(catId: 'health' | 'growth' | 'community' | 'environment') {
-    this.category.set(catId);
-  }
 
   get suggestions() {
     const cat = this.category();
     switch (cat) {
       case 'health':
-        return ['Morning water', 'Quick stretch', 'Sleep before midnight'];
-      case 'growth':
-        return ['Read 10 pages', 'Daily journal', 'Learn 1 new word'];
-      case 'community':
-        return ['Call family', 'Share a smile', 'Small act of kindness'];
+        return ['Drink Water', 'No Sugar', 'Morning Walk'];
       case 'environment':
-        return ['Save electricity', 'Reduce plastic', 'Water a plant'];
+        return ['No Plastic', 'Save Water', 'Recycle'];
+      case 'community':
+        return ['Call Mom', 'Smile more', 'Donate'];
+      case 'growth':
+        return ['Read 5 pages', 'Journaling', 'Learn new word'];
       default:
         return [];
     }
@@ -66,12 +60,11 @@ export class NewCommitmentModal {
     }
   }
 
-  async handleSubmit() {
-    const titleVal = this.title().trim();
-    if (titleVal.length < 2) return;
+  handleSubmit() {
+    if (this.title().trim().length < 2) return;
 
     this.submit.emit({
-      title: titleVal,
+      title: this.title().trim(),
       why: this.why().trim(),
       totalDays: this.duration(),
       category: this.category(),
