@@ -78,7 +78,7 @@ export class CommitmentService {
       id: crypto.randomUUID(),
       title: data.title!,
       totalDays: data.totalDays || 21,
-      currentDay: 1,
+      currentDay: 0,
       currentStreak: 0,
       isCompletedToday: false,
       category: data.category as any,

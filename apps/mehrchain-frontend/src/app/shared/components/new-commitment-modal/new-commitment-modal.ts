@@ -48,16 +48,24 @@ export class NewCommitmentModal {
     this.title.set(text);
   }
 
+  setStandardDuration(days: number) {
+    this.duration.set(days);
+    this.isCustomDuration.set(false);
+  }
+
   toggleCustomDuration() {
     this.isCustomDuration.set(true);
   }
 
-  confirmCustomDuration(value: string) {
+  onCustomDurationInput(value: string) {
     const days = parseInt(value, 10);
     if (days > 0) {
       this.duration.set(days);
-      this.isCustomDuration.set(false);
     }
+  }
+
+  isNonStandardDuration(): boolean {
+    return ![7, 14, 21].includes(this.duration());
   }
 
   handleSubmit() {

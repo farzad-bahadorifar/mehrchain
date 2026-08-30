@@ -30,7 +30,7 @@ describe('CommitmentsService (Unit Tests)', () => {
         title: 'Drink Water',
         category: Category.health,
         totalDays: 21,
-        currentDay: 1,
+        currentDay: 0,
         currentStreak: 0,
       };
 
@@ -44,7 +44,7 @@ describe('CommitmentsService (Unit Tests)', () => {
       });
 
       expect(result.currentStreak).toBe(0);
-      expect(result.currentDay).toBe(1);
+      expect(result.currentDay).toBe(0);
       expect(mockPrisma.commitment.create).toHaveBeenCalled();
     });
   });

@@ -36,7 +36,7 @@
   }
 
   <div class="flex justify-between text-xs text-muted-foreground mb-3 font-medium">
-    <span>Day {{ commitment().currentDay }} of {{ commitment().totalDays }}</span>
+    <span>{{ commitment().currentDay }} / {{ commitment().totalDays }} Days</span>
     <span class="flex items-center gap-1 text-primary font-semibold">
       <lucide-icon name="sparkles" class="w-3 h-3"></lucide-icon>
       {{ commitment().currentStreak }} day streak

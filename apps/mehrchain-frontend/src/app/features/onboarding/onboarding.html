@@ -272,12 +272,14 @@
             <div class="grid grid-cols-4 gap-2 mb-5">
               @for (days of [7, 14, 21]; track days) {
                 <button
+                  type="button"
                   (click)="setDuration(days)"
                   class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 transition-all duration-300"
-                  [class.border-primary]="selectedDuration() === days && !isCustomDuration()"
-                  [class.bg-primary/10]="selectedDuration() === days && !isCustomDuration()"
-                  [class.text-primary]="selectedDuration() === days && !isCustomDuration()"
-                  [class.border-gray-200]="selectedDuration() !== days"
+                  [class]="
+                    selectedDuration() === days && !isCustomDuration() && !isNonStandardDuration()
+                      ? 'border-primary bg-primary text-white shadow-md'
+                      : 'border-gray-200 text-gray-500 hover:border-primary/30 hover:bg-gray-50'
+                  "
                 >
                   <span class="text-base font-bold">{{ days }}</span>
                   <span class="text-[10px] font-medium uppercase">Days</span>
@@ -291,15 +293,26 @@
                   <input
                     #durInput
                     type="number"
-                    class="w-full text-center font-bold text-base outline-none bg-transparent"
+                    [value]="isNonStandardDuration() ? selectedDuration() : ''"
+                    class="w-full text-center font-bold text-base outline-none bg-transparent text-primary"
                     placeholder="#"
-                    (keyup.enter)="confirmCustomDuration(durInput.value)"
-                    (blur)="confirmCustomDuration(durInput.value)"
+                    (input)="onCustomDurationInput(durInput.value)"
+                    (keyup.enter)="isCustomDuration.set(false)"
                     autoFocus
                   />
                 </div>
+              } @else if (isNonStandardDuration()) {
+                <button
+                  type="button"
+                  (click)="toggleCustomDuration()"
+                  class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 border-primary bg-primary text-white shadow-md transition-all"
+                >
+                  <span class="text-base font-bold">{{ selectedDuration() }}</span>
+                  <span class="text-[10px] font-medium uppercase">Days</span>
+                </button>
               } @else {
                 <button
+                  type="button"
                   (click)="toggleCustomDuration()"
                   class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 border-gray-200 text-gray-400 hover:border-primary/50 hover:text-primary transition-all"
                 >

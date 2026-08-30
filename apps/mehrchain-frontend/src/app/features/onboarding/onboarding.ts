@@ -144,12 +144,15 @@ export class OnboardingComponent implements OnInit {
     this.isCustomDuration.set(true);
   }
 
-  confirmCustomDuration(value: string) {
+  onCustomDurationInput(value: string) {
     const days = parseInt(value, 10);
     if (days > 0) {
       this.selectedDuration.set(days);
-      this.isCustomDuration.set(false);
     }
+  }
+
+  isNonStandardDuration(): boolean {
+    return ![7, 14, 21].includes(this.selectedDuration());
   }
 
   enableCustomHabit() {

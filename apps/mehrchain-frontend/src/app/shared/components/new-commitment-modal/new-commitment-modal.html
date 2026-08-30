@@ -90,10 +90,11 @@
       <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         @for (d of [7, 14, 21]; track d) {
           <button
-            (click)="duration.set(d); isCustomDuration.set(false)"
+            type="button"
+            (click)="setStandardDuration(d)"
             class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2"
             [class]="
-              duration() === d && !isCustomDuration()
+              duration() === d && !isCustomDuration() && !isNonStandardDuration()
                 ? 'border-primary bg-primary text-white shadow-md'
                 : 'border-gray-200 text-gray-500 hover:border-primary/30 hover:bg-gray-50'
             "
@@ -109,15 +110,26 @@
             <input
               #durInput
               type="number"
-              class="w-full text-center font-bold text-sm outline-none bg-transparent h-full py-1"
+              [value]="isNonStandardDuration() ? duration() : ''"
+              class="w-full text-center font-bold text-sm outline-none bg-transparent h-full py-1 text-primary"
               placeholder="#"
-              (keyup.enter)="confirmCustomDuration(durInput.value)"
-              (blur)="confirmCustomDuration(durInput.value)"
+              (input)="onCustomDurationInput(durInput.value)"
+              (keyup.enter)="isCustomDuration.set(false)"
               autoFocus
             />
           </div>
+        } @else if (isNonStandardDuration()) {
+          <button
+            type="button"
+            (click)="toggleCustomDuration()"
+            class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2 border-primary bg-primary text-white shadow-md flex items-center justify-center gap-1"
+          >
+            <span>{{ duration() }}</span>
+            <span class="text-[10px] uppercase">Days</span>
+          </button>
         } @else {
           <button
+            type="button"
             (click)="toggleCustomDuration()"
             class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2 border-gray-200 text-gray-400 hover:border-primary hover:text-primary hover:bg-white flex items-center justify-center"
           >

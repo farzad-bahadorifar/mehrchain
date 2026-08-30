@@ -45,7 +45,7 @@ export class CommitmentsService {
         category: dto.category,
         why: dto.why?.trim(),
         totalDays: dto.totalDays,
-        currentDay: 1,
+        currentDay: 0,
         currentStreak: 0,
         reminderTime: dto.reminderTime,
         history: [],
