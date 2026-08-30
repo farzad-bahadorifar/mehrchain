@@ -9,7 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Defining the literal types from your interface as a Postgres Enum
+// Pillar categories for commitments
 enum Category {
   health
   growth
@@ -17,22 +17,63 @@ enum Category {
   environment
 }
 
+// User model for persistent authentication and identity
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  passwordHash String
+  name         String
+  role         String       @default("USER")
+  metadata     Json?        // Extensible metadata for future gamification & preferences
+
+  commitments  Commitment[]
+
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@map("users")
+}
+
+// Core habit commitment model
 model Commitment {
-  id                String    @id @default(uuid()) // UUID String format
+  id                String          @id @default(uuid())
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   title             String
   category          Category
   why               String?
   totalDays         Int
-  currentDay        Int       @default(0)
-  currentStreak     Int       @default(0)
-  startDate         DateTime  @default(now())
+  currentDay        Int             @default(0)
+  currentStreak     Int             @default(0)
+  startDate         DateTime        @default(now())
   lastCompletedDate DateTime?
-  rippleEffects     String[]  // Postgres supports string arrays natively
-  history           String[]  // Storing dates as string arrays
+  reminderTime      String?
+  isArchived        Boolean         @default(false)
 
-  // Standard tracking timestamps
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  rippleEffects     String[]        // Potential connected chain effects
+  history           String[]        // Legacy date strings
+  logs              CommitmentLog[] // Granular completion logs
 
+  metadata          Json?           // Extensible metadata for future modules
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([userId])
   @@map("commitments")
+}
+
+// Granular completion log for activity tracking & future analytics
+model CommitmentLog {
+  id           String     @id @default(uuid())
+  commitmentId String
+  commitment   Commitment @relation(fields: [commitmentId], references: [id], onDelete: Cascade)
+
+  completedAt  DateTime   @default(now())
+  note         String?
+  metadata     Json?      // Future metrics (e.g. mood, energy level)
+
+  @@index([commitmentId])
+  @@map("commitment_logs")
 }

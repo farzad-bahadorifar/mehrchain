@@ -47,6 +47,11 @@ Thumbs.db
 .nx/cache
 .nx/workspace-data
 
+# Environment files
+.env
+.env.local
+.env.*.local
+
 # Mobile & Capacitor build outputs
 /android/.gradle/
 /android/app/build/
