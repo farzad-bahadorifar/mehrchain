@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "nx serve mehrchain-frontend",
     "start:backend": "nx serve mehrchain-backend",
+    "dev": "nx run-many -t serve --parallel=2",
     "build": "nx build",
     "watch": "nx build --watch --configuration development",
     "test": "nx test",
