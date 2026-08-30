@@ -1,0 +1,190 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" (click)="close.emit()"></div>
+
+  <!-- Modal Dialog -->
+  <div
+    class="bg-card w-full max-w-md rounded-3xl p-6 shadow-2xl z-10 border border-border/50 max-h-[90vh] overflow-y-auto animate-scale-in"
+  >
+    <div class="flex justify-between items-center mb-5">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+          <lucide-icon name="edit" class="w-5 h-5"></lucide-icon>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-foreground">Edit Habit</h2>
+          <p class="text-xs text-muted-foreground">Adjust your commitment & reminders</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        (click)="close.emit()"
+        class="w-8 h-8 rounded-full bg-muted/60 hover:bg-muted text-muted-foreground flex items-center justify-center transition-colors"
+      >
+        <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+      </button>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Habit Title -->
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+          Habit Name
+        </label>
+        <input
+          type="text"
+          [ngModel]="title()"
+          (ngModelChange)="title.set($event)"
+          name="title"
+          required
+          class="w-full bg-muted/40 border border-border rounded-2xl px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+        />
+      </div>
+
+      <!-- Why (Personal Motivation) -->
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1.5">
+          <span>Why this matters to you</span>
+          <span class="text-[10px] text-primary lowercase">(your spark)</span>
+        </label>
+        <textarea
+          [ngModel]="why()"
+          (ngModelChange)="why.set($event)"
+          name="why"
+          rows="2"
+          placeholder="e.g. To stay healthy and show up for my family"
+          class="w-full bg-muted/40 border border-border rounded-2xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Target Duration -->
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+          Target Duration
+        </label>
+        <div class="grid grid-cols-4 gap-2">
+          <button
+            type="button"
+            (click)="setStandardDuration(7)"
+            class="py-2.5 rounded-xl border text-xs font-bold transition-all"
+            [class]="
+              duration() === 7 && !isCustomDuration()
+                ? 'border-primary bg-primary text-white shadow-sm'
+                : 'border-border bg-card text-foreground hover:bg-muted/50'
+            "
+          >
+            7 Days
+          </button>
+
+          <button
+            type="button"
+            (click)="setStandardDuration(21)"
+            class="py-2.5 rounded-xl border text-xs font-bold transition-all relative overflow-hidden"
+            [class]="
+              duration() === 21 && !isCustomDuration()
+                ? 'border-primary bg-primary text-white shadow-sm'
+                : 'border-border bg-card text-foreground hover:bg-muted/50'
+            "
+          >
+            21 Days
+          </button>
+
+          <button
+            type="button"
+            (click)="setStandardDuration(30)"
+            class="py-2.5 rounded-xl border text-xs font-bold transition-all"
+            [class]="
+              duration() === 30 && !isCustomDuration()
+                ? 'border-primary bg-primary text-white shadow-sm'
+                : 'border-border bg-card text-foreground hover:bg-muted/50'
+            "
+          >
+            30 Days
+          </button>
+
+          @if (!isCustomDuration()) {
+            <button
+              type="button"
+              (click)="toggleCustomDuration()"
+              class="py-2.5 rounded-xl border border-dashed border-border bg-muted/30 text-xs font-bold text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all"
+            >
+              +
+            </button>
+          } @else {
+            <div class="relative">
+              <input
+                type="number"
+                min="1"
+                max="365"
+                [value]="duration()"
+                (input)="onCustomDurationInput($any($event.target).value)"
+                class="w-full py-2.5 rounded-xl border border-primary bg-primary text-white font-bold text-center text-xs focus:outline-none ring-2 ring-primary/40 shadow-sm"
+              />
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Daily Reminder Time -->
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1.5">
+          <lucide-icon name="bell" class="w-3.5 h-3.5 text-primary"></lucide-icon>
+          <span>Daily Reminder Time</span>
+        </label>
+        <input
+          type="time"
+          [ngModel]="reminderTime()"
+          (ngModelChange)="reminderTime.set($event)"
+          name="reminderTime"
+          class="w-full bg-muted/40 border border-border rounded-2xl px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+        />
+      </div>
+
+      <!-- Category Selector -->
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+          Category
+        </label>
+        <div class="grid grid-cols-2 gap-2">
+          @for (cat of categories; track cat.id) {
+            <button
+              type="button"
+              (click)="category.set(cat.id)"
+              class="p-2.5 rounded-2xl border text-left flex items-center gap-2.5 transition-all text-xs font-semibold"
+              [class]="
+                category() === cat.id
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border bg-card text-foreground hover:bg-muted/50'
+              "
+            >
+              <lucide-icon [name]="cat.icon" class="w-4 h-4"></lucide-icon>
+              <span>{{ cat.label }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Submit & Cancel -->
+      <div class="flex items-center gap-3 pt-3">
+        <mc-button
+          variant="secondary"
+          size="lg"
+          [fullWidth]="true"
+          type="button"
+          (clicked)="close.emit()"
+        >
+          Cancel
+        </mc-button>
+
+        <mc-button
+          variant="primary"
+          size="lg"
+          [fullWidth]="true"
+          type="submit"
+        >
+          Save Changes
+        </mc-button>
+      </div>
+    </form>
+  </div>
+</div>

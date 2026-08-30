@@ -48,7 +48,13 @@
       </div>
     } @else {
       @for (c of commitmentService.commitments(); track c.id) {
-        <app-commitment-card [commitment]="c" (onComplete)="handleComplete($event)">
+        <app-commitment-card
+          [commitment]="c"
+          (onComplete)="handleComplete($event)"
+          (onDelete)="promptDelete($event)"
+          (onArchive)="handleArchive($event)"
+          (onEdit)="openEdit($event)"
+        >
         </app-commitment-card>
       }
     }
@@ -62,6 +68,24 @@
   >
     <lucide-icon name="plus" class="w-8 h-8"></lucide-icon>
   </button>
+
+  <!-- Delete Confirmation Modal (Mindful Intention Reflection) -->
+  @if (deletingCommitment()) {
+    <app-delete-confirmation-modal
+      [commitment]="deletingCommitment()!"
+      (confirm)="confirmDelete()"
+      (cancel)="cancelDelete()"
+    />
+  }
+
+  <!-- Edit Commitment Modal -->
+  @if (editingCommitment()) {
+    <app-edit-commitment-modal
+      [commitment]="editingCommitment()!"
+      (close)="closeEdit()"
+      (save)="handleUpdateCommitment($event)"
+    />
+  }
 
   @if (isModalOpen()) {
     <app-new-commitment-modal

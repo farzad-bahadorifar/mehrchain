@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCommitmentDto } from './dto/create-commitment.dto';
+import { UpdateCommitmentDto } from './dto/update-commitment.dto';
 
 @Injectable()
 export class CommitmentsService {
@@ -101,6 +102,31 @@ export class CommitmentsService {
       ...updated,
       isCompletedToday: true,
     };
+  }
+
+  async updateCommitment(userId: string, commitmentId: string, dto: UpdateCommitmentDto) {
+    const commitment = await this.prisma.commitment.findUnique({
+      where: { id: commitmentId },
+    });
+
+    if (!commitment) {
+      throw new NotFoundException('Commitment not found.');
+    }
+
+    if (commitment.userId !== userId) {
+      throw new ForbiddenException('Access denied.');
+    }
+
+    return this.prisma.commitment.update({
+      where: { id: commitmentId },
+      data: {
+        ...(dto.title !== undefined && { title: dto.title.trim() }),
+        ...(dto.category !== undefined && { category: dto.category }),
+        ...(dto.why !== undefined && { why: dto.why?.trim() }),
+        ...(dto.totalDays !== undefined && { totalDays: dto.totalDays }),
+        ...(dto.reminderTime !== undefined && { reminderTime: dto.reminderTime }),
+      },
+    });
   }
 
   async deleteCommitment(userId: string, commitmentId: string) {

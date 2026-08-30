@@ -159,4 +159,31 @@ describe('CommitmentsService (Unit Tests)', () => {
       expect(result.isArchived).toBe(true);
     });
   });
+
+  describe('updateCommitment', () => {
+    it('should update commitment fields successfully', async () => {
+      mockPrisma.commitment.findUnique.mockResolvedValue({
+        id: 'comm-1',
+        userId: 'user-1',
+      });
+      mockPrisma.commitment.update.mockResolvedValue({
+        id: 'comm-1',
+        title: 'Updated Yoga',
+        why: 'More strength',
+      });
+
+      const result = await service.updateCommitment('user-1', 'comm-1', {
+        title: 'Updated Yoga',
+        why: 'More strength',
+      });
+      expect(result.title).toBe('Updated Yoga');
+      expect(mockPrisma.commitment.update).toHaveBeenCalledWith({
+        where: { id: 'comm-1' },
+        data: {
+          title: 'Updated Yoga',
+          why: 'More strength',
+        },
+      });
+    });
+  });
 });

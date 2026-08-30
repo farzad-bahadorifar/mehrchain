@@ -34,6 +34,9 @@ import {
   Sun,
   Moon,
   Monitor,
+  MoreVertical,
+  Archive,
+  Edit,
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -74,6 +77,9 @@ export const appConfig: ApplicationConfig = {
         Sun,
         Moon,
         Monitor,
+        MoreVertical,
+        Archive,
+        Edit,
       }),
     ),
   ],

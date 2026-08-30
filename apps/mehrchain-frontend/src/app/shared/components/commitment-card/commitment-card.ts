@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { Commitment } from '@mehrchain/shared-data';
 import { McBadgeComponent, McButtonComponent, McCardComponent } from '../../ui';
@@ -13,6 +13,20 @@ import { McBadgeComponent, McButtonComponent, McCardComponent } from '../../ui';
 export class CommitmentCardComponent {
   commitment = input.required<Commitment>();
   onComplete = output<string>();
+  onDelete = output<string>();
+  onArchive = output<string>();
+  onEdit = output<string>();
+
+  isMenuOpen = signal(false);
+
+  toggleMenu(e: Event) {
+    e.stopPropagation();
+    this.isMenuOpen.update((v) => !v);
+  }
+
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
 
   get progressPercent() {
     return Math.round((this.commitment().currentDay / this.commitment().totalDays) * 100);

@@ -6,12 +6,22 @@ import { CommitmentService } from '../../core/services/commitment.service';
 import { MeroService } from '../../core/services/mero.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ThemeService } from '../../core/services/theme.service';
+import { Commitment } from '@mehrchain/shared-data';
 import { CommitmentCardComponent } from '../../shared/components/commitment-card/commitment-card';
+import { DeleteConfirmationModal } from '../../shared/components/delete-confirmation-modal/delete-confirmation-modal';
+import { EditCommitmentModal } from '../../shared/components/edit-commitment-modal/edit-commitment-modal';
 import { NewCommitmentModal } from '../../shared/components/new-commitment-modal/new-commitment-modal';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, CommitmentCardComponent, LucideAngularModule, NewCommitmentModal],
+  imports: [
+    CommonModule,
+    CommitmentCardComponent,
+    LucideAngularModule,
+    NewCommitmentModal,
+    DeleteConfirmationModal,
+    EditCommitmentModal,
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -22,6 +32,8 @@ export class DashboardComponent {
   notificationService = inject(NotificationService);
   router = inject(Router);
   isModalOpen = signal(false);
+  deletingCommitment = signal<Commitment | null>(null);
+  editingCommitment = signal<Commitment | null>(null);
 
   toggleTheme() {
     const nextMode = this.themeService.isDark() ? 'light' : 'dark';
@@ -69,5 +81,50 @@ export class DashboardComponent {
       navigator.vibrate(50);
     }
     setTimeout(() => this.meroService.setState('idle'), 2000);
+  }
+
+  promptDelete(id: string) {
+    const found = this.commitmentService.commitments().find((c) => c.id === id);
+    if (found) {
+      this.deletingCommitment.set(found);
+    }
+  }
+
+  cancelDelete() {
+    this.deletingCommitment.set(null);
+  }
+
+  async confirmDelete() {
+    const target = this.deletingCommitment();
+    if (target) {
+      await this.commitmentService.removeCommitment(target.id);
+      this.deletingCommitment.set(null);
+    }
+  }
+
+  async handleArchive(id: string) {
+    await this.commitmentService.removeCommitment(id);
+  }
+
+  openEdit(id: string) {
+    const found = this.commitmentService.commitments().find((c) => c.id === id);
+    if (found) {
+      this.editingCommitment.set(found);
+    }
+  }
+
+  closeEdit() {
+    this.editingCommitment.set(null);
+  }
+
+  async handleUpdateCommitment(data: any) {
+    await this.commitmentService.updateCommitment(data.id, {
+      title: data.title,
+      why: data.why,
+      totalDays: data.totalDays,
+      category: data.category,
+      reminderTime: data.reminderTime,
+    });
+    this.editingCommitment.set(null);
   }
 }

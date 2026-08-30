@@ -4,6 +4,7 @@ import { CurrentUser } from '../auth/current-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CommitmentsService } from './commitments.service';
 import { CreateCommitmentDto } from './dto/create-commitment.dto';
+import { UpdateCommitmentDto } from './dto/update-commitment.dto';
 
 @ApiTags('Commitments')
 @ApiBearerAuth()
@@ -35,6 +36,17 @@ export class CommitmentsController {
     @Body('note') note?: string,
   ) {
     return this.commitmentsService.completeCommitment(user.id, id, note);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update an existing commitment' })
+  @ApiResponse({ status: 200, description: 'Commitment updated successfully' })
+  updateCommitment(
+    @CurrentUser() user: { id: string },
+    @Param('id') id: string,
+    @Body() dto: UpdateCommitmentDto,
+  ) {
+    return this.commitmentsService.updateCommitment(user.id, id, dto);
   }
 
   @Delete(':id')

@@ -31,6 +31,9 @@ import {
   Sun,
   Moon,
   Monitor,
+  MoreVertical,
+  Archive,
+  Edit,
 } from 'lucide-angular';
 
 export const commonTestProviders = [
@@ -66,6 +69,9 @@ export const commonTestProviders = [
       Sun,
       Moon,
       Monitor,
+      MoreVertical,
+      Archive,
+      Edit,
     })
   ),
 ];

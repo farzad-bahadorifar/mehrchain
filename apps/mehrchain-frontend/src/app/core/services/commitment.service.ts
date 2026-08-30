@@ -164,6 +164,42 @@ export class CommitmentService {
   }
 
   /**
+   * Updates an existing commitment.
+   */
+  async updateCommitment(id: string, updates: Partial<Commitment>): Promise<Commitment> {
+    let updatedItem: Commitment | undefined;
+
+    this.commitmentsSignal.update((list) =>
+      list.map((c) => {
+        if (c.id === id) {
+          updatedItem = { ...c, ...updates };
+          return updatedItem;
+        }
+        return c;
+      })
+    );
+
+    try {
+      const token = localStorage.getItem('mehrchain_auth_token_v1');
+      if (token) {
+        const backendUpdated = await firstValueFrom(
+          this.http.patch<Commitment>(`${this.API_URL}/${id}`, updates)
+        );
+        if (backendUpdated) {
+          this.commitmentsSignal.update((list) =>
+            list.map((c) => (c.id === id ? { ...c, ...backendUpdated } : c))
+          );
+          return backendUpdated;
+        }
+      }
+    } catch (err) {
+      console.warn('[CommitmentService] Failed to update commitment on backend.', err);
+    }
+
+    return updatedItem!;
+  }
+
+  /**
    * Archives or removes a commitment.
    */
   async removeCommitment(id: string): Promise<void> {
