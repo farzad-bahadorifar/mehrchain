@@ -1,45 +1,77 @@
-<div class="min-h-screen bg-background pb-24 px-5 pt-6 font-sans">
-  <div class="flex items-center justify-between mb-8">
+<div class="min-h-screen bg-background pb-28 px-5 pt-6 font-sans">
+  <!-- Header with Mero mascot avatar -->
+  <div class="flex items-center justify-between mb-6">
     <div>
       <h1 class="text-2xl font-bold text-foreground">My Journey</h1>
-      <p class="text-sm text-muted-foreground">Every step matters.</p>
+      <p class="text-sm text-muted-foreground">Every small step shapes your destiny.</p>
     </div>
-    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-      <lucide-icon name="trending-up" class="w-5 h-5"></lucide-icon>
+    <div class="w-10 h-10 rounded-full bg-primary/10 p-1">
+      <img src="assets/mero.png" alt="Mero Mascot" class="w-full h-full object-cover rounded-full" />
     </div>
   </div>
 
-  <div class="bg-white rounded-3xl p-5 shadow-sm border border-border/50 mb-6">
+  <!-- User Profile Card -->
+  <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6 flex items-center gap-4">
+    <div class="w-14 h-14 rounded-2xl bg-primary/10 p-1 shrink-0">
+      <img src="assets/mero.png" alt="Mero Mascot" class="w-full h-full object-contain" />
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2">
+        <h2 class="text-lg font-bold text-foreground truncate">
+          {{ currentUser()?.name || 'MehrChain Explorer' }}
+        </h2>
+        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary">
+          Active
+        </span>
+      </div>
+      <p class="text-xs text-muted-foreground truncate mt-0.5">
+        {{ currentUser()?.email || 'Signed In' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-3 gap-3 mb-6">
+    <div class="bg-card p-4 rounded-2xl border border-border/50 text-center shadow-soft">
+      <p class="text-[10px] text-muted-foreground font-bold uppercase mb-1">Habits</p>
+      <p class="text-xl font-bold text-foreground">{{ activeCommitmentsCount() }}</p>
+    </div>
+    <div class="bg-card p-4 rounded-2xl border border-border/50 text-center shadow-soft">
+      <p class="text-[10px] text-muted-foreground font-bold uppercase mb-1">Streak</p>
+      <p class="text-xl font-bold text-primary">{{ longestStreak() }}d</p>
+    </div>
+    <div class="bg-card p-4 rounded-2xl border border-border/50 text-center shadow-soft">
+      <p class="text-[10px] text-muted-foreground font-bold uppercase mb-1">Sparks</p>
+      <p class="text-xl font-bold text-foreground">{{ totalActivities() }}</p>
+    </div>
+  </div>
+
+  <!-- Activity Heatmap Calendar -->
+  <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6">
     <div class="flex items-center gap-2 mb-4">
-      <lucide-icon name="flame" class="w-5 h-5 text-orange-500"></lucide-icon>
-      <h2 class="font-bold text-lg">Activity Log</h2>
+      <div class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-500">
+        <lucide-icon name="flame" class="w-4 h-4"></lucide-icon>
+      </div>
+      <h2 class="font-bold text-base text-foreground">Activity Log</h2>
     </div>
 
     <app-heatmap-calendar [completedDates]="allHistory()" />
   </div>
 
-  <div class="grid grid-cols-2 gap-4 mb-8">
-    <div class="bg-white p-4 rounded-2xl border border-border/50">
-      <p class="text-xs text-muted-foreground font-bold uppercase mb-1">Total Activities</p>
-      <p class="text-2xl font-bold text-foreground">{{ totalActivities() }}</p>
-    </div>
-    <div class="bg-white p-4 rounded-2xl border border-border/50">
-      <p class="text-xs text-muted-foreground font-bold uppercase mb-1">Longest Streak</p>
-      <p class="text-2xl font-bold text-foreground">{{ longestStreak() }}</p>
-    </div>
-  </div>
-
-  <div class="space-y-4">
-    <h3 class="font-bold text-lg px-1">Recent Activity</h3>
+  <!-- Recent Activity -->
+  <div class="space-y-3 mb-8">
+    <h3 class="font-bold text-sm text-foreground px-1 uppercase tracking-wider text-muted-foreground">
+      Recent Consistency
+    </h3>
 
     @if (recentActivities().length === 0) {
-      <div class="text-center py-8 text-muted-foreground text-sm bg-muted/30 rounded-2xl">
-        No activities yet. Start a commitment!
+      <div class="text-center py-8 text-muted-foreground text-sm bg-muted/30 rounded-2xl border border-border/40">
+        No completions yet. Light your first lamp today!
       </div>
     } @else {
       @for (log of recentActivities(); track log.title + log.date) {
         <div
-          class="bg-white p-4 rounded-2xl border border-border/50 flex items-center justify-between animate-fade-in"
+          class="bg-card p-4 rounded-2xl border border-border/50 flex items-center justify-between shadow-soft animate-fade-in"
         >
           <div class="flex items-center gap-3">
             <div
@@ -52,11 +84,36 @@
               <p class="text-[10px] text-muted-foreground">{{ log.date }}</p>
             </div>
           </div>
-          <div class="text-green-500">
-            <lucide-icon name="check-circle-2" class="w-4 h-4"></lucide-icon>
+          <div class="text-primary">
+            <lucide-icon name="check-circle-2" class="w-5 h-5"></lucide-icon>
           </div>
         </div>
       }
     }
+  </div>
+
+  <!-- Account Actions -->
+  <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 space-y-3">
+    <h3 class="font-bold text-xs uppercase tracking-wider text-muted-foreground mb-3">
+      Account Settings
+    </h3>
+
+    <!-- Sign Out Button -->
+    <button
+      (click)="handleSignOut()"
+      class="w-full py-3.5 rounded-2xl font-bold bg-muted/50 border border-border text-foreground hover:bg-muted transition-all active:scale-98 flex items-center justify-center gap-2"
+    >
+      <lucide-icon name="log-out" class="w-4 h-4 text-muted-foreground"></lucide-icon>
+      <span>Sign Out</span>
+    </button>
+
+    <!-- Delete Account Button -->
+    <button
+      (click)="handleDeleteAccount()"
+      class="w-full py-3 rounded-2xl font-medium text-xs text-rose-500 hover:bg-rose-50 border border-rose-200/50 transition-all active:scale-98 flex items-center justify-center gap-1.5"
+    >
+      <lucide-icon name="trash-2" class="w-3.5 h-3.5"></lucide-icon>
+      <span>Delete Account & Data</span>
+    </button>
   </div>
 </div>

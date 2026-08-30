@@ -23,6 +23,12 @@ import {
   Clock,
   Calendar,
   ArrowLeft,
+  LogOut,
+  Trash2,
+  Mail,
+  User,
+  Link,
+  Zap,
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -53,6 +59,12 @@ export const appConfig: ApplicationConfig = {
         Clock,
         Calendar,
         ArrowLeft,
+        LogOut,
+        Trash2,
+        Mail,
+        User,
+        Link,
+        Zap,
       }),
     ),
   ],

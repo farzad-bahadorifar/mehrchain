@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   Heart,
@@ -12,24 +13,40 @@ import {
   Sparkles,
   Bell,
   Clock,
+  Lock,
+  Mail,
+  User,
+  X,
 } from 'lucide-angular';
+import { AuthService } from '../../core/services/auth.service';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { MeroService } from '../../core/services/mero.service';
 import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-onboarding',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule],
   templateUrl: './onboarding.html',
   styleUrl: './onboarding.css',
 })
 export class OnboardingComponent implements OnInit {
   private router = inject(Router);
+  private authService = inject(AuthService);
   private commitmentService = inject(CommitmentService);
   public meroService = inject(MeroService);
   private notificationService = inject(NotificationService);
 
+  // Steps:
+  // 0: Welcome
+  // 1: Why Choose Us
+  // 2: Meaning of MehrChain
+  // 3: Select Category
+  // 4: Pick Habit Spark
+  // 5: Duration, Why & Reminder
+  // 6: Create Profile & Sign Up
   step = signal<number>(0);
+
+  // Habit Form State
   selectedCategory = signal<string | null>(null);
   selectedHabit = signal<string | null>(null);
   selectedDuration = signal<number>(21);
@@ -37,6 +54,18 @@ export class OnboardingComponent implements OnInit {
   isCustomHabit = signal(false);
   whyText = signal('To prove to myself that small steps matter.');
   reminderTime = signal('08:30');
+
+  // Sign Up Form State (Step 6)
+  signUpName = signal('');
+  signUpEmail = signal('');
+  signUpPassword = signal('');
+  signUpError = signal('');
+
+  // Login Modal State
+  isLoginModalOpen = signal(false);
+  loginEmail = signal('');
+  loginPassword = signal('');
+  loginError = signal('');
 
   categories = [
     {
@@ -77,7 +106,8 @@ export class OnboardingComponent implements OnInit {
   };
 
   ngOnInit() {
-    if (this.commitmentService.hasAnyCommitment()) {
+    // Returning authenticated user check
+    if (this.authService.isAuthenticated() && this.commitmentService.hasAnyCommitment()) {
       this.router.navigate(['/dashboard']);
     }
   }
@@ -140,7 +170,36 @@ export class OnboardingComponent implements OnInit {
     }
   }
 
-  async finish() {
+  proceedToSignUp() {
+    this.step.set(7);
+  }
+
+  async handleSignUp() {
+    this.signUpError.set('');
+
+    const name = this.signUpName().trim();
+    const email = this.signUpEmail().trim();
+    const password = this.signUpPassword().trim();
+
+    if (!name || name.length < 2) {
+      this.signUpError.set('Please enter your full name.');
+      return;
+    }
+
+    if (!email || !email.includes('@')) {
+      this.signUpError.set('Please enter a valid email address.');
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      this.signUpError.set('Password must be at least 6 characters.');
+      return;
+    }
+
+    // Register user profile
+    await this.authService.register(name, email, password);
+
+    // Save habit commitment
     if (this.selectedHabit() && this.selectedCategory()) {
       const newCommitment = this.commitmentService.addCommitment({
         title: this.selectedHabit()!,
@@ -165,13 +224,44 @@ export class OnboardingComponent implements OnInit {
           commitmentId: newCommitment.id,
         });
       }
-
-      this.meroService.setState('celebrating');
-      this.router.navigate(['/dashboard']);
     }
+
+    this.meroService.setState('celebrating');
+    this.router.navigate(['/dashboard']);
   }
 
-  login() {
-    alert('Online account sync is coming soon! You can start right away with on-device storage.');
+  openLoginModal() {
+    this.loginError.set('');
+    this.isLoginModalOpen.set(true);
+  }
+
+  closeLoginModal() {
+    this.isLoginModalOpen.set(false);
+  }
+
+  async handleLogin() {
+    this.loginError.set('');
+    const email = this.loginEmail().trim();
+    const password = this.loginPassword().trim();
+
+    if (!email || !email.includes('@')) {
+      this.loginError.set('Please enter your valid email.');
+      return;
+    }
+
+    if (!password) {
+      this.loginError.set('Please enter your password.');
+      return;
+    }
+
+    await this.authService.login(email, password);
+    this.isLoginModalOpen.set(false);
+
+    // If user has commitments, take them to dashboard, else guide to pick a habit
+    if (this.commitmentService.hasAnyCommitment()) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.step.set(4); // Go to category selection
+    }
   }
 }
