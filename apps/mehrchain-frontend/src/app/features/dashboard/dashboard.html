@@ -1,18 +1,28 @@
 <div class="min-h-screen bg-background pb-24 px-5 pt-6 font-sans">
-  <!-- Header with Mero avatar -->
+  <!-- Header with Mero avatar and Quick Theme Toggle -->
   <div class="flex justify-between items-center mb-6">
     <div>
       <h1 class="text-2xl font-bold text-foreground">My Dashboard</h1>
       <p class="text-sm text-muted-foreground">Keep your lights burning.</p>
     </div>
-    <div class="w-10 h-10 rounded-full bg-primary/10 p-1">
-      <img src="assets/mero.png" alt="Mero Mascot" class="w-full h-full object-cover rounded-full" />
+    <div class="flex items-center gap-2.5">
+      <button
+        type="button"
+        (click)="toggleTheme()"
+        class="w-9 h-9 rounded-full bg-card border border-border/70 flex items-center justify-center text-foreground hover:border-primary/50 shadow-sm transition-all active:scale-95"
+        [title]="themeService.isDark() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+      >
+        <lucide-icon [name]="themeService.isDark() ? 'sun' : 'moon'" class="w-4 h-4 text-primary"></lucide-icon>
+      </button>
+      <div class="w-10 h-10 rounded-full bg-primary/10 p-1">
+        <img src="assets/mero.png" alt="Mero Mascot" class="w-full h-full object-cover rounded-full" />
+      </div>
     </div>
   </div>
 
   <!-- Overall Streak Card -->
   <div
-    class="bg-white rounded-2xl p-4 shadow-sm border border-border/50 flex justify-between items-center mb-6"
+    class="bg-card rounded-2xl p-4 shadow-sm border border-border/50 flex justify-between items-center mb-6"
   >
     <div class="flex items-center gap-3">
       <div

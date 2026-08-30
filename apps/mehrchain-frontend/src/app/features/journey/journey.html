@@ -92,6 +92,62 @@
     }
   </div>
 
+  <!-- Appearance & Theme Selector -->
+  <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+        Appearance
+      </h3>
+      <span class="text-[11px] font-bold text-primary capitalize">
+        {{ themeService.mode() }} Mode
+      </span>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2 p-1 bg-muted/60 rounded-2xl border border-border/40">
+      <button
+        type="button"
+        (click)="themeService.setTheme('light')"
+        class="py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5"
+        [class]="
+          themeService.mode() === 'light'
+            ? 'bg-card text-primary shadow-sm border border-border/60'
+            : 'text-muted-foreground hover:text-foreground'
+        "
+      >
+        <lucide-icon name="sun" class="w-4 h-4"></lucide-icon>
+        <span>Light</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="themeService.setTheme('system')"
+        class="py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5"
+        [class]="
+          themeService.mode() === 'system'
+            ? 'bg-card text-primary shadow-sm border border-border/60'
+            : 'text-muted-foreground hover:text-foreground'
+        "
+      >
+        <lucide-icon name="monitor" class="w-4 h-4"></lucide-icon>
+        <span>System</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="themeService.setTheme('dark')"
+        class="py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5"
+        [class]="
+          themeService.mode() === 'dark'
+            ? 'bg-card text-primary shadow-sm border border-border/60'
+            : 'text-muted-foreground hover:text-foreground'
+        "
+      >
+        <lucide-icon name="moon" class="w-4 h-4"></lucide-icon>
+        <span>Dark</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Account Actions -->
   <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 space-y-3">
     <h3 class="font-bold text-xs uppercase tracking-wider text-muted-foreground mb-3">

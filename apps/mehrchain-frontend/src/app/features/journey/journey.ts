@@ -4,6 +4,7 @@ import { HeatmapCalendar } from '../../shared/components/heatmap-calendar/heatma
 import { LucideAngularModule } from 'lucide-angular';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { ActivityLog } from '@mehrchain/shared-data';
 
 @Component({
@@ -15,6 +16,7 @@ import { ActivityLog } from '@mehrchain/shared-data';
 export class Journey {
   commitmentService = inject(CommitmentService);
   authService = inject(AuthService);
+  themeService = inject(ThemeService);
 
   currentUser = this.authService.currentUser;
 

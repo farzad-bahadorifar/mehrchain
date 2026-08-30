@@ -31,6 +31,9 @@ import {
   User,
   Link,
   Zap,
+  Sun,
+  Moon,
+  Monitor,
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -68,6 +71,9 @@ export const appConfig: ApplicationConfig = {
         User,
         Link,
         Zap,
+        Sun,
+        Moon,
+        Monitor,
       }),
     ),
   ],

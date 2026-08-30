@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import 'tailwindcss';
 
-@theme {
-  /* Colors */
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Light Theme Palette */
   --color-background: hsl(210 20% 98%);
   --color-foreground: hsl(220 29% 17%);
 
@@ -25,6 +27,62 @@
   --color-input: hsl(210 20% 90%);
   --color-ring: hsl(180 100% 25%);
 
+  --shadow-soft: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+  --shadow-float: 0 8px 24px -8px rgba(0, 128, 128, 0.25);
+}
+
+.dark {
+  /* Dark Theme Palette: Deep obsidian slate with radiant emerald glow */
+  --color-background: hsl(222 47% 9%);
+  --color-foreground: hsl(210 40% 98%);
+
+  --color-card: hsl(222 47% 14%);
+  --color-card-foreground: hsl(210 40% 98%);
+
+  --color-primary: hsl(172 75% 42%);
+  --color-primary-foreground: hsl(0 0% 100%);
+
+  --color-secondary: hsl(217 33% 18%);
+  --color-secondary-foreground: hsl(210 40% 98%);
+
+  --color-muted: hsl(217 33% 18%);
+  --color-muted-foreground: hsl(215 20% 65%);
+
+  --color-accent: hsl(172 80% 50%);
+  --color-accent-foreground: hsl(0 0% 100%);
+
+  --color-border: hsl(217 33% 22%);
+  --color-input: hsl(217 33% 22%);
+  --color-ring: hsl(172 75% 42%);
+
+  --shadow-soft: 0 4px 14px -2px rgba(0, 0, 0, 0.5);
+  --shadow-float: 0 8px 24px -8px rgba(20, 184, 166, 0.35);
+}
+
+@theme {
+  /* Dynamic Token Binding */
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+
+  --color-card: var(--color-card);
+  --color-card-foreground: var(--color-card-foreground);
+
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+
+  --color-accent: var(--color-accent);
+  --color-accent-foreground: var(--color-accent-foreground);
+
+  --color-border: var(--color-border);
+  --color-input: var(--color-input);
+  --color-ring: var(--color-ring);
+
   /* Border Radius */
   --radius-lg: 1rem;
   --radius-md: calc(1rem - 2px);
@@ -33,8 +91,8 @@
   --radius-3xl: 1.5rem;
 
   /* Shadows */
-  --shadow-soft: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
-  --shadow-float: 0 8px 24px -8px rgba(0, 128, 128, 0.25);
+  --shadow-soft: var(--shadow-soft);
+  --shadow-float: var(--shadow-float);
 
   /* Fonts */
   --font-sans: 'Poppins', sans-serif;
@@ -45,6 +103,7 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom Components */

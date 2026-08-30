@@ -5,6 +5,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { MeroService } from '../../core/services/mero.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { CommitmentCardComponent } from '../../shared/components/commitment-card/commitment-card';
 import { NewCommitmentModal } from '../../shared/components/new-commitment-modal/new-commitment-modal';
 
@@ -16,10 +17,16 @@ import { NewCommitmentModal } from '../../shared/components/new-commitment-modal
 })
 export class DashboardComponent {
   commitmentService = inject(CommitmentService);
+  themeService = inject(ThemeService);
   meroService = inject(MeroService);
   notificationService = inject(NotificationService);
   router = inject(Router);
   isModalOpen = signal(false);
+
+  toggleTheme() {
+    const nextMode = this.themeService.isDark() ? 'light' : 'dark';
+    this.themeService.setTheme(nextMode);
+  }
 
   constructor() {
     effect(() => {
