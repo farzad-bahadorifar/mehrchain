@@ -92,6 +92,65 @@
     }
   </div>
 
+  <!-- Archived Flames Section -->
+  <mc-card variant="elevated" padding="md" class="mb-6 block">
+    <div
+      class="flex items-center justify-between cursor-pointer select-none"
+      (click)="toggleArchived()"
+    >
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-muted flex items-center justify-center text-muted-foreground">
+          <lucide-icon name="archive" class="w-4 h-4"></lucide-icon>
+        </div>
+        <div>
+          <h3 class="font-bold text-sm text-foreground">Archived Flames</h3>
+          <p class="text-[11px] text-muted-foreground">Paused habits and past sparks</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-muted text-muted-foreground">
+          {{ commitmentService.archivedCommitments().length }}
+        </span>
+        <lucide-icon
+          [name]="showArchived() ? 'chevron-up' : 'chevron-down'"
+          class="w-4 h-4 text-muted-foreground"
+        ></lucide-icon>
+      </div>
+    </div>
+
+    @if (showArchived()) {
+      <div class="mt-4 pt-3 border-t border-border/40 space-y-2.5 animate-fade-in">
+        @if (commitmentService.archivedCommitments().length === 0) {
+          <div class="text-center py-6 text-xs text-muted-foreground">
+            No archived habits found. All your active flames are burning bright!
+          </div>
+        } @else {
+          @for (habit of commitmentService.archivedCommitments(); track habit.id) {
+            <div
+              class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-center justify-between gap-3"
+            >
+              <div>
+                <p class="text-sm font-bold text-foreground">{{ habit.title }}</p>
+                <p class="text-[11px] text-muted-foreground">
+                  Reached Day {{ habit.currentDay }} of {{ habit.totalDays }}
+                </p>
+              </div>
+
+              <mc-button
+                variant="outline"
+                size="sm"
+                (clicked)="restoreHabit(habit.id)"
+              >
+                <lucide-icon name="rotate-ccw" class="w-3.5 h-3.5 text-primary"></lucide-icon>
+                <span>Restore</span>
+              </mc-button>
+            </div>
+          }
+        }
+      </div>
+    }
+  </mc-card>
+
   <!-- Appearance & Theme Selector -->
   <mc-card variant="elevated" padding="md" class="mb-6 block">
     <div class="flex items-center justify-between mb-3">

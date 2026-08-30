@@ -203,7 +203,11 @@ export class CommitmentService {
    * Archives or removes a commitment.
    */
   async removeCommitment(id: string): Promise<void> {
+    const target = this.commitmentsSignal().find((c) => c.id === id);
     this.commitmentsSignal.update((list) => list.filter((c) => c.id !== id));
+    if (target) {
+      this.archivedCommitmentsSignal.update((list) => [{ ...target, isArchived: true }, ...list]);
+    }
 
     try {
       const token = localStorage.getItem('mehrchain_auth_token_v1');
@@ -215,8 +219,48 @@ export class CommitmentService {
     }
   }
 
+  private archivedCommitmentsSignal = signal<Commitment[]>([]);
+  readonly archivedCommitments = this.archivedCommitmentsSignal.asReadonly();
+
+  async fetchArchivedCommitments(): Promise<Commitment[]> {
+    try {
+      const token = localStorage.getItem('mehrchain_auth_token_v1');
+      if (token) {
+        const list = await firstValueFrom(
+          this.http.get<Commitment[]>(`${this.API_URL}/archived`)
+        );
+        if (list) {
+          this.archivedCommitmentsSignal.set(list);
+          return list;
+        }
+      }
+    } catch (err) {
+      console.warn('[CommitmentService] Failed to fetch archived commitments:', err);
+    }
+    return this.archivedCommitmentsSignal();
+  }
+
+  async restoreCommitment(id: string): Promise<void> {
+    const target = this.archivedCommitmentsSignal().find((c) => c.id === id);
+
+    this.archivedCommitmentsSignal.update((list) => list.filter((c) => c.id !== id));
+    if (target) {
+      this.commitmentsSignal.update((list) => [{ ...target, isArchived: false }, ...list]);
+    }
+
+    try {
+      const token = localStorage.getItem('mehrchain_auth_token_v1');
+      if (token) {
+        await firstValueFrom(this.http.patch(`${this.API_URL}/${id}/restore`, {}));
+      }
+    } catch (err) {
+      console.warn('[CommitmentService] Failed to restore commitment on backend:', err);
+    }
+  }
+
   resetData() {
     this.commitmentsSignal.set([]);
+    this.archivedCommitmentsSignal.set([]);
     localStorage.removeItem(this.STORAGE_KEY);
   }
 }

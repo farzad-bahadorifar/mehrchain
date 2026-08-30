@@ -147,4 +147,40 @@ export class CommitmentsService {
       data: { isArchived: true },
     });
   }
+
+  async getArchivedCommitments(userId: string) {
+    const commitments = await this.prisma.commitment.findMany({
+      where: {
+        userId,
+        isArchived: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
+
+    return commitments.map((c) => ({
+      ...c,
+      isCompletedToday: false,
+    }));
+  }
+
+  async restoreCommitment(userId: string, commitmentId: string) {
+    const commitment = await this.prisma.commitment.findUnique({
+      where: { id: commitmentId },
+    });
+
+    if (!commitment) {
+      throw new NotFoundException('Commitment not found.');
+    }
+
+    if (commitment.userId !== userId) {
+      throw new ForbiddenException('Access denied.');
+    }
+
+    return this.prisma.commitment.update({
+      where: { id: commitmentId },
+      data: { isArchived: false },
+    });
+  }
 }

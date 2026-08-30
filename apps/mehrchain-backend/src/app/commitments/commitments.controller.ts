@@ -49,10 +49,24 @@ export class CommitmentsController {
     return this.commitmentsService.updateCommitment(user.id, id, dto);
   }
 
+  @Get('archived')
+  @ApiOperation({ summary: 'Get all archived commitments for the current user' })
+  @ApiResponse({ status: 200, description: 'List of archived commitments' })
+  getArchivedCommitments(@CurrentUser() user: { id: string }) {
+    return this.commitmentsService.getArchivedCommitments(user.id);
+  }
+
   @Delete(':id')
   @ApiOperation({ summary: 'Archive a commitment' })
   @ApiResponse({ status: 200, description: 'Commitment archived' })
   deleteCommitment(@CurrentUser() user: { id: string }, @Param('id') id: string) {
     return this.commitmentsService.deleteCommitment(user.id, id);
+  }
+
+  @Patch(':id/restore')
+  @ApiOperation({ summary: 'Restore an archived commitment' })
+  @ApiResponse({ status: 200, description: 'Commitment restored' })
+  restoreCommitment(@CurrentUser() user: { id: string }, @Param('id') id: string) {
+    return this.commitmentsService.restoreCommitment(user.id, id);
   }
 }

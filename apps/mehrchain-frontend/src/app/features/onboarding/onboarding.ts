@@ -17,6 +17,9 @@ import {
   Mail,
   User,
   X,
+  Eye,
+  EyeOff,
+  ArrowLeft,
 } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
 import { CommitmentService } from '../../core/services/commitment.service';
@@ -60,12 +63,22 @@ export class OnboardingComponent implements OnInit {
   signUpEmail = signal('');
   signUpPassword = signal('');
   signUpError = signal('');
+  showSignUpPassword = signal(false);
 
   // Login Modal State
   isLoginModalOpen = signal(false);
   loginEmail = signal('');
   loginPassword = signal('');
   loginError = signal('');
+  showLoginPassword = signal(false);
+
+  toggleSignUpPassword() {
+    this.showSignUpPassword.update((v) => !v);
+  }
+
+  toggleLoginPassword() {
+    this.showLoginPassword.update((v) => !v);
+  }
 
   categories = [
     {
@@ -107,7 +120,7 @@ export class OnboardingComponent implements OnInit {
 
   ngOnInit() {
     // Returning authenticated user check
-    if (this.authService.isAuthenticated() && this.commitmentService.hasAnyCommitment()) {
+    if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
     }
   }
@@ -200,7 +213,17 @@ export class OnboardingComponent implements OnInit {
     }
 
     // Register user profile
-    await this.authService.register(name, email, password);
+    try {
+      await this.authService.register(name, email, password);
+    } catch (err: any) {
+      const msg = err?.message || '';
+      if (msg.includes('already exists') || msg.toLowerCase().includes('conflict')) {
+        this.signUpError.set('An account with this email already exists. Please sign in instead.');
+      } else {
+        this.signUpError.set(msg || 'Registration failed. Please check your details and network.');
+      }
+      return;
+    }
 
     // Save habit commitment
     if (this.selectedHabit() && this.selectedCategory()) {
@@ -257,14 +280,12 @@ export class OnboardingComponent implements OnInit {
       return;
     }
 
-    await this.authService.login(email, password);
-    this.isLoginModalOpen.set(false);
-
-    // If user has commitments, take them to dashboard, else guide to pick a habit
-    if (this.commitmentService.hasAnyCommitment()) {
+    try {
+      await this.authService.login(email, password);
+      this.isLoginModalOpen.set(false);
       this.router.navigate(['/dashboard']);
-    } else {
-      this.step.set(4); // Go to category selection
+    } catch (err: any) {
+      this.loginError.set(err?.message || 'Invalid email or password. Please try again.');
     }
   }
 }

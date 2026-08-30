@@ -34,6 +34,11 @@ import {
   MoreVertical,
   Archive,
   Edit,
+  Eye,
+  EyeOff,
+  ChevronDown,
+  ChevronUp,
+  RotateCcw,
 } from 'lucide-angular';
 
 export const commonTestProviders = [
@@ -72,6 +77,11 @@ export const commonTestProviders = [
       MoreVertical,
       Archive,
       Edit,
+      Eye,
+      EyeOff,
+      ChevronDown,
+      ChevronUp,
+      RotateCcw,
     })
   ),
 ];

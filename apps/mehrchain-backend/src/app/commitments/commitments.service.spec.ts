@@ -186,4 +186,37 @@ describe('CommitmentsService (Unit Tests)', () => {
       });
     });
   });
+
+  describe('getArchivedCommitments', () => {
+    it('should return only archived commitments', async () => {
+      mockPrisma.commitment.findMany.mockResolvedValue([
+        { id: 'comm-archived', title: 'Old Habit', isArchived: true },
+      ]);
+
+      const result = await service.getArchivedCommitments('user-1');
+      expect(result.length).toBe(1);
+      expect(result[0].id).toBe('comm-archived');
+    });
+  });
+
+  describe('restoreCommitment', () => {
+    it('should restore an archived commitment to active', async () => {
+      mockPrisma.commitment.findUnique.mockResolvedValue({
+        id: 'comm-archived',
+        userId: 'user-1',
+        isArchived: true,
+      });
+      mockPrisma.commitment.update.mockResolvedValue({
+        id: 'comm-archived',
+        isArchived: false,
+      });
+
+      const result = await service.restoreCommitment('user-1', 'comm-archived');
+      expect(result.isArchived).toBe(false);
+      expect(mockPrisma.commitment.update).toHaveBeenCalledWith({
+        where: { id: 'comm-archived' },
+        data: { isArchived: false },
+      });
+    });
+  });
 });

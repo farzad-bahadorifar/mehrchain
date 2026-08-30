@@ -37,6 +37,11 @@ import {
   MoreVertical,
   Archive,
   Edit,
+  Eye,
+  EyeOff,
+  ChevronDown,
+  ChevronUp,
+  RotateCcw,
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -80,6 +85,11 @@ export const appConfig: ApplicationConfig = {
         MoreVertical,
         Archive,
         Edit,
+        Eye,
+        EyeOff,
+        ChevronDown,
+        ChevronUp,
+        RotateCcw,
       }),
     ),
   ],

@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeatmapCalendar } from '../../shared/components/heatmap-calendar/heatmap-calendar';
 import { LucideAngularModule } from 'lucide-angular';
@@ -15,10 +15,24 @@ import { McButtonComponent, McCardComponent } from '../../shared/ui';
   templateUrl: './journey.html',
   styleUrl: './journey.css',
 })
-export class Journey {
+export class Journey implements OnInit {
   commitmentService = inject(CommitmentService);
   authService = inject(AuthService);
   themeService = inject(ThemeService);
+
+  showArchived = signal(false);
+
+  ngOnInit(): void {
+    this.commitmentService.fetchArchivedCommitments();
+  }
+
+  toggleArchived(): void {
+    this.showArchived.update((v) => !v);
+  }
+
+  async restoreHabit(id: string): Promise<void> {
+    await this.commitmentService.restoreCommitment(id);
+  }
 
   currentUser = this.authService.currentUser;
 

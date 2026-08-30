@@ -6,9 +6,8 @@ import { CommitmentService } from '../services/commitment.service';
 export const onboardingGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
-  const commitmentService = inject(CommitmentService);
 
-  if (authService.isAuthenticated() && commitmentService.hasAnyCommitment()) {
+  if (authService.isAuthenticated()) {
     return true;
   } else {
     return router.createUrlTree(['/']);
