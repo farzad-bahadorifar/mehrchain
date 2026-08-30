@@ -93,7 +93,7 @@
   </div>
 
   <!-- Appearance & Theme Selector -->
-  <mc-card variant="elevated" padding="md">
+  <mc-card variant="elevated" padding="md" class="mb-6 block">
     <div class="flex items-center justify-between mb-3">
       <h3 class="font-bold text-xs uppercase tracking-wider text-muted-foreground">
         Appearance
@@ -149,31 +149,33 @@
   </mc-card>
 
   <!-- Account Actions -->
-  <mc-card variant="elevated" padding="md" class="space-y-3 block">
+  <mc-card variant="elevated" padding="md" class="mb-8 block">
     <h3 class="font-bold text-xs uppercase tracking-wider text-muted-foreground mb-3">
       Account Settings
     </h3>
 
-    <!-- Sign Out Button -->
-    <mc-button
-      variant="secondary"
-      size="lg"
-      [fullWidth]="true"
-      (clicked)="handleSignOut()"
-    >
-      <lucide-icon name="log-out" class="w-4 h-4 text-muted-foreground"></lucide-icon>
-      <span>Sign Out</span>
-    </mc-button>
+    <div class="flex flex-col gap-3.5">
+      <!-- Sign Out Button -->
+      <mc-button
+        variant="secondary"
+        size="lg"
+        [fullWidth]="true"
+        (clicked)="handleSignOut()"
+      >
+        <lucide-icon name="log-out" class="w-4 h-4 text-muted-foreground"></lucide-icon>
+        <span>Sign Out</span>
+      </mc-button>
 
-    <!-- Delete Account Button -->
-    <mc-button
-      variant="danger"
-      size="md"
-      [fullWidth]="true"
-      (clicked)="handleDeleteAccount()"
-    >
-      <lucide-icon name="trash-2" class="w-3.5 h-3.5"></lucide-icon>
-      <span>Delete Account & Data</span>
-    </mc-button>
+      <!-- Delete Account Button -->
+      <mc-button
+        variant="danger"
+        size="md"
+        [fullWidth]="true"
+        (clicked)="handleDeleteAccount()"
+      >
+        <lucide-icon name="trash-2" class="w-3.5 h-3.5"></lucide-icon>
+        <span>Delete Account & Data</span>
+      </mc-button>
+    </div>
   </mc-card>
 </div>
