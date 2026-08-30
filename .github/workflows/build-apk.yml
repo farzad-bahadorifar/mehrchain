@@ -1,13 +1,29 @@
-name: Build Android APK
+name: Build & Release Android APK
 
 on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      publish_release:
+        description: 'Publish official GitHub Release with downloadable APK'
+        required: false
+        type: boolean
+        default: false
+      version_tag:
+        description: 'Release Tag Name (e.g. v0.9.0-preview)'
+        required: false
+        type: string
+        default: 'v0.9.0-preview'
+
+permissions:
+  contents: write
 
 jobs:
   build-apk:
@@ -51,10 +67,26 @@ jobs:
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon --stacktrace
+          # Copy to clean name for release attachment
+          cp app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/mehrchain.apk
 
-      - name: 🚀 Upload APK Artifact
+      - name: 🚀 Upload APK Artifact (Internal Build)
         uses: actions/upload-artifact@v4
         with:
           name: mehrchain-debug-apk
-          path: android/app/build/outputs/apk/debug/*.apk
+          path: android/app/build/outputs/apk/debug/mehrchain.apk
           retention-days: 14
+
+      - name: 🏷️ Publish Official GitHub Release (Only on Tags or Manual Request)
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.publish_release == true
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || inputs.version_tag }}
+          name: MehrChain ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || inputs.version_tag }}
+          files: |
+            android/app/build/outputs/apk/debug/mehrchain.apk
+          draft: false
+          prerelease: true
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
