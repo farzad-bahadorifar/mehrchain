@@ -1,23 +1,32 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommitmentService } from './commitment.service';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface UserProfile {
   id: string;
   name: string;
   email: string;
+  role?: string;
   createdAt: string;
+}
+
+interface AuthResponse {
+  user: UserProfile;
+  accessToken: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private http = inject(HttpClient);
   private router = inject(Router);
-  private commitmentService = inject(CommitmentService);
 
   private readonly AUTH_KEY = 'mehrchain_auth_user_v1';
   private readonly TOKEN_KEY = 'mehrchain_auth_token_v1';
+  private readonly API_URL = `${environment.apiUrl}/auth`;
 
   // User authentication state
   private currentUserSignal = signal<UserProfile | null>(null);
@@ -30,14 +39,43 @@ export class AuthService {
   }
 
   /**
-   * Loads persisted user session on application launch for automatic login.
+   * Retrieves the current stored JWT access token.
    */
-  private loadPersistedSession(): void {
+  getToken(): string | null {
+    try {
+      return localStorage.getItem(this.TOKEN_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Loads persisted user session on application launch for instant auto-login.
+   */
+  private async loadPersistedSession(): Promise<void> {
     try {
       const stored = localStorage.getItem(this.AUTH_KEY);
-      if (stored) {
+      const token = this.getToken();
+
+      if (stored && token) {
         const user = JSON.parse(stored) as UserProfile;
         this.currentUserSignal.set(user);
+
+        // Verify session validity silently in background
+        try {
+          const freshUser = await firstValueFrom(
+            this.http.get<UserProfile>(`${this.API_URL}/me`)
+          );
+          if (freshUser) {
+            this.currentUserSignal.set(freshUser);
+            localStorage.setItem(this.AUTH_KEY, JSON.stringify(freshUser));
+          }
+        } catch (err) {
+          // If token expired on server (401), clean up
+          if (err instanceof HttpErrorResponse && err.status === 401) {
+            this.logout();
+          }
+        }
       }
     } catch (err) {
       console.error('[AuthService] Failed to load stored user session:', err);
@@ -45,63 +83,63 @@ export class AuthService {
   }
 
   /**
-   * Registers a new user and creates their profile session.
+   * Registers a new user account with the backend API.
    */
   async register(name: string, email: string, password?: string): Promise<UserProfile> {
-    const newUser: UserProfile = {
-      id: crypto.randomUUID(),
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      createdAt: new Date().toISOString(),
-    };
+    try {
+      const payload = {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        password: password || 'defaultPass123',
+      };
 
-    // Store profile and mock JWT token
-    localStorage.setItem(this.AUTH_KEY, JSON.stringify(newUser));
-    localStorage.setItem(this.TOKEN_KEY, 'mock_token_' + Date.now());
+      const res = await firstValueFrom(
+        this.http.post<AuthResponse>(`${this.API_URL}/register`, payload)
+      );
 
-    this.currentUserSignal.set(newUser);
-    return newUser;
+      localStorage.setItem(this.AUTH_KEY, JSON.stringify(res.user));
+      localStorage.setItem(this.TOKEN_KEY, res.accessToken);
+
+      this.currentUserSignal.set(res.user);
+      return res.user;
+    } catch (err: any) {
+      const message =
+        err?.error?.message ||
+        (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
+        'Registration failed. Please check your network connection.';
+      throw new Error(message);
+    }
   }
 
   /**
-   * Logs in an existing user.
+   * Authenticates an existing user account with the backend API.
    */
   async login(email: string, password?: string): Promise<UserProfile> {
-    const cleanEmail = email.trim().toLowerCase();
-    
-    // Check if there was a previous registered user with this email
-    let user: UserProfile;
-    const stored = localStorage.getItem(this.AUTH_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored) as UserProfile;
-      if (parsed.email === cleanEmail) {
-        user = parsed;
-      } else {
-        user = {
-          id: crypto.randomUUID(),
-          name: cleanEmail.split('@')[0] || 'Explorer',
-          email: cleanEmail,
-          createdAt: new Date().toISOString(),
-        };
-      }
-    } else {
-      user = {
-        id: crypto.randomUUID(),
-        name: cleanEmail.split('@')[0] || 'Explorer',
-        email: cleanEmail,
-        createdAt: new Date().toISOString(),
+    try {
+      const payload = {
+        email: email.trim().toLowerCase(),
+        password: password || '',
       };
+
+      const res = await firstValueFrom(
+        this.http.post<AuthResponse>(`${this.API_URL}/login`, payload)
+      );
+
+      localStorage.setItem(this.AUTH_KEY, JSON.stringify(res.user));
+      localStorage.setItem(this.TOKEN_KEY, res.accessToken);
+
+      this.currentUserSignal.set(res.user);
+      return res.user;
+    } catch (err: any) {
+      const message =
+        err?.error?.message ||
+        'Invalid email or password. Please try again.';
+      throw new Error(message);
     }
-
-    localStorage.setItem(this.AUTH_KEY, JSON.stringify(user));
-    localStorage.setItem(this.TOKEN_KEY, 'mock_token_' + Date.now());
-
-    this.currentUserSignal.set(user);
-    return user;
   }
 
   /**
-   * Signs the user out of the application.
+   * Signs the user out of the application and clears tokens.
    */
   logout(): void {
     localStorage.removeItem(this.AUTH_KEY);
@@ -111,12 +149,11 @@ export class AuthService {
   }
 
   /**
-   * Permanently deletes user profile and associated habit data.
+   * Permanently deletes user profile and session.
    */
   deleteAccount(): void {
     localStorage.removeItem(this.AUTH_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
-    this.commitmentService.resetData();
     this.currentUserSignal.set(null);
     this.router.navigate(['/']);
   }

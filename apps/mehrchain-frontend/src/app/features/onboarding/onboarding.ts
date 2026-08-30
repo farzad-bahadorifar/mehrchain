@@ -201,7 +201,7 @@ export class OnboardingComponent implements OnInit {
 
     // Save habit commitment
     if (this.selectedHabit() && this.selectedCategory()) {
-      const newCommitment = this.commitmentService.addCommitment({
+      const newCommitment = await this.commitmentService.addCommitment({
         title: this.selectedHabit()!,
         category: this.selectedCategory() as any,
         totalDays: this.selectedDuration(),

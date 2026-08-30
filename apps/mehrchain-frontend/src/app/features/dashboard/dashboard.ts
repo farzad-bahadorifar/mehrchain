@@ -32,7 +32,7 @@ export class DashboardComponent {
   }
 
   async handleNewCommitment(data: any) {
-    const newCommitment = this.commitmentService.addCommitment(data);
+    const newCommitment = await this.commitmentService.addCommitment(data);
     this.isModalOpen.set(false);
     this.meroService.setState('celebrating');
 

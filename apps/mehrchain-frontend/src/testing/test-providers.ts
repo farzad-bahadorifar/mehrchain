@@ -1,0 +1,65 @@
+import { importProvidersFrom } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import {
+  LucideAngularModule,
+  Flame,
+  Sparkles,
+  Plus,
+  Check,
+  Heart,
+  Leaf,
+  Users,
+  TrendingUp,
+  ArrowRight,
+  X,
+  Globe,
+  Lock,
+  CheckCircle2,
+  Bell,
+  Clock,
+  Calendar,
+  ArrowLeft,
+  LogOut,
+  Trash2,
+  Mail,
+  User,
+  Link,
+  Zap,
+  Home,
+} from 'lucide-angular';
+
+export const commonTestProviders = [
+  provideHttpClient(),
+  provideHttpClientTesting(),
+  provideRouter([]),
+  importProvidersFrom(
+    LucideAngularModule.pick({
+      Flame,
+      Sparkles,
+      Plus,
+      Check,
+      Heart,
+      Leaf,
+      Users,
+      TrendingUp,
+      ArrowRight,
+      X,
+      Globe,
+      Lock,
+      CheckCircle2,
+      Bell,
+      Clock,
+      Calendar,
+      ArrowLeft,
+      LogOut,
+      Trash2,
+      Mail,
+      User,
+      Link,
+      Zap,
+      Home,
+    })
+  ),
+];
