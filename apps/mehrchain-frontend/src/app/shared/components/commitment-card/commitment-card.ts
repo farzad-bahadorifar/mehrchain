@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { Commitment } from '@mehrchain/shared-data';
+import { McBadgeComponent, McButtonComponent, McCardComponent } from '../../ui';
 
 @Component({
   selector: 'app-commitment-card',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, McCardComponent, McButtonComponent, McBadgeComponent],
   templateUrl: './commitment-card.html',
   styleUrl: './commitment-card.css',
 })

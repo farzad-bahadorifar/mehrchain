@@ -1,20 +1,16 @@
-<div
-  class="bg-card rounded-[1.5rem] p-5 shadow-soft border border-border/50 relative overflow-hidden transition-all duration-300 hover:shadow-lg"
->
+<mc-card variant="elevated" padding="md">
   <div class="flex justify-between items-start mb-3">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span
-          class="inline-block px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary"
-        >
+        <mc-badge variant="primary" size="xs">
           {{ commitment().category }}
-        </span>
+        </mc-badge>
 
         @if (commitment().reminderTime) {
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium bg-muted text-muted-foreground">
+          <mc-badge variant="neutral" size="xs">
             <lucide-icon name="bell" class="w-3 h-3 text-primary"></lucide-icon>
             <span>{{ commitment().reminderTime }}</span>
-          </span>
+          </mc-badge>
         }
       </div>
       <h3 class="text-lg font-bold text-foreground">{{ commitment().title }}</h3>
@@ -45,32 +41,32 @@
 
   <div class="h-2 w-full bg-muted rounded-full overflow-hidden mb-4">
     <div
-      class="h-full bg-primary transition-all duration-1000 ease-out rounded-full"
+      class="h-full bg-primary transition-all duration-500 rounded-full"
       [style.width.%]="progressPercent"
     ></div>
   </div>
 
-  <div class="flex gap-1.5 mb-5 justify-center opacity-60">
+  <!-- Weekly Chain Dots -->
+  <div class="flex justify-between items-center px-1 mb-4">
     @for (dot of weekDots; track $index) {
       <div
-        class="w-2 h-2 rounded-full transition-colors"
+        class="w-2.5 h-2.5 rounded-full transition-all duration-300"
         [class.bg-primary]="dot === 'filled'"
-        [class.bg-primary-30]="dot === 'current'"
         [class.bg-muted]="dot === 'empty'"
+        [class.bg-accent]="dot === 'current'"
+        [class.ring-2]="dot === 'current'"
+        [class.ring-primary]="dot === 'current'"
         [class.animate-pulse]="dot === 'current'"
       ></div>
     }
   </div>
 
-  <button
-    (click)="onComplete.emit(commitment().id)"
+  <mc-button
+    [variant]="commitment().isCompletedToday ? 'secondary' : 'primary'"
+    size="md"
+    [fullWidth]="true"
     [disabled]="commitment().isCompletedToday"
-    class="w-full py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
-    [class]="
-      commitment().isCompletedToday
-        ? 'bg-primary/10 text-primary cursor-default'
-        : 'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-accent'
-    "
+    (clicked)="onComplete.emit(commitment().id)"
   >
     @if (commitment().isCompletedToday) {
       <span>Completed</span>
@@ -78,5 +74,5 @@
       <lucide-icon name="check" class="w-5 h-5"></lucide-icon>
       <span>I did it today</span>
     }
-  </button>
-</div>
+  </mc-button>
+</mc-card>
