@@ -28,6 +28,12 @@
       },
       "configurations": {
         "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/mehrchain-frontend/src/environments/environment.ts",
+              "with": "apps/mehrchain-frontend/src/environments/environment.prod.ts"
+            }
+          ],
           "optimization": {
             "scripts": true,
             "styles": {

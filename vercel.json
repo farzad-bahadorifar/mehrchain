@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "buildCommand": "npx nx build mehrchain-frontend",
+  "outputDirectory": "dist/mehrchain-frontend/browser",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

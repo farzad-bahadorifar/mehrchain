@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: mehrchain-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install && npx prisma generate --schema=apps/mehrchain-backend/prisma/schema.prisma && npx nx build mehrchain-backend
+    startCommand: node dist/mehrchain-backend/main.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
