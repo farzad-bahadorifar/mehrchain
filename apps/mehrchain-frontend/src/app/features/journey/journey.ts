@@ -8,10 +8,11 @@ import { ThemeService } from '../../core/services/theme.service';
 import { ActivityLog } from '@mehrchain/shared-data';
 
 import { McButtonComponent, McCardComponent } from '../../shared/ui';
+import { MeroComponent } from '../../shared/components/mero/mero';
 
 @Component({
   selector: 'app-journey',
-  imports: [CommonModule, HeatmapCalendar, LucideAngularModule, McCardComponent, McButtonComponent],
+  imports: [CommonModule, HeatmapCalendar, LucideAngularModule, McCardComponent, McButtonComponent, MeroComponent],
   templateUrl: './journey.html',
   styleUrl: './journey.css',
 })

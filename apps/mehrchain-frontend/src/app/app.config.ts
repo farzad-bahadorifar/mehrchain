@@ -43,6 +43,10 @@ import {
   ChevronDown,
   ChevronUp,
   RotateCcw,
+  AlertCircle,
+  LogIn,
+  HelpCircle,
+  Info,
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -91,6 +95,10 @@ export const appConfig: ApplicationConfig = {
         ChevronDown,
         ChevronUp,
         RotateCcw,
+        AlertCircle,
+        LogIn,
+        HelpCircle,
+        Info,
       }),
     ),
   ],

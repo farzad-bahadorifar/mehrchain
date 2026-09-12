@@ -12,4 +12,5 @@ export interface Commitment {
   lastCompletedDate?: string;
   history?: string[];
   reminderTime?: string;
+  isArchived?: boolean;
 }

@@ -3,19 +3,34 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { AuthService } from './auth.service';
+import { CommitmentStore } from '../store/commitment.store';
 
 describe('AuthService (Frontend)', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
+  let mockCommitmentStore: {
+    loadForUser: ReturnType<typeof vi.fn>;
+    syncWithBackend: ReturnType<typeof vi.fn>;
+    resetState: ReturnType<typeof vi.fn>;
+    clearUserStorage: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
     localStorage.clear();
+    mockCommitmentStore = {
+      loadForUser: vi.fn(),
+      syncWithBackend: vi.fn().mockResolvedValue(undefined),
+      resetState: vi.fn(),
+      clearUserStorage: vi.fn(),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         AuthService,
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
+        { provide: CommitmentStore, useValue: mockCommitmentStore },
       ],
     });
 
@@ -55,6 +70,7 @@ describe('AuthService (Frontend)', () => {
     expect(service.currentUser()?.email).toBe('farzad@example.com');
     expect(service.isAuthenticated()).toBe(true);
     expect(service.getToken()).toBe('test_token_xyz');
+    expect(mockCommitmentStore.loadForUser).toHaveBeenCalledWith('user-1');
   });
 
   it('should login user and set authentication state', async () => {
@@ -78,6 +94,7 @@ describe('AuthService (Frontend)', () => {
     expect(user.id).toBe('user-1');
     expect(service.isAuthenticated()).toBe(true);
     expect(service.getToken()).toBe('login_token_xyz');
+    expect(mockCommitmentStore.loadForUser).toHaveBeenCalledWith('user-1');
   });
 
   it('should logout and clear local storage and signals', () => {
@@ -89,5 +106,6 @@ describe('AuthService (Frontend)', () => {
     expect(service.currentUser()).toBeNull();
     expect(service.isAuthenticated()).toBe(false);
     expect(service.getToken()).toBeNull();
+    expect(mockCommitmentStore.resetState).toHaveBeenCalled();
   });
 });

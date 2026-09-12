@@ -1,6 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 
-export type MeroState = 'idle' | 'happy' | 'waiting' | 'celebrating';
+export type MeroState =
+  | 'idle'
+  | 'content'
+  | 'happy'
+  | 'waiting'
+  | 'celebrating'
+  | 'sleepy'
+  | 'missing';
 
 @Injectable({
   providedIn: 'root',

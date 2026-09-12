@@ -1,266 +1,63 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Commitment } from '@mehrchain/shared-data';
-import { firstValueFrom } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { CommitmentStore } from '../store/commitment.store';
 
+/**
+ * Facade service for CommitmentStore.
+ * Provides backwards-compatibility for existing components while delegating state
+ * and mutations directly to NgRx SignalStore.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class CommitmentService {
-  private http = inject(HttpClient);
-
-  private readonly STORAGE_KEY = 'mehrchain_data_v1';
-  private readonly API_URL = `${environment.apiUrl}/commitments`;
-
-  // State
-  private commitmentsSignal = signal<Commitment[]>([]);
-
-  constructor() {
-    this.loadFromStorage();
-    this.syncWithBackend();
-
-    // Keep local cache updated for offline resilience
-    effect(() => {
-      const data = this.commitmentsSignal();
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
-    });
-  }
+  private readonly store = inject(CommitmentStore);
 
   // Selectors
-  readonly commitments = this.commitmentsSignal.asReadonly();
-  readonly hasAnyCommitment = computed(() => this.commitmentsSignal().length > 0);
-
-  readonly overallStreak = computed(() => {
-    const list = this.commitmentsSignal();
-    return list.length > 0 ? Math.max(...list.map((c) => c.currentStreak)) : 0;
-  });
+  readonly commitments = this.store.commitments;
+  readonly hasAnyCommitment = this.store.hasAnyCommitment;
+  readonly overallStreak = this.store.overallStreak;
+  readonly archivedCommitments = this.store.archivedCommitments;
+  readonly isLoading = this.store.isLoading;
 
   // Actions
-  private loadFromStorage() {
-    const data = localStorage.getItem(this.STORAGE_KEY);
-    if (data) {
-      try {
-        const parsed = JSON.parse(data);
-        this.commitmentsSignal.set(parsed);
-      } catch (e) {
-        console.error('[CommitmentService] Local data load failed', e);
-      }
-    }
+  loadForUser(userId: string): void {
+    this.store.loadForUser(userId);
   }
 
-  /**
-   * Fetches latest user commitments from backend API if authenticated.
-   */
-  async syncWithBackend(): Promise<void> {
-    try {
-      const token = localStorage.getItem('mehrchain_auth_token_v1');
-      if (!token) return;
-
-      const remoteData = await firstValueFrom(
-        this.http.get<Commitment[]>(this.API_URL)
-      );
-
-      if (Array.isArray(remoteData)) {
-        this.commitmentsSignal.set(remoteData);
-      }
-    } catch (err) {
-      console.warn('[CommitmentService] Background sync failed, using cached data.', err);
-    }
+  syncWithBackend(): Promise<void> {
+    return this.store.syncWithBackend();
   }
 
-  /**
-   * Creates a new commitment via backend API and caches locally.
-   */
-  async addCommitment(data: Partial<Commitment>): Promise<Commitment> {
-    // Generate optimistic local model
-    const localCommitment: Commitment = {
-      id: crypto.randomUUID(),
-      title: data.title!,
-      totalDays: data.totalDays || 21,
-      currentDay: 0,
-      currentStreak: 0,
-      isCompletedToday: false,
-      category: data.category as any,
-      why: data.why,
-      rippleEffects: data.rippleEffects,
-      startDate: new Date().toISOString(),
-      reminderTime: data.reminderTime,
-      history: [],
-    };
-
-    // Optimistic state update
-    this.commitmentsSignal.update((list) => [localCommitment, ...list]);
-
-    // Send to backend if authenticated
-    try {
-      const token = localStorage.getItem('mehrchain_auth_token_v1');
-      if (token) {
-        const payload = {
-          title: localCommitment.title,
-          category: localCommitment.category,
-          why: localCommitment.why,
-          totalDays: localCommitment.totalDays,
-          reminderTime: localCommitment.reminderTime,
-        };
-
-        const serverRecord = await firstValueFrom(
-          this.http.post<Commitment>(this.API_URL, payload)
-        );
-
-        if (serverRecord && serverRecord.id) {
-          this.commitmentsSignal.update((list) =>
-            list.map((c) => (c.id === localCommitment.id ? serverRecord : c))
-          );
-          return serverRecord;
-        }
-      }
-    } catch (err) {
-      console.warn('[CommitmentService] Failed to persist to backend, retained locally.', err);
-    }
-
-    return localCommitment;
+  addCommitment(data: Partial<Commitment>): Promise<Commitment> {
+    return this.store.addCommitment(data);
   }
 
-  /**
-   * Marks a commitment completed today via backend API.
-   */
-  async completeCommitment(id: string, note?: string): Promise<void> {
-    const today = new Date().toISOString();
-
-    // Optimistic local update
-    this.commitmentsSignal.update((list) =>
-      list.map((c) => {
-        if (c.id === id && !c.isCompletedToday) {
-          return {
-            ...c,
-            currentStreak: c.currentStreak + 1,
-            currentDay: Math.min(c.currentDay + 1, c.totalDays),
-            isCompletedToday: true,
-            history: [...(c.history || []), today],
-          };
-        }
-        return c;
-      })
-    );
-
-    // Sync with backend API
-    try {
-      const token = localStorage.getItem('mehrchain_auth_token_v1');
-      if (token) {
-        const updated = await firstValueFrom(
-          this.http.patch<Commitment>(`${this.API_URL}/${id}/complete`, { note })
-        );
-
-        if (updated) {
-          this.commitmentsSignal.update((list) =>
-            list.map((c) => (c.id === id ? { ...c, ...updated, isCompletedToday: true } : c))
-          );
-        }
-      }
-    } catch (err) {
-      console.warn('[CommitmentService] Failed to complete on backend.', err);
-    }
+  completeCommitment(id: string, note?: string): Promise<void> {
+    return this.store.completeCommitment(id, note);
   }
 
-  /**
-   * Updates an existing commitment.
-   */
-  async updateCommitment(id: string, updates: Partial<Commitment>): Promise<Commitment> {
-    let updatedItem: Commitment | undefined;
-
-    this.commitmentsSignal.update((list) =>
-      list.map((c) => {
-        if (c.id === id) {
-          updatedItem = { ...c, ...updates };
-          return updatedItem;
-        }
-        return c;
-      })
-    );
-
-    try {
-      const token = localStorage.getItem('mehrchain_auth_token_v1');
-      if (token) {
-        const backendUpdated = await firstValueFrom(
-          this.http.patch<Commitment>(`${this.API_URL}/${id}`, updates)
-        );
-        if (backendUpdated) {
-          this.commitmentsSignal.update((list) =>
-            list.map((c) => (c.id === id ? { ...c, ...backendUpdated } : c))
-          );
-          return backendUpdated;
-        }
-      }
-    } catch (err) {
-      console.warn('[CommitmentService] Failed to update commitment on backend.', err);
-    }
-
-    return updatedItem!;
+  updateCommitment(id: string, updates: Partial<Commitment>): Promise<Commitment> {
+    return this.store.updateCommitment(id, updates);
   }
 
-  /**
-   * Archives or removes a commitment.
-   */
-  async removeCommitment(id: string): Promise<void> {
-    const target = this.commitmentsSignal().find((c) => c.id === id);
-    this.commitmentsSignal.update((list) => list.filter((c) => c.id !== id));
-    if (target) {
-      this.archivedCommitmentsSignal.update((list) => [{ ...target, isArchived: true }, ...list]);
-    }
-
-    try {
-      const token = localStorage.getItem('mehrchain_auth_token_v1');
-      if (token) {
-        await firstValueFrom(this.http.delete(`${this.API_URL}/${id}`));
-      }
-    } catch (err) {
-      console.warn('[CommitmentService] Failed to archive on backend.', err);
-    }
+  removeCommitment(id: string): Promise<void> {
+    return this.store.removeCommitment(id);
   }
 
-  private archivedCommitmentsSignal = signal<Commitment[]>([]);
-  readonly archivedCommitments = this.archivedCommitmentsSignal.asReadonly();
-
-  async fetchArchivedCommitments(): Promise<Commitment[]> {
-    try {
-      const token = localStorage.getItem('mehrchain_auth_token_v1');
-      if (token) {
-        const list = await firstValueFrom(
-          this.http.get<Commitment[]>(`${this.API_URL}/archived`)
-        );
-        if (list) {
-          this.archivedCommitmentsSignal.set(list);
-          return list;
-        }
-      }
-    } catch (err) {
-      console.warn('[CommitmentService] Failed to fetch archived commitments:', err);
-    }
-    return this.archivedCommitmentsSignal();
+  fetchArchivedCommitments(): Promise<Commitment[]> {
+    return this.store.fetchArchivedCommitments();
   }
 
-  async restoreCommitment(id: string): Promise<void> {
-    const target = this.archivedCommitmentsSignal().find((c) => c.id === id);
-
-    this.archivedCommitmentsSignal.update((list) => list.filter((c) => c.id !== id));
-    if (target) {
-      this.commitmentsSignal.update((list) => [{ ...target, isArchived: false }, ...list]);
-    }
-
-    try {
-      const token = localStorage.getItem('mehrchain_auth_token_v1');
-      if (token) {
-        await firstValueFrom(this.http.patch(`${this.API_URL}/${id}/restore`, {}));
-      }
-    } catch (err) {
-      console.warn('[CommitmentService] Failed to restore commitment on backend:', err);
-    }
+  restoreCommitment(id: string): Promise<void> {
+    return this.store.restoreCommitment(id);
   }
 
-  resetData() {
-    this.commitmentsSignal.set([]);
-    this.archivedCommitmentsSignal.set([]);
-    localStorage.removeItem(this.STORAGE_KEY);
+  resetData(): void {
+    this.store.resetState();
+  }
+
+  clearUserStorage(userId: string): void {
+    this.store.clearUserStorage(userId);
   }
 }

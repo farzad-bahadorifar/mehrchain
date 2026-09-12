@@ -20,15 +20,22 @@ import {
   Eye,
   EyeOff,
   ArrowLeft,
+  AlertCircle,
+  LogIn,
+  HelpCircle,
+  Info,
+  CheckCircle2,
 } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { MeroService } from '../../core/services/mero.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { MeroComponent } from '../../shared/components/mero/mero';
+import { SwipeDirective } from '../../shared/directives/swipe.directive';
 
 @Component({
   selector: 'app-onboarding',
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, MeroComponent, SwipeDirective],
   templateUrl: './onboarding.html',
   styleUrl: './onboarding.css',
 })
@@ -58,11 +65,12 @@ export class OnboardingComponent implements OnInit {
   whyText = signal('To prove to myself that small steps matter.');
   reminderTime = signal('08:30');
 
-  // Sign Up Form State (Step 6)
+  // Sign Up Form State (Step 6/7)
   signUpName = signal('');
   signUpEmail = signal('');
   signUpPassword = signal('');
   signUpError = signal('');
+  isDuplicateEmailError = signal(false);
   showSignUpPassword = signal(false);
 
   // Login Modal State
@@ -71,6 +79,12 @@ export class OnboardingComponent implements OnInit {
   loginPassword = signal('');
   loginError = signal('');
   showLoginPassword = signal(false);
+  isPrefilledFromSignUp = signal(false);
+
+  // Forgot Password State
+  isForgotPasswordMode = signal(false);
+  forgotPasswordEmail = signal('');
+  forgotPasswordSubmitted = signal(false);
 
   toggleSignUpPassword() {
     this.showSignUpPassword.update((v) => !v);
@@ -137,6 +151,25 @@ export class OnboardingComponent implements OnInit {
     }
   }
 
+  onSwipeRight() {
+    if (this.isLoginModalOpen()) return;
+    this.prevStep();
+  }
+
+  onSwipeLeft() {
+    if (this.isLoginModalOpen()) return;
+    // Validate whether user can progress forward
+    if (this.step() < 4) {
+      this.nextStep();
+    } else if (this.step() === 4 && this.selectedCategory()) {
+      this.nextStep();
+    } else if (this.step() === 5 && this.selectedHabit()) {
+      this.nextStep();
+    } else if (this.step() === 6) {
+      this.proceedToSignUp();
+    }
+  }
+
   selectCategory(id: string) {
     this.selectedCategory.set(id);
     this.meroService.setState('happy');
@@ -172,6 +205,10 @@ export class OnboardingComponent implements OnInit {
     this.isCustomHabit.set(true);
   }
 
+  cancelCustomHabit() {
+    this.isCustomHabit.set(false);
+  }
+
   confirmCustomHabit(value: string) {
     if (value && value.trim().length > 0) {
       this.selectedHabit.set(value.trim());
@@ -190,8 +227,17 @@ export class OnboardingComponent implements OnInit {
     this.step.set(7);
   }
 
+  onSignUpEmailChange(value: string) {
+    this.signUpEmail.set(value);
+    if (this.isDuplicateEmailError()) {
+      this.isDuplicateEmailError.set(false);
+      this.signUpError.set('');
+    }
+  }
+
   async handleSignUp() {
     this.signUpError.set('');
+    this.isDuplicateEmailError.set(false);
 
     const name = this.signUpName().trim();
     const email = this.signUpEmail().trim();
@@ -216,11 +262,17 @@ export class OnboardingComponent implements OnInit {
     try {
       await this.authService.register(name, email, password);
     } catch (err: any) {
-      const msg = err?.message || '';
-      if (msg.includes('already exists') || msg.toLowerCase().includes('conflict')) {
-        this.signUpError.set('An account with this email already exists. Please sign in instead.');
+      const msg = (err?.message || '').toLowerCase();
+      if (
+        msg.includes('already exists') ||
+        msg.includes('already registered') ||
+        msg.includes('conflict') ||
+        msg.includes('duplicate')
+      ) {
+        this.isDuplicateEmailError.set(true);
+        this.signUpError.set('This email is already registered.');
       } else {
-        this.signUpError.set(msg || 'Registration failed. Please check your details and network.');
+        this.signUpError.set(err?.message || 'Registration failed. Please check your details and network.');
       }
       return;
     }
@@ -256,13 +308,49 @@ export class OnboardingComponent implements OnInit {
     this.router.navigate(['/dashboard']);
   }
 
-  openLoginModal() {
+  openLoginModal(prefillEmail?: string) {
     this.loginError.set('');
+    this.isForgotPasswordMode.set(false);
+    this.forgotPasswordSubmitted.set(false);
+
+    const emailToUse = prefillEmail !== undefined ? prefillEmail : this.signUpEmail().trim();
+    if (emailToUse) {
+      this.loginEmail.set(emailToUse);
+      this.isPrefilledFromSignUp.set(true);
+    } else {
+      this.isPrefilledFromSignUp.set(false);
+    }
+
     this.isLoginModalOpen.set(true);
+  }
+
+  switchToLoginWithEmail() {
+    this.openLoginModal(this.signUpEmail().trim());
   }
 
   closeLoginModal() {
     this.isLoginModalOpen.set(false);
+    this.isForgotPasswordMode.set(false);
+    this.forgotPasswordSubmitted.set(false);
+  }
+
+  toggleForgotPassword(show: boolean) {
+    this.isForgotPasswordMode.set(show);
+    this.loginError.set('');
+    this.forgotPasswordSubmitted.set(false);
+    if (show) {
+      this.forgotPasswordEmail.set(this.loginEmail().trim() || this.signUpEmail().trim());
+    }
+  }
+
+  handleForgotPassword() {
+    const email = this.forgotPasswordEmail().trim();
+    if (!email || !email.includes('@')) {
+      this.loginError.set('Please enter a valid email address.');
+      return;
+    }
+    this.loginError.set('');
+    this.forgotPasswordSubmitted.set(true);
   }
 
   async handleLogin() {

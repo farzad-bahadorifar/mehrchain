@@ -11,6 +11,7 @@ import { CommitmentCardComponent } from '../../shared/components/commitment-card
 import { DeleteConfirmationModal } from '../../shared/components/delete-confirmation-modal/delete-confirmation-modal';
 import { EditCommitmentModal } from '../../shared/components/edit-commitment-modal/edit-commitment-modal';
 import { NewCommitmentModal } from '../../shared/components/new-commitment-modal/new-commitment-modal';
+import { MeroComponent } from '../../shared/components/mero/mero';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,7 @@ import { NewCommitmentModal } from '../../shared/components/new-commitment-modal
     NewCommitmentModal,
     DeleteConfirmationModal,
     EditCommitmentModal,
+    MeroComponent,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',

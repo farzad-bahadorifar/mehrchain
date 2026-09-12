@@ -3,6 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { CommitmentStore } from '../store/commitment.store';
 
 export interface UserProfile {
   id: string;
@@ -23,6 +24,7 @@ interface AuthResponse {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private commitmentStore = inject(CommitmentStore);
 
   private readonly AUTH_KEY = 'mehrchain_auth_user_v1';
   private readonly TOKEN_KEY = 'mehrchain_auth_token_v1';
@@ -60,6 +62,8 @@ export class AuthService {
       if (stored && token) {
         const user = JSON.parse(stored) as UserProfile;
         this.currentUserSignal.set(user);
+        this.commitmentStore.loadForUser(user.id);
+        this.commitmentStore.syncWithBackend().catch(() => {});
 
         // Verify session validity silently in background
         try {
@@ -108,6 +112,7 @@ export class AuthService {
       localStorage.setItem(this.TOKEN_KEY, res.accessToken);
 
       this.currentUserSignal.set(res.user);
+      this.commitmentStore.loadForUser(res.user.id);
       return res.user;
     } catch (err: any) {
       const message =
@@ -142,6 +147,8 @@ export class AuthService {
       localStorage.setItem(this.TOKEN_KEY, res.accessToken);
 
       this.currentUserSignal.set(res.user);
+      this.commitmentStore.loadForUser(res.user.id);
+      this.commitmentStore.syncWithBackend().catch(() => {});
       return res.user;
     } catch (err: any) {
       const message =
@@ -156,8 +163,10 @@ export class AuthService {
    * Signs the user out of the application and clears tokens.
    */
   logout(): void {
+    this.commitmentStore.resetState();
     localStorage.removeItem(this.AUTH_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem('mehrchain_data_v1');
     this.currentUserSignal.set(null);
     this.router.navigate(['/']);
   }
@@ -166,8 +175,14 @@ export class AuthService {
    * Permanently deletes user profile and session.
    */
   deleteAccount(): void {
+    const user = this.currentUserSignal();
+    if (user) {
+      this.commitmentStore.clearUserStorage(user.id);
+    }
+    this.commitmentStore.resetState();
     localStorage.removeItem(this.AUTH_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem('mehrchain_data_v1');
     this.currentUserSignal.set(null);
     this.router.navigate(['/']);
   }
