@@ -243,4 +243,37 @@ export class CommitmentsService {
       data: { isArchived: false },
     });
   }
+
+  /**
+   * Permanently hard-deletes a commitment and all its child completion logs from the database.
+   *
+   * @param userId - Owner user ID.
+   * @param commitmentId - Target commitment UUID.
+   * @returns Success response object.
+   * @throws {NotFoundException} If commitment does not exist.
+   * @throws {ForbiddenException} If commitment belongs to a different user.
+   */
+  async hardDeleteCommitment(userId: string, commitmentId: string) {
+    const commitment = await this.prisma.commitment.findUnique({
+      where: { id: commitmentId },
+    });
+
+    if (!commitment) {
+      throw new NotFoundException('Commitment not found.');
+    }
+
+    if (commitment.userId !== userId) {
+      throw new ForbiddenException('Access denied.');
+    }
+
+    await this.prisma.commitment.delete({
+      where: { id: commitmentId },
+    });
+
+    return {
+      success: true,
+      message: 'Commitment permanently deleted from database.',
+    };
+  }
 }
+

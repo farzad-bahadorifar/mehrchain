@@ -2,14 +2,14 @@
   appSwipe
   (swipeLeft)="onSwipeLeft()"
   (swipeRight)="onSwipeRight()"
-  class="min-h-screen flex flex-col items-center justify-between p-6 bg-background relative overflow-hidden font-sans select-none"
+  class="h-screen h-[100dvh] max-h-[100dvh] flex flex-col items-center justify-between p-4 sm:p-6 bg-background relative overflow-hidden font-sans select-none"
 >
   <!-- Floating Back Button -->
   @if (step() > 0) {
     <button
       type="button"
       (click)="prevStep()"
-      class="absolute top-6 left-6 z-50 w-10 h-10 rounded-2xl bg-card/85 backdrop-blur-md border border-border/60 shadow-soft flex items-center justify-center text-foreground hover:bg-card active:scale-90 transition-all"
+      class="absolute top-4 sm:top-6 left-4 sm:left-6 z-50 w-10 h-10 rounded-2xl bg-card/85 backdrop-blur-md border border-border/60 shadow-soft flex items-center justify-center text-foreground hover:bg-card active:scale-90 transition-all"
       aria-label="Previous step"
     >
       <lucide-icon name="arrow-left" class="w-5 h-5"></lucide-icon>
@@ -17,12 +17,14 @@
   }
   <!-- Top Section: Mascot & Hero Title (Proportional & Auto Centered) -->
   <div
-    class="flex-1 flex flex-col items-center justify-center w-full max-w-md transition-all duration-700 ease-out"
-    [class.scale-75]="step() > 0"
-    [class.-translate-y-10]="step() > 0"
+    class="flex-1 flex flex-col items-center justify-center w-full max-w-md transition-all duration-500 ease-out py-2 sm:py-4 min-h-0"
   >
-    <div class="relative mb-8 flex items-center justify-center filter drop-shadow-2xl">
-      <app-mero size="hero" [showGlow]="true" [floating]="step() === 0" />
+    <div
+      class="relative flex items-center justify-center filter drop-shadow-2xl transition-all duration-500"
+      [class.mb-8]="step() === 0"
+      [class.mb-0]="step() > 0"
+    >
+      <app-mero [size]="step() === 0 ? 'hero' : 'md'" [showGlow]="true" [floating]="step() === 0" />
     </div>
 
     @if (step() === 0) {
@@ -38,9 +40,9 @@
     }
   </div>
 
-  <!-- Bottom Floating Card (Proportional content-driven height) -->
+  <!-- Bottom Floating Card (Proportional content-driven height with overflow containment) -->
   <div
-    class="w-full max-w-md bg-card rounded-[2rem] shadow-float p-8 flex flex-col justify-between animate-slide-up relative z-10 border border-white/20 backdrop-blur-sm"
+    class="w-full max-w-md bg-card rounded-[2rem] shadow-float p-6 sm:p-7 flex flex-col justify-between animate-slide-up relative z-10 border border-white/20 backdrop-blur-sm overflow-hidden"
   >
     @switch (step()) {
 
@@ -113,16 +115,16 @@
 
       <!-- Step 2: Meaning of MehrChain -->
       @case (2) {
-        <div class="animate-fade-in h-full flex flex-col justify-between space-y-3.5">
+        <div class="animate-fade-in h-full flex flex-col justify-between space-y-4">
           <div>
             <h2 class="text-2xl font-bold mb-1.5 text-foreground leading-snug">
               The Meaning of MehrChain
             </h2>
-            <p class="text-muted-foreground text-sm leading-relaxed mb-3.5">
+            <p class="text-muted-foreground text-sm leading-relaxed mb-4">
               We believe the world becomes brighter with intentional kindness.
             </p>
 
-            <div class="space-y-3">
+            <div class="space-y-3.5">
               <!-- Mehr Card -->
               <div class="p-3.5 rounded-2xl bg-gradient-to-br from-amber-500/10 via-muted/40 to-muted/20 border border-amber-500/25 flex items-start gap-3.5 shadow-xs transition-all hover:border-amber-500/40">
                 <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-600 dark:text-amber-400 flex flex-col items-center justify-center shrink-0 border border-amber-500/30 shadow-xs">
@@ -130,12 +132,9 @@
                   <span class="text-[9px] font-black tracking-tight uppercase">Mehr</span>
                 </div>
                 <div class="flex-1">
-                  <div class="flex items-center gap-1.5 mb-0.5">
-                    <h3 class="text-xs font-bold text-foreground">Light & Unconditional Love</h3>
-                    <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold px-1.5 py-0.2 rounded-md bg-amber-500/15">مهر</span>
-                  </div>
+                  <h3 class="text-xs font-bold text-foreground mb-0.5">Covenant & Loving Kindness</h3>
                   <p class="text-xs text-muted-foreground leading-relaxed">
-                    An ancient Persian wisdom: when you light your own lamp, you bring warmth and light to everything around you.
+                    Rooted in ancient Persian wisdom, Mehr represents the sacred covenant, steadfast friendship, and illuminating warmth—honoring your daily promise to yourself.
                   </p>
                 </div>
               </div>
@@ -153,14 +152,6 @@
                   </p>
                 </div>
               </div>
-            </div>
-
-            <!-- Rumi Poetic Spark Note -->
-            <div class="mt-3 px-3.5 py-2.5 rounded-xl bg-card border border-border/60 shadow-xs flex items-center gap-2.5">
-              <span class="text-sm">🕯️</span>
-              <p class="text-[11px] text-muted-foreground italic leading-tight">
-                <span class="font-medium text-foreground">"You, light your own lamp."</span> — Rumi
-              </p>
             </div>
           </div>
 
@@ -240,7 +231,7 @@
             @for (cat of categories; track cat.id) {
               <button
                 (click)="selectCategory(cat.id)"
-                class="flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-transparent bg-muted/50 hover:bg-white hover:border-primary/30 hover:shadow-md transition-all duration-300 group active:scale-95 aspect-square"
+                class="flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-transparent bg-muted/50 hover:bg-card hover:border-primary/30 hover:shadow-md transition-all duration-300 group active:scale-95 aspect-square"
               >
                 <div
                   [class]="
@@ -263,51 +254,81 @@
 
       <!-- Step 5: Pick Habit Spark -->
       @case (5) {
-        <div class="animate-fade-in h-full flex flex-col">
-          <h2 class="text-2xl font-bold mb-2 text-center text-foreground">Pick a simple spark</h2>
-          <p class="text-center text-muted-foreground mb-6 text-sm">
-            Something small you can do today.
-          </p>
+        @if (!isCustomHabit()) {
+          <div class="animate-fade-in flex flex-col justify-between space-y-3">
+            <div>
+              <h2 class="text-2xl font-bold mb-1.5 text-center text-foreground">Pick a simple spark</h2>
+              <p class="text-center text-muted-foreground mb-4 text-xs sm:text-sm">
+                Something small you can do today.
+              </p>
 
-          <div class="space-y-3 flex-1 overflow-y-auto pr-1 custom-scrollbar max-h-64">
-            @for (habit of habitsMock[selectedCategory()!]; track habit) {
-              <button
-                (click)="selectHabit(habit)"
-                class="w-full text-left p-5 rounded-2xl bg-muted/40 hover:bg-primary hover:text-white border border-transparent hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 font-medium group flex items-center justify-between"
-              >
-                <span>{{ habit }}</span>
-                <lucide-icon
-                  name="arrow-right"
-                  class="w-5 h-5 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all"
-                ></lucide-icon>
-              </button>
-            }
-            @if (isCustomHabit()) {
-              <div class="mt-4 animate-fade-in">
-                <input
-                  #customInput
-                  type="text"
-                  placeholder="Type your habit..."
-                  class="w-full p-4 rounded-xl border-2 border-primary bg-white focus:outline-none text-foreground"
-                  (keyup.enter)="confirmCustomHabit(customInput.value)"
-                />
-                <button
-                  (click)="confirmCustomHabit(customInput.value)"
-                  class="w-full mt-2 bg-primary text-white py-3 rounded-xl font-bold"
-                >
-                  Confirm
-                </button>
+              <div class="space-y-2.5">
+                @for (habit of habitsMock[selectedCategory()!]; track habit) {
+                  <button
+                    (click)="selectHabit(habit)"
+                    class="w-full text-left p-3.5 sm:p-4 rounded-2xl bg-muted/40 hover:bg-primary hover:text-white border border-transparent hover:shadow-md hover:shadow-primary/20 transition-all duration-200 font-medium group flex items-center justify-between text-sm"
+                  >
+                    <span>{{ habit }}</span>
+                    <lucide-icon
+                      name="arrow-right"
+                      class="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all"
+                    ></lucide-icon>
+                  </button>
+                }
               </div>
-            } @else {
-              <button
-                (click)="enableCustomHabit()"
-                class="w-full py-3 text-center text-sm font-semibold text-primary hover:underline"
-              >
-                ✨ Create your own spark...
-              </button>
-            }
+            </div>
+
+            <button
+              (click)="enableCustomHabit()"
+              class="w-full py-3 text-center text-xs sm:text-sm font-semibold text-primary hover:bg-primary/10 rounded-xl transition-all"
+            >
+              ✨ Create your own custom spark...
+            </button>
           </div>
-        </div>
+        } @else {
+          <!-- Custom Habit Dedicated Mode -->
+          <div class="animate-fade-in flex flex-col justify-between space-y-4">
+            <div>
+              <h2 class="text-2xl font-bold mb-1.5 text-center text-foreground">Create Your Spark</h2>
+              <p class="text-center text-muted-foreground mb-5 text-xs sm:text-sm">
+                What daily intention would you like to build?
+              </p>
+
+              <div class="space-y-2">
+                <label class="block text-xs font-bold text-gray-500 uppercase ml-1">Custom Habit Name</label>
+                <div class="relative flex items-center">
+                  <lucide-icon name="sparkles" class="w-4 h-4 text-primary absolute left-4 pointer-events-none"></lucide-icon>
+                  <input
+                    #customInput
+                    type="text"
+                    placeholder="e.g., Read 10 pages before sleep"
+                    class="w-full bg-gray-50 dark:bg-slate-900 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border-2 border-primary focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all shadow-sm"
+                    (keyup.enter)="confirmCustomHabit(customInput.value)"
+                    autofocus
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-2 pt-2">
+              <button
+                (click)="confirmCustomHabit(customInput.value)"
+                class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                <span>Confirm Spark</span>
+                <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+              </button>
+
+              <button
+                type="button"
+                (click)="cancelCustomHabit()"
+                class="w-full py-2.5 text-center text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
+              >
+                Back to suggested sparks
+              </button>
+            </div>
+          </div>
+        }
       }
 
       <!-- Step 6: Duration, Why & Reminder -->
@@ -327,7 +348,7 @@
                   [class]="
                     selectedDuration() === days && !isCustomDuration() && !isNonStandardDuration()
                       ? 'border-primary bg-primary text-white shadow-md'
-                      : 'border-gray-200 text-gray-500 hover:border-primary/30 hover:bg-gray-50'
+                      : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
                   "
                 >
                   <span class="text-base font-bold">{{ days }}</span>
@@ -337,7 +358,7 @@
 
               @if (isCustomDuration()) {
                 <div
-                  class="flex flex-col items-center justify-center p-1 rounded-xl border-2 border-primary bg-white animate-fade-in"
+                  class="flex flex-col items-center justify-center p-1 rounded-xl border-2 border-primary bg-card animate-fade-in"
                 >
                   <input
                     #durInput
@@ -363,7 +384,7 @@
                 <button
                   type="button"
                   (click)="toggleCustomDuration()"
-                  class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 border-gray-200 text-gray-400 hover:border-primary/50 hover:text-primary transition-all"
+                  class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 border-border text-muted-foreground hover:border-primary/50 hover:text-primary transition-all"
                 >
                   <lucide-icon name="plus" class="w-5 h-5 mb-0.5"></lucide-icon>
                   <span class="text-[10px] font-medium uppercase">Custom</span>
@@ -398,7 +419,7 @@
                 type="time"
                 [value]="reminderTime()"
                 (change)="updateReminderTime(timeInput.value)"
-                class="bg-white border border-border/70 rounded-xl px-2.5 py-1 text-xs font-bold text-foreground outline-none cursor-pointer"
+                class="bg-card border border-border/70 rounded-xl px-2.5 py-1 text-xs font-bold text-foreground outline-none cursor-pointer"
               />
             </div>
           </div>
@@ -466,49 +487,49 @@
 
             <div class="space-y-3">
               <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Full Name</label>
+                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1 ml-1">Full Name</label>
                 <div class="relative flex items-center">
-                  <lucide-icon name="user" class="w-4 h-4 text-muted-foreground absolute left-3.5 pointer-events-none"></lucide-icon>
+                  <lucide-icon name="user" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
                   <input
                     type="text"
                     [value]="signUpName()"
                     (input)="signUpName.set($any($event.target).value)"
                     placeholder="Your Name"
-                    class="w-full bg-gray-50 dark:bg-slate-900 rounded-xl py-3.5 pl-10 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-colors"
+                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Email</label>
+                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1 ml-1">Email</label>
                 <div class="relative flex items-center">
-                  <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-3.5 pointer-events-none"></lucide-icon>
+                  <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
                   <input
                     type="email"
                     [value]="signUpEmail()"
                     (input)="onSignUpEmailChange($any($event.target).value)"
                     placeholder="you@example.com"
-                    class="w-full bg-gray-50 dark:bg-slate-900 rounded-xl py-3.5 pl-10 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-colors"
+                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Password</label>
+                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1 ml-1">Password</label>
                 <div class="relative flex items-center">
-                  <lucide-icon name="lock" class="w-4 h-4 text-muted-foreground absolute left-3.5 pointer-events-none"></lucide-icon>
+                  <lucide-icon name="lock" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
                   <input
                     [type]="showSignUpPassword() ? 'text' : 'password'"
                     [value]="signUpPassword()"
                     (input)="signUpPassword.set($any($event.target).value)"
                     placeholder="At least 6 characters"
-                    class="w-full bg-gray-50 dark:bg-slate-900 rounded-xl py-3.5 pl-10 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-colors"
+                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                     (keyup.enter)="handleSignUp()"
                   />
                   <button
                     type="button"
                     (click)="toggleSignUpPassword()"
-                    class="absolute right-3 p-1 text-muted-foreground hover:text-foreground transition-colors"
+                    class="absolute right-3.5 p-1 text-muted-foreground hover:text-foreground transition-colors"
                     title="Toggle password visibility"
                   >
                     <lucide-icon [name]="showSignUpPassword() ? 'eye-off' : 'eye'" class="w-4 h-4"></lucide-icon>
@@ -532,13 +553,13 @@
     }
   </div>
 
-  <!-- Bottom Dots Indicator (Original size and margins) -->
+  <!-- Bottom Dots Indicator (Optimized margins to prevent viewport overflow) -->
   @if (step() > 0) {
-    <div class="flex gap-3 mt-8 mb-4">
+    <div class="flex gap-2.5 mt-3 sm:mt-5 mb-1 sm:mb-2">
       @for (s of [1, 2, 3, 4, 5, 6, 7]; track s) {
         <div
-          class="h-2 rounded-full transition-all duration-500 ease-out"
-          [class]="s <= step() ? 'w-8 bg-primary' : 'w-2 bg-muted-foreground/30'"
+          class="h-1.5 sm:h-2 rounded-full transition-all duration-500 ease-out"
+          [class]="s <= step() ? 'w-6 sm:w-8 bg-primary' : 'w-1.5 sm:w-2 bg-muted-foreground/30'"
         ></div>
       }
     </div>
@@ -553,9 +574,9 @@
       ></div>
 
       <div
-        class="relative w-full max-w-md bg-card rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-white/10 overflow-hidden"
+        class="relative w-full max-w-md bg-card rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-white/10 overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar"
       >
-        <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-5 opacity-50"></div>
+        <div class="w-12 h-1.5 bg-muted rounded-full mx-auto mb-5 opacity-60"></div>
 
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-xl font-bold text-foreground">
@@ -563,7 +584,7 @@
           </h2>
           <button
             (click)="closeLoginModal()"
-            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors text-gray-500"
+            class="w-8 h-8 rounded-full bg-muted/60 hover:bg-muted flex items-center justify-center transition-colors text-muted-foreground"
           >
             <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
           </button>
@@ -586,29 +607,46 @@
           }
 
           @if (loginError()) {
-            <div class="p-3 mb-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-medium text-center">
-              {{ loginError() }}
-            </div>
+            @if (isNoAccountFound()) {
+              <div class="p-3.5 mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-medium space-y-2 animate-fade-in">
+                <div class="flex items-center gap-1.5 justify-center">
+                  <lucide-icon name="info" class="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400"></lucide-icon>
+                  <span>No account exists with this email address.</span>
+                </div>
+                <button
+                  type="button"
+                  (click)="switchToSignUpFromLogin()"
+                  class="w-full py-2 px-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl transition-all duration-200 text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-95"
+                >
+                  <span>Create an Account (Sign Up)</span>
+                  <lucide-icon name="arrow-right" class="w-3.5 h-3.5"></lucide-icon>
+                </button>
+              </div>
+            } @else {
+              <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center">
+                {{ loginError() }}
+              </div>
+            }
           }
 
           <div class="space-y-3.5 mb-5">
             <div>
-              <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">Email</label>
+              <label class="block text-xs font-bold text-muted-foreground uppercase mb-1.5 ml-1">Email</label>
               <div class="relative flex items-center">
-                <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-3.5 pointer-events-none"></lucide-icon>
+                <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
                 <input
                   type="email"
                   [value]="loginEmail()"
                   (input)="loginEmail.set($any($event.target).value)"
                   placeholder="you@example.com"
-                  class="w-full bg-gray-50 rounded-xl py-3.5 pl-10 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-white focus:outline-none"
+                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             <div>
               <div class="flex items-center justify-between mb-1.5 ml-1 mr-1">
-                <label class="block text-xs font-bold text-gray-500 uppercase">Password</label>
+                <label class="block text-xs font-bold text-muted-foreground uppercase">Password</label>
                 <button
                   type="button"
                   (click)="toggleForgotPassword(true)"
@@ -618,19 +656,19 @@
                 </button>
               </div>
               <div class="relative flex items-center">
-                <lucide-icon name="lock" class="w-4 h-4 text-muted-foreground absolute left-3.5 pointer-events-none"></lucide-icon>
+                <lucide-icon name="lock" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
                 <input
                   [type]="showLoginPassword() ? 'text' : 'password'"
                   [value]="loginPassword()"
                   (input)="loginPassword.set($any($event.target).value)"
                   placeholder="Your password"
-                  class="w-full bg-gray-50 dark:bg-slate-900 rounded-xl py-3.5 pl-10 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-white dark:focus:bg-slate-800 focus:outline-none"
+                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                   (keyup.enter)="handleLogin()"
                 />
                 <button
                   type="button"
                   (click)="toggleLoginPassword()"
-                  class="absolute right-3 p-1 text-muted-foreground hover:text-foreground transition-colors"
+                  class="absolute right-3.5 p-1 text-muted-foreground hover:text-foreground transition-colors"
                   title="Toggle password visibility"
                 >
                   <lucide-icon [name]="showLoginPassword() ? 'eye-off' : 'eye'" class="w-4 h-4"></lucide-icon>
@@ -670,22 +708,22 @@
             </button>
           } @else {
             @if (loginError()) {
-              <div class="p-3 mb-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-medium text-center">
+              <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center">
                 {{ loginError() }}
               </div>
             }
 
             <div class="space-y-4 mb-5">
               <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">Account Email</label>
+                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1.5 ml-1">Account Email</label>
                 <div class="relative flex items-center">
-                  <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-3.5 pointer-events-none"></lucide-icon>
+                  <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
                   <input
                     type="email"
                     [value]="forgotPasswordEmail()"
                     (input)="forgotPasswordEmail.set($any($event.target).value)"
                     placeholder="you@example.com"
-                    class="w-full bg-gray-50 rounded-xl py-3.5 pl-10 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-white focus:outline-none"
+                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                     (keyup.enter)="handleForgotPassword()"
                   />
                 </div>
@@ -709,6 +747,118 @@
             </div>
           }
         }
+      </div>
+    </div>
+  }
+
+  <!-- Email OTP Verification Modal -->
+  @if (isVerificationModalOpen()) {
+    <div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4">
+      <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
+        (click)="closeVerificationModal()"
+      ></div>
+
+      <div
+        class="relative w-full max-w-md bg-card rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-white/10 overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar"
+      >
+        <div class="w-12 h-1.5 bg-muted rounded-full mx-auto mb-5 opacity-60"></div>
+
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+            <lucide-icon name="mail" class="w-5 h-5 text-primary"></lucide-icon>
+            Verify Your Email
+          </h2>
+          <button
+            (click)="closeVerificationModal()"
+            class="w-8 h-8 rounded-full bg-muted/60 hover:bg-muted flex items-center justify-center transition-colors text-muted-foreground"
+          >
+            <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+          </button>
+        </div>
+
+        <div class="mx-auto mb-3 flex items-center justify-center">
+          <app-mero size="sm" [showGlow]="false" />
+        </div>
+
+        <p class="text-xs text-muted-foreground text-center mb-4">
+          We sent a 6-digit confirmation code to
+          <strong class="text-foreground block mt-1 font-semibold">{{ signUpEmail() }}</strong>
+        </p>
+
+        @if (verificationError()) {
+          <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center animate-fade-in flex items-center justify-center gap-2">
+            <lucide-icon name="alert-circle" class="w-4 h-4 shrink-0"></lucide-icon>
+            <span>{{ verificationError() }}</span>
+          </div>
+        }
+
+        @if (verificationSuccess()) {
+          <div class="p-3 mb-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-medium text-center animate-fade-in flex items-center justify-center gap-2">
+            <lucide-icon name="check-circle2" class="w-4 h-4 shrink-0"></lucide-icon>
+            <span>{{ verificationSuccess() }}</span>
+          </div>
+        }
+
+        <div class="space-y-4 mb-5">
+          <div>
+            <label class="block text-xs font-bold text-muted-foreground uppercase text-center mb-2">
+              Enter 6-Digit Code
+            </label>
+            <input
+              type="text"
+              maxlength="6"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              [value]="verificationCode()"
+              (input)="verificationCode.set($any($event.target).value)"
+              (keyup.enter)="handleVerifyEmail()"
+              placeholder="••••••"
+              class="w-full bg-muted/40 rounded-xl py-4 text-center text-2xl font-bold font-mono tracking-[0.35em] text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <button
+            (click)="handleVerifyEmail()"
+            [disabled]="isVerifying() || verificationCode().trim().length !== 6"
+            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100"
+          >
+            @if (isVerifying()) {
+              <div class="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
+              <span>Verifying...</span>
+            } @else {
+              <span>Confirm & Start Journey</span>
+              <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+            }
+          </button>
+
+          <div class="flex items-center justify-between pt-2 px-1">
+            <button
+              type="button"
+              (click)="closeVerificationModal()"
+              class="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Change Email
+            </button>
+
+            <button
+              type="button"
+              (click)="handleResendVerificationCode()"
+              [disabled]="resendCooldown() > 0 || isResending()"
+              class="text-xs text-primary font-semibold hover:underline disabled:opacity-50 disabled:no-underline"
+            >
+              @if (resendCooldown() > 0) {
+                Resend code in {{ resendCooldown() }}s
+              } @else if (isResending()) {
+                Sending...
+              } @else {
+                Resend Code
+              }
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   }

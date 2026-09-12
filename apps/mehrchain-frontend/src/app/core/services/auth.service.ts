@@ -10,10 +10,17 @@ export interface UserProfile {
   name: string;
   email: string;
   role?: string;
+  isEmailVerified?: boolean;
   createdAt: string;
 }
 
-interface AuthResponse {
+export interface RegisterResponse {
+  requiresVerification: boolean;
+  email: string;
+  message: string;
+}
+
+export interface AuthResponse {
   user: UserProfile;
   accessToken: string;
 }
@@ -87,16 +94,15 @@ export class AuthService {
   }
 
   /**
-   * Registers a new user account with the backend API, persists the auth session,
-   * and broadcasts the current user profile signal.
+   * Registers a new user account with the backend API and initiates email verification.
    *
    * @param name - Display name of the user.
    * @param email - Primary user email address.
    * @param password - Account password.
-   * @returns Resolves with the saved UserProfile upon successful registration.
+   * @returns Resolves with the register response indicating verification code dispatch.
    * @throws {Error} If registration fails due to duplicate email or validation errors.
    */
-  async register(name: string, email: string, password?: string): Promise<UserProfile> {
+  async register(name: string, email: string, password?: string): Promise<RegisterResponse> {
     try {
       const payload = {
         name: name.trim(),
@@ -104,8 +110,36 @@ export class AuthService {
         password: password || 'defaultPass123',
       };
 
+      return await firstValueFrom(
+        this.http.post<RegisterResponse>(`${this.API_URL}/register`, payload)
+      );
+    } catch (err: any) {
+      const message =
+        err?.error?.message ||
+        (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
+        err?.message ||
+        'Registration failed. Please check your network connection.';
+      throw new Error(message);
+    }
+  }
+
+  /**
+   * Verifies the 6-digit OTP code sent to user email and saves the active session.
+   *
+   * @param email - Primary user email address.
+   * @param code - 6-digit verification code.
+   * @returns Resolves with the authenticated UserProfile.
+   * @throws {Error} If code is invalid or expired.
+   */
+  async verifyEmail(email: string, code: string): Promise<UserProfile> {
+    try {
+      const payload = {
+        email: email.trim().toLowerCase(),
+        code: code.trim(),
+      };
+
       const res = await firstValueFrom(
-        this.http.post<AuthResponse>(`${this.API_URL}/register`, payload)
+        this.http.post<AuthResponse>(`${this.API_URL}/verify-email`, payload)
       );
 
       localStorage.setItem(this.AUTH_KEY, JSON.stringify(res.user));
@@ -113,13 +147,38 @@ export class AuthService {
 
       this.currentUserSignal.set(res.user);
       this.commitmentStore.loadForUser(res.user.id);
+      this.commitmentStore.syncWithBackend().catch(() => {});
       return res.user;
     } catch (err: any) {
       const message =
-        err?.message ||
         err?.error?.message ||
         (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
-        'Registration failed. Please check your network connection.';
+        err?.message ||
+        'Email verification failed. Please try again.';
+      throw new Error(message);
+    }
+  }
+
+  /**
+   * Resends a new 6-digit verification code to the user's email.
+   *
+   * @param email - Primary user email address.
+   */
+  async resendVerificationCode(email: string): Promise<{ success: boolean; message: string }> {
+    try {
+      const payload = { email: email.trim().toLowerCase() };
+      return await firstValueFrom(
+        this.http.post<{ success: boolean; message: string }>(
+          `${this.API_URL}/resend-verification`,
+          payload
+        )
+      );
+    } catch (err: any) {
+      const message =
+        err?.error?.message ||
+        (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
+        err?.message ||
+        'Failed to resend verification code.';
       throw new Error(message);
     }
   }
@@ -152,8 +211,9 @@ export class AuthService {
       return res.user;
     } catch (err: any) {
       const message =
-        err?.message ||
         err?.error?.message ||
+        (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
+        err?.message ||
         'Invalid email or password. Please try again.';
       throw new Error(message);
     }
@@ -172,18 +232,27 @@ export class AuthService {
   }
 
   /**
-   * Permanently deletes user profile and session.
+   * Permanently deletes user profile and session from both server database and local storage.
    */
-  deleteAccount(): void {
+  async deleteAccount(): Promise<void> {
     const user = this.currentUserSignal();
-    if (user) {
-      this.commitmentStore.clearUserStorage(user.id);
+    try {
+      const token = this.getToken();
+      if (token) {
+        await firstValueFrom(this.http.delete(`${this.API_URL}/account`));
+      }
+    } catch (err) {
+      console.warn('[AuthService] Backend account deletion warning:', err);
+    } finally {
+      if (user) {
+        this.commitmentStore.clearUserStorage(user.id);
+      }
+      this.commitmentStore.resetState();
+      localStorage.removeItem(this.AUTH_KEY);
+      localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem('mehrchain_data_v1');
+      this.currentUserSignal.set(null);
+      this.router.navigate(['/']);
     }
-    this.commitmentStore.resetState();
-    localStorage.removeItem(this.AUTH_KEY);
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem('mehrchain_data_v1');
-    this.currentUserSignal.set(null);
-    this.router.navigate(['/']);
   }
 }

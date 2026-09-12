@@ -35,6 +35,12 @@ export class Journey implements OnInit {
     await this.commitmentService.restoreCommitment(id);
   }
 
+  async permanentDeleteHabit(id: string): Promise<void> {
+    if (confirm('Are you sure you want to permanently delete this habit and all its history?')) {
+      await this.commitmentService.permanentDeleteCommitment(id);
+    }
+  }
+
   currentUser = this.authService.currentUser;
 
   activeCommitmentsCount = computed(() => this.commitmentService.commitments().length);
@@ -91,13 +97,14 @@ export class Journey implements OnInit {
     }
   }
 
-  handleDeleteAccount(): void {
+  async handleDeleteAccount(): Promise<void> {
     if (
       confirm(
         'Are you sure you want to delete your account? All habits and consistency data will be permanently removed.',
       )
     ) {
-      this.authService.deleteAccount();
+      await this.authService.deleteAccount();
     }
   }
 }
+

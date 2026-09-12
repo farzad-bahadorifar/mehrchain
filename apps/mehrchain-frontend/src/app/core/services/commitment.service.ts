@@ -53,9 +53,14 @@ export class CommitmentService {
     return this.store.restoreCommitment(id);
   }
 
+  permanentDeleteCommitment(id: string): Promise<void> {
+    return this.store.permanentDeleteCommitment(id);
+  }
+
   resetData(): void {
     this.store.resetState();
   }
+
 
   clearUserStorage(userId: string): void {
     this.store.clearUserStorage(userId);

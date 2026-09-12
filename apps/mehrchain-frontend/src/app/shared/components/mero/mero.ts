@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
-  DestroyRef,
   computed,
   inject,
   input,
@@ -10,6 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { MeroService, MeroState } from '../../../core/services/mero.service';
+import { MeroCustomizationService } from '../../../core/services/mero-customization.service';
 
 export type MeroSize = 'xs' | 'sm' | 'md' | 'lg' | 'hero';
 
@@ -21,7 +21,7 @@ export type MeroSize = 'xs' | 'sm' | 'md' | 'lg' | 'hero';
 })
 export class MeroComponent implements OnInit {
   private meroService = inject(MeroService);
-  private destroyRef = inject(DestroyRef);
+  private customizationService = inject(MeroCustomizationService, { optional: true });
 
   // Inputs
   size = input<MeroSize>('md');
@@ -29,6 +29,7 @@ export class MeroComponent implements OnInit {
   showGlow = input<boolean>(true);
   floating = input<boolean>(false);
   state = input<MeroState | null>(null);
+  customGradient = input<string | null>(null);
 
   // Outputs
   onTap = output<void>();
@@ -39,6 +40,17 @@ export class MeroComponent implements OnInit {
   // Computed state (uses explicit state input or falls back to MeroService)
   effectiveState = computed<MeroState>(() => {
     return this.state() ?? this.meroService.state();
+  });
+
+  // Effective glow gradient
+  effectiveGradient = computed<string>(() => {
+    if (this.customGradient()) {
+      return this.customGradient()!;
+    }
+    return (
+      this.customizationService?.effectiveGlowGradient() ??
+      'radial-gradient(circle, rgba(254, 240, 138, 0.8) 0%, rgba(245, 158, 11, 0.35) 45%, transparent 72%)'
+    );
   });
 
   // Size mapping classes

@@ -73,11 +73,22 @@ export class OnboardingComponent implements OnInit {
   isDuplicateEmailError = signal(false);
   showSignUpPassword = signal(false);
 
+  // Email Verification Modal State
+  isVerificationModalOpen = signal(false);
+  verificationCode = signal('');
+  verificationError = signal('');
+  verificationSuccess = signal('');
+  isVerifying = signal(false);
+  isResending = signal(false);
+  resendCooldown = signal(0);
+  private resendTimerInterval: any = null;
+
   // Login Modal State
   isLoginModalOpen = signal(false);
   loginEmail = signal('');
   loginPassword = signal('');
   loginError = signal('');
+  isNoAccountFound = signal(false);
   showLoginPassword = signal(false);
   isPrefilledFromSignUp = signal(false);
 
@@ -248,7 +259,9 @@ export class OnboardingComponent implements OnInit {
       return;
     }
 
-    if (!email || !email.includes('@')) {
+    const emailRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+    if (!email || !emailRegex.test(email)) {
       this.signUpError.set('Please enter a valid email address.');
       return;
     }
@@ -260,7 +273,15 @@ export class OnboardingComponent implements OnInit {
 
     // Register user profile
     try {
-      await this.authService.register(name, email, password);
+      const res = await this.authService.register(name, email, password);
+      if (res.requiresVerification) {
+        this.verificationCode.set('');
+        this.verificationError.set('');
+        this.verificationSuccess.set('');
+        this.isVerificationModalOpen.set(true);
+        this.startResendTimer();
+        return;
+      }
     } catch (err: any) {
       const msg = (err?.message || '').toLowerCase();
       if (
@@ -276,40 +297,98 @@ export class OnboardingComponent implements OnInit {
       }
       return;
     }
+  }
 
-    // Save habit commitment
-    if (this.selectedHabit() && this.selectedCategory()) {
-      const newCommitment = await this.commitmentService.addCommitment({
-        title: this.selectedHabit()!,
-        category: this.selectedCategory() as any,
-        totalDays: this.selectedDuration(),
-        why: this.whyText(),
-        reminderTime: this.reminderTime(),
-      });
-
-      // Schedule local notification if reminderTime is set
-      if (this.reminderTime()) {
-        const [hourStr, minuteStr] = this.reminderTime().split(':');
-        const hour = parseInt(hourStr, 10) || 8;
-        const minute = parseInt(minuteStr, 10) || 30;
-
-        await this.notificationService.scheduleDailyHabitReminder({
-          id: 1001,
-          title: 'MehrChain Reminder ✨',
-          body: `Time to light your lamp: ${this.selectedHabit()}`,
-          hour,
-          minute,
-          commitmentId: newCommitment.id,
-        });
+  startResendTimer() {
+    this.resendCooldown.set(60);
+    if (this.resendTimerInterval) {
+      clearInterval(this.resendTimerInterval);
+    }
+    this.resendTimerInterval = setInterval(() => {
+      if (this.resendCooldown() > 0) {
+        this.resendCooldown.update((c) => c - 1);
+      } else {
+        clearInterval(this.resendTimerInterval);
       }
+    }, 1000);
+  }
+
+  async handleVerifyEmail() {
+    this.verificationError.set('');
+    this.verificationSuccess.set('');
+    const code = this.verificationCode().trim();
+
+    if (!code || code.length !== 6) {
+      this.verificationError.set('Please enter the 6-digit verification code.');
+      return;
     }
 
-    this.meroService.setState('celebrating');
-    this.router.navigate(['/dashboard']);
+    this.isVerifying.set(true);
+    try {
+      await this.authService.verifyEmail(this.signUpEmail(), code);
+      this.verificationSuccess.set('Account verified successfully!');
+      this.isVerificationModalOpen.set(false);
+
+      // Save habit commitment
+      if (this.selectedHabit() && this.selectedCategory()) {
+        const newCommitment = await this.commitmentService.addCommitment({
+          title: this.selectedHabit()!,
+          category: this.selectedCategory() as any,
+          totalDays: this.selectedDuration(),
+          why: this.whyText(),
+          reminderTime: this.reminderTime(),
+        });
+
+        // Schedule local notification if reminderTime is set
+        if (this.reminderTime()) {
+          const [hourStr, minuteStr] = this.reminderTime().split(':');
+          const hour = parseInt(hourStr, 10) || 8;
+          const minute = parseInt(minuteStr, 10) || 30;
+
+          await this.notificationService.scheduleDailyHabitReminder({
+            id: 1001,
+            title: 'MehrChain Reminder ✨',
+            body: `Time to light your lamp: ${this.selectedHabit()}`,
+            hour,
+            minute,
+            commitmentId: newCommitment.id,
+          });
+        }
+      }
+
+      this.meroService.setState('celebrating');
+      this.router.navigate(['/dashboard']);
+    } catch (err: any) {
+      this.verificationError.set(err?.message || 'Invalid or expired verification code.');
+    } finally {
+      this.isVerifying.set(false);
+    }
+  }
+
+  async handleResendVerificationCode() {
+    if (this.resendCooldown() > 0 || this.isResending()) return;
+    this.isResending.set(true);
+    this.verificationError.set('');
+    this.verificationSuccess.set('');
+
+    try {
+      await this.authService.resendVerificationCode(this.signUpEmail());
+      this.verificationSuccess.set('A new verification code has been sent to your email.');
+      this.startResendTimer();
+    } catch (err: any) {
+      this.verificationError.set(err?.message || 'Failed to resend code.');
+    } finally {
+      this.isResending.set(false);
+    }
+  }
+
+  closeVerificationModal() {
+    this.isVerificationModalOpen.set(false);
   }
 
   openLoginModal(prefillEmail?: string) {
     this.loginError.set('');
+    this.isNoAccountFound.set(false);
     this.isForgotPasswordMode.set(false);
     this.forgotPasswordSubmitted.set(false);
 
@@ -328,8 +407,23 @@ export class OnboardingComponent implements OnInit {
     this.openLoginModal(this.signUpEmail().trim());
   }
 
+  switchToSignUpFromLogin() {
+    const email = this.loginEmail().trim();
+    if (email) {
+      this.signUpEmail.set(email);
+    }
+    this.closeLoginModal();
+    // If user hasn't chosen habit yet, guide them to category selection or directly to sign up
+    if (!this.selectedHabit() || !this.selectedCategory()) {
+      this.step.set(4);
+    } else {
+      this.step.set(7);
+    }
+  }
+
   closeLoginModal() {
     this.isLoginModalOpen.set(false);
+    this.isNoAccountFound.set(false);
     this.isForgotPasswordMode.set(false);
     this.forgotPasswordSubmitted.set(false);
   }
@@ -337,6 +431,7 @@ export class OnboardingComponent implements OnInit {
   toggleForgotPassword(show: boolean) {
     this.isForgotPasswordMode.set(show);
     this.loginError.set('');
+    this.isNoAccountFound.set(false);
     this.forgotPasswordSubmitted.set(false);
     if (show) {
       this.forgotPasswordEmail.set(this.loginEmail().trim() || this.signUpEmail().trim());
@@ -355,6 +450,7 @@ export class OnboardingComponent implements OnInit {
 
   async handleLogin() {
     this.loginError.set('');
+    this.isNoAccountFound.set(false);
     const email = this.loginEmail().trim();
     const password = this.loginPassword().trim();
 
@@ -373,7 +469,19 @@ export class OnboardingComponent implements OnInit {
       this.isLoginModalOpen.set(false);
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
-      this.loginError.set(err?.message || 'Invalid email or password. Please try again.');
+      const msg = err?.message || 'Invalid email or password. Please try again.';
+      const lowerMsg = msg.toLowerCase();
+      if (
+        lowerMsg.includes('no account found') ||
+        lowerMsg.includes('user account not found') ||
+        lowerMsg.includes('not found') ||
+        lowerMsg.includes('please sign up')
+      ) {
+        this.isNoAccountFound.set(true);
+        this.loginError.set('No account found with this email.');
+      } else {
+        this.loginError.set(msg);
+      }
     }
   }
 }

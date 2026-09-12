@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { MeroService } from '../../core/services/mero.service';
+import { MeroCustomizationService } from '../../core/services/mero-customization.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { Commitment } from '@mehrchain/shared-data';
@@ -17,6 +18,7 @@ import { MeroComponent } from '../../shared/components/mero/mero';
   selector: 'app-dashboard',
   imports: [
     CommonModule,
+    RouterLink,
     CommitmentCardComponent,
     LucideAngularModule,
     NewCommitmentModal,
@@ -31,6 +33,7 @@ export class DashboardComponent {
   commitmentService = inject(CommitmentService);
   themeService = inject(ThemeService);
   meroService = inject(MeroService);
+  customizationService = inject(MeroCustomizationService);
   notificationService = inject(NotificationService);
   router = inject(Router);
   isModalOpen = signal(false);

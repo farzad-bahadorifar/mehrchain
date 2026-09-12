@@ -18,9 +18,24 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status === 0) {
         normalizedMessage = 'Unable to connect to the server. Please check your internet connection.';
       } else if (error.status === 401) {
-        // Token expired or invalid
-        normalizedMessage = 'Session expired. Please sign in again.';
-        authService.logout();
+        const isAuthEndpoint = req.url.includes('/auth/login') ||
+          req.url.includes('/auth/register') ||
+          req.url.includes('/auth/verify-email') ||
+          req.url.includes('/auth/resend-verification');
+
+        if (isAuthEndpoint) {
+          if (typeof error.error?.message === 'string') {
+            normalizedMessage = error.error.message;
+          } else if (typeof error.error === 'string') {
+            normalizedMessage = error.error;
+          } else {
+            normalizedMessage = 'Invalid email or password.';
+          }
+        } else {
+          // Token expired or invalid during an authenticated session
+          normalizedMessage = 'Session expired. Please sign in again.';
+          authService.logout();
+        }
       } else if (error.error) {
         if (typeof error.error === 'string') {
           normalizedMessage = error.error;

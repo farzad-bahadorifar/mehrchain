@@ -47,7 +47,7 @@
   <!-- Activity Heatmap Calendar -->
   <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6">
     <div class="flex items-center gap-2 mb-4">
-      <div class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-500">
+      <div class="w-7 h-7 rounded-lg bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-orange-500 dark:text-orange-400">
         <lucide-icon name="flame" class="w-4 h-4"></lucide-icon>
       </div>
       <h2 class="font-bold text-base text-foreground">Activity Log</h2>
@@ -134,19 +134,31 @@
                 </p>
               </div>
 
-              <mc-button
-                variant="outline"
-                size="sm"
-                (clicked)="restoreHabit(habit.id)"
-              >
-                <lucide-icon name="rotate-ccw" class="w-3.5 h-3.5 text-primary"></lucide-icon>
-                <span>Restore</span>
-              </mc-button>
+              <div class="flex items-center gap-2">
+                <mc-button
+                  variant="outline"
+                  size="sm"
+                  (clicked)="restoreHabit(habit.id)"
+                >
+                  <lucide-icon name="rotate-ccw" class="w-3.5 h-3.5 text-primary"></lucide-icon>
+                  <span>Restore</span>
+                </mc-button>
+
+                <button
+                  type="button"
+                  (click)="permanentDeleteHabit(habit.id)"
+                  class="p-2 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                  title="Permanently delete from database"
+                >
+                  <lucide-icon name="trash-2" class="w-4 h-4"></lucide-icon>
+                </button>
+              </div>
             </div>
           }
         }
       </div>
     }
+
   </mc-card>
 
   <!-- Appearance & Theme Selector -->

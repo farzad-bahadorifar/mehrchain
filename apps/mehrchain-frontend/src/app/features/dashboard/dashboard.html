@@ -14,7 +14,13 @@
       >
         <lucide-icon [name]="themeService.isDark() ? 'sun' : 'moon'" class="w-4 h-4 text-primary"></lucide-icon>
       </button>
-      <app-mero size="xs" [showGlow]="false" />
+      <a
+        routerLink="/profile"
+        class="relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+        [title]="'پروفایل ' + customizationService.nickname()"
+      >
+        <app-mero size="xs" [showGlow]="true" />
+      </a>
     </div>
   </div>
 
@@ -24,7 +30,7 @@
   >
     <div class="flex items-center gap-3">
       <div
-        class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-500"
+        class="w-10 h-10 rounded-xl bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-orange-500 dark:text-orange-400"
       >
         <lucide-icon name="flame" class="w-6 h-6"></lucide-icon>
       </div>

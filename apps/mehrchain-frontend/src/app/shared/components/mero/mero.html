@@ -9,6 +9,7 @@
   @if (showGlow()) {
     <div
       class="mero-belly-glow"
+      [style.background]="effectiveGradient()"
       [class.glow-celebrate]="effectiveState() === 'celebrating'"
       [class.glow-dim]="effectiveState() === 'sleepy'"
     ></div>

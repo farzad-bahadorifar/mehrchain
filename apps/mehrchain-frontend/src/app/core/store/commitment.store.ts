@@ -295,6 +295,25 @@ export const CommitmentStore = signalStore(
       },
 
       /**
+       * Permanently deletes a commitment from both local state and backend database.
+       */
+      async permanentDeleteCommitment(id: string): Promise<void> {
+        patchState(store, {
+          commitments: store.commitments().filter((c) => c.id !== id),
+          archivedCommitments: store.archivedCommitments().filter((c) => c.id !== id),
+        });
+
+        try {
+          const token = localStorage.getItem('mehrchain_auth_token_v1');
+          if (token) {
+            await firstValueFrom(http.delete(`${API_URL}/${id}/permanent`));
+          }
+        } catch (err) {
+          console.warn('[CommitmentStore] Failed to permanently delete commitment on backend:', err);
+        }
+      },
+
+      /**
        * Purges all in-memory commitments and resets active session state.
        * Does NOT erase user's offline cache key.
        */

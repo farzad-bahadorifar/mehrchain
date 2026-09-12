@@ -69,4 +69,12 @@ export class CommitmentsController {
   restoreCommitment(@CurrentUser() user: { id: string }, @Param('id') id: string) {
     return this.commitmentsService.restoreCommitment(user.id, id);
   }
+
+  @Delete(':id/permanent')
+  @ApiOperation({ summary: 'Permanently delete a commitment from database' })
+  @ApiResponse({ status: 200, description: 'Commitment permanently deleted' })
+  hardDeleteCommitment(@CurrentUser() user: { id: string }, @Param('id') id: string) {
+    return this.commitmentsService.hardDeleteCommitment(user.id, id);
+  }
 }
+

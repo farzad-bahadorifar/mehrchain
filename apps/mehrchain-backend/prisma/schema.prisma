@@ -23,13 +23,16 @@ model User {
   email        String       @unique
   passwordHash String
   name         String
-  role         String       @default("USER")
-  metadata     Json?        // Extensible metadata for future gamification & preferences
+  role                       String       @default("USER")
+  isEmailVerified            Boolean      @default(false)
+  verificationCode           String?
+  verificationCodeExpiresAt  DateTime?
+  metadata                   Json?        // Extensible metadata for future gamification & preferences
 
-  commitments  Commitment[]
+  commitments                Commitment[]
 
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt                  DateTime     @default(now())
+  updatedAt                  DateTime     @updatedAt
 
   @@map("users")
 }

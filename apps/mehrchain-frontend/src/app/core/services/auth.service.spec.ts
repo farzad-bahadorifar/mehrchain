@@ -48,7 +48,23 @@ describe('AuthService (Frontend)', () => {
     expect(service.isAuthenticated()).toBe(false);
   });
 
-  it('should register user and save JWT token to localStorage', async () => {
+  it('should call register endpoint and return verification status', async () => {
+    const registerPromise = service.register('Farzad', 'farzad@example.com', 'pass123');
+
+    const req = httpMock.expectOne('http://localhost:3000/api/auth/register');
+    expect(req.request.method).toBe('POST');
+    req.flush({
+      requiresVerification: true,
+      email: 'farzad@example.com',
+      message: 'Verification code sent to your email address.',
+    });
+
+    const res = await registerPromise;
+    expect(res.requiresVerification).toBe(true);
+    expect(res.email).toBe('farzad@example.com');
+  });
+
+  it('should verify email code and save JWT token to localStorage', async () => {
     const mockUser = {
       id: 'user-1',
       name: 'Farzad',
@@ -56,16 +72,16 @@ describe('AuthService (Frontend)', () => {
       createdAt: new Date().toISOString(),
     };
 
-    const registerPromise = service.register('Farzad', 'farzad@example.com', 'pass123');
+    const verifyPromise = service.verifyEmail('farzad@example.com', '123456');
 
-    const req = httpMock.expectOne('http://localhost:3000/api/auth/register');
+    const req = httpMock.expectOne('http://localhost:3000/api/auth/verify-email');
     expect(req.request.method).toBe('POST');
     req.flush({
       user: mockUser,
       accessToken: 'test_token_xyz',
     });
 
-    const user = await registerPromise;
+    const user = await verifyPromise;
     expect(user.email).toBe('farzad@example.com');
     expect(service.currentUser()?.email).toBe('farzad@example.com');
     expect(service.isAuthenticated()).toBe(true);

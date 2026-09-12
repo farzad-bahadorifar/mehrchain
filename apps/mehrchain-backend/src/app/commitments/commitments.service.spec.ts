@@ -11,6 +11,7 @@ describe('CommitmentsService (Unit Tests)', () => {
       findUnique: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+      delete: jest.fn(),
     },
     commitmentLog: {
       create: jest.fn(),
@@ -219,4 +220,38 @@ describe('CommitmentsService (Unit Tests)', () => {
       });
     });
   });
+
+  describe('hardDeleteCommitment', () => {
+    it('should permanently delete the commitment', async () => {
+      mockPrisma.commitment.findUnique.mockResolvedValue({
+        id: 'comm-1',
+        userId: 'user-1',
+      });
+      mockPrisma.commitment.delete = jest.fn().mockResolvedValue({ id: 'comm-1' });
+
+      const result = await service.hardDeleteCommitment('user-1', 'comm-1');
+      expect(result.success).toBe(true);
+      expect(mockPrisma.commitment.delete).toHaveBeenCalledWith({ where: { id: 'comm-1' } });
+    });
+
+    it('should throw ForbiddenException if user does not own commitment', async () => {
+      mockPrisma.commitment.findUnique.mockResolvedValue({
+        id: 'comm-1',
+        userId: 'other-user',
+      });
+
+      await expect(
+        service.hardDeleteCommitment('user-1', 'comm-1'),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should throw NotFoundException if commitment not found', async () => {
+      mockPrisma.commitment.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.hardDeleteCommitment('user-1', 'nonexistent-id'),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
 });
+

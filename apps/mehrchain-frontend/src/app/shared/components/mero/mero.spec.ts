@@ -65,4 +65,11 @@ describe('MeroComponent', () => {
     fixture.detectChanges();
     expect(component.effectiveState()).toBe('celebrating');
   });
+
+  it('should support custom glow gradient override', () => {
+    const custom = 'radial-gradient(circle, #ff0000 0%, transparent 70%)';
+    fixture.componentRef.setInput('customGradient', custom);
+    fixture.detectChanges();
+    expect(component.effectiveGradient()).toBe(custom);
+  });
 });

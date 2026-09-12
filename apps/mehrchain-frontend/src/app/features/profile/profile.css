@@ -1,0 +1,5 @@
+/* Profile specific styling enhancements */
+:host {
+  display: block;
+  width: 100%;
+}

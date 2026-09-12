@@ -14,5 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/journey/journey').then((m) => m.Journey),
     canActivate: [onboardingGuard],
   },
+  {
+    path: 'profile',
+    loadComponent: () => import('./features/profile/profile').then((m) => m.ProfileComponent),
+    canActivate: [onboardingGuard],
+  },
   { path: '**', redirectTo: '' },
 ];
