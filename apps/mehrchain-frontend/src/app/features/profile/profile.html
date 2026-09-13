@@ -1,16 +1,16 @@
-<div class="min-h-screen bg-background pb-28 px-4 sm:px-6 pt-6 font-sans select-none animate-fade-in" dir="rtl">
+<div class="min-h-screen bg-background pb-28 px-4 sm:px-6 pt-6 font-sans select-none animate-fade-in">
   <!-- Top Navigation / Title -->
   <div class="flex justify-between items-center mb-6">
     <div>
-      <h1 class="text-2xl font-black text-foreground tracking-tight">پروفایل و شخصی‌سازی</h1>
-      <p class="text-xs sm:text-sm text-muted-foreground mt-0.5">همراه اختصاصی و تنظیمات هویتی مِرو</p>
+      <h1 class="text-2xl font-black text-foreground tracking-tight">Profile & Customization</h1>
+      <p class="text-xs sm:text-sm text-muted-foreground mt-0.5">Personal companion & Mero settings</p>
     </div>
 
     <!-- Quick User Status -->
     <div class="flex items-center gap-2 bg-card border border-border/60 px-3 py-1.5 rounded-full shadow-xs">
       <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
       <span class="text-xs font-medium text-foreground truncate max-w-[130px] sm:max-w-[180px]">
-        {{ currentUser()?.name || currentUser()?.email || 'کاربر مهرچین' }}
+        {{ currentUser()?.name || currentUser()?.email || 'MehrChain Explorer' }}
       </span>
     </div>
   </div>
@@ -55,9 +55,9 @@
           [customGradient]="heroPreviewGradient()"
         />
         <div
-          class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] text-muted-foreground/70 bg-background/80 backdrop-blur-xs px-2 py-0.5 rounded-full border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+          class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] text-muted-foreground/70 bg-background/80 backdrop-blur-xs px-2 py-0.5 rounded-full border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
         >
-          برای نوازش کلیک کنید ✨
+          Tap to interact ✨
         </div>
       </div>
 
@@ -71,7 +71,7 @@
               (keydown.enter)="saveNickname()"
               (keydown.escape)="cancelEditingNickname()"
               maxlength="25"
-              placeholder="نام مِرو..."
+              placeholder="Name your Mero..."
               class="w-full bg-transparent px-3 py-1.5 text-sm font-bold text-foreground focus:outline-hidden text-center"
               autofocus
             />
@@ -79,7 +79,7 @@
               type="button"
               (click)="saveNickname()"
               class="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shrink-0 hover:bg-primary/90 active:scale-95 transition-transform"
-              title="ذخیره"
+              title="Save"
             >
               <lucide-icon name="check" class="w-4 h-4"></lucide-icon>
             </button>
@@ -87,7 +87,7 @@
               type="button"
               (click)="cancelEditingNickname()"
               class="w-8 h-8 rounded-xl bg-muted text-muted-foreground flex items-center justify-center shrink-0 hover:bg-muted/80 active:scale-95 transition-transform"
-              title="انصراف"
+              title="Cancel"
             >
               <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
             </button>
@@ -101,7 +101,7 @@
               type="button"
               (click)="startEditingNickname()"
               class="w-7 h-7 rounded-full bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground flex items-center justify-center transition-all active:scale-95"
-              title="تغییر نام مِرو"
+              title="Change companion name"
             >
               <lucide-icon name="edit" class="w-3.5 h-3.5"></lucide-icon>
             </button>
@@ -130,7 +130,7 @@
             class="w-2 h-2 rounded-full shadow-xs"
             [style.backgroundColor]="customization.activeTheme().previewColor"
           ></span>
-          <span>تم نور: {{ customization.activeTheme().name }}</span>
+          <span>Theme: {{ customization.activeTheme().name }}</span>
         </span>
       </div>
     </div>
@@ -144,8 +144,8 @@
           <lucide-icon name="sparkles" class="w-4 h-4"></lucide-icon>
         </div>
         <div>
-          <h3 class="text-base font-bold text-foreground">رنگ نور شکم مِرو</h3>
-          <p class="text-[11px] text-muted-foreground">کالیبره‌شده برای درخشش دقیق در حالت روز و شب</p>
+          <h3 class="text-base font-bold text-foreground">Belly Glow Color</h3>
+          <p class="text-[11px] text-muted-foreground">Calibrated for day & night radiance</p>
         </div>
       </div>
     </div>
@@ -161,7 +161,7 @@
           (click)="handleSelectTheme(t.id)"
           (mouseenter)="hoveredThemeId.set(t.id)"
           (mouseleave)="hoveredThemeId.set(null)"
-          class="relative p-3.5 rounded-2xl bg-card border text-right transition-all flex flex-col justify-between h-32 group active:scale-[0.98]"
+          class="relative p-3.5 rounded-2xl bg-card border text-left transition-all flex flex-col justify-between h-32 group active:scale-[0.98]"
           [class.border-primary]="isSelected"
           [class.ring-2]="isSelected"
           [class.ring-primary/30]="isSelected"
@@ -192,10 +192,10 @@
             } @else if (!isUnlocked) {
               <div
                 class="flex items-center gap-1 bg-muted/80 text-muted-foreground px-1.5 py-0.5 rounded-md text-[10px] font-bold"
-                [title]="'نیازمند ' + t.minStreak + ' روز زنجیره'"
+                [title]="'Requires ' + t.minStreak + '-day streak'"
               >
                 <lucide-icon name="lock" class="w-3 h-3"></lucide-icon>
-                <span>{{ t.minStreak }} روز</span>
+                <span>{{ t.minStreak }}d</span>
               </div>
             }
           </div>
@@ -221,8 +221,8 @@
         <lucide-icon name="zap" class="w-4 h-4"></lucide-icon>
       </div>
       <div>
-        <h3 class="text-base font-bold text-foreground">شخصیت و لحن مِرو</h3>
-        <p class="text-[11px] text-muted-foreground">نحوه همراهی، تشویق و گفت‌وگو با شما در برنامه</p>
+        <h3 class="text-base font-bold text-foreground">Personality & Tone</h3>
+        <p class="text-[11px] text-muted-foreground">Companion demeanor and encouragement style</p>
       </div>
     </div>
 
@@ -233,7 +233,7 @@
         <button
           type="button"
           (click)="handleSelectPersonality(opt.id)"
-          class="p-4 rounded-2xl bg-card border text-right transition-all flex flex-col justify-between group active:scale-[0.98]"
+          class="p-4 rounded-2xl bg-card border text-left transition-all flex flex-col justify-between group active:scale-[0.98]"
           [class.border-primary]="isSelected"
           [class.ring-2]="isSelected"
           [class.ring-primary/30]="isSelected"
@@ -259,7 +259,7 @@
           </div>
 
           <div class="bg-muted/40 rounded-xl p-2.5 border border-border/40 text-[11px] text-muted-foreground italic leading-relaxed">
-            «{{ opt.greeting(customization.nickname()) }}»
+            "{{ opt.greeting(customization.nickname()) }}"
           </div>
         </button>
       }
@@ -273,8 +273,8 @@
         <lucide-icon name="flame" class="w-4 h-4"></lucide-icon>
       </div>
       <div>
-        <h3 class="text-base font-bold text-foreground">شناسنامه همراهی</h3>
-        <p class="text-[11px] text-muted-foreground">آمار وفاداری و تعهدات شما با مِرو</p>
+        <h3 class="text-base font-bold text-foreground">Companion Milestones</h3>
+        <p class="text-[11px] text-muted-foreground">Your consistency and streak stats with Mero</p>
       </div>
     </div>
 
@@ -282,38 +282,38 @@
       <!-- Streak Card -->
       <div class="bg-card border border-border/60 rounded-2xl p-4 flex flex-col justify-between shadow-xs">
         <div class="flex items-center justify-between text-muted-foreground mb-2">
-          <span class="text-xs font-bold">زنجیره فعال</span>
+          <span class="text-xs font-bold">Active Streak</span>
           <lucide-icon name="flame" class="w-4 h-4 text-orange-500"></lucide-icon>
         </div>
         <div>
           <span class="text-2xl font-black text-foreground">{{ currentStreak() }}</span>
-          <span class="text-xs text-muted-foreground mr-1">روز</span>
+          <span class="text-xs text-muted-foreground ml-1">Days</span>
         </div>
       </div>
 
       <!-- Active Habits Card -->
       <div class="bg-card border border-border/60 rounded-2xl p-4 flex flex-col justify-between shadow-xs">
         <div class="flex items-center justify-between text-muted-foreground mb-2">
-          <span class="text-xs font-bold">عادت‌های روشن</span>
+          <span class="text-xs font-bold">Active Habits</span>
           <lucide-icon name="sparkles" class="w-4 h-4 text-amber-500"></lucide-icon>
         </div>
         <div>
           <span class="text-2xl font-black text-foreground">{{ activeHabitsCount() }}</span>
-          <span class="text-xs text-muted-foreground mr-1">تعهد</span>
+          <span class="text-xs text-muted-foreground ml-1">Habits</span>
         </div>
       </div>
 
       <!-- Unlocked Themes Card -->
       <div class="bg-card border border-border/60 rounded-2xl p-4 flex flex-col justify-between shadow-xs col-span-2 sm:col-span-1">
         <div class="flex items-center justify-between text-muted-foreground mb-2">
-          <span class="text-xs font-bold">تم‌های باز شده</span>
+          <span class="text-xs font-bold">Unlocked Themes</span>
           <lucide-icon name="heart" class="w-4 h-4 text-rose-500"></lucide-icon>
         </div>
         <div>
           <span class="text-2xl font-black text-foreground">
             {{ customization.availableThemes.length - 2 + (currentStreak() >= 3 ? 1 : 0) + (currentStreak() >= 7 ? 1 : 0) }}
           </span>
-          <span class="text-xs text-muted-foreground mr-1">از {{ customization.availableThemes.length }} تم</span>
+          <span class="text-xs text-muted-foreground ml-1">of {{ customization.availableThemes.length }}</span>
         </div>
       </div>
     </div>
@@ -325,8 +325,8 @@
     <div class="bg-card border border-border/60 rounded-2xl p-4 shadow-xs">
       <div class="flex items-center justify-between mb-3">
         <div>
-          <h4 class="text-xs font-bold text-foreground">حالت نمایش اپلیکیشن</h4>
-          <p class="text-[10px] text-muted-foreground">انتخاب تم روشن، تاریک یا هماهنگ با سیستم</p>
+          <h4 class="text-xs font-bold text-foreground">Display Theme</h4>
+          <p class="text-[10px] text-muted-foreground">Select light, dark, or system mode</p>
         </div>
       </div>
 
@@ -342,7 +342,7 @@
           [class.text-muted-foreground]="themeService.mode() !== 'light'"
         >
           <lucide-icon name="sun" class="w-3.5 h-3.5"></lucide-icon>
-          <span>روشن</span>
+          <span>Light</span>
         </button>
 
         <button
@@ -356,7 +356,7 @@
           [class.text-muted-foreground]="themeService.mode() !== 'system'"
         >
           <lucide-icon name="monitor" class="w-3.5 h-3.5"></lucide-icon>
-          <span>سیستم</span>
+          <span>System</span>
         </button>
 
         <button
@@ -370,7 +370,7 @@
           [class.text-muted-foreground]="themeService.mode() !== 'dark'"
         >
           <lucide-icon name="moon" class="w-3.5 h-3.5"></lucide-icon>
-          <span>تاریک</span>
+          <span>Dark</span>
         </button>
       </div>
     </div>
@@ -383,7 +383,7 @@
         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold text-destructive hover:bg-destructive/10 border border-destructive/20 transition-all active:scale-95"
       >
         <lucide-icon name="log-out" class="w-4 h-4"></lucide-icon>
-        <span>خروج از حساب کاربری</span>
+        <span>Sign Out</span>
       </button>
     </div>
   </div>

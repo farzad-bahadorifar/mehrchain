@@ -64,7 +64,7 @@ export class ProfileComponent {
     if (val.length > 0) {
       this.customization.setNickname(val);
       this.isEditingNickname.set(false);
-      this.showSaveFeedback('نام همراه با موفقیت ذخیره شد ✨');
+      this.showSaveFeedback('Companion name saved successfully ✨');
     }
   }
 
@@ -78,20 +78,20 @@ export class ProfileComponent {
     if (!isUnlocked) {
       const theme = this.customization.availableThemes.find((t) => t.id === themeId);
       this.showSaveFeedback(
-        `این تم نوری نیازمند ${theme?.minStreak ?? 0} روز تعهد پیوسته است 🔒`
+        `This glow theme requires a ${theme?.minStreak ?? 0}-day streak 🔒`
       );
       return;
     }
 
     const success = this.customization.setGlowTheme(themeId);
     if (success) {
-      this.showSaveFeedback('نور شکم مِرو با موفقیت به‌روزرسانی شد 🌟');
+      this.showSaveFeedback('Mero belly glow updated successfully 🌟');
     }
   }
 
   handleSelectPersonality(p: MeroPersonality): void {
     this.customization.setPersonality(p);
-    this.showSaveFeedback('لحن و شخصیت مِرو تغییر کرد 💬');
+    this.showSaveFeedback('Mero personality updated 💬');
   }
 
   setThemeMode(mode: ThemeMode): void {
@@ -99,7 +99,7 @@ export class ProfileComponent {
   }
 
   handleSignOut(): void {
-    if (confirm('آیا مطمئن هستید که می‌خواهید خارج شوید؟')) {
+    if (confirm('Are you sure you want to sign out?')) {
       this.authService.logout();
     }
   }

@@ -39,7 +39,7 @@ export interface PersonalityOption {
 export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
   {
     id: 'golden',
-    name: 'مهر طلایی',
+    name: 'Golden Warmth',
     nameEn: 'Golden Warmth',
     lightGradient:
       'radial-gradient(circle, rgba(254, 240, 138, 0.85) 0%, rgba(245, 158, 11, 0.4) 45%, transparent 72%)',
@@ -48,11 +48,11 @@ export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
     previewColor: '#f59e0b',
     accentColor: '#d97706',
     minStreak: 0,
-    description: 'گرمی و روشنایی کلاسیک خورشید مهر',
+    description: 'Classic warmth and radiant sunshine',
   },
   {
     id: 'ocean',
-    name: 'اقیانوس آرام',
+    name: 'Calm Breeze',
     nameEn: 'Calm Breeze',
     lightGradient:
       'radial-gradient(circle, rgba(186, 230, 253, 0.9) 0%, rgba(14, 165, 233, 0.45) 45%, transparent 72%)',
@@ -61,11 +61,11 @@ export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
     previewColor: '#0ea5e9',
     accentColor: '#0284c7',
     minStreak: 0,
-    description: 'امواج زلال و حس آرامش بیکران',
+    description: 'Crystal waves and serene tranquility',
   },
   {
     id: 'nebula',
-    name: 'کیهان نئونی',
+    name: 'Cyber Nebula',
     nameEn: 'Cyber Nebula',
     lightGradient:
       'radial-gradient(circle, rgba(245, 208, 254, 0.9) 0%, rgba(168, 85, 247, 0.45) 45%, transparent 72%)',
@@ -74,11 +74,11 @@ export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
     previewColor: '#a855f7',
     accentColor: '#9333ea',
     minStreak: 0,
-    description: 'درخشش کهکشانی و جادوی شب',
+    description: 'Cosmic shimmer and nocturnal magic',
   },
   {
     id: 'emerald',
-    name: 'جوانه امید',
+    name: 'Emerald Spring',
     nameEn: 'Emerald Spring',
     lightGradient:
       'radial-gradient(circle, rgba(187, 247, 208, 0.9) 0%, rgba(34, 197, 94, 0.45) 45%, transparent 72%)',
@@ -87,11 +87,11 @@ export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
     previewColor: '#22c55e',
     accentColor: '#16a34a',
     minStreak: 0,
-    description: 'انرژی رویش و سرسبزی طبیعت',
+    description: 'Vibrant growth and fresh nature energy',
   },
   {
     id: 'sakura',
-    name: 'شکوفه گیلاس',
+    name: 'Sakura Dream',
     nameEn: 'Sakura Dream',
     lightGradient:
       'radial-gradient(circle, rgba(254, 205, 211, 0.9) 0%, rgba(244, 63, 94, 0.45) 45%, transparent 72%)',
@@ -100,11 +100,11 @@ export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
     previewColor: '#f43f5e',
     accentColor: '#e11d48',
     minStreak: 0,
-    description: 'لطافت، مهربانی و عشق بی‌پایان',
+    description: 'Softness, kindness, and eternal love',
   },
   {
     id: 'aurora',
-    name: 'شفق قطبی',
+    name: 'Aurora Borealis',
     nameEn: 'Aurora Borealis',
     lightGradient:
       'radial-gradient(circle, rgba(167, 243, 208, 0.9) 0%, rgba(45, 212, 191, 0.5) 35%, rgba(99, 102, 241, 0.3) 65%, transparent 75%)',
@@ -113,12 +113,12 @@ export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
     previewColor: '#14b8a6',
     accentColor: '#0d9488',
     minStreak: 3,
-    badge: '۳ روز پیوسته',
-    description: 'رقص جادویی نورهای قطبی در آسمان شب',
+    badge: '3-Day Streak',
+    description: 'Magical northern lights dancing across the sky',
   },
   {
     id: 'cosmic_fire',
-    name: 'شعله کیهانی',
+    name: 'Cosmic Fire',
     nameEn: 'Cosmic Fire',
     lightGradient:
       'radial-gradient(circle, rgba(254, 240, 138, 0.95) 0%, rgba(249, 115, 22, 0.55) 40%, rgba(239, 68, 68, 0.35) 65%, transparent 75%)',
@@ -127,41 +127,41 @@ export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
     previewColor: '#f97316',
     accentColor: '#ea580c',
     minStreak: 7,
-    badge: '۷ روز پیوسته',
-    description: 'تپش قدرتمند اراده و اشتیاق سوزان',
+    badge: '7-Day Streak',
+    description: 'Fierce willpower and burning determination',
   },
 ];
 
 export const PERSONALITY_OPTIONS: PersonalityOption[] = [
   {
     id: 'energetic',
-    title: 'پرانرژی و پرشور',
-    subtitle: 'انگیزه‌بخش، پرهیجان و مشتاق',
+    title: 'Energetic & Vibrant',
+    subtitle: 'Motivational, thrilling, and eager',
     emoji: '⚡',
     icon: 'zap',
-    greeting: (name) => `${name} پر از انرژیه و آماده ترکوندنه! 🔥`,
+    greeting: (name) => `${name} is bursting with energy and ready to conquer the day! 🔥`,
     streakPraise: (name, days) =>
-      `عالیه! ${days} روز فوق‌العاده پشت سر هم، هیچ‌چیز جلوت رو نمی‌گیره! 🚀`,
+      `Incredible! ${days} amazing days in a row, nothing can stop you! 🚀`,
   },
   {
     id: 'calm',
-    title: 'آرامش‌بخش و صبور',
-    subtitle: 'همراه مهربان، بدون استرس و پیوسته',
+    title: 'Calm & Mindful',
+    subtitle: 'Gentle companion, stress-free and steady',
     emoji: '🧘',
     icon: 'leaf',
-    greeting: (name) => `${name} در کنارت با آرامش همراهه. 🌸`,
+    greeting: (name) => `${name} is right by your side with peace and serenity. 🌸`,
     streakPraise: (name, days) =>
-      `آفرین به صبوری و تداومت، ${days} روز قدم‌های پیوسته و زیبا. 🍃`,
+      `Praise your patience and consistency, ${days} beautiful mindful steps. 🍃`,
   },
   {
     id: 'focused',
-    title: 'جدی و هدفمند',
-    subtitle: 'تمرکز بالا، دقیق و بدون حاشیه',
+    title: 'Driven & Focused',
+    subtitle: 'Laser focus, disciplined and razor-sharp',
     emoji: '🎯',
     icon: 'sparkles',
-    greeting: (name) => `${name} منتظر تحقق اهداف امروزه. 🎯`,
+    greeting: (name) => `${name} is locked in and ready to crush today's goals. 🎯`,
     streakPraise: (name, days) =>
-      `هدف‌گیری دقیق! ${days} روز بدون حتی یک شکست ثبت شد. ⚔️`,
+      `Target locked! ${days} flawless consecutive days achieved. ⚔️`,
   },
 ];
 
@@ -177,7 +177,7 @@ export class MeroCustomizationService {
   readonly personalityOptions = PERSONALITY_OPTIONS;
 
   // Reactive State Signals
-  readonly nickname = signal<string>('مِرو');
+  readonly nickname = signal<string>('Mero');
   readonly selectedThemeId = signal<MeroGlowThemeId>('golden');
   readonly personality = signal<MeroPersonality>('calm');
 

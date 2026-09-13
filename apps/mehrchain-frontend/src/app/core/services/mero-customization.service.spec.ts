@@ -37,19 +37,19 @@ describe('MeroCustomizationService', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(service.nickname()).toBe('مِرو');
+    expect(service.nickname()).toBe('Mero');
     expect(service.selectedThemeId()).toBe('golden');
     expect(service.personality()).toBe('calm');
     expect(service.activeTheme().id).toBe('golden');
   });
 
   it('should update nickname correctly when valid', () => {
-    service.setNickname('پرتو امید');
-    expect(service.nickname()).toBe('پرتو امید');
+    service.setNickname('Sparky');
+    expect(service.nickname()).toBe('Sparky');
 
     // Should ignore empty or whitespace-only names
     service.setNickname('   ');
-    expect(service.nickname()).toBe('پرتو امید');
+    expect(service.nickname()).toBe('Sparky');
   });
 
   it('should switch glow theme if unlocked', () => {
@@ -88,9 +88,9 @@ describe('MeroCustomizationService', () => {
   it('should update personality mode and generate matching greetings', () => {
     service.setPersonality('energetic');
     expect(service.personality()).toBe('energetic');
-    expect(service.getGreeting()).toContain('آماده ترکوندنه');
+    expect(service.getGreeting()).toContain('bursting with energy');
 
     service.setPersonality('focused');
-    expect(service.getGreeting()).toContain('تحقق اهداف');
+    expect(service.getGreeting()).toContain('locked in');
   });
 });

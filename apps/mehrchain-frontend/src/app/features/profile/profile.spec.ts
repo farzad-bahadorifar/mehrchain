@@ -28,23 +28,23 @@ describe('ProfileComponent', () => {
     component.startEditingNickname();
     expect(component.isEditingNickname()).toBe(true);
 
-    component.nicknameInput.set('همراه پرتو');
+    component.nicknameInput.set('Sparky');
     component.saveNickname();
 
     expect(component.isEditingNickname()).toBe(false);
-    expect(customizationService.nickname()).toBe('همراه پرتو');
-    expect(component.saveFeedbackMessage()).toContain('با موفقیت ذخیره شد');
+    expect(customizationService.nickname()).toBe('Sparky');
+    expect(component.saveFeedbackMessage()).toContain('saved successfully');
   });
 
   it('should change glow theme when selecting an unlocked theme', () => {
     component.handleSelectTheme('ocean');
     expect(customizationService.selectedThemeId()).toBe('ocean');
-    expect(component.saveFeedbackMessage()).toContain('به‌روزرسانی شد');
+    expect(component.saveFeedbackMessage()).toContain('updated successfully');
   });
 
   it('should change personality mode', () => {
     component.handleSelectPersonality('energetic');
     expect(customizationService.personality()).toBe('energetic');
-    expect(component.saveFeedbackMessage()).toContain('شخصیت مِرو تغییر کرد');
+    expect(component.saveFeedbackMessage()).toContain('personality updated');
   });
 });
