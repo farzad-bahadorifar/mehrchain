@@ -69,7 +69,7 @@
       @case (1) {
         <div class="animate-fade-in h-full flex flex-col justify-between space-y-4">
           <div>
-            <h2 class="text-2xl font-bold mb-2 text-foreground leading-snug">
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-foreground leading-snug">
               Why Walk Together?
             </h2>
             <p class="text-muted-foreground text-sm leading-relaxed mb-4">
@@ -117,7 +117,7 @@
       @case (2) {
         <div class="animate-fade-in h-full flex flex-col justify-between space-y-4">
           <div>
-            <h2 class="text-2xl font-bold mb-1.5 text-foreground leading-snug">
+            <h2 class="text-xl sm:text-2xl font-bold mb-1.5 text-foreground leading-snug">
               The Meaning of MehrChain
             </h2>
             <p class="text-muted-foreground text-sm leading-relaxed mb-4">
@@ -169,41 +169,36 @@
       @case (3) {
         <div class="animate-fade-in h-full flex flex-col justify-between space-y-3.5">
           <div>
-            <div class="flex items-center justify-between mb-2">
-              <h2 class="text-2xl font-bold text-foreground leading-snug">
-                Interlocking Chains
-              </h2>
-              <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 text-[10px] font-extrabold uppercase tracking-wider">
-                Coming Soon
-              </span>
-            </div>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-foreground leading-snug">
+              Connected Habit Chains
+            </h2>
             <p class="text-muted-foreground text-sm leading-relaxed mb-3.5">
-              One positive action naturally ignites another, creating an unstoppable ripple.
+              Link your public habits with friends through invite links and QR codes. Keep each other shining with quiet support.
             </p>
 
             <div class="space-y-3">
-              <!-- Ripple Card -->
+              <!-- Shared Accountability Card -->
               <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
                 <div class="w-10 h-10 rounded-2xl bg-primary/15 text-primary flex items-center justify-center shrink-0 border border-primary/20">
-                  <lucide-icon name="zap" class="w-5 h-5 text-primary"></lucide-icon>
+                  <lucide-icon name="link-2" class="w-5 h-5 text-primary"></lucide-icon>
                 </div>
                 <div class="flex-1">
-                  <h3 class="text-xs font-bold text-foreground mb-0.5">Synergistic Habits</h3>
+                  <h3 class="text-xs font-bold text-foreground mb-0.5">Shared Accountability</h3>
                   <p class="text-xs text-muted-foreground leading-relaxed">
-                    Reading 10 pages leads to calm sleep, which powers your morning walk. Habits reinforce each other.
+                    Track your daily spark alongside a friend. No toxic leaderboards or pressure, just mutual presence and consistency.
                   </p>
                 </div>
               </div>
 
-              <!-- Community Presence Card -->
+              <!-- Supportive Reactions Card -->
               <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
                 <div class="w-10 h-10 rounded-2xl bg-teal-500/15 text-teal-600 flex items-center justify-center shrink-0 border border-teal-500/20">
-                  <lucide-icon name="users" class="w-5 h-5 text-teal-600"></lucide-icon>
+                  <lucide-icon name="heart" class="w-5 h-5 text-teal-600"></lucide-icon>
                 </div>
                 <div class="flex-1">
-                  <h3 class="text-xs font-bold text-foreground mb-0.5">Silent Connection</h3>
+                  <h3 class="text-xs font-bold text-foreground mb-0.5">Micro Support & Nudges</h3>
                   <p class="text-xs text-muted-foreground leading-relaxed">
-                    Know that others are lighting their lamps alongside you, without toxic comparison or leaderboards.
+                    Send warm heart reactions and gentle reminders when your friend completes their habit for the day.
                   </p>
                 </div>
               </div>
@@ -487,15 +482,20 @@
 
             <div class="space-y-3">
               <div>
-                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1 ml-1">Full Name</label>
+                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1 ml-1 flex justify-between">
+                  <span>Username</span>
+                  <span class="text-[10px] text-teal-600 dark:text-teal-400 font-semibold lowercase">Unique ID (3-20 chars)</span>
+                </label>
                 <div class="relative flex items-center">
-                  <lucide-icon name="user" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
+                  <span class="absolute left-4 font-bold text-sm text-teal-600 dark:text-teal-400 select-none pointer-events-none">&#64;</span>
                   <input
                     type="text"
-                    [value]="signUpName()"
-                    (input)="signUpName.set($any($event.target).value)"
-                    placeholder="Your Name"
-                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+                    [value]="signUpUsername()"
+                    (input)="onSignUpUsernameChange($any($event.target).value)"
+                    placeholder="your_username"
+                    autocomplete="username"
+                    autocapitalize="none"
+                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-10 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors font-medium"
                   />
                 </div>
               </div>
@@ -631,15 +631,17 @@
 
           <div class="space-y-3.5 mb-5">
             <div>
-              <label class="block text-xs font-bold text-muted-foreground uppercase mb-1.5 ml-1">Email</label>
+              <label class="block text-xs font-bold text-muted-foreground uppercase mb-1.5 ml-1">Email or Username</label>
               <div class="relative flex items-center">
-                <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
+                <lucide-icon name="user" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
                 <input
-                  type="email"
+                  type="text"
                   [value]="loginEmail()"
                   (input)="loginEmail.set($any($event.target).value)"
-                  placeholder="you@example.com"
-                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+                  placeholder="you@example.com or @username"
+                  autocomplete="username"
+                  autocapitalize="none"
+                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors font-medium"
                 />
               </div>
             </div>

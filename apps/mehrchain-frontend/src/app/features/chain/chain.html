@@ -1,0 +1,315 @@
+<div class="min-h-screen bg-background pb-28 px-5 pt-6 font-sans">
+  <!-- Header with Mero avatar and Quick Theme Toggle -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-foreground">MehrChain</h1>
+      <p class="text-sm text-muted-foreground">Keep each other's lights burning with care.</p>
+    </div>
+    <div class="flex items-center gap-2.5">
+      <button
+        type="button"
+        (click)="toggleTheme()"
+        class="w-9 h-9 rounded-full bg-card border border-border/70 flex items-center justify-center text-foreground hover:border-primary/50 shadow-sm transition-all active:scale-95"
+        [title]="themeService.isDark() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+      >
+        <lucide-icon [name]="themeService.isDark() ? 'sun' : 'moon'" class="w-4 h-4 text-primary"></lucide-icon>
+      </button>
+      <a
+        routerLink="/profile"
+        class="relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+        [title]="'Profile • ' + customizationService.nickname()"
+      >
+        <app-mero size="xs" [showGlow]="true" />
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Hero Card: Link Your Habit Chain -->
+  <div class="chain-hero-card bg-card rounded-3xl p-6 border border-border/60 shadow-float mb-6 relative animate-fade-in overflow-visible">
+    <!-- Top Visual Emblem: Clean Static Interlocking Teal & Orange Chain -->
+    <div class="flex flex-col items-center justify-center pt-2 pb-4">
+      <div class="relative w-32 h-24 flex items-center justify-center">
+        <svg class="w-28 h-20 overflow-visible" viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Static Sparkles -->
+          <path d="M48 16L50 20L54 22L50 24L48 28L46 24L42 22L46 20L48 16Z" fill="#F59E0B" />
+          <path d="M96 74L98 78L102 80L98 82L96 86L94 82L90 80L94 78L96 74Z" fill="#F59E0B" />
+
+          <!-- Left Link (Teal / Brand Mero) -->
+          <rect
+            x="24"
+            y="22"
+            width="52"
+            height="30"
+            rx="15"
+            transform="rotate(-30 24 22)"
+            stroke="url(#tealGradient)"
+            stroke-width="11"
+            stroke-linecap="round"
+            class="chain-link-teal"
+          />
+
+          <!-- Right Link (Amber / Partner Warmth) -->
+          <rect
+            x="64"
+            y="48"
+            width="52"
+            height="30"
+            rx="15"
+            transform="rotate(-30 64 48)"
+            stroke="url(#orangeGradient)"
+            stroke-width="11"
+            stroke-linecap="round"
+            class="chain-link-orange"
+          />
+
+          <!-- Gradients definition -->
+          <defs>
+            <linearGradient id="tealGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#2DD4BF" />
+              <stop offset="100%" stop-color="#0F766E" />
+            </linearGradient>
+            <linearGradient id="orangeGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FB923C" />
+              <stop offset="100%" stop-color="#EA580C" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <h2 class="text-xl font-extrabold text-foreground text-center mt-2 tracking-tight">
+        @if (selectedCommitment()) {
+          Link Your {{ selectedCommitment()?.totalDays }}-Day Journey with a Friend
+        } @else {
+          Link Your Habit with a Friend
+        }
+      </h2>
+      <p class="text-xs text-muted-foreground text-center mt-1 max-w-xs">
+        Quiet support and shared accountability. Zero pressure.
+      </p>
+    </div>
+
+    <!-- Habit Selection: Only Public Commitments -->
+    <div class="mb-4 relative">
+      <div class="flex items-center justify-between mb-1.5 px-1">
+        <label class="text-xs font-semibold text-muted-foreground">
+          Select Public Habit to Share:
+        </label>
+        <span class="text-[10px] text-teal-600 dark:text-teal-400 font-bold flex items-center gap-1">
+          <lucide-icon name="globe" class="w-3 h-3"></lucide-icon>
+          Public Habit
+        </span>
+      </div>
+
+      @if (publicCommitments().length === 0) {
+        <!-- No Public Commitments Guidance -->
+        <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-center">
+          <p class="text-xs font-bold text-amber-600 dark:text-amber-400 mb-1">
+            No Public Habits Available
+          </p>
+          <p class="text-[11px] text-muted-foreground mb-3 leading-relaxed">
+            Only habits marked as Public (🌐) can be chained. Create or edit a habit in Dashboard and enable the Globe icon.
+          </p>
+          <a
+            routerLink="/dashboard"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-card border border-border text-xs font-bold text-foreground shadow-xs hover:border-primary transition-all"
+          >
+            <span>Go to Dashboard</span>
+            <lucide-icon name="arrow-right" class="w-3 h-3"></lucide-icon>
+          </a>
+        </div>
+      } @else {
+        <!-- Custom Sleek Dropdown Trigger -->
+        <button
+          type="button"
+          (click)="isDropdownOpen.set(!isDropdownOpen())"
+          class="w-full bg-secondary/80 dark:bg-card/90 hover:bg-secondary border border-border/80 rounded-2xl px-4 py-3 flex items-center justify-between text-start transition-all shadow-xs"
+        >
+          <div class="flex items-center gap-2.5 truncate">
+            <div class="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+              <lucide-icon [name]="getCategoryIcon(selectedCommitment()?.category)" class="w-4 h-4"></lucide-icon>
+            </div>
+            <div class="truncate">
+              <p class="text-sm font-bold text-foreground truncate">
+                {{ selectedCommitment()?.title }}
+              </p>
+              <p class="text-[10px] text-muted-foreground">
+                {{ selectedCommitment()?.totalDays }} Days Journey • Streak: {{ selectedCommitment()?.currentStreak }}d
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="w-4 h-4 text-muted-foreground shrink-0 transition-transform duration-200"
+            [class.rotate-180]="isDropdownOpen()"
+          ></lucide-icon>
+        </button>
+
+        <!-- Custom Dropdown Popover List -->
+        @if (isDropdownOpen()) {
+          <div class="dropdown-popover absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-2xl p-1.5 shadow-float z-30 space-y-1">
+            @for (c of publicCommitments(); track c.id) {
+              <button
+                type="button"
+                (click)="selectCommitment(c.id)"
+                class="w-full p-2.5 rounded-xl flex items-center justify-between hover:bg-secondary/80 transition-colors text-start"
+                [class.bg-primary/10]="c.id === selectedCommitmentId()"
+              >
+                <div class="flex items-center gap-2.5 truncate">
+                  <div class="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <lucide-icon [name]="getCategoryIcon(c.category)" class="w-3.5 h-3.5"></lucide-icon>
+                  </div>
+                  <span class="text-xs font-bold text-foreground truncate">{{ c.title }}</span>
+                </div>
+                <span class="text-[10px] text-muted-foreground font-semibold shrink-0">
+                  {{ c.totalDays }}d
+                </span>
+              </button>
+            }
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Primary Action: Generate Invite Link & Share -->
+    <button
+      type="button"
+      [disabled]="publicCommitments().length === 0"
+      (click)="shareInviteLink()"
+      class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-500 hover:to-teal-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm shadow-md shadow-teal-700/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mb-4"
+    >
+      <lucide-icon name="share-2" class="w-4 h-4"></lucide-icon>
+      <span>Generate Invite Link & Share</span>
+    </button>
+
+    <!-- QR Code Scan Section -->
+    <div class="flex items-center gap-4 p-3.5 rounded-2xl bg-secondary/40 dark:bg-muted/30 border border-border/60">
+      <div class="shrink-0">
+        <app-qr-code [value]="currentInviteUrl()" [size]="80"></app-qr-code>
+      </div>
+      <div class="flex-1">
+        <p class="text-xs font-bold text-foreground mb-0.5">Or, scan QR code with phone</p>
+        <p class="text-[11px] text-muted-foreground leading-relaxed">
+          Open mobile camera to join instantly.
+        </p>
+        <button
+          type="button"
+          (click)="copyLinkOnly()"
+          class="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-primary hover:underline"
+        >
+          <lucide-icon name="copy" class="w-3 h-3"></lucide-icon>
+          <span>{{ copied() ? 'Copied to Clipboard! ✓' : 'Copy link' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connected Friends Chains List -->
+  <div>
+    <div class="flex items-center justify-between mb-3 px-1">
+      <h3 class="text-sm font-bold text-foreground">
+        Active Friend Chains ({{ friendChains().length }})
+      </h3>
+    </div>
+
+    @if (friendChains().length === 0) {
+      <div class="p-8 rounded-3xl bg-card border border-border/60 text-center shadow-soft animate-fade-in">
+        <div class="mx-auto mb-3 flex items-center justify-center">
+          <app-mero size="sm" [showGlow]="true" />
+        </div>
+        <h4 class="text-sm font-bold text-foreground mb-1">No Active Chains Yet</h4>
+        <p class="text-xs text-muted-foreground max-w-xs mx-auto mb-4 leading-relaxed">
+          Share your invite link or let a friend scan your QR code above to link your journeys.
+        </p>
+        <button
+          type="button"
+          (click)="loadDemoChain()"
+          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 text-xs font-bold hover:bg-teal-500/20 active:scale-95 transition-all"
+        >
+          <lucide-icon name="sparkles" class="w-3.5 h-3.5"></lucide-icon>
+          <span>Preview Sample Friend (Demo)</span>
+        </button>
+      </div>
+    } @else {
+      <div class="space-y-3">
+        @for (chain of friendChains(); track chain.id) {
+          <div class="bg-card rounded-2xl p-4 border border-border/70 shadow-xs relative">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-orange-500 font-bold text-sm">
+                  {{ chain.partnerName.charAt(0).toUpperCase() }}
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h4 class="font-bold text-foreground text-sm">&#64;{{ chain.partnerName }}</h4>
+                    <button
+                      type="button"
+                      (click)="togglePartnerToday(chain.id)"
+                      [title]="'Click to simulate check-in status'"
+                      class="text-[10px] px-2 py-0.5 rounded-full font-bold cursor-pointer transition-transform active:scale-95"
+                      [class]="chain.partnerCompletedToday ? 'bg-teal-500/15 text-teal-600 dark:text-teal-400' : 'bg-muted text-muted-foreground'"
+                    >
+                      {{ chain.partnerCompletedToday ? 'Completed Today ✓' : 'In Progress ⏳' }}
+                    </button>
+                  </div>
+                  <p class="text-xs text-muted-foreground mt-0.5">
+                    Their Habit: <span class="text-foreground font-medium">{{ chain.partnerCommitmentTitle }}</span>
+                  </p>
+                  <p class="text-[11px] text-muted-foreground flex items-center gap-1">
+                    <span>Your Habit:</span>
+                    <span class="text-primary font-medium">{{ chain.myCommitmentTitle }}</span>
+                    <span class="text-orange-500 font-bold flex items-center gap-0.5 ml-1.5">
+                      <lucide-icon name="flame" class="w-3 h-3"></lucide-icon>
+                      {{ chain.streak }}d
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Quick Reactions for Friend -->
+              <div class="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  (click)="sendReaction(chain.id, 'heart')"
+                  class="p-2 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-400 active:scale-90 transition-transform"
+                  title="Send Heart Reaction"
+                >
+                  <lucide-icon name="heart" class="w-4 h-4 fill-teal-500/30"></lucide-icon>
+                </button>
+                <button
+                  type="button"
+                  (click)="sendReaction(chain.id, 'nudge')"
+                  class="p-2 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 text-orange-500 active:scale-90 transition-transform"
+                  title="Send Gentle Nudge"
+                >
+                  <lucide-icon name="bell" class="w-4 h-4"></lucide-icon>
+                </button>
+              </div>
+            </div>
+
+            @if (chain.lastReaction) {
+              <div class="mt-2.5 pt-2 border-t border-border/50 text-[11px] text-muted-foreground flex justify-between items-center">
+                <span>{{ chain.lastReaction.message }}</span>
+                <button
+                  type="button"
+                  (click)="removeChain(chain.id)"
+                  class="text-[10px] text-muted-foreground hover:text-rose-500 opacity-60 hover:opacity-100 transition-opacity"
+                  title="Disconnect"
+                >
+                  Disconnect
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Toast Notification -->
+  @if (toastMessage()) {
+    <div class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-2 z-50 animate-fade-in">
+      <lucide-icon name="check-circle-2" class="w-4 h-4 text-teal-400"></lucide-icon>
+      <span>{{ toastMessage() }}</span>
+    </div>
+  }
+</div>

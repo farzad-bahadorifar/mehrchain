@@ -10,6 +10,11 @@ export const routes: Routes = [
     canActivate: [onboardingGuard],
   },
   {
+    path: 'chain',
+    loadComponent: () => import('./features/chain/chain').then((m) => m.ChainComponent),
+    canActivate: [onboardingGuard],
+  },
+  {
     path: 'journey',
     loadComponent: () => import('./features/journey/journey').then((m) => m.Journey),
     canActivate: [onboardingGuard],

@@ -22,22 +22,28 @@ export class AuthService {
   ) {}
 
   /**
-   * Registers a new user account, generates an OTP verification code, and sends verification email.
-   *
-   * @param dto - User registration payload containing name, email, and password.
-   * @returns Object indicating verification is required.
-   * @throws {ConflictException} If the email is already registered and verified.
+   * Registers a new user account with unique username, generates an OTP verification code, and sends email.
    */
   async register(dto: RegisterDto) {
     const cleanEmail = dto.email.trim().toLowerCase();
-    const cleanName = dto.name.trim();
+    const cleanUsername = dto.username.trim().toLowerCase();
+    const displayName = (dto.name || dto.username).trim();
 
-    // Check if user already exists
-    const existing = await this.prisma.user.findUnique({
+    // Check if username is already taken
+    const existingUsername = await this.prisma.user.findUnique({
+      where: { username: cleanUsername },
+    });
+
+    if (existingUsername && existingUsername.isEmailVerified) {
+      throw new ConflictException('This username is already taken. Please choose another one.');
+    }
+
+    // Check if email already exists
+    const existingEmail = await this.prisma.user.findUnique({
       where: { email: cleanEmail },
     });
 
-    if (existing && existing.isEmailVerified) {
+    if (existingEmail && existingEmail.isEmailVerified) {
       throw new ConflictException('This email is already registered.');
     }
 
@@ -46,12 +52,16 @@ export class AuthService {
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
-    if (existing && !existing.isEmailVerified) {
-      // User registered earlier but never verified -> refresh OTP & password
+    const targetUser = existingEmail || existingUsername;
+
+    if (targetUser && !targetUser.isEmailVerified) {
+      // Refresh unverified record
       await this.prisma.user.update({
-        where: { id: existing.id },
+        where: { id: targetUser.id },
         data: {
-          name: cleanName,
+          username: cleanUsername,
+          name: displayName,
+          email: cleanEmail,
           passwordHash,
           verificationCode: otpCode,
           verificationCodeExpiresAt: expiresAt,
@@ -61,7 +71,8 @@ export class AuthService {
       // Create fresh unverified user record
       await this.prisma.user.create({
         data: {
-          name: cleanName,
+          username: cleanUsername,
+          name: displayName,
           email: cleanEmail,
           passwordHash,
           isEmailVerified: false,
@@ -72,21 +83,18 @@ export class AuthService {
     }
 
     // Send email with OTP code
-    await this.mailService.sendVerificationEmail(cleanEmail, cleanName, otpCode);
+    await this.mailService.sendVerificationEmail(cleanEmail, displayName, otpCode);
 
     return {
       requiresVerification: true,
       email: cleanEmail,
+      username: cleanUsername,
       message: 'Verification code sent to your email address.',
     };
   }
 
   /**
    * Verifies the 6-digit OTP code sent to user email and activates the account.
-   *
-   * @param dto - Verification payload containing email and 6-digit code.
-   * @returns Authenticated user profile and session JWT token.
-   * @throws {BadRequestException | UnauthorizedException} If code is invalid or expired.
    */
   async verifyEmail(dto: VerifyEmailDto) {
     const cleanEmail = dto.email.trim().toLowerCase();
@@ -104,11 +112,13 @@ export class AuthService {
       const accessToken = this.jwtService.sign({
         sub: user.id,
         email: user.email,
+        username: user.username,
       });
 
       return {
         user: {
           id: user.id,
+          username: user.username,
           name: user.name,
           email: user.email,
           role: user.role,
@@ -136,6 +146,7 @@ export class AuthService {
       },
       select: {
         id: true,
+        username: true,
         name: true,
         email: true,
         role: true,
@@ -146,6 +157,7 @@ export class AuthService {
     const accessToken = this.jwtService.sign({
       sub: updatedUser.id,
       email: updatedUser.email,
+      username: updatedUser.username,
     });
 
     return {
@@ -156,9 +168,6 @@ export class AuthService {
 
   /**
    * Resends a new 6-digit verification code to the user email.
-   *
-   * @param dto - Resend verification payload containing email.
-   * @returns Success confirmation.
    */
   async resendVerificationCode(dto: ResendVerificationDto) {
     const cleanEmail = dto.email.trim().toLowerCase();
@@ -186,7 +195,7 @@ export class AuthService {
       },
     });
 
-    await this.mailService.sendVerificationEmail(cleanEmail, user.name, otpCode);
+    await this.mailService.sendVerificationEmail(cleanEmail, user.name || user.username, otpCode);
 
     return {
       success: true,
@@ -195,21 +204,19 @@ export class AuthService {
   }
 
   /**
-   * Authenticates user credentials and returns a signed JWT session token.
-   *
-   * @param dto - Login credentials containing email and plaintext password.
-   * @returns Object containing the authenticated user profile and the signed JWT accessToken.
-   * @throws {UnauthorizedException} If credentials do not match or email is unverified.
+   * Authenticates user credentials with email OR username.
    */
   async login(dto: LoginDto) {
-    const cleanEmail = dto.email.trim().toLowerCase();
+    const identifier = dto.email.trim().toLowerCase();
 
-    const user = await this.prisma.user.findUnique({
-      where: { email: cleanEmail },
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [{ email: identifier }, { username: identifier }],
+      },
     });
 
     if (!user) {
-      throw new UnauthorizedException('No account found with this email. Please sign up.');
+      throw new UnauthorizedException('No account found with this email or username. Please sign up.');
     }
 
     const isMatch = await bcrypt.compare(dto.password, user.passwordHash);
@@ -226,11 +233,13 @@ export class AuthService {
     const accessToken = this.jwtService.sign({
       sub: user.id,
       email: user.email,
+      username: user.username,
     });
 
     return {
       user: {
         id: user.id,
+        username: user.username,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -245,6 +254,7 @@ export class AuthService {
       where: { id: userId },
       select: {
         id: true,
+        username: true,
         name: true,
         email: true,
         role: true,
@@ -259,13 +269,6 @@ export class AuthService {
     return user;
   }
 
-  /**
-   * Permanently hard-deletes user account and cascades all associated commitments and logs.
-   *
-   * @param userId - ID of the authenticated user to delete.
-   * @returns Success status and confirmation message.
-   * @throws {UnauthorizedException} If user record is not found.
-   */
   async deleteAccount(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },

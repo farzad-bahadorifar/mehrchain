@@ -109,6 +109,7 @@ export const CommitmentStore = signalStore(
           rippleEffects: data.rippleEffects,
           startDate: new Date().toISOString(),
           reminderTime: data.reminderTime,
+          isPublic: data.isPublic !== undefined ? data.isPublic : false,
           history: [],
         };
 

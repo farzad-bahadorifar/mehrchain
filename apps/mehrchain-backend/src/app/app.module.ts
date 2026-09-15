@@ -6,8 +6,10 @@ import { CommitmentsModule } from './commitments/commitments.module';
 import { MailModule } from './mail/mail.module';
 import { PrismaModule } from './prisma/prisma.module';
 
+import { UsersModule } from './users/users.module';
+
 @Module({
-  imports: [PrismaModule, MailModule, AuthModule, CommitmentsModule],
+  imports: [PrismaModule, MailModule, AuthModule, CommitmentsModule, UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })

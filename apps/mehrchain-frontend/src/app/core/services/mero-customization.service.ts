@@ -9,7 +9,8 @@ export type MeroGlowThemeId =
   | 'emerald'
   | 'sakura'
   | 'aurora'
-  | 'cosmic_fire';
+  | 'cosmic_fire'
+  | 'custom';
 
 export type MeroPersonality = 'energetic' | 'calm' | 'focused';
 
@@ -34,6 +35,42 @@ export interface PersonalityOption {
   icon: string;
   greeting: (name: string) => string;
   streakPraise: (name: string, days: number) => string;
+}
+
+/**
+ * Utility function to convert a Hex color code to RGBA string
+ */
+export function hexToRgba(hex: string, alpha: number): string {
+  let cleanHex = hex.replace('#', '').trim();
+  if (cleanHex.length === 3) {
+    cleanHex = cleanHex
+      .split('')
+      .map((c) => c + c)
+      .join('');
+  }
+  if (!/^[0-9a-fA-F]{6}$/.test(cleanHex)) {
+    return `rgba(139, 92, 246, ${alpha})`;
+  }
+  const num = parseInt(cleanHex, 16);
+  const r = (num >> 16) & 255;
+  const g = (num >> 8) & 255;
+  const b = num & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+/**
+ * Generate matching light and dark radial gradients from a given Hex color
+ */
+export function generateCustomGlowGradients(hex: string) {
+  const lightCenter = hexToRgba(hex, 0.9);
+  const lightMid = hexToRgba(hex, 0.45);
+  const darkCenter = hexToRgba(hex, 0.95);
+  const darkMid = hexToRgba(hex, 0.55);
+
+  return {
+    lightGradient: `radial-gradient(circle, ${lightCenter} 0%, ${lightMid} 45%, transparent 72%)`,
+    darkGradient: `radial-gradient(circle, ${darkCenter} 0%, ${darkMid} 45%, transparent 75%)`,
+  };
 }
 
 export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
@@ -173,18 +210,43 @@ export class MeroCustomizationService {
   private themeService = inject(ThemeService);
   private commitmentService = inject(CommitmentService);
 
-  readonly availableThemes = MERO_GLOW_THEMES;
+  readonly baseThemes = MERO_GLOW_THEMES;
   readonly personalityOptions = PERSONALITY_OPTIONS;
 
   // Reactive State Signals
   readonly nickname = signal<string>('Mero');
   readonly selectedThemeId = signal<MeroGlowThemeId>('golden');
   readonly personality = signal<MeroPersonality>('calm');
+  readonly customGlowColor = signal<string>('#8b5cf6');
+  readonly customGlowName = signal<string>('Custom Aura');
+
+  // Available Themes (Base + Dynamic 21-Day Custom Theme)
+  readonly availableThemes = computed<MeroGlowTheme[]>(() => {
+    const customHex = this.customGlowColor();
+    const customName = this.customGlowName() || 'Custom Aura';
+    const { lightGradient, darkGradient } = generateCustomGlowGradients(customHex);
+
+    const customTheme: MeroGlowTheme = {
+      id: 'custom',
+      name: customName,
+      nameEn: customName,
+      lightGradient,
+      darkGradient,
+      previewColor: customHex,
+      accentColor: customHex,
+      minStreak: 21,
+      badge: '21-Day Streak',
+      description: 'Custom palette crafted by your 21-day dedication',
+    };
+
+    return [...this.baseThemes, customTheme];
+  });
 
   // Active Glow Theme object
   readonly activeTheme = computed<MeroGlowTheme>(() => {
     const id = this.selectedThemeId();
-    return this.availableThemes.find((t) => t.id === id) ?? this.availableThemes[0];
+    const themes = this.availableThemes();
+    return themes.find((t) => t.id === id) ?? themes[0];
   });
 
   // Effective CSS gradient taking into account active Light / Dark mode
@@ -203,11 +265,18 @@ export class MeroCustomizationService {
   // Check if a specific theme is unlocked by user's streak
   readonly isThemeUnlocked = computed(() => {
     const streak = this.commitmentService.overallStreak();
+    const themes = this.availableThemes();
     return (themeId: MeroGlowThemeId): boolean => {
-      const theme = this.availableThemes.find((t) => t.id === themeId);
+      const theme = themes.find((t) => t.id === themeId);
       if (!theme) return false;
       return streak >= theme.minStreak;
     };
+  });
+
+  // Count of currently unlocked themes
+  readonly unlockedThemesCount = computed<number>(() => {
+    const isUnlocked = this.isThemeUnlocked();
+    return this.availableThemes().filter((t) => isUnlocked(t.id)).length;
   });
 
   constructor() {
@@ -232,6 +301,18 @@ export class MeroCustomizationService {
     return true;
   }
 
+  setCustomGlow(name: string, hexColor: string): void {
+    const trimmedName = name.trim();
+    if (trimmedName.length > 0 && trimmedName.length <= 30) {
+      this.customGlowName.set(trimmedName);
+    }
+    if (/^#?[0-9a-fA-F]{6}$/.test(hexColor.trim())) {
+      const formatted = hexColor.startsWith('#') ? hexColor.trim() : `#${hexColor.trim()}`;
+      this.customGlowColor.set(formatted);
+    }
+    this.saveState();
+  }
+
   setPersonality(personality: MeroPersonality): void {
     this.personality.set(personality);
     this.saveState();
@@ -253,9 +334,16 @@ export class MeroCustomizationService {
         if (parsed.nickname && typeof parsed.nickname === 'string') {
           this.nickname.set(parsed.nickname);
         }
+        if (parsed.customGlowColor && typeof parsed.customGlowColor === 'string') {
+          this.customGlowColor.set(parsed.customGlowColor);
+        }
+        if (parsed.customGlowName && typeof parsed.customGlowName === 'string') {
+          this.customGlowName.set(parsed.customGlowName);
+        }
         if (
           parsed.selectedThemeId &&
-          this.availableThemes.some((t) => t.id === parsed.selectedThemeId)
+          (this.baseThemes.some((t) => t.id === parsed.selectedThemeId) ||
+            parsed.selectedThemeId === 'custom')
         ) {
           this.selectedThemeId.set(parsed.selectedThemeId);
         }
@@ -277,6 +365,8 @@ export class MeroCustomizationService {
         nickname: this.nickname(),
         selectedThemeId: this.selectedThemeId(),
         personality: this.personality(),
+        customGlowColor: this.customGlowColor(),
+        customGlowName: this.customGlowName(),
       };
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(payload));
     } catch (err) {
@@ -284,3 +374,4 @@ export class MeroCustomizationService {
     }
   }
 }
+

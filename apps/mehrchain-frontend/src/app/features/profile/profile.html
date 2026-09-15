@@ -152,7 +152,7 @@
 
     <!-- Swatch Cards Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-      @for (t of customization.availableThemes; track t.id) {
+      @for (t of customization.availableThemes(); track t.id) {
         @let isSelected = customization.selectedThemeId() === t.id;
         @let isUnlocked = customization.isThemeUnlocked()(t.id);
 
@@ -197,13 +197,17 @@
                 <lucide-icon name="lock" class="w-3 h-3"></lucide-icon>
                 <span>{{ t.minStreak }}d</span>
               </div>
+            } @else if (t.id === 'custom') {
+              <div class="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shadow-xs">
+                <lucide-icon name="palette" class="w-3 h-3"></lucide-icon>
+              </div>
             }
           </div>
 
           <!-- Bottom row: Name & Subtitle -->
           <div>
             <div class="flex items-center gap-1">
-              <span class="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
+              <span class="text-xs font-bold text-foreground group-hover:text-primary transition-colors truncate">
                 {{ t.name }}
               </span>
             </div>
@@ -212,6 +216,135 @@
         </button>
       }
     </div>
+
+    <!-- 21-Day Custom Glow Studio -->
+    @if (isCustomThemeUnlocked()) {
+      <div class="mt-4 p-5 rounded-3xl bg-gradient-to-br from-card via-card to-primary/5 border border-primary/25 shadow-sm space-y-4 animate-fade-in">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
+              <lucide-icon name="palette" class="w-4 h-4"></lucide-icon>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="text-sm font-bold text-foreground">21-Day Custom Glow Studio</h4>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/25">
+                  Mastery Unlocked ✨
+                </span>
+              </div>
+              <p class="text-[11px] text-muted-foreground">Pick your signature color and name your companion's aura</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Palette Swatches -->
+        <div>
+          <label class="block text-[11px] font-bold text-muted-foreground mb-2">Preset Vibrancies</label>
+          <div class="flex flex-wrap gap-2">
+            @for (preset of PRESET_CUSTOM_COLORS; track preset.hex) {
+              <button
+                type="button"
+                (click)="applyPresetCustomColor(preset)"
+                class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all active:scale-95 cursor-pointer"
+                [class.border-primary]="customColorInput() === preset.hex"
+                [class.bg-primary/10]="customColorInput() === preset.hex"
+                [class.border-border/60]="customColorInput() !== preset.hex"
+                [class.hover:border-primary/40]="customColorInput() !== preset.hex"
+              >
+                <span
+                  class="w-3.5 h-3.5 rounded-full shadow-xs shrink-0"
+                  [style.backgroundColor]="preset.hex"
+                ></span>
+                <span class="text-[11px] text-foreground">{{ preset.name }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Color Picker + Custom Name Fields -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <!-- Color Picker and Hex Input -->
+          <div class="space-y-1.5">
+            <label class="block text-[11px] font-bold text-muted-foreground">Custom Color & Hex</label>
+            <div class="flex items-center gap-2 bg-background border border-border/80 rounded-2xl p-2 shadow-xs">
+              <div class="relative w-8 h-8 rounded-xl overflow-hidden shrink-0 border border-border/60 cursor-pointer shadow-xs">
+                <input
+                  type="color"
+                  [(ngModel)]="customColorInput"
+                  class="absolute -top-2 -left-2 w-12 h-12 cursor-pointer border-0 p-0"
+                />
+              </div>
+              <input
+                type="text"
+                [(ngModel)]="customColorInput"
+                maxlength="7"
+                placeholder="#8b5cf6"
+                class="w-full bg-transparent text-xs font-mono font-bold text-foreground focus:outline-hidden uppercase"
+              />
+            </div>
+          </div>
+
+          <!-- Custom Name Input -->
+          <div class="space-y-1.5">
+            <label class="block text-[11px] font-bold text-muted-foreground">Glow Aura Name</label>
+            <div class="flex items-center gap-2 bg-background border border-border/80 rounded-2xl p-2 shadow-xs">
+              <lucide-icon name="sparkles" class="w-4 h-4 text-primary shrink-0 ml-1"></lucide-icon>
+              <input
+                type="text"
+                [(ngModel)]="customNameInput"
+                maxlength="30"
+                placeholder="Name your custom glow..."
+                class="w-full bg-transparent text-xs font-bold text-foreground focus:outline-hidden"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Action Button -->
+        <div class="pt-1 flex justify-end">
+          <button
+            type="button"
+            (click)="saveCustomGlow()"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-primary text-white text-xs font-bold shadow-md hover:bg-primary/90 active:scale-95 transition-all cursor-pointer"
+          >
+            <lucide-icon name="check" class="w-4 h-4"></lucide-icon>
+            <span>Save & Apply Custom Glow</span>
+          </button>
+        </div>
+      </div>
+    } @else {
+      <!-- 21-Day Custom Glow Locked Teaser Card -->
+      <div class="mt-4 p-5 rounded-3xl bg-card border border-border/60 shadow-xs space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-muted text-muted-foreground flex items-center justify-center">
+              <lucide-icon name="lock" class="w-4 h-4"></lucide-icon>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-foreground">21-Day Custom Glow Studio</h4>
+              <p class="text-[11px] text-muted-foreground">Mastery reward: craft and name your own signature hue</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-muted text-muted-foreground border border-border/40">
+            🔒 21-Day Lock
+          </span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-[11px] font-bold text-muted-foreground">
+            <span>Streak Progress</span>
+            <span>{{ currentStreak() }} / 21 Days ({{ customStreakProgress() }}%)</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-muted overflow-hidden">
+            <div
+              class="h-full bg-gradient-to-r from-amber-500 via-primary to-indigo-500 rounded-full transition-all duration-500"
+              [style.width.%]="customStreakProgress()"
+            ></div>
+          </div>
+        </div>
+      </div>
+    }
   </div>
 
   <!-- 3. Mero Personality & Tone Mode -->
@@ -311,9 +444,9 @@
         </div>
         <div>
           <span class="text-2xl font-black text-foreground">
-            {{ customization.availableThemes.length - 2 + (currentStreak() >= 3 ? 1 : 0) + (currentStreak() >= 7 ? 1 : 0) }}
+            {{ unlockedThemesCount() }}
           </span>
-          <span class="text-xs text-muted-foreground ml-1">of {{ customization.availableThemes.length }}</span>
+          <span class="text-xs text-muted-foreground ml-1">of {{ totalThemesCount() }}</span>
         </div>
       </div>
     </div>

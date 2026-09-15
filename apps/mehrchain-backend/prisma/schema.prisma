@@ -17,51 +17,67 @@ enum Category {
   environment
 }
 
+// Status for two-way chain requests
+enum ChainRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
 // User model for persistent authentication and identity
 model User {
-  id           String       @id @default(uuid())
-  email        String       @unique
-  passwordHash String
-  name         String
-  role                       String       @default("USER")
-  isEmailVerified            Boolean      @default(false)
-  verificationCode           String?
-  verificationCodeExpiresAt  DateTime?
-  metadata                   Json?        // Extensible metadata for future gamification & preferences
+  id                        String          @id @default(uuid())
+  email                     String          @unique
+  username                  String          @unique
+  name                      String?
+  passwordHash              String
+  role                      String          @default("USER")
+  isEmailVerified           Boolean         @default(false)
+  verificationCode          String?
+  verificationCodeExpiresAt DateTime?
+  metadata                  Json?           // Extensible metadata for future gamification & preferences
 
-  commitments                Commitment[]
+  commitments               Commitment[]
+  sentChainRequests         ChainRequest[]  @relation("SentChainRequests")
+  receivedChainRequests     ChainRequest[]  @relation("ReceivedChainRequests")
 
-  createdAt                  DateTime     @default(now())
-  updatedAt                  DateTime     @updatedAt
+  createdAt                 DateTime        @default(now())
+  updatedAt                 DateTime        @updatedAt
 
+  @@index([username])
   @@map("users")
 }
 
 // Core habit commitment model
 model Commitment {
-  id                String          @id @default(uuid())
-  userId            String
-  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                    String          @id @default(uuid())
+  userId                String
+  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  title             String
-  category          Category
-  why               String?
-  totalDays         Int
-  currentDay        Int             @default(0)
-  currentStreak     Int             @default(0)
-  startDate         DateTime        @default(now())
-  lastCompletedDate DateTime?
-  reminderTime      String?
-  isArchived        Boolean         @default(false)
+  title                 String
+  category              Category
+  why                   String?
+  totalDays             Int
+  currentDay            Int             @default(0)
+  currentStreak         Int             @default(0)
+  startDate             DateTime        @default(now())
+  lastCompletedDate     DateTime?
+  reminderTime          String?
+  isPublic              Boolean         @default(false)
+  isArchived            Boolean         @default(false)
 
-  rippleEffects     String[]        // Potential connected chain effects
-  history           String[]        // Legacy date strings
-  logs              CommitmentLog[] // Granular completion logs
+  rippleEffects         String[]        // Potential connected chain effects
+  history               String[]        // Legacy date strings
+  logs                  CommitmentLog[] // Granular completion logs
 
-  metadata          Json?           // Extensible metadata for future modules
+  senderChainRequests   ChainRequest[]  @relation("SenderCommitment")
+  receiverChainRequests ChainRequest[]  @relation("ReceiverCommitment")
 
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  metadata              Json?           // Extensible metadata for future modules
+
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
 
   @@index([userId])
   @@map("commitments")
@@ -79,4 +95,31 @@ model CommitmentLog {
 
   @@index([commitmentId])
   @@map("commitment_logs")
+}
+
+// Model for managing two-way chain connections & requests
+model ChainRequest {
+  id                   String             @id @default(uuid())
+
+  senderId             String
+  sender               User               @relation("SentChainRequests", fields: [senderId], references: [id], onDelete: Cascade)
+
+  receiverId           String
+  receiver             User               @relation("ReceivedChainRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  senderCommitmentId   String
+  senderCommitment     Commitment         @relation("SenderCommitment", fields: [senderCommitmentId], references: [id], onDelete: Cascade)
+
+  receiverCommitmentId String?
+  receiverCommitment   Commitment?        @relation("ReceiverCommitment", fields: [receiverCommitmentId], references: [id], onDelete: SetNull)
+
+  status               ChainRequestStatus @default(PENDING)
+
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@unique([senderId, receiverId, senderCommitmentId])
+  @@index([receiverId, status])
+  @@index([senderId, status])
+  @@map("chain_requests")
 }

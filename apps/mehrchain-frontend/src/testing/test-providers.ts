@@ -39,6 +39,8 @@ import {
   ChevronDown,
   ChevronUp,
   RotateCcw,
+  Palette,
+  Wand2,
 } from 'lucide-angular';
 
 export const commonTestProviders = [
@@ -82,6 +84,8 @@ export const commonTestProviders = [
       ChevronDown,
       ChevronUp,
       RotateCcw,
+      Palette,
+      Wand2,
     })
   ),
 ];

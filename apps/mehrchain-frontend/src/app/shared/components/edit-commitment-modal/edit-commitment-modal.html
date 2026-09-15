@@ -16,13 +16,28 @@
           <p class="text-xs text-muted-foreground">Adjust your commitment & reminders</p>
         </div>
       </div>
-      <button
-        type="button"
-        (click)="close.emit()"
-        class="w-8 h-8 rounded-full bg-muted/60 hover:bg-muted text-muted-foreground flex items-center justify-center transition-colors"
-      >
-        <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
-      </button>
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          (click)="isPublic.set(!isPublic())"
+          class="w-8 h-8 rounded-full flex items-center justify-center transition-all border"
+          [class]="
+            isPublic()
+              ? 'bg-teal-500/15 text-teal-600 dark:text-teal-400 border-teal-500/30'
+              : 'bg-muted/60 text-muted-foreground border-border'
+          "
+          [title]="isPublic() ? 'Public Habit (Can be chained)' : 'Private Habit'"
+        >
+          <lucide-icon [name]="isPublic() ? 'globe' : 'lock'" class="w-4 h-4"></lucide-icon>
+        </button>
+        <button
+          type="button"
+          (click)="close.emit()"
+          class="w-8 h-8 rounded-full bg-muted/60 hover:bg-muted text-muted-foreground flex items-center justify-center transition-colors"
+        >
+          <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+        </button>
+      </div>
     </div>
 
     <form (ngSubmit)="onSubmit()" class="space-y-4">

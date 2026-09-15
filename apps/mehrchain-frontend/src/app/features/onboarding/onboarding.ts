@@ -66,6 +66,7 @@ export class OnboardingComponent implements OnInit {
   reminderTime = signal('08:30');
 
   // Sign Up Form State (Step 6/7)
+  signUpUsername = signal('');
   signUpName = signal('');
   signUpEmail = signal('');
   signUpPassword = signal('');
@@ -238,6 +239,12 @@ export class OnboardingComponent implements OnInit {
     this.step.set(7);
   }
 
+  onSignUpUsernameChange(value: string) {
+    const clean = value.replace(/^@/, '').toLowerCase().trim();
+    this.signUpUsername.set(clean);
+    this.signUpError.set('');
+  }
+
   onSignUpEmailChange(value: string) {
     this.signUpEmail.set(value);
     if (this.isDuplicateEmailError()) {
@@ -250,12 +257,13 @@ export class OnboardingComponent implements OnInit {
     this.signUpError.set('');
     this.isDuplicateEmailError.set(false);
 
-    const name = this.signUpName().trim();
+    const username = this.signUpUsername().trim().toLowerCase();
     const email = this.signUpEmail().trim();
     const password = this.signUpPassword().trim();
 
-    if (!name || name.length < 2) {
-      this.signUpError.set('Please enter your full name.');
+    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+    if (!username || !usernameRegex.test(username)) {
+      this.signUpError.set('Username must be 3-20 characters (letters, numbers, underscore).');
       return;
     }
 
@@ -273,7 +281,7 @@ export class OnboardingComponent implements OnInit {
 
     // Register user profile
     try {
-      const res = await this.authService.register(name, email, password);
+      const res = await this.authService.register(username, email, password);
       if (res.requiresVerification) {
         this.verificationCode.set('');
         this.verificationError.set('');
@@ -290,8 +298,12 @@ export class OnboardingComponent implements OnInit {
         msg.includes('conflict') ||
         msg.includes('duplicate')
       ) {
-        this.isDuplicateEmailError.set(true);
-        this.signUpError.set('This email is already registered.');
+        if (msg.includes('username')) {
+          this.signUpError.set('This username is already taken. Please pick another.');
+        } else {
+          this.isDuplicateEmailError.set(true);
+          this.signUpError.set('This email is already registered.');
+        }
       } else {
         this.signUpError.set(err?.message || 'Registration failed. Please check your details and network.');
       }

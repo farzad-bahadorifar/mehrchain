@@ -93,4 +93,19 @@ describe('MeroCustomizationService', () => {
     service.setPersonality('focused');
     expect(service.getGreeting()).toContain('locked in');
   });
+
+  it('should unlock 21-day custom theme when streak reaches 21 and allow setting custom glow', () => {
+    mockStreakSignal.set(10);
+    expect(service.setGlowTheme('custom')).toBe(false);
+
+    mockStreakSignal.set(21);
+    expect(service.setGlowTheme('custom')).toBe(true);
+    expect(service.selectedThemeId()).toBe('custom');
+
+    service.setCustomGlow('Mystic Nebula', '#06b6d4');
+    expect(service.customGlowName()).toBe('Mystic Nebula');
+    expect(service.customGlowColor()).toBe('#06b6d4');
+    expect(service.activeTheme().name).toBe('Mystic Nebula');
+    expect(service.activeTheme().previewColor).toBe('#06b6d4');
+  });
 });

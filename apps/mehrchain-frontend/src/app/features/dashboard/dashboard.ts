@@ -129,6 +129,7 @@ export class DashboardComponent {
       totalDays: data.totalDays,
       category: data.category,
       reminderTime: data.reminderTime,
+      isPublic: data.isPublic,
     });
     this.editingCommitment.set(null);
   }

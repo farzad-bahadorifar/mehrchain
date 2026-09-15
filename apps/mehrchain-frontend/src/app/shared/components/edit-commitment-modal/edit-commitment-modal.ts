@@ -21,6 +21,7 @@ export class EditCommitmentModal {
     totalDays: number;
     category: any;
     reminderTime?: string;
+    isPublic?: boolean;
   }>();
 
   title = signal('');
@@ -28,6 +29,7 @@ export class EditCommitmentModal {
   duration = signal(21);
   category = signal('health');
   reminderTime = signal('08:30');
+  isPublic = signal(false);
   isCustomDuration = signal(false);
 
   categories = [
@@ -46,6 +48,7 @@ export class EditCommitmentModal {
         this.duration.set(c.totalDays);
         this.category.set(c.category);
         this.reminderTime.set(c.reminderTime || '08:30');
+        this.isPublic.set(c.isPublic || false);
         if (![7, 14, 21].includes(c.totalDays)) {
           this.isCustomDuration.set(true);
         }
@@ -80,6 +83,7 @@ export class EditCommitmentModal {
       totalDays: this.duration(),
       category: this.category(),
       reminderTime: this.reminderTime(),
+      isPublic: this.isPublic(),
     });
   }
 }

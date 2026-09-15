@@ -77,6 +77,7 @@ export class NewCommitmentModal {
       totalDays: this.duration(),
       category: this.category(),
       reminderTime: this.reminderTime(),
+      isPublic: this.isPublic(),
     });
 
     this.close.emit();
