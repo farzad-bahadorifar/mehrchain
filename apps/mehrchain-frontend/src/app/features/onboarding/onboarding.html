@@ -302,7 +302,7 @@
                     #customInput
                     type="text"
                     placeholder="e.g., Read 10 pages before sleep"
-                    class="w-full bg-gray-50 dark:bg-slate-900 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border-2 border-primary focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all shadow-sm"
+                    class="w-full bg-gray-50 dark:bg-slate-900 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border-2 border-primary focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all shadow-sm"
                     (keyup.enter)="confirmCustomHabit(customInput.value)"
                     autofocus
                   />
@@ -495,7 +495,7 @@
                     [value]="signUpName()"
                     (input)="signUpName.set($any($event.target).value)"
                     placeholder="Your Name"
-                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -509,7 +509,7 @@
                     [value]="signUpEmail()"
                     (input)="onSignUpEmailChange($any($event.target).value)"
                     placeholder="you@example.com"
-                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -523,7 +523,7 @@
                     [value]="signUpPassword()"
                     (input)="signUpPassword.set($any($event.target).value)"
                     placeholder="At least 6 characters"
-                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                     (keyup.enter)="handleSignUp()"
                   />
                   <button
@@ -639,7 +639,7 @@
                   [value]="loginEmail()"
                   (input)="loginEmail.set($any($event.target).value)"
                   placeholder="you@example.com"
-                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                 />
               </div>
             </div>
@@ -662,7 +662,7 @@
                   [value]="loginPassword()"
                   (input)="loginPassword.set($any($event.target).value)"
                   placeholder="Your password"
-                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                   (keyup.enter)="handleLogin()"
                 />
                 <button
@@ -723,7 +723,7 @@
                     [value]="forgotPasswordEmail()"
                     (input)="forgotPasswordEmail.set($any($event.target).value)"
                     placeholder="you@example.com"
-                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-12 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
                     (keyup.enter)="handleForgotPassword()"
                   />
                 </div>

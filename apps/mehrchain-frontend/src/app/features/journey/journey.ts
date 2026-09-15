@@ -4,7 +4,6 @@ import { HeatmapCalendar } from '../../shared/components/heatmap-calendar/heatma
 import { LucideAngularModule } from 'lucide-angular';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { AuthService } from '../../core/services/auth.service';
-import { ThemeService } from '../../core/services/theme.service';
 import { ActivityLog } from '@mehrchain/shared-data';
 
 import { McButtonComponent, McCardComponent } from '../../shared/ui';
@@ -19,7 +18,6 @@ import { MeroComponent } from '../../shared/components/mero/mero';
 export class Journey implements OnInit {
   commitmentService = inject(CommitmentService);
   authService = inject(AuthService);
-  themeService = inject(ThemeService);
 
   showArchived = signal(false);
 
@@ -90,21 +88,5 @@ export class Journey implements OnInit {
 
   totalActivities = computed(() => this.allHistory().length);
   longestStreak = this.commitmentService.overallStreak;
-
-  handleSignOut(): void {
-    if (confirm('Are you sure you want to sign out?')) {
-      this.authService.logout();
-    }
-  }
-
-  async handleDeleteAccount(): Promise<void> {
-    if (
-      confirm(
-        'Are you sure you want to delete your account? All habits and consistency data will be permanently removed.',
-      )
-    ) {
-      await this.authService.deleteAccount();
-    }
-  }
 }
 

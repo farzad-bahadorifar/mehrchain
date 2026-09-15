@@ -375,16 +375,34 @@
       </div>
     </div>
 
-    <!-- Sign Out Button -->
-    <div class="flex justify-center">
-      <button
-        type="button"
-        (click)="handleSignOut()"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold text-destructive hover:bg-destructive/10 border border-destructive/20 transition-all active:scale-95"
-      >
-        <lucide-icon name="log-out" class="w-4 h-4"></lucide-icon>
-        <span>Sign Out</span>
-      </button>
+    <!-- Account Settings -->
+    <div class="bg-card border border-border/60 rounded-2xl p-4 shadow-xs space-y-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h4 class="text-xs font-bold text-foreground">Account Actions</h4>
+          <p class="text-[10px] text-muted-foreground">Manage your session and account data</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-2.5">
+        <button
+          type="button"
+          (click)="handleSignOut()"
+          class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-foreground bg-muted/60 hover:bg-muted border border-border/60 transition-all active:scale-95 cursor-pointer"
+        >
+          <lucide-icon name="log-out" class="w-4 h-4 text-muted-foreground"></lucide-icon>
+          <span>Sign Out</span>
+        </button>
+
+        <button
+          type="button"
+          (click)="handleDeleteAccount()"
+          class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-destructive hover:bg-destructive/10 border border-destructive/20 transition-all active:scale-95 cursor-pointer"
+        >
+          <lucide-icon name="trash-2" class="w-3.5 h-3.5"></lucide-icon>
+          <span>Delete Account</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

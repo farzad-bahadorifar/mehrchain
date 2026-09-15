@@ -104,6 +104,16 @@ export class ProfileComponent {
     }
   }
 
+  async handleDeleteAccount(): Promise<void> {
+    if (
+      confirm(
+        'Are you sure you want to delete your account? All habits and consistency data will be permanently removed.',
+      )
+    ) {
+      await this.authService.deleteAccount();
+    }
+  }
+
   private showSaveFeedback(msg: string): void {
     this.saveFeedbackMessage.set(msg);
     setTimeout(() => {
