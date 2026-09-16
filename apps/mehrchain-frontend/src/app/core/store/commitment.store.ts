@@ -30,6 +30,15 @@ export function getUserStorageKey(userId: string): string {
   return `mehrchain_commitments_${userId}`;
 }
 
+export function getUserArchivedStorageKey(userId: string): string {
+  return `mehrchain_archived_commitments_${userId}`;
+}
+
+export function isRemoteToken(token: string | null): boolean {
+  if (!token) return false;
+  return !token.startsWith('local_') && !token.startsWith('mock_');
+}
+
 function loadCommitmentsFromStorage(userId: string): Commitment[] {
   try {
     const raw = localStorage.getItem(getUserStorageKey(userId));
@@ -41,6 +50,21 @@ function loadCommitmentsFromStorage(userId: string): Commitment[] {
     }
   } catch (e) {
     console.error('[CommitmentStore] Failed to load local cache for user', userId, e);
+  }
+  return [];
+}
+
+function loadArchivedCommitmentsFromStorage(userId: string): Commitment[] {
+  try {
+    const raw = localStorage.getItem(getUserArchivedStorageKey(userId));
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.error('[CommitmentStore] Failed to load local archived cache for user', userId, e);
   }
   return [];
 }
@@ -65,18 +89,20 @@ export const CommitmentStore = signalStore(
        */
       loadForUser(userId: string): void {
         const cached = loadCommitmentsFromStorage(userId);
+        const cachedArchived = loadArchivedCommitmentsFromStorage(userId);
         patchState(store, {
           activeUserId: userId,
           commitments: cached,
+          archivedCommitments: cachedArchived,
         });
       },
 
       /**
-       * Fetches latest user commitments from backend API if authenticated.
+       * Fetches latest user commitments from backend API if authenticated with remote token.
        */
       async syncWithBackend(): Promise<void> {
         const token = localStorage.getItem('mehrchain_auth_token_v1');
-        if (!token) return;
+        if (!isRemoteToken(token)) return;
 
         try {
           patchState(store, { isLoading: true });
@@ -118,16 +144,17 @@ export const CommitmentStore = signalStore(
           commitments: [localCommitment, ...store.commitments()],
         });
 
-        // Send to backend if authenticated
+        // Send to backend if authenticated with remote token
         try {
           const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (token) {
+          if (isRemoteToken(token)) {
             const payload = {
               title: localCommitment.title,
               category: localCommitment.category,
               why: localCommitment.why,
               totalDays: localCommitment.totalDays,
               reminderTime: localCommitment.reminderTime,
+              isPublic: localCommitment.isPublic,
             };
 
             const serverRecord = await firstValueFrom(
@@ -172,10 +199,10 @@ export const CommitmentStore = signalStore(
           }),
         });
 
-        // Sync with backend API
+        // Sync with backend API if remote token is present
         try {
           const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (token) {
+          if (isRemoteToken(token)) {
             const updated = await firstValueFrom(
               http.patch<Commitment>(`${API_URL}/${id}/complete`, { note })
             );
@@ -211,7 +238,7 @@ export const CommitmentStore = signalStore(
 
         try {
           const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (token) {
+          if (isRemoteToken(token)) {
             const backendUpdated = await firstValueFrom(
               http.patch<Commitment>(`${API_URL}/${id}`, updates)
             );
@@ -245,7 +272,7 @@ export const CommitmentStore = signalStore(
 
         try {
           const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (token) {
+          if (isRemoteToken(token)) {
             await firstValueFrom(http.delete(`${API_URL}/${id}`));
           }
         } catch (err) {
@@ -259,7 +286,7 @@ export const CommitmentStore = signalStore(
       async fetchArchivedCommitments(): Promise<Commitment[]> {
         try {
           const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (token) {
+          if (isRemoteToken(token)) {
             const list = await firstValueFrom(http.get<Commitment[]>(`${API_URL}/archived`));
             if (Array.isArray(list)) {
               patchState(store, { archivedCommitments: list });
@@ -287,7 +314,7 @@ export const CommitmentStore = signalStore(
 
         try {
           const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (token) {
+          if (isRemoteToken(token)) {
             await firstValueFrom(http.patch(`${API_URL}/${id}/restore`, {}));
           }
         } catch (err) {
@@ -306,7 +333,7 @@ export const CommitmentStore = signalStore(
 
         try {
           const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (token) {
+          if (isRemoteToken(token)) {
             await firstValueFrom(http.delete(`${API_URL}/${id}/permanent`));
           }
         } catch (err) {
@@ -328,11 +355,12 @@ export const CommitmentStore = signalStore(
       },
 
       /**
-       * Completely erases the local cache key for a specific user.
+       * Completely erases the local cache keys for a specific user.
        */
       clearUserStorage(userId: string): void {
         try {
           localStorage.removeItem(getUserStorageKey(userId));
+          localStorage.removeItem(getUserArchivedStorageKey(userId));
         } catch (e) {
           console.error('[CommitmentStore] Failed to clear user storage', e);
         }
@@ -350,6 +378,18 @@ export const CommitmentStore = signalStore(
             localStorage.setItem(getUserStorageKey(userId), JSON.stringify(commitments));
           } catch (e) {
             console.error('[CommitmentStore] Failed to save local cache', e);
+          }
+        }
+      });
+
+      effect(() => {
+        const userId = store.activeUserId();
+        const archived = store.archivedCommitments();
+        if (userId) {
+          try {
+            localStorage.setItem(getUserArchivedStorageKey(userId), JSON.stringify(archived));
+          } catch (e) {
+            console.error('[CommitmentStore] Failed to save local archived cache', e);
           }
         }
       });

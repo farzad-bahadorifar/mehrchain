@@ -3,6 +3,7 @@ import { Component, effect, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommitmentService } from '../../core/services/commitment.service';
+import { ChainService } from '../../core/services/chain.service';
 import { MeroService } from '../../core/services/mero.service';
 import { MeroCustomizationService } from '../../core/services/mero-customization.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -31,6 +32,7 @@ import { MeroComponent } from '../../shared/components/mero/mero';
 })
 export class DashboardComponent {
   commitmentService = inject(CommitmentService);
+  chainService = inject(ChainService);
   themeService = inject(ThemeService);
   meroService = inject(MeroService);
   customizationService = inject(MeroCustomizationService);
@@ -39,6 +41,7 @@ export class DashboardComponent {
   isModalOpen = signal(false);
   deletingCommitment = signal<Commitment | null>(null);
   editingCommitment = signal<Commitment | null>(null);
+  toastMessage = signal<string | null>(null);
 
   toggleTheme() {
     const nextMode = this.themeService.isDark() ? 'light' : 'dark';
@@ -86,6 +89,31 @@ export class DashboardComponent {
       navigator.vibrate(50);
     }
     setTimeout(() => this.meroService.setState('idle'), 2000);
+  }
+
+  handleRingBell(id: string) {
+    const res = this.chainService.ringBellBroadcast(id);
+    this.commitmentService.updateCommitment(id, {
+      isBroadcastedToday: true,
+      lastBroadcastDate: new Date().toISOString(),
+    });
+    this.meroService.setState('celebrating');
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate([50, 50, 100]);
+    }
+    this.showToast(
+      res.count > 0
+        ? `Celebration bell broadcasted to ${res.count} chain supporter${res.count > 1 ? 's' : ''}! 🌟🔔`
+        : 'Bell rung! Your future chain supporters will be notified. ✨'
+    );
+    setTimeout(() => this.meroService.setState('idle'), 3500);
+  }
+
+  private showToast(msg: string) {
+    this.toastMessage.set(msg);
+    setTimeout(() => {
+      this.toastMessage.set(null);
+    }, 3200);
   }
 
   promptDelete(id: string) {

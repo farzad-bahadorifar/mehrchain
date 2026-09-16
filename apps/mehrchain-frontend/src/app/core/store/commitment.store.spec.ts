@@ -135,4 +135,46 @@ describe('CommitmentStore (@ngrx/signals)', () => {
 
     expect(localStorage.getItem(getUserStorageKey(userId))).toBeNull();
   });
+
+  it('should preserve and isolate archived habits per user in offline storage', () => {
+    const userId = 'user-archived-test';
+    const mockArchived: Commitment[] = [
+      {
+        id: 'c-arch-1',
+        title: 'Old Archived Habit',
+        totalDays: 21,
+        currentDay: 21,
+        currentStreak: 21,
+        isCompletedToday: true,
+        category: 'growth',
+        isArchived: true,
+        startDate: new Date().toISOString(),
+      },
+    ];
+
+    localStorage.setItem(`mehrchain_archived_commitments_${userId}`, JSON.stringify(mockArchived));
+
+    store.loadForUser(userId);
+
+    expect(store.archivedCommitments().length).toBe(1);
+    expect(store.archivedCommitments()[0].title).toBe('Old Archived Habit');
+  });
+
+  it('should safely add and remove habits in offline mode with mock token without throwing', async () => {
+    localStorage.setItem('mehrchain_auth_token_v1', 'local_jwt_token_123456');
+    store.loadForUser('offline-user');
+
+    const added = await store.addCommitment({
+      title: 'Offline Meditation',
+      category: 'health',
+      totalDays: 21,
+    });
+
+    expect(added.title).toBe('Offline Meditation');
+    expect(store.commitments().some((c) => c.title === 'Offline Meditation')).toBe(true);
+
+    await store.removeCommitment(added.id);
+    expect(store.commitments().some((c) => c.id === added.id)).toBe(false);
+    expect(store.archivedCommitments().some((c) => c.id === added.id)).toBe(true);
+  });
 });

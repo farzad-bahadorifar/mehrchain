@@ -58,6 +58,15 @@ export class AuthService {
     }
   }
 
+  /**
+   * Checks if a token is a local dev/offline mock token.
+   */
+  isLocalToken(token?: string | null): boolean {
+    const t = token !== undefined ? token : this.getToken();
+    if (!t) return true;
+    return t.startsWith('local_') || t.startsWith('mock_');
+  }
+
   private async loadPersistedSession(): Promise<void> {
     try {
       const stored = localStorage.getItem(this.AUTH_KEY);
@@ -67,20 +76,21 @@ export class AuthService {
         const user = JSON.parse(stored) as UserProfile;
         this.currentUserSignal.set(user);
         this.commitmentStore.loadForUser(user.id);
-        this.commitmentStore.syncWithBackend().catch(() => {});
 
-        // Verify session silently in background if backend is reachable
-        try {
-          const freshUser = await firstValueFrom(
-            this.http.get<UserProfile>(`${this.API_URL}/me`)
-          );
-          if (freshUser) {
-            this.currentUserSignal.set(freshUser);
-            localStorage.setItem(this.AUTH_KEY, JSON.stringify(freshUser));
-          }
-        } catch (err) {
-          if (err instanceof HttpErrorResponse && err.status === 401) {
-            this.logout();
+        if (!this.isLocalToken(token)) {
+          this.commitmentStore.syncWithBackend().catch(() => {});
+
+          // Verify session silently in background if using remote backend token
+          try {
+            const freshUser = await firstValueFrom(
+              this.http.get<UserProfile>(`${this.API_URL}/me`)
+            );
+            if (freshUser) {
+              this.currentUserSignal.set(freshUser);
+              localStorage.setItem(this.AUTH_KEY, JSON.stringify(freshUser));
+            }
+          } catch (err) {
+            console.warn('[AuthService] Silent session refresh skipped or offline:', err);
           }
         }
       }

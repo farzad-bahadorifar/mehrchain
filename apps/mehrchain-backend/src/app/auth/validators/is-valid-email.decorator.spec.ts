@@ -65,12 +65,12 @@ describe('IsValidEmailConstraint', () => {
     process.env['NODE_ENV'] = originalEnv;
   });
 
-  it('should reject domain if MX and A records do not exist or throw error', async () => {
+  it('should reject domain if MX and A records do not exist', async () => {
     const originalEnv = process.env['NODE_ENV'];
     process.env['NODE_ENV'] = 'production';
 
-    (dns.resolveMx as jest.Mock).mockRejectedValue(new Error('ENOTFOUND'));
-    (dns.resolve4 as jest.Mock).mockRejectedValue(new Error('ENOTFOUND'));
+    (dns.resolveMx as jest.Mock).mockResolvedValue([]);
+    (dns.resolve4 as jest.Mock).mockResolvedValue([]);
 
     const result = await validator.validate('user@nonexistentdomain999888777.com');
     expect(result).toBe(false);

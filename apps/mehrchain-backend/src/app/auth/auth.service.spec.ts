@@ -12,6 +12,7 @@ describe('AuthService (Unit Tests)', () => {
   const mockPrisma = {
     user: {
       findUnique: jest.fn(),
+      findFirst: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
@@ -46,6 +47,7 @@ describe('AuthService (Unit Tests)', () => {
       });
 
       const result = await service.register({
+        username: 'farzad',
         name: 'Farzad',
         email: 'farzad@example.com',
         password: 'password123',
@@ -66,6 +68,7 @@ describe('AuthService (Unit Tests)', () => {
 
       await expect(
         service.register({
+          username: 'farzad',
           name: 'Farzad',
           email: 'duplicate@example.com',
           password: 'password123',
@@ -78,6 +81,7 @@ describe('AuthService (Unit Tests)', () => {
       mockPrisma.user.update.mockResolvedValue({});
 
       const result = await service.register({
+        username: 'farzad',
         name: 'Farzad',
         email: 'unverified@example.com',
         password: 'newpassword123',
@@ -191,7 +195,7 @@ describe('AuthService (Unit Tests)', () => {
   describe('login', () => {
     it('should authenticate user with valid credentials and verified email', async () => {
       const passwordHash = await bcrypt.hash('password123', 10);
-      mockPrisma.user.findUnique.mockResolvedValue({
+      mockPrisma.user.findFirst.mockResolvedValue({
         id: 'user-uuid-1',
         name: 'Farzad',
         email: 'farzad@example.com',
@@ -212,7 +216,7 @@ describe('AuthService (Unit Tests)', () => {
 
     it('should throw UnauthorizedException if email is unverified', async () => {
       const passwordHash = await bcrypt.hash('password123', 10);
-      mockPrisma.user.findUnique.mockResolvedValue({
+      mockPrisma.user.findFirst.mockResolvedValue({
         id: 'user-uuid-1',
         name: 'Farzad',
         email: 'farzad@example.com',
@@ -230,7 +234,7 @@ describe('AuthService (Unit Tests)', () => {
     });
 
     it('should throw UnauthorizedException for non-existent user', async () => {
-      mockPrisma.user.findUnique.mockResolvedValue(null);
+      mockPrisma.user.findFirst.mockResolvedValue(null);
 
       await expect(
         service.login({
@@ -242,7 +246,7 @@ describe('AuthService (Unit Tests)', () => {
 
     it('should throw UnauthorizedException for wrong password', async () => {
       const passwordHash = await bcrypt.hash('correctPassword', 10);
-      mockPrisma.user.findUnique.mockResolvedValue({
+      mockPrisma.user.findFirst.mockResolvedValue({
         id: 'user-uuid-1',
         email: 'farzad@example.com',
         passwordHash,

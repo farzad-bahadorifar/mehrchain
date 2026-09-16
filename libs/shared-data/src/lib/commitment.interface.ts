@@ -14,4 +14,6 @@ export interface Commitment {
   reminderTime?: string;
   isPublic?: boolean;
   isArchived?: boolean;
+  isBroadcastedToday?: boolean;
+  lastBroadcastDate?: string;
 }

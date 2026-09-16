@@ -68,6 +68,9 @@
     },
     "serve": {
       "executor": "@angular/build:dev-server",
+      "options": {
+        "port": 4300
+      },
       "configurations": {
         "production": {
           "buildTarget": "mehrchain-frontend:build:production"

@@ -63,6 +63,7 @@ describe('EditCommitmentModal', () => {
       totalDays: 30,
       category: 'growth',
       reminderTime: '21:00',
+      isPublic: false,
     });
   });
 

@@ -26,5 +26,20 @@
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "api-data",
+      "urls": [
+        "/api/commitments/**",
+        "/api/auth/me"
+      ],
+      "cacheConfig": {
+        "maxSize": 100,
+        "maxAge": "3d",
+        "timeout": "3s",
+        "strategy": "freshness"
+      }
+    }
   ]
 }

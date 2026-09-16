@@ -124,4 +124,12 @@ describe('AuthService (Frontend)', () => {
     expect(service.getToken()).toBeNull();
     expect(mockCommitmentStore.resetState).toHaveBeenCalled();
   });
+
+  it('should accurately detect local dev/mock tokens vs remote JWT tokens', () => {
+    expect(service.isLocalToken('local_jwt_token_12345')).toBe(true);
+    expect(service.isLocalToken('local_dev_token_12345')).toBe(true);
+    expect(service.isLocalToken('mock_token')).toBe(true);
+    expect(service.isLocalToken(null)).toBe(true);
+    expect(service.isLocalToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...')).toBe(false);
+  });
 });

@@ -1,35 +1,57 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { CommitmentService } from './commitment.service';
+import { AuthService } from './auth.service';
+import { MeroCustomizationService } from './mero-customization.service';
 
-export interface DuoChain {
+export interface HabitChain {
   id: string;
-  partnerName: string;
-  partnerAvatar?: string;
   myCommitmentId: string;
   myCommitmentTitle: string;
+  partnerName: string;
+  partnerAvatar?: string;
   partnerCommitmentTitle: string;
+  partnerCategory?: 'health' | 'growth' | 'community' | 'environment';
   streak: number;
   partnerCompletedToday: boolean;
+  partnerBroadcastedToday: boolean;
   myCompletedToday: boolean;
   lastReaction?: {
-    type: 'heart' | 'nudge';
+    type: 'heart' | 'cheer' | 'nudge';
     from: string;
     message?: string;
-    timestamp: Date;
+    timestamp: Date | string;
   };
-  createdAt: Date;
+  createdAt: Date | string;
 }
 
-const STORAGE_KEY = 'mehrchain_duo_chains';
+// Backwards compatibility alias
+export type DuoChain = HabitChain;
+
+export interface ChainInvitePayload {
+  inviteCode: string;
+  inviterName: string;
+  habitTitle: string;
+  category?: 'health' | 'growth' | 'community' | 'environment';
+  commitmentId?: string;
+}
+
+const STORAGE_PREFIX = 'mehrchain_chains_';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChainService {
   private commitmentService = inject(CommitmentService);
+  private authService = inject(AuthService);
+  private customizationService = inject(MeroCustomizationService);
+
+  private currentStorageKey = computed(() => {
+    const user = this.authService.currentUser();
+    return `${STORAGE_PREFIX}${user ? user.id : 'default'}`;
+  });
 
   // Stored connected friend chains
-  private _friendChains = signal<DuoChain[]>(this.loadStoredChains());
+  private _friendChains = signal<HabitChain[]>([]);
 
   readonly friendChains = computed(() => this._friendChains());
 
@@ -38,48 +60,278 @@ export class ChainService {
     this.commitmentService.commitments().filter((c) => c.isPublic === true)
   );
 
-  // Active commitment selection for invite
+  // Active commitment selection for invite in UI
   readonly selectedCommitmentId = signal<string>('');
 
   constructor() {
-    // Select first public commitment if available
-    const pubList = this.publicCommitments();
-    if (pubList.length > 0) {
-      this.selectedCommitmentId.set(pubList[0].id);
-    }
+    // Initial load
+    this.reloadChains();
+
+    // Reload chains when user session switches
+    effect(() => {
+      const key = this.currentStorageKey();
+      this.reloadChains(key);
+    });
+
+    // Auto-select first public commitment if available
+    effect(() => {
+      const pubList = this.publicCommitments();
+      const current = this.selectedCommitmentId();
+      if (pubList.length > 0 && (!current || !pubList.some((c) => c.id === current))) {
+        this.selectedCommitmentId.set(pubList[0].id);
+      }
+    });
   }
 
-  private loadStoredChains(): DuoChain[] {
+  private reloadChains(storageKey?: string): void {
+    const key = storageKey || this.currentStorageKey();
     try {
-      const data = localStorage.getItem(STORAGE_KEY);
+      const data = localStorage.getItem(key);
       if (data) {
-        return JSON.parse(data);
+        const parsed = JSON.parse(data);
+        if (Array.isArray(parsed)) {
+          this._friendChains.set(parsed);
+          return;
+        }
       }
     } catch (e) {
-      console.error('Failed to load chains from storage', e);
+      console.error('[ChainService] Failed to load chains from storage', e);
     }
-    return [];
+    this._friendChains.set([]);
   }
 
   private saveStoredChains(): void {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this._friendChains()));
+      const key = this.currentStorageKey();
+      localStorage.setItem(key, JSON.stringify(this._friendChains()));
     } catch (e) {
-      console.error('Failed to save chains to storage', e);
+      console.error('[ChainService] Failed to save chains to storage', e);
     }
   }
 
+  /**
+   * Returns all chains linked to a specific local commitment (1:N support)
+   */
+  getChainsForCommitment(commitmentId: string): HabitChain[] {
+    return this._friendChains().filter((c) => c.myCommitmentId === commitmentId);
+  }
+
+  /**
+   * Returns the count of supporters chained to a specific commitment
+   */
+  getSupportersCount(commitmentId: string): number {
+    return this.getChainsForCommitment(commitmentId).length;
+  }
+
+  /**
+   * Generates a shareable invite URL containing inviter and habit details
+   */
   getInviteUrl(commitmentId?: string): string {
     const cid = commitmentId || this.selectedCommitmentId() || 'general';
+    const habit = this.publicCommitments().find((c) => c.id === cid);
+    const habitTitle = habit ? encodeURIComponent(habit.title) : 'Habit';
+    const habitCategory = habit ? encodeURIComponent(habit.category) : 'growth';
+
+    const inviterName = encodeURIComponent(
+      this.authService.currentUser()?.name ||
+      this.authService.currentUser()?.username ||
+      this.customizationService.nickname() ||
+      'Friend'
+    );
+
     const baseUrl = window.location.origin;
     const inviteCode = btoa(`chain_${cid}_${Date.now()}`).substring(0, 10);
-    return `${baseUrl}/chain?invite=${inviteCode}&cid=${cid}`;
+
+    return `${baseUrl}/chain?invite=${inviteCode}&cid=${cid}&u=${inviterName}&title=${habitTitle}&cat=${habitCategory}`;
+  }
+
+  /**
+   * Parses an invite payload from search params or object
+   */
+  parseInviteParams(params: { [key: string]: string | undefined }): ChainInvitePayload | null {
+    const inviteCode = params['invite'];
+    if (!inviteCode) return null;
+
+    return {
+      inviteCode,
+      inviterName: params['u'] ? decodeURIComponent(params['u']) : 'A friend',
+      habitTitle: params['title'] ? decodeURIComponent(params['title']) : 'Daily Habit',
+      category: (params['cat'] as any) || 'growth',
+      commitmentId: params['cid'],
+    };
+  }
+
+  /**
+   * Connects incoming invite habit with a local public habit
+   */
+  acceptInvite(payload: {
+    inviterName: string;
+    inviterHabitTitle: string;
+    inviterCategory?: 'health' | 'growth' | 'community' | 'environment';
+    myCommitmentId: string;
+    myCommitmentTitle: string;
+  }): HabitChain {
+    const newChain: HabitChain = {
+      id: `chain_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      myCommitmentId: payload.myCommitmentId,
+      myCommitmentTitle: payload.myCommitmentTitle,
+      partnerName: payload.inviterName,
+      partnerCommitmentTitle: payload.inviterHabitTitle,
+      partnerCategory: payload.inviterCategory || 'growth',
+      streak: 1,
+      partnerCompletedToday: true,
+      partnerBroadcastedToday: true,
+      myCompletedToday: false,
+      lastReaction: {
+        type: 'heart',
+        from: payload.inviterName,
+        message: `${payload.inviterName} linked journeys with you! 💙`,
+        timestamp: new Date().toISOString(),
+      },
+      createdAt: new Date().toISOString(),
+    };
+
+    this._friendChains.update((list) => [newChain, ...list]);
+    this.saveStoredChains();
+    return newChain;
+  }
+
+  /**
+   * "Ring the Bell" Broadcast: Sends completion broadcast to all supporters chained to this habit.
+   */
+  ringBellBroadcast(commitmentId: string): { count: number; habitTitle: string } {
+    const affected = this._friendChains().filter((c) => c.myCommitmentId === commitmentId);
+    const myName = this.authService.currentUser()?.name || this.customizationService.nickname() || 'You';
+    const habit = this.commitmentService.commitments().find((c) => c.id === commitmentId);
+    const habitTitle = habit ? habit.title : 'Daily Habit';
+
+    this._friendChains.update((chains) =>
+      chains.map((chain) => {
+        if (chain.myCommitmentId === commitmentId) {
+          return {
+            ...chain,
+            myCompletedToday: true,
+            lastReaction: {
+              type: 'cheer',
+              from: myName,
+              message: `${myName} rang the bell today for "${habitTitle}"! 🔔✨`,
+              timestamp: new Date().toISOString(),
+            },
+          };
+        }
+        return chain;
+      })
+    );
+
+    this.saveStoredChains();
+    return { count: affected.length, habitTitle };
+  }
+
+  /**
+   * Sends heart or cheering reaction to a connected friend
+   */
+  sendReaction(chainId: string, type: 'heart' | 'cheer' | 'nudge'): void {
+    const myName = this.authService.currentUser()?.name || this.customizationService.nickname() || 'You';
+
+    let reactionMsg = `${myName} sent warm heart energy! 💙`;
+    if (type === 'cheer') {
+      reactionMsg = `${myName} cheered for your progress! 🌟`;
+    } else if (type === 'nudge') {
+      reactionMsg = `${myName} sent a gentle reminder! 🔔`;
+    }
+
+    this._friendChains.update((chains) =>
+      chains.map((chain) => {
+        if (chain.id === chainId) {
+          return {
+            ...chain,
+            lastReaction: {
+              type,
+              from: myName,
+              message: reactionMsg,
+              timestamp: new Date().toISOString(),
+            },
+          };
+        }
+        return chain;
+      })
+    );
+    this.saveStoredChains();
+  }
+
+  removeChain(chainId: string): void {
+    this._friendChains.update((list) => list.filter((c) => c.id !== chainId));
+    this.saveStoredChains();
+  }
+
+  addDemoFriendChain(): void {
+    const pubList = this.publicCommitments();
+    const myHabit = pubList.length > 0 ? pubList[0].title : 'Save Water';
+    const myHabitId = pubList.length > 0 ? pubList[0].id : 'demo_id';
+
+    const demoChain: HabitChain = {
+      id: `demo_chain_${Date.now()}`,
+      partnerName: 'sara',
+      myCommitmentId: myHabitId,
+      myCommitmentTitle: myHabit,
+      partnerCommitmentTitle: 'Morning Meditation (20m)',
+      partnerCategory: 'growth',
+      streak: 5,
+      partnerCompletedToday: true,
+      partnerBroadcastedToday: true,
+      myCompletedToday: false,
+      lastReaction: {
+        type: 'heart',
+        from: 'sara',
+        message: 'Sara rang the bell & sent you love! 💙✨',
+        timestamp: new Date().toISOString(),
+      },
+      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+    };
+
+    this._friendChains.update((list) => [demoChain, ...list.filter((c) => c.partnerName !== 'sara')]);
+    this.saveStoredChains();
+  }
+
+  togglePartnerToday(chainId: string): void {
+    this._friendChains.update((chains) =>
+      chains.map((chain) => {
+        if (chain.id === chainId) {
+          const next = !chain.partnerCompletedToday;
+          return {
+            ...chain,
+            partnerCompletedToday: next,
+            partnerBroadcastedToday: next ? chain.partnerBroadcastedToday : false,
+            streak: next ? chain.streak + 1 : Math.max(1, chain.streak - 1),
+          };
+        }
+        return chain;
+      })
+    );
+    this.saveStoredChains();
+  }
+
+  togglePartnerBroadcastToday(chainId: string): void {
+    this._friendChains.update((chains) =>
+      chains.map((chain) => {
+        if (chain.id === chainId) {
+          const nextBroadcast = !chain.partnerBroadcastedToday;
+          return {
+            ...chain,
+            partnerCompletedToday: true,
+            partnerBroadcastedToday: nextBroadcast,
+          };
+        }
+        return chain;
+      })
+    );
+    this.saveStoredChains();
   }
 
   async shareInvite(habitTitle: string): Promise<boolean> {
     const inviteUrl = this.getInviteUrl();
     const shareData = {
-      title: 'Join my MehrChain Duo Habit!',
+      title: 'Join my MehrChain Habit Support Network!',
       text: `Let's chain our habits together on MehrChain! I'm tracking "${habitTitle}". Connect with me:`,
       url: inviteUrl,
     };
@@ -119,77 +371,8 @@ export class ChainService {
         return success;
       }
     } catch (err) {
-      console.error('Clipboard copy error:', err);
+      console.error('[ChainService] Clipboard copy error:', err);
       return false;
     }
-  }
-
-  sendReaction(chainId: string, type: 'heart' | 'nudge'): void {
-    this._friendChains.update((chains) =>
-      chains.map((chain) => {
-        if (chain.id === chainId) {
-          return {
-            ...chain,
-            lastReaction: {
-              type,
-              from: 'You',
-              message: type === 'heart' ? 'You sent heart reaction 💙' : 'You sent a nudge 🔔',
-              timestamp: new Date(),
-            },
-          };
-        }
-        return chain;
-      })
-    );
-    this.saveStoredChains();
-  }
-
-  removeChain(chainId: string): void {
-    this._friendChains.update((list) => list.filter((c) => c.id !== chainId));
-    this.saveStoredChains();
-  }
-
-  addDemoFriendChain(): void {
-    const pubList = this.publicCommitments();
-    const myHabit = pubList.length > 0 ? pubList[0].title : 'Save Water';
-    const myHabitId = pubList.length > 0 ? pubList[0].id : 'demo_id';
-
-    const demoChain: DuoChain = {
-      id: `demo_chain_${Date.now()}`,
-      partnerName: 'sara',
-      myCommitmentId: myHabitId,
-      myCommitmentTitle: myHabit,
-      partnerCommitmentTitle: 'Morning Meditation (20m)',
-      streak: 4,
-      partnerCompletedToday: true,
-      myCompletedToday: false,
-      lastReaction: {
-        type: 'heart',
-        from: 'sara',
-        message: 'Sara sent you love & encouragement! 💙',
-        timestamp: new Date(),
-      },
-      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
-    };
-
-    this._friendChains.update((list) => [demoChain, ...list.filter((c) => c.partnerName !== 'sara')]);
-    this.saveStoredChains();
-  }
-
-  togglePartnerToday(chainId: string): void {
-    this._friendChains.update((chains) =>
-      chains.map((chain) => {
-        if (chain.id === chainId) {
-          const next = !chain.partnerCompletedToday;
-          return {
-            ...chain,
-            partnerCompletedToday: next,
-            streak: next ? chain.streak + 1 : Math.max(1, chain.streak - 1),
-          };
-        }
-        return chain;
-      })
-    );
-    this.saveStoredChains();
   }
 }

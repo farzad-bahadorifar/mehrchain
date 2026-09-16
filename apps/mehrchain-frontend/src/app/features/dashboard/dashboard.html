@@ -68,7 +68,9 @@
       @for (c of commitmentService.commitments(); track c.id) {
         <app-commitment-card
           [commitment]="c"
+          [supportersCount]="chainService.getSupportersCount(c.id)"
           (onComplete)="handleComplete($event)"
+          (onRingBell)="handleRingBell($event)"
           (onDelete)="promptDelete($event)"
           (onArchive)="handleArchive($event)"
           (onEdit)="openEdit($event)"
@@ -77,6 +79,14 @@
       }
     }
   </div>
+
+  <!-- Toast Notification -->
+  @if (toastMessage()) {
+    <div class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-2 z-50 animate-fade-in">
+      <lucide-icon name="sparkles" class="w-4 h-4 text-amber-400"></lucide-icon>
+      <span>{{ toastMessage() }}</span>
+    </div>
+  }
 
   <!-- Floating Add Button -->
   <button

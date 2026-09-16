@@ -42,17 +42,28 @@ describe('errorInterceptor', () => {
     req.error(new ProgressEvent('error'), { status: 0, statusText: 'Unknown Error' });
   });
 
-  it('should handle 401 and trigger logout', () => {
+  it('should handle 401 without destroying offline session', () => {
     http.get('/api/protected').subscribe({
       next: () => expect.fail('Should have failed'),
       error: (err: Error) => {
-        expect(err.message).toContain('Session expired');
-        expect(authServiceSpy.logout).toHaveBeenCalled();
+        expect(err.message).toBe('Session expired or unauthorized for remote sync.');
       },
     });
 
     const req = httpMock.expectOne('/api/protected');
-    req.flush({ message: 'Unauthorized' }, { status: 401, statusText: 'Unauthorized' });
+    req.flush(null, { status: 401, statusText: 'Unauthorized' });
+  });
+
+  it('should return server error message on 401 if provided', () => {
+    http.get('/api/commitments').subscribe({
+      next: () => expect.fail('Should have failed'),
+      error: (err: Error) => {
+        expect(err.message).toBe('Invalid token signature');
+      },
+    });
+
+    const req = httpMock.expectOne('/api/commitments');
+    req.flush({ message: 'Invalid token signature' }, { status: 401, statusText: 'Unauthorized' });
   });
 
   it('should extract array validation messages cleanly', () => {
