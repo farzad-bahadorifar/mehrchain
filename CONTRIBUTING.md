@@ -69,7 +69,7 @@ Optional:
    npm run dev
    ```
    This runs both servers concurrently:
-   - Frontend: `http://localhost:4200`
+   - Frontend: `http://localhost:4300`
    - Backend API: `http://localhost:3000/api`
    - Swagger Docs: `http://localhost:3000/api/docs`
 
