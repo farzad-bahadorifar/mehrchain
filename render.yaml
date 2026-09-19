@@ -5,10 +5,12 @@ services:
     plan: free
     region: frankfurt
     buildCommand: npm install && npx prisma generate --schema=apps/mehrchain-backend/prisma/schema.prisma && npx nx build mehrchain-backend
-    startCommand: node dist/apps/mehrchain-backend/main.js
+    startCommand: node dist/mehrchain-backend/main.js
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 20
       - key: DATABASE_URL
         sync: false
       - key: JWT_SECRET
