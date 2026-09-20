@@ -1,4 +1,4 @@
-# 🔥 MehrChain
+﻿# 🔥 MehrChain
 
 **"You, light your own lamp." — Rumi**
 
@@ -177,7 +177,8 @@ npx cap open android
 ## 📱 Download & Releases
 
 * **Android APK:** Download the latest debug APK from [GitHub Releases](https://github.com/farzad-bahadorifar/mehrchain/releases/latest).
-* **Web App:** Hosted on Vercel (PWA enabled).
+* **Web App (PWA):** Hosted globally on [Cloudflare Pages](https://mehrchain.pages.dev).
+* **Backend API:** Hosted on [Render](https://mehrchain-api.onrender.com) with Serverless PostgreSQL on [Neon.tech](https://neon.tech).
 
 ---
 

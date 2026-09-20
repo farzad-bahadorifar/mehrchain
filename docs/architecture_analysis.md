@@ -1,4 +1,4 @@
-# MehrChain — Architecture Analysis & Dependency Map
+﻿# MehrChain — Architecture Analysis & Dependency Map
 
 > **Version:** v0.9.0-preview  
 > **Generated:** September 2026  
@@ -341,7 +341,7 @@ graph LR
     end
 
     subgraph Frontend["Frontend Hosting"]
-        Vercel["Vercel (SPA)"]
+        Cloudflare["Cloudflare Pages (SPA)"]
     end
 
     subgraph Backend["Backend Hosting"]
@@ -354,15 +354,15 @@ graph LR
 
     Build --> APK
     APK --> Release
-    Build --> Vercel
+    Build --> Cloudflare
     Build --> Render
     Render --> Neon
 ```
 
 | Component | Platform | Tier | Status |
 |-----------|----------|------|--------|
-| Frontend | Vercel | Free | Configured (not actively deployed) |
-| Backend | Render | Free | Configured (not deployed — no domain) |
+| Frontend | Cloudflare Pages | Free | ✅ Fully Deployed (Live) |
+| Backend | Render | Free | ✅ Fully Deployed (Live) |
 | Database | Neon | Serverless | Configured |
 | Android APK | GitHub Actions | Free | ✅ Working CI/CD pipeline |
 | iOS | — | — | Config only, not built |
