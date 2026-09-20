@@ -5,7 +5,6 @@ import { LucideAngularModule } from 'lucide-angular';
 import {
   MeroCustomizationService,
   MeroGlowThemeId,
-  MeroPersonality,
 } from '../../core/services/mero-customization.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService, ThemeMode } from '../../core/services/theme.service';
@@ -151,10 +150,6 @@ export class ProfileComponent {
     this.showSaveFeedback(`Custom glow "${name}" saved & applied to Mero! ✨`);
   }
 
-  handleSelectPersonality(p: MeroPersonality): void {
-    this.customization.setPersonality(p);
-    this.showSaveFeedback('Mero personality updated 💬');
-  }
 
   setThemeMode(mode: ThemeMode): void {
     this.themeService.setTheme(mode);

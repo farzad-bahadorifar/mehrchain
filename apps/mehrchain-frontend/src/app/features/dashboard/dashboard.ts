@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommitmentService } from '../../core/services/commitment.service';
@@ -48,11 +48,7 @@ export class DashboardComponent {
     this.themeService.setTheme(nextMode);
   }
 
-  constructor() {
-    effect(() => {
-      console.log('Dashboard Commitments:', this.commitmentService.commitments());
-    });
-  }
+
 
   openNewCommitment() {
     this.isModalOpen.set(true);

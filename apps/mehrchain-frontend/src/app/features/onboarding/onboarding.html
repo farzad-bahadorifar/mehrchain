@@ -15,6 +15,7 @@
       <lucide-icon name="arrow-left" class="w-5 h-5"></lucide-icon>
     </button>
   }
+
   <!-- Top Section: Mascot & Hero Title (Proportional & Auto Centered) -->
   <div
     class="flex-1 flex flex-col items-center justify-center w-full max-w-md transition-all duration-500 ease-out py-2 sm:py-4 min-h-0"
@@ -45,511 +46,74 @@
     class="w-full max-w-md bg-card rounded-[2rem] shadow-float p-6 sm:p-7 flex flex-col justify-between animate-slide-up relative z-10 border border-white/20 backdrop-blur-sm overflow-hidden"
   >
     @switch (step()) {
-
-      <!-- Step 0: Welcome & Start -->
       @case (0) {
-        <div class="flex flex-col h-full justify-end space-y-4">
-          <button
-            (click)="nextStep()"
-            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300"
-          >
-            Start My Journey
-          </button>
-
-          <button
-            (click)="openLoginModal()"
-            class="text-sm text-muted-foreground font-medium hover:text-primary transition-colors text-center"
-          >
-            I have an account
-          </button>
-        </div>
+        <app-welcome-step
+          (next)="nextStep()"
+          (openLogin)="openLoginModal()"
+        />
       }
-
-      <!-- Step 1: Why Choose Us? -->
       @case (1) {
-        <div class="animate-fade-in h-full flex flex-col justify-between space-y-4">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-foreground leading-snug">
-              Why Walk Together?
-            </h2>
-            <p class="text-muted-foreground text-sm leading-relaxed mb-4">
-              A peaceful space to build consistency without pressure.
-            </p>
-
-            <div class="space-y-3">
-              <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
-                <div class="w-10 h-10 rounded-2xl bg-primary/15 text-primary flex items-center justify-center shrink-0 border border-primary/20">
-                  <lucide-icon name="heart" class="w-5 h-5 text-primary"></lucide-icon>
-                </div>
-                <div class="flex-1">
-                  <h3 class="text-xs font-bold text-foreground mb-0.5">Gentle Companionship</h3>
-                  <p class="text-xs text-muted-foreground leading-relaxed">
-                    No toxic pressure, streak shaming, or guilt. Mero stands by your side with quiet daily support.
-                  </p>
-                </div>
-              </div>
-
-              <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
-                <div class="w-10 h-10 rounded-2xl bg-accent/15 text-accent flex items-center justify-center shrink-0 border border-accent/20">
-                  <lucide-icon name="sparkles" class="w-5 h-5 text-accent"></lucide-icon>
-                </div>
-                <div class="flex-1">
-                  <h3 class="text-xs font-bold text-foreground mb-0.5">Meaningful Horizons</h3>
-                  <p class="text-xs text-muted-foreground leading-relaxed">
-                    Commit to 7, 14, or 21 days rooted in your personal purpose, celebrating every mindful step.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button
-            (click)="nextStep()"
-            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
-          >
-            <span>The Meaning of MehrChain</span>
-            <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
-          </button>
-        </div>
+        <app-why-choose-step
+          (next)="nextStep()"
+        />
       }
-
-      <!-- Step 2: Meaning of MehrChain -->
       @case (2) {
-        <div class="animate-fade-in h-full flex flex-col justify-between space-y-4">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-bold mb-1.5 text-foreground leading-snug">
-              The Meaning of MehrChain
-            </h2>
-            <p class="text-muted-foreground text-sm leading-relaxed mb-4">
-              We believe the world becomes brighter with intentional kindness.
-            </p>
-
-            <div class="space-y-3.5">
-              <!-- Mehr Card -->
-              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-amber-500/10 via-muted/40 to-muted/20 border border-amber-500/25 flex items-start gap-3.5 shadow-xs transition-all hover:border-amber-500/40">
-                <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-600 dark:text-amber-400 flex flex-col items-center justify-center shrink-0 border border-amber-500/30 shadow-xs">
-                  <lucide-icon name="sun" class="w-4 h-4 text-amber-500 mb-0.5"></lucide-icon>
-                  <span class="text-[9px] font-black tracking-tight uppercase">Mehr</span>
-                </div>
-                <div class="flex-1">
-                  <h3 class="text-xs font-bold text-foreground mb-0.5">Covenant & Loving Kindness</h3>
-                  <p class="text-xs text-muted-foreground leading-relaxed">
-                    Rooted in ancient Persian wisdom, Mehr represents the sacred covenant, steadfast friendship, and illuminating warmth—honoring your daily promise to yourself.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Chain Card -->
-              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-primary/10 via-muted/40 to-muted/20 border border-primary/25 flex items-start gap-3.5 shadow-xs transition-all hover:border-primary/40">
-                <div class="w-11 h-11 rounded-2xl bg-primary/20 text-primary flex flex-col items-center justify-center shrink-0 border border-primary/30 shadow-xs">
-                  <lucide-icon name="link" class="w-4 h-4 text-primary mb-0.5"></lucide-icon>
-                  <span class="text-[9px] font-black tracking-tight uppercase">Chain</span>
-                </div>
-                <div class="flex-1">
-                  <h3 class="text-xs font-bold text-foreground mb-0.5">Continuous Habits</h3>
-                  <p class="text-xs text-muted-foreground leading-relaxed">
-                    Every small intentional act links to another, forming an unbreakable chain of daily growth and positive ripples.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button
-            (click)="nextStep()"
-            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
-          >
-            <span>How Chains Work</span>
-            <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
-          </button>
-        </div>
+        <app-meaning-step
+          (next)="nextStep()"
+        />
       }
-
-      <!-- Step 3: Chain Reactions & Ripple Effects (Coming Soon) -->
       @case (3) {
-        <div class="animate-fade-in h-full flex flex-col justify-between space-y-3.5">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-foreground leading-snug">
-              Connected Habit Chains
-            </h2>
-            <p class="text-muted-foreground text-sm leading-relaxed mb-3.5">
-              Link your public habits with friends through invite links and QR codes. Keep each other shining with quiet support.
-            </p>
-
-            <div class="space-y-3">
-              <!-- Shared Accountability Card -->
-              <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
-                <div class="w-10 h-10 rounded-2xl bg-primary/15 text-primary flex items-center justify-center shrink-0 border border-primary/20">
-                  <lucide-icon name="link-2" class="w-5 h-5 text-primary"></lucide-icon>
-                </div>
-                <div class="flex-1">
-                  <h3 class="text-xs font-bold text-foreground mb-0.5">Shared Accountability</h3>
-                  <p class="text-xs text-muted-foreground leading-relaxed">
-                    Track your daily spark alongside a friend. No toxic leaderboards or pressure, just mutual presence and consistency.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Supportive Reactions Card -->
-              <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
-                <div class="w-10 h-10 rounded-2xl bg-teal-500/15 text-teal-600 flex items-center justify-center shrink-0 border border-teal-500/20">
-                  <lucide-icon name="heart" class="w-5 h-5 text-teal-600"></lucide-icon>
-                </div>
-                <div class="flex-1">
-                  <h3 class="text-xs font-bold text-foreground mb-0.5">Micro Support & Nudges</h3>
-                  <p class="text-xs text-muted-foreground leading-relaxed">
-                    Send warm heart reactions and gentle reminders when your friend completes their habit for the day.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button
-            (click)="nextStep()"
-            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
-          >
-            <span>Choose My Starting Spark</span>
-            <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
-          </button>
-        </div>
+        <app-chains-step
+          (next)="nextStep()"
+        />
       }
-
-      <!-- Step 4: Select Category -->
       @case (4) {
-        <div class="animate-fade-in h-full flex flex-col">
-          <h2 class="text-2xl font-bold mb-6 text-center text-foreground">
-            Where do you want to shine?
-          </h2>
-
-          <div class="grid grid-cols-2 gap-4 flex-1">
-            @for (cat of categories; track cat.id) {
-              <button
-                (click)="selectCategory(cat.id)"
-                class="flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-transparent bg-muted/50 hover:bg-card hover:border-primary/30 hover:shadow-md transition-all duration-300 group active:scale-95 aspect-square"
-              >
-                <div
-                  [class]="
-                    'w-14 h-14 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ' +
-                    cat.bg
-                  "
-                >
-                  <lucide-icon [name]="cat.icon" [class]="'w-7 h-7 ' + cat.color"></lucide-icon>
-                </div>
-
-                <span
-                  class="font-semibold text-foreground group-hover:text-primary transition-colors"
-                  >{{ cat.label }}</span
-                >
-              </button>
-            }
-          </div>
-        </div>
+        <app-category-step
+          [categories]="categories"
+          (categorySelected)="selectCategory($event)"
+        />
       }
-
-      <!-- Step 5: Pick Habit Spark -->
       @case (5) {
-        @if (!isCustomHabit()) {
-          <div class="animate-fade-in flex flex-col justify-between space-y-3">
-            <div>
-              <h2 class="text-2xl font-bold mb-1.5 text-center text-foreground">Pick a simple spark</h2>
-              <p class="text-center text-muted-foreground mb-4 text-xs sm:text-sm">
-                Something small you can do today.
-              </p>
-
-              <div class="space-y-2.5">
-                @for (habit of habitsMock[selectedCategory()!]; track habit) {
-                  <button
-                    (click)="selectHabit(habit)"
-                    class="w-full text-left p-3.5 sm:p-4 rounded-2xl bg-muted/40 hover:bg-primary hover:text-white border border-transparent hover:shadow-md hover:shadow-primary/20 transition-all duration-200 font-medium group flex items-center justify-between text-sm"
-                  >
-                    <span>{{ habit }}</span>
-                    <lucide-icon
-                      name="arrow-right"
-                      class="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all"
-                    ></lucide-icon>
-                  </button>
-                }
-              </div>
-            </div>
-
-            <button
-              (click)="enableCustomHabit()"
-              class="w-full py-3 text-center text-xs sm:text-sm font-semibold text-primary hover:bg-primary/10 rounded-xl transition-all"
-            >
-              ✨ Create your own custom spark...
-            </button>
-          </div>
-        } @else {
-          <!-- Custom Habit Dedicated Mode -->
-          <div class="animate-fade-in flex flex-col justify-between space-y-4">
-            <div>
-              <h2 class="text-2xl font-bold mb-1.5 text-center text-foreground">Create Your Spark</h2>
-              <p class="text-center text-muted-foreground mb-5 text-xs sm:text-sm">
-                What daily intention would you like to build?
-              </p>
-
-              <div class="space-y-2">
-                <label class="block text-xs font-bold text-gray-500 uppercase ml-1">Custom Habit Name</label>
-                <div class="relative flex items-center">
-                  <lucide-icon name="sparkles" class="w-4 h-4 text-primary absolute left-4 pointer-events-none"></lucide-icon>
-                  <input
-                    #customInput
-                    type="text"
-                    placeholder="e.g., Read 10 pages before sleep"
-                    class="w-full bg-gray-50 dark:bg-slate-900 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border-2 border-primary focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all shadow-sm"
-                    (keyup.enter)="confirmCustomHabit(customInput.value)"
-                    autofocus
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-2 pt-2">
-              <button
-                (click)="confirmCustomHabit(customInput.value)"
-                class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                <span>Confirm Spark</span>
-                <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
-              </button>
-
-              <button
-                type="button"
-                (click)="cancelCustomHabit()"
-                class="w-full py-2.5 text-center text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
-              >
-                Back to suggested sparks
-              </button>
-            </div>
-          </div>
-        }
+        <app-habit-step
+          [selectedCategory]="selectedCategory()!"
+          [habits]="habitsMock"
+          [isCustomHabit]="isCustomHabit()"
+          (habitSelected)="selectHabit($event)"
+          (enableCustom)="enableCustomHabit()"
+          (cancelCustom)="cancelCustomHabit()"
+          (confirmCustom)="confirmCustomHabit($event)"
+        />
       }
-
-      <!-- Step 6: Duration, Why & Reminder -->
       @case (6) {
-        <div class="animate-fade-in h-full flex flex-col justify-between space-y-4">
-          <div>
-            <h2 class="text-2xl font-bold mb-4 text-center text-foreground">
-              Commit for how long?
-            </h2>
-
-            <div class="grid grid-cols-4 gap-2 mb-5">
-              @for (days of [7, 14, 21]; track days) {
-                <button
-                  type="button"
-                  (click)="setDuration(days)"
-                  class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 transition-all duration-300"
-                  [class]="
-                    selectedDuration() === days && !isCustomDuration() && !isNonStandardDuration()
-                      ? 'border-primary bg-primary text-white shadow-md'
-                      : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
-                  "
-                >
-                  <span class="text-base font-bold">{{ days }}</span>
-                  <span class="text-[10px] font-medium uppercase">Days</span>
-                </button>
-              }
-
-              @if (isCustomDuration()) {
-                <div
-                  class="flex flex-col items-center justify-center p-1 rounded-xl border-2 border-primary bg-card animate-fade-in"
-                >
-                  <input
-                    #durInput
-                    type="number"
-                    [value]="isNonStandardDuration() ? selectedDuration() : ''"
-                    class="w-full text-center font-bold text-base outline-none bg-transparent text-primary"
-                    placeholder="#"
-                    (input)="onCustomDurationInput(durInput.value)"
-                    (keyup.enter)="isCustomDuration.set(false)"
-                    autoFocus
-                  />
-                </div>
-              } @else if (isNonStandardDuration()) {
-                <button
-                  type="button"
-                  (click)="toggleCustomDuration()"
-                  class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 border-primary bg-primary text-white shadow-md transition-all"
-                >
-                  <span class="text-base font-bold">{{ selectedDuration() }}</span>
-                  <span class="text-[10px] font-medium uppercase">Days</span>
-                </button>
-              } @else {
-                <button
-                  type="button"
-                  (click)="toggleCustomDuration()"
-                  class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 border-border text-muted-foreground hover:border-primary/50 hover:text-primary transition-all"
-                >
-                  <lucide-icon name="plus" class="w-5 h-5 mb-0.5"></lucide-icon>
-                  <span class="text-[10px] font-medium uppercase">Custom</span>
-                </button>
-              }
-            </div>
-
-            <!-- Why Textarea -->
-            <div
-              class="bg-gradient-to-br from-primary/5 to-accent/5 p-4 rounded-2xl border border-primary/10 flex gap-3 mb-3"
-            >
-              <div class="text-lg">💡</div>
-              <div class="w-full">
-                <span class="font-bold text-foreground block mb-1 text-xs">Why this matters?</span>
-                <textarea
-                  [value]="whyText()"
-                  (input)="whyText.set($any($event.target).value)"
-                  class="w-full bg-transparent text-xs text-muted-foreground resize-none focus:outline-none border-b border-primary/20 focus:border-primary h-12"
-                  placeholder="Write your reason..."
-                ></textarea>
-              </div>
-            </div>
-
-            <!-- Daily Phone Reminder Time -->
-            <div class="p-3 rounded-2xl bg-muted/40 border border-border/40 flex items-center justify-between mb-1">
-              <div class="flex items-center gap-2 text-xs font-semibold text-foreground">
-                <lucide-icon name="bell" class="w-4 h-4 text-primary"></lucide-icon>
-                <span>Daily Reminder:</span>
-              </div>
-              <input
-                #timeInput
-                type="time"
-                [value]="reminderTime()"
-                (change)="updateReminderTime(timeInput.value)"
-                class="bg-card border border-border/70 rounded-xl px-2.5 py-1 text-xs font-bold text-foreground outline-none cursor-pointer"
-              />
-            </div>
-          </div>
-
-          <button
-            (click)="proceedToSignUp()"
-            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 mt-2"
-          >
-            Continue to Save Progress <lucide-icon name="arrow-right" class="w-5 h-5"></lucide-icon>
-          </button>
-        </div>
+        <app-details-step
+          [selectedDuration]="selectedDuration()"
+          [isCustomDuration]="isCustomDuration()"
+          [whyText]="whyText()"
+          [reminderTime]="reminderTime()"
+          (durationChanged)="setDuration($event)"
+          (toggleCustomDuration)="toggleCustomDuration()"
+          (whyTextChanged)="whyText.set($event)"
+          (reminderTimeChanged)="updateReminderTime($event)"
+          (proceedToSignUp)="proceedToSignUp()"
+        />
       }
-
-      <!-- Step 7: Create Profile & Sign Up (Proportional, No duplicate logo, aligned icons) -->
       @case (7) {
-        <div class="animate-fade-in h-full flex flex-col justify-between space-y-4">
-          <div>
-            <h2 class="text-2xl font-bold text-center text-foreground mb-1">
-              Save Your Progress
-            </h2>
-            <p class="text-xs text-muted-foreground text-center mb-5 max-w-xs mx-auto leading-relaxed">
-              Create your profile to keep your streak glowing and access your habits anywhere.
-            </p>
-
-            @if (isDuplicateEmailError()) {
-              <div class="p-4 mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-100 text-xs animate-slide-up shadow-sm">
-                <div class="flex items-start gap-3">
-                  <div class="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">
-                    <lucide-icon name="alert-circle" class="w-4 h-4"></lucide-icon>
-                  </div>
-                  <div class="space-y-2.5 flex-1">
-                    <div>
-                      <p class="font-bold text-foreground text-sm">
-                        Account Already Exists
-                      </p>
-                      <p class="text-muted-foreground text-xs leading-relaxed mt-0.5">
-                        This email is already registered. Would you like to sign in to your account?
-                      </p>
-                    </div>
-                    <div class="flex items-center gap-2 pt-0.5">
-                      <button
-                        type="button"
-                        (click)="switchToLoginWithEmail()"
-                        class="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-accent transition-all shadow-md shadow-primary/20 active:scale-95 flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <lucide-icon name="log-in" class="w-3.5 h-3.5"></lucide-icon>
-                        <span>Sign In Directly</span>
-                      </button>
-                      <button
-                        type="button"
-                        (click)="openLoginModal(); toggleForgotPassword(true)"
-                        class="text-xs text-muted-foreground hover:text-primary font-medium transition-colors px-2 py-1"
-                      >
-                        Forgot Password?
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            } @else if (signUpError()) {
-              <div class="p-3.5 mb-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-semibold text-center animate-shake">
-                <span>{{ signUpError() }}</span>
-              </div>
-            }
-
-            <div class="space-y-3">
-              <div>
-                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1 ml-1 flex justify-between">
-                  <span>Username</span>
-                  <span class="text-[10px] text-teal-600 dark:text-teal-400 font-semibold lowercase">Unique ID (3-20 chars)</span>
-                </label>
-                <div class="relative flex items-center">
-                  <span class="absolute left-4 font-bold text-sm text-teal-600 dark:text-teal-400 select-none pointer-events-none">&#64;</span>
-                  <input
-                    type="text"
-                    [value]="signUpUsername()"
-                    (input)="onSignUpUsernameChange($any($event.target).value)"
-                    placeholder="your_username"
-                    autocomplete="username"
-                    autocapitalize="none"
-                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-10 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors font-medium"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1 ml-1">Email</label>
-                <div class="relative flex items-center">
-                  <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
-                  <input
-                    type="email"
-                    [value]="signUpEmail()"
-                    (input)="onSignUpEmailChange($any($event.target).value)"
-                    placeholder="you@example.com"
-                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1 ml-1">Password</label>
-                <div class="relative flex items-center">
-                  <lucide-icon name="lock" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
-                  <input
-                    [type]="showSignUpPassword() ? 'text' : 'password'"
-                    [value]="signUpPassword()"
-                    (input)="signUpPassword.set($any($event.target).value)"
-                    placeholder="At least 6 characters"
-                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
-                    (keyup.enter)="handleSignUp()"
-                  />
-                  <button
-                    type="button"
-                    (click)="toggleSignUpPassword()"
-                    class="absolute right-3.5 p-1 text-muted-foreground hover:text-foreground transition-colors"
-                    title="Toggle password visibility"
-                  >
-                    <lucide-icon [name]="showSignUpPassword() ? 'eye-off' : 'eye'" class="w-4 h-4"></lucide-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-2">
-            <button
-              (click)="handleSignUp()"
-              class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
-            >
-              Create Account & Light Lamp <lucide-icon name="sparkles" class="w-5 h-5"></lucide-icon>
-            </button>
-          </div>
-        </div>
+        <app-signup-step
+          [signUpUsername]="signUpUsername()"
+          [signUpEmail]="signUpEmail()"
+          [signUpPassword]="signUpPassword()"
+          [signUpError]="signUpError()"
+          [isDuplicateEmailError]="isDuplicateEmailError()"
+          [showSignUpPassword]="showSignUpPassword()"
+          (usernameChange)="onSignUpUsernameChange($event)"
+          (emailChange)="onSignUpEmailChange($event)"
+          (passwordChange)="signUpPassword.set($event)"
+          (togglePassword)="toggleSignUpPassword()"
+          (signUp)="handleSignUp()"
+          (switchToLogin)="switchToLoginWithEmail()"
+          (openLoginWithForgot)="openLoginModal(); toggleForgotPassword(true)"
+        />
       }
-
     }
   </div>
 
@@ -567,301 +131,42 @@
 
   <!-- Sign In (Login) Modal -->
   @if (isLoginModalOpen()) {
-    <div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4">
-      <div
-        class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
-        (click)="closeLoginModal()"
-      ></div>
-
-      <div
-        class="relative w-full max-w-md bg-card rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-white/10 overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar"
-      >
-        <div class="w-12 h-1.5 bg-muted rounded-full mx-auto mb-5 opacity-60"></div>
-
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-foreground">
-            {{ isForgotPasswordMode() ? 'Reset Password' : 'Sign In' }}
-          </h2>
-          <button
-            (click)="closeLoginModal()"
-            class="w-8 h-8 rounded-full bg-muted/60 hover:bg-muted flex items-center justify-center transition-colors text-muted-foreground"
-          >
-            <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
-          </button>
-        </div>
-
-        <div class="mx-auto mb-2 flex items-center justify-center">
-          <app-mero size="sm" [showGlow]="false" />
-        </div>
-
-        @if (!isForgotPasswordMode()) {
-          <p class="text-xs text-muted-foreground text-center mb-4">
-            Welcome back! Sign in to keep your streak glowing.
-          </p>
-
-          @if (isPrefilledFromSignUp()) {
-            <div class="px-3.5 py-2 mb-4 rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs font-medium flex items-center gap-2 animate-fade-in">
-              <lucide-icon name="info" class="w-4 h-4 shrink-0"></lucide-icon>
-              <span>Email pre-filled from your registration attempt.</span>
-            </div>
-          }
-
-          @if (loginError()) {
-            @if (isNoAccountFound()) {
-              <div class="p-3.5 mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-medium space-y-2 animate-fade-in">
-                <div class="flex items-center gap-1.5 justify-center">
-                  <lucide-icon name="info" class="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400"></lucide-icon>
-                  <span>No account exists with this email address.</span>
-                </div>
-                <button
-                  type="button"
-                  (click)="switchToSignUpFromLogin()"
-                  class="w-full py-2 px-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl transition-all duration-200 text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-95"
-                >
-                  <span>Create an Account (Sign Up)</span>
-                  <lucide-icon name="arrow-right" class="w-3.5 h-3.5"></lucide-icon>
-                </button>
-              </div>
-            } @else {
-              <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center">
-                {{ loginError() }}
-              </div>
-            }
-          }
-
-          <div class="space-y-3.5 mb-5">
-            <div>
-              <label class="block text-xs font-bold text-muted-foreground uppercase mb-1.5 ml-1">Email or Username</label>
-              <div class="relative flex items-center">
-                <lucide-icon name="user" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
-                <input
-                  type="text"
-                  [value]="loginEmail()"
-                  (input)="loginEmail.set($any($event.target).value)"
-                  placeholder="you@example.com or @username"
-                  autocomplete="username"
-                  autocapitalize="none"
-                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors font-medium"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div class="flex items-center justify-between mb-1.5 ml-1 mr-1">
-                <label class="block text-xs font-bold text-muted-foreground uppercase">Password</label>
-                <button
-                  type="button"
-                  (click)="toggleForgotPassword(true)"
-                  class="text-[11px] text-primary hover:underline font-semibold"
-                >
-                  Forgot password?
-                </button>
-              </div>
-              <div class="relative flex items-center">
-                <lucide-icon name="lock" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
-                <input
-                  [type]="showLoginPassword() ? 'text' : 'password'"
-                  [value]="loginPassword()"
-                  (input)="loginPassword.set($any($event.target).value)"
-                  placeholder="Your password"
-                  class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
-                  (keyup.enter)="handleLogin()"
-                />
-                <button
-                  type="button"
-                  (click)="toggleLoginPassword()"
-                  class="absolute right-3.5 p-1 text-muted-foreground hover:text-foreground transition-colors"
-                  title="Toggle password visibility"
-                >
-                  <lucide-icon [name]="showLoginPassword() ? 'eye-off' : 'eye'" class="w-4 h-4"></lucide-icon>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <button
-            (click)="handleLogin()"
-            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
-          >
-            Sign In <lucide-icon name="arrow-right" class="w-5 h-5"></lucide-icon>
-          </button>
-        } @else {
-          <!-- Forgot Password View -->
-          <p class="text-xs text-muted-foreground text-center mb-4">
-            Enter your email to receive password recovery instructions.
-          </p>
-
-          @if (forgotPasswordSubmitted()) {
-            <div class="p-4 mb-5 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-700 dark:text-teal-300 text-xs font-semibold text-center space-y-2 animate-fade-in">
-              <div class="flex items-center justify-center gap-1.5">
-                <lucide-icon name="check-circle-2" class="w-5 h-5 text-teal-600"></lucide-icon>
-                <span>Reset link sent!</span>
-              </div>
-              <p class="text-[11px] font-normal leading-relaxed text-muted-foreground">
-                If an account exists for <strong class="text-foreground">{{ forgotPasswordEmail() }}</strong>, you will receive an email shortly.
-              </p>
-            </div>
-
-            <button
-              (click)="toggleForgotPassword(false)"
-              class="w-full bg-primary text-primary-foreground py-3.5 rounded-2xl font-bold text-sm hover:bg-accent transition-all duration-300"
-            >
-              Back to Sign In
-            </button>
-          } @else {
-            @if (loginError()) {
-              <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center">
-                {{ loginError() }}
-              </div>
-            }
-
-            <div class="space-y-4 mb-5">
-              <div>
-                <label class="block text-xs font-bold text-muted-foreground uppercase mb-1.5 ml-1">Account Email</label>
-                <div class="relative flex items-center">
-                  <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
-                  <input
-                    type="email"
-                    [value]="forgotPasswordEmail()"
-                    (input)="forgotPasswordEmail.set($any($event.target).value)"
-                    placeholder="you@example.com"
-                    class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
-                    (keyup.enter)="handleForgotPassword()"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-2">
-              <button
-                (click)="handleForgotPassword()"
-                class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                Send Reset Instructions <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
-              </button>
-              <button
-                type="button"
-                (click)="toggleForgotPassword(false)"
-                class="w-full py-2.5 text-center text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
-              >
-                Cancel and back to Sign In
-              </button>
-            </div>
-          }
-        }
-      </div>
-    </div>
+    <app-login-modal
+      [loginEmail]="loginEmail()"
+      [loginPassword]="loginPassword()"
+      [loginError]="loginError()"
+      [isNoAccountFound]="isNoAccountFound()"
+      [showLoginPassword]="showLoginPassword()"
+      [isPrefilledFromSignUp]="isPrefilledFromSignUp()"
+      [isForgotPasswordMode]="isForgotPasswordMode()"
+      [forgotPasswordEmail]="forgotPasswordEmail()"
+      [forgotPasswordSubmitted]="forgotPasswordSubmitted()"
+      (emailChange)="loginEmail.set($event)"
+      (passwordChange)="loginPassword.set($event)"
+      (togglePassword)="toggleLoginPassword()"
+      (login)="handleLogin()"
+      (switchToSignUp)="switchToSignUpFromLogin()"
+      (toggleForgotPassword)="toggleForgotPassword($event)"
+      (forgotEmailChange)="forgotPasswordEmail.set($event)"
+      (forgotPasswordSubmit)="handleForgotPassword()"
+      (close)="closeLoginModal()"
+    />
   }
 
   <!-- Email OTP Verification Modal -->
   @if (isVerificationModalOpen()) {
-    <div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4">
-      <div
-        class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
-        (click)="closeVerificationModal()"
-      ></div>
-
-      <div
-        class="relative w-full max-w-md bg-card rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-white/10 overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar"
-      >
-        <div class="w-12 h-1.5 bg-muted rounded-full mx-auto mb-5 opacity-60"></div>
-
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
-            <lucide-icon name="mail" class="w-5 h-5 text-primary"></lucide-icon>
-            Verify Your Email
-          </h2>
-          <button
-            (click)="closeVerificationModal()"
-            class="w-8 h-8 rounded-full bg-muted/60 hover:bg-muted flex items-center justify-center transition-colors text-muted-foreground"
-          >
-            <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
-          </button>
-        </div>
-
-        <div class="mx-auto mb-3 flex items-center justify-center">
-          <app-mero size="sm" [showGlow]="false" />
-        </div>
-
-        <p class="text-xs text-muted-foreground text-center mb-4">
-          We sent a 6-digit confirmation code to
-          <strong class="text-foreground block mt-1 font-semibold">{{ signUpEmail() }}</strong>
-        </p>
-
-        @if (verificationError()) {
-          <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center animate-fade-in flex items-center justify-center gap-2">
-            <lucide-icon name="alert-circle" class="w-4 h-4 shrink-0"></lucide-icon>
-            <span>{{ verificationError() }}</span>
-          </div>
-        }
-
-        @if (verificationSuccess()) {
-          <div class="p-3 mb-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-medium text-center animate-fade-in flex items-center justify-center gap-2">
-            <lucide-icon name="check-circle2" class="w-4 h-4 shrink-0"></lucide-icon>
-            <span>{{ verificationSuccess() }}</span>
-          </div>
-        }
-
-        <div class="space-y-4 mb-5">
-          <div>
-            <label class="block text-xs font-bold text-muted-foreground uppercase text-center mb-2">
-              Enter 6-Digit Code
-            </label>
-            <input
-              type="text"
-              maxlength="6"
-              inputmode="numeric"
-              pattern="[0-9]*"
-              [value]="verificationCode()"
-              (input)="verificationCode.set($any($event.target).value)"
-              (keyup.enter)="handleVerifyEmail()"
-              placeholder="••••••"
-              class="w-full bg-muted/40 rounded-xl py-4 text-center text-2xl font-bold font-mono tracking-[0.35em] text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
-            />
-          </div>
-        </div>
-
-        <div class="space-y-3">
-          <button
-            (click)="handleVerifyEmail()"
-            [disabled]="isVerifying() || verificationCode().trim().length !== 6"
-            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100"
-          >
-            @if (isVerifying()) {
-              <div class="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
-              <span>Verifying...</span>
-            } @else {
-              <span>Confirm & Start Journey</span>
-              <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
-            }
-          </button>
-
-          <div class="flex items-center justify-between pt-2 px-1">
-            <button
-              type="button"
-              (click)="closeVerificationModal()"
-              class="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Change Email
-            </button>
-
-            <button
-              type="button"
-              (click)="handleResendVerificationCode()"
-              [disabled]="resendCooldown() > 0 || isResending()"
-              class="text-xs text-primary font-semibold hover:underline disabled:opacity-50 disabled:no-underline"
-            >
-              @if (resendCooldown() > 0) {
-                Resend code in {{ resendCooldown() }}s
-              } @else if (isResending()) {
-                Sending...
-              } @else {
-                Resend Code
-              }
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <app-verification-modal
+      [signUpEmail]="signUpEmail()"
+      [verificationCode]="verificationCode()"
+      [verificationError]="verificationError()"
+      [verificationSuccess]="verificationSuccess()"
+      [isVerifying]="isVerifying()"
+      [isResending]="isResending()"
+      [resendCooldown]="resendCooldown()"
+      (codeChange)="verificationCode.set($event)"
+      (verify)="handleVerifyEmail()"
+      (resend)="handleResendVerificationCode()"
+      (close)="closeVerificationModal()"
+    />
   }
 </div>

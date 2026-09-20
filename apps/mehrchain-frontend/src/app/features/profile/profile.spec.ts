@@ -42,9 +42,9 @@ describe('ProfileComponent', () => {
     expect(component.saveFeedbackMessage()).toContain('updated successfully');
   });
 
-  it('should change personality mode', () => {
-    component.handleSelectPersonality('energetic');
-    expect(customizationService.personality()).toBe('energetic');
-    expect(component.saveFeedbackMessage()).toContain('personality updated');
+  it('should show locked message when selecting a locked theme', () => {
+    // 'custom' theme requires 21-day streak; default streak is 0
+    component.handleSelectTheme('custom');
+    expect(component.saveFeedbackMessage()).toContain('Locked!');
   });
 });

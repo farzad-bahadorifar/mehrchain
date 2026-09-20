@@ -8,23 +8,6 @@ import {
   LucideAngularModule,
   TrendingUp,
   Users,
-  ArrowRight,
-  Plus,
-  Sparkles,
-  Bell,
-  Clock,
-  Lock,
-  Mail,
-  User,
-  X,
-  Eye,
-  EyeOff,
-  ArrowLeft,
-  AlertCircle,
-  LogIn,
-  HelpCircle,
-  Info,
-  CheckCircle2,
 } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
 import { CommitmentService } from '../../core/services/commitment.service';
@@ -32,10 +15,36 @@ import { MeroService } from '../../core/services/mero.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { MeroComponent } from '../../shared/components/mero/mero';
 import { SwipeDirective } from '../../shared/directives/swipe.directive';
+import { WelcomeStepComponent } from './steps/welcome-step';
+import { WhyChooseStepComponent } from './steps/why-choose-step';
+import { MeaningStepComponent } from './steps/meaning-step';
+import { ChainsStepComponent } from './steps/chains-step';
+import { CategoryStepComponent } from './steps/category-step';
+import { HabitStepComponent } from './steps/habit-step';
+import { DetailsStepComponent } from './steps/details-step';
+import { SignupStepComponent } from './steps/signup-step';
+import { LoginModalComponent } from './modals/login-modal';
+import { VerificationModalComponent } from './modals/verification-modal';
 
 @Component({
   selector: 'app-onboarding',
-  imports: [CommonModule, FormsModule, LucideAngularModule, MeroComponent, SwipeDirective],
+  imports: [
+    CommonModule,
+    FormsModule,
+    LucideAngularModule,
+    MeroComponent,
+    SwipeDirective,
+    WelcomeStepComponent,
+    WhyChooseStepComponent,
+    MeaningStepComponent,
+    ChainsStepComponent,
+    CategoryStepComponent,
+    HabitStepComponent,
+    DetailsStepComponent,
+    SignupStepComponent,
+    LoginModalComponent,
+    VerificationModalComponent,
+  ],
   templateUrl: './onboarding.html',
   styleUrl: './onboarding.css',
 })

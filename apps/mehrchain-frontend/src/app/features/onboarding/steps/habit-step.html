@@ -1,0 +1,75 @@
+@if (!isCustomHabit()) {
+  <div class="animate-fade-in flex flex-col justify-between space-y-3">
+    <div>
+      <h2 class="text-2xl font-bold mb-1.5 text-center text-foreground">Pick a simple spark</h2>
+      <p class="text-center text-muted-foreground mb-4 text-xs sm:text-sm">
+        Something small you can do today.
+      </p>
+
+      <div class="space-y-2.5">
+        @for (habit of habits()[selectedCategory()]; track habit) {
+          <button
+            (click)="habitSelected.emit(habit)"
+            class="w-full text-left p-3.5 sm:p-4 rounded-2xl bg-muted/40 hover:bg-primary hover:text-white border border-transparent hover:shadow-md hover:shadow-primary/20 transition-all duration-200 font-medium group flex items-center justify-between text-sm"
+          >
+            <span>{{ habit }}</span>
+            <lucide-icon
+              name="arrow-right"
+              class="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all"
+            ></lucide-icon>
+          </button>
+        }
+      </div>
+    </div>
+
+    <button
+      (click)="enableCustom.emit()"
+      class="w-full py-3 text-center text-xs sm:text-sm font-semibold text-primary hover:bg-primary/10 rounded-xl transition-all"
+    >
+      ✨ Create your own custom spark...
+    </button>
+  </div>
+} @else {
+  <!-- Custom Habit Dedicated Mode -->
+  <div class="animate-fade-in flex flex-col justify-between space-y-4">
+    <div>
+      <h2 class="text-2xl font-bold mb-1.5 text-center text-foreground">Create Your Spark</h2>
+      <p class="text-center text-muted-foreground mb-5 text-xs sm:text-sm">
+        What daily intention would you like to build?
+      </p>
+
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-gray-500 uppercase ml-1">Custom Habit Name</label>
+        <div class="relative flex items-center">
+          <lucide-icon name="sparkles" class="w-4 h-4 text-primary absolute left-4 pointer-events-none"></lucide-icon>
+          <input
+            #customInput
+            type="text"
+            placeholder="e.g., Read 10 pages before sleep"
+            class="w-full bg-gray-50 dark:bg-slate-900 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border-2 border-primary focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all shadow-sm"
+            (keyup.enter)="confirmCustom.emit(customInput.value)"
+            autofocus
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-2 pt-2">
+      <button
+        (click)="confirmCustom.emit(customInput.value)"
+        class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+      >
+        <span>Confirm Spark</span>
+        <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+      </button>
+
+      <button
+        type="button"
+        (click)="cancelCustom.emit()"
+        class="w-full py-2.5 text-center text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
+      >
+        Back to suggested sparks
+      </button>
+    </div>
+  </div>
+}

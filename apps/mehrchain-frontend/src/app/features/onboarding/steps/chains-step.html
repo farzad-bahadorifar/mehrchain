@@ -1,0 +1,46 @@
+<div class="animate-fade-in h-full flex flex-col justify-between space-y-3.5">
+  <div>
+    <h2 class="text-xl sm:text-2xl font-bold mb-2 text-foreground leading-snug">
+      Connected Habit Chains
+    </h2>
+    <p class="text-muted-foreground text-sm leading-relaxed mb-3.5">
+      Link your public habits with friends through invite links and QR codes. Keep each other shining with quiet support.
+    </p>
+
+    <div class="space-y-3">
+      <!-- Shared Accountability Card -->
+      <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
+        <div class="w-10 h-10 rounded-2xl bg-primary/15 text-primary flex items-center justify-center shrink-0 border border-primary/20">
+          <lucide-icon name="link-2" class="w-5 h-5 text-primary"></lucide-icon>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-xs font-bold text-foreground mb-0.5">Shared Accountability</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Track your daily spark alongside a friend. No toxic leaderboards or pressure, just mutual presence and consistency.
+          </p>
+        </div>
+      </div>
+
+      <!-- Supportive Reactions Card -->
+      <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
+        <div class="w-10 h-10 rounded-2xl bg-teal-500/15 text-teal-600 flex items-center justify-center shrink-0 border border-teal-500/20">
+          <lucide-icon name="heart" class="w-5 h-5 text-teal-600"></lucide-icon>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-xs font-bold text-foreground mb-0.5">Micro Support &amp; Nudges</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Send warm heart reactions and gentle reminders when your friend completes their habit for the day.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button
+    (click)="next.emit()"
+    class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+  >
+    <span>Choose My Starting Spark</span>
+    <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+  </button>
+</div>

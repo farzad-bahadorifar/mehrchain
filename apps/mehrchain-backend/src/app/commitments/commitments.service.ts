@@ -31,11 +31,11 @@ export class CommitmentsService {
       },
     });
 
-    const todayStr = new Date().toDateString();
+    const todayUtc = new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
 
     return commitments.map((c) => {
       const isCompletedToday = c.lastCompletedDate
-        ? new Date(c.lastCompletedDate).toDateString() === todayStr
+        ? new Date(c.lastCompletedDate).toISOString().slice(0, 10) === todayUtc
         : false;
 
       return {
@@ -93,10 +93,10 @@ export class CommitmentsService {
     }
 
     const today = new Date();
-    const todayStr = today.toDateString();
+    const todayUtc = today.toISOString().slice(0, 10); // 'YYYY-MM-DD'
 
     const alreadyDone = commitment.lastCompletedDate
-      ? new Date(commitment.lastCompletedDate).toDateString() === todayStr
+      ? new Date(commitment.lastCompletedDate).toISOString().slice(0, 10) === todayUtc
       : false;
 
     if (alreadyDone) {
@@ -119,7 +119,7 @@ export class CommitmentsService {
         currentStreak: { increment: 1 },
         currentDay: Math.min(commitment.currentDay + 1, commitment.totalDays),
         lastCompletedDate: today,
-        history: { push: todayStr },
+        history: { push: todayUtc },
       },
     });
 

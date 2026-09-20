@@ -1,0 +1,98 @@
+<div class="animate-fade-in h-full flex flex-col justify-between space-y-4">
+  <div>
+    <h2 class="text-2xl font-bold mb-4 text-center text-foreground">
+      Commit for how long?
+    </h2>
+
+    <div class="grid grid-cols-4 gap-2 mb-5">
+      @for (days of [7, 14, 21]; track days) {
+        <button
+          type="button"
+          (click)="durationChanged.emit(days)"
+          class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 transition-all duration-300"
+          [class]="
+            selectedDuration() === days && !isCustomDuration() && !isNonStandardDuration()
+              ? 'border-primary bg-primary text-white shadow-md'
+              : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
+          "
+        >
+          <span class="text-base font-bold">{{ days }}</span>
+          <span class="text-[10px] font-medium uppercase">Days</span>
+        </button>
+      }
+
+      @if (isCustomDuration()) {
+        <div
+          class="flex flex-col items-center justify-center p-1 rounded-xl border-2 border-primary bg-card animate-fade-in"
+        >
+          <input
+            #durInput
+            type="number"
+            [value]="isNonStandardDuration() ? selectedDuration() : ''"
+            class="w-full text-center font-bold text-base outline-none bg-transparent text-primary"
+            placeholder="#"
+            (input)="durationChanged.emit(+durInput.value)"
+            (keyup.enter)="toggleCustomDuration.emit()"
+            autoFocus
+          />
+        </div>
+      } @else if (isNonStandardDuration()) {
+        <button
+          type="button"
+          (click)="toggleCustomDuration.emit()"
+          class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 border-primary bg-primary text-white shadow-md transition-all"
+        >
+          <span class="text-base font-bold">{{ selectedDuration() }}</span>
+          <span class="text-[10px] font-medium uppercase">Days</span>
+        </button>
+      } @else {
+        <button
+          type="button"
+          (click)="toggleCustomDuration.emit()"
+          class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 border-border text-muted-foreground hover:border-primary/50 hover:text-primary transition-all"
+        >
+          <lucide-icon name="plus" class="w-5 h-5 mb-0.5"></lucide-icon>
+          <span class="text-[10px] font-medium uppercase">Custom</span>
+        </button>
+      }
+    </div>
+
+    <!-- Why Textarea -->
+    <div
+      class="bg-gradient-to-br from-primary/5 to-accent/5 p-4 rounded-2xl border border-primary/10 flex gap-3 mb-3"
+    >
+      <div class="text-lg">💡</div>
+      <div class="w-full">
+        <span class="font-bold text-foreground block mb-1 text-xs">Why this matters?</span>
+        <textarea
+          [value]="whyText()"
+          (input)="whyTextChanged.emit($any($event.target).value)"
+          class="w-full bg-transparent text-xs text-muted-foreground resize-none focus:outline-none border-b border-primary/20 focus:border-primary h-12"
+          placeholder="Write your reason..."
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Daily Phone Reminder Time -->
+    <div class="p-3 rounded-2xl bg-muted/40 border border-border/40 flex items-center justify-between mb-1">
+      <div class="flex items-center gap-2 text-xs font-semibold text-foreground">
+        <lucide-icon name="bell" class="w-4 h-4 text-primary"></lucide-icon>
+        <span>Daily Reminder:</span>
+      </div>
+      <input
+        #timeInput
+        type="time"
+        [value]="reminderTime()"
+        (change)="reminderTimeChanged.emit(timeInput.value)"
+        class="bg-card border border-border/70 rounded-xl px-2.5 py-1 text-xs font-bold text-foreground outline-none cursor-pointer"
+      />
+    </div>
+  </div>
+
+  <button
+    (click)="proceedToSignUp.emit()"
+    class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 mt-2"
+  >
+    Continue to Save Progress <lucide-icon name="arrow-right" class="w-5 h-5"></lucide-icon>
+  </button>
+</div>

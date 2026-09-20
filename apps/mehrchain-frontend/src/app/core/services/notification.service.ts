@@ -91,7 +91,6 @@ export class NotificationService {
     }
 
     if (!Capacitor.isNativePlatform()) {
-      console.log('[NotificationService] Web fallback: Reminder scheduled (simulated):', config);
       return true;
     }
 
@@ -122,7 +121,6 @@ export class NotificationService {
       };
 
       await LocalNotifications.schedule(options);
-      console.log(`[NotificationService] Daily reminder #${config.id} scheduled for ${config.hour}:${config.minute}`);
       return true;
     } catch (err) {
       console.error('[NotificationService] Failed to schedule reminder:', err);
@@ -165,7 +163,6 @@ export class NotificationService {
     if (!Capacitor.isNativePlatform()) return;
 
     LocalNotifications.addListener('localNotificationActionPerformed', (notification: ActionPerformed) => {
-      console.log('[NotificationService] User tapped notification:', notification);
       const commitmentId = notification.notification.extra?.commitmentId;
       if (commitmentId) {
         // Can navigate or highlight active commitment

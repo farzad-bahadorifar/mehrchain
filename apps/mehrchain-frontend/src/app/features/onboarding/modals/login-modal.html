@@ -1,0 +1,184 @@
+<div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4">
+  <div
+    class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
+    (click)="close.emit()"
+  ></div>
+
+  <div
+    class="relative w-full max-w-md bg-card rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-white/10 overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar"
+  >
+    <div class="w-12 h-1.5 bg-muted rounded-full mx-auto mb-5 opacity-60"></div>
+
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-bold text-foreground">
+        {{ isForgotPasswordMode() ? 'Reset Password' : 'Sign In' }}
+      </h2>
+      <button
+        (click)="close.emit()"
+        class="w-8 h-8 rounded-full bg-muted/60 hover:bg-muted flex items-center justify-center transition-colors text-muted-foreground"
+      >
+        <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+      </button>
+    </div>
+
+    <div class="mx-auto mb-2 flex items-center justify-center">
+      <app-mero size="sm" [showGlow]="false" />
+    </div>
+
+    @if (!isForgotPasswordMode()) {
+      <p class="text-xs text-muted-foreground text-center mb-4">
+        Welcome back! Sign in to keep your streak glowing.
+      </p>
+
+      @if (isPrefilledFromSignUp()) {
+        <div class="px-3.5 py-2 mb-4 rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs font-medium flex items-center gap-2 animate-fade-in">
+          <lucide-icon name="info" class="w-4 h-4 shrink-0"></lucide-icon>
+          <span>Email pre-filled from your registration attempt.</span>
+        </div>
+      }
+
+      @if (loginError()) {
+        @if (isNoAccountFound()) {
+          <div class="p-3.5 mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-medium space-y-2 animate-fade-in">
+            <div class="flex items-center gap-1.5 justify-center">
+              <lucide-icon name="info" class="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400"></lucide-icon>
+              <span>No account exists with this email address.</span>
+            </div>
+            <button
+              type="button"
+              (click)="switchToSignUp.emit()"
+              class="w-full py-2 px-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl transition-all duration-200 text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-95"
+            >
+              <span>Create an Account (Sign Up)</span>
+              <lucide-icon name="arrow-right" class="w-3.5 h-3.5"></lucide-icon>
+            </button>
+          </div>
+        } @else {
+          <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center">
+            {{ loginError() }}
+          </div>
+        }
+      }
+
+      <div class="space-y-3.5 mb-5">
+        <div>
+          <label class="block text-xs font-bold text-muted-foreground uppercase mb-1.5 ml-1">Email or Username</label>
+          <div class="relative flex items-center">
+            <lucide-icon name="user" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
+            <input
+              type="text"
+              [value]="loginEmail()"
+              (input)="emailChange.emit($any($event.target).value)"
+              placeholder="you@example.com or @username"
+              autocomplete="username"
+              autocapitalize="none"
+              class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors font-medium"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1.5 ml-1 mr-1">
+            <label class="block text-xs font-bold text-muted-foreground uppercase">Password</label>
+            <button
+              type="button"
+              (click)="toggleForgotPassword.emit(true)"
+              class="text-[11px] text-primary hover:underline font-semibold"
+            >
+              Forgot password?
+            </button>
+          </div>
+          <div class="relative flex items-center">
+            <lucide-icon name="lock" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
+            <input
+              [type]="showLoginPassword() ? 'text' : 'password'"
+              [value]="loginPassword()"
+              (input)="passwordChange.emit($any($event.target).value)"
+              placeholder="Your password"
+              class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-11 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+              (keyup.enter)="login.emit()"
+            />
+            <button
+              type="button"
+              (click)="togglePassword.emit()"
+              class="absolute right-3.5 p-1 text-muted-foreground hover:text-foreground transition-colors"
+              title="Toggle password visibility"
+            >
+              <lucide-icon [name]="showLoginPassword() ? 'eye-off' : 'eye'" class="w-4 h-4"></lucide-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        (click)="login.emit()"
+        class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+      >
+        Sign In <lucide-icon name="arrow-right" class="w-5 h-5"></lucide-icon>
+      </button>
+    } @else {
+      <!-- Forgot Password View -->
+      <p class="text-xs text-muted-foreground text-center mb-4">
+        Enter your email to receive password recovery instructions.
+      </p>
+
+      @if (forgotPasswordSubmitted()) {
+        <div class="p-4 mb-5 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-700 dark:text-teal-300 text-xs font-semibold text-center space-y-2 animate-fade-in">
+          <div class="flex items-center justify-center gap-1.5">
+            <lucide-icon name="check-circle-2" class="w-5 h-5 text-teal-600"></lucide-icon>
+            <span>Reset link sent!</span>
+          </div>
+          <p class="text-[11px] font-normal leading-relaxed text-muted-foreground">
+            If an account exists for <strong class="text-foreground">{{ forgotPasswordEmail() }}</strong>, you will receive an email shortly.
+          </p>
+        </div>
+
+        <button
+          (click)="toggleForgotPassword.emit(false)"
+          class="w-full bg-primary text-primary-foreground py-3.5 rounded-2xl font-bold text-sm hover:bg-accent transition-all duration-300"
+        >
+          Back to Sign In
+        </button>
+      } @else {
+        @if (loginError()) {
+          <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center">
+            {{ loginError() }}
+          </div>
+        }
+
+        <div class="space-y-4 mb-5">
+          <div>
+            <label class="block text-xs font-bold text-muted-foreground uppercase mb-1.5 ml-1">Account Email</label>
+            <div class="relative flex items-center">
+              <lucide-icon name="mail" class="w-4 h-4 text-muted-foreground absolute left-4 pointer-events-none"></lucide-icon>
+              <input
+                type="email"
+                [value]="forgotPasswordEmail()"
+                (input)="forgotEmailChange.emit($any($event.target).value)"
+                placeholder="you@example.com"
+                class="w-full bg-muted/40 rounded-xl py-3.5 pl-14 pr-4 text-sm text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+                (keyup.enter)="forgotPasswordSubmit.emit()"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <button
+            (click)="forgotPasswordSubmit.emit()"
+            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+          >
+            Send Reset Instructions <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+          </button>
+          <button
+            type="button"
+            (click)="toggleForgotPassword.emit(false)"
+            class="w-full py-2.5 text-center text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
+          >
+            Cancel and back to Sign In
+          </button>
+        </div>
+      }
+    }
+  </div>
+</div>

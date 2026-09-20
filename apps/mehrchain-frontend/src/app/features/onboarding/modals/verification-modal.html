@@ -1,0 +1,108 @@
+<div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4">
+  <div
+    class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
+    (click)="close.emit()"
+  ></div>
+
+  <div
+    class="relative w-full max-w-md bg-card rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-white/10 overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar"
+  >
+    <div class="w-12 h-1.5 bg-muted rounded-full mx-auto mb-5 opacity-60"></div>
+
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+        <lucide-icon name="mail" class="w-5 h-5 text-primary"></lucide-icon>
+        Verify Your Email
+      </h2>
+      <button
+        (click)="close.emit()"
+        class="w-8 h-8 rounded-full bg-muted/60 hover:bg-muted flex items-center justify-center transition-colors text-muted-foreground"
+      >
+        <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+      </button>
+    </div>
+
+    <div class="mx-auto mb-3 flex items-center justify-center">
+      <app-mero size="sm" [showGlow]="false" />
+    </div>
+
+    <p class="text-xs text-muted-foreground text-center mb-4">
+      We sent a 6-digit confirmation code to
+      <strong class="text-foreground block mt-1 font-semibold">{{ signUpEmail() }}</strong>
+    </p>
+
+    @if (verificationError()) {
+      <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center animate-fade-in flex items-center justify-center gap-2">
+        <lucide-icon name="alert-circle" class="w-4 h-4 shrink-0"></lucide-icon>
+        <span>{{ verificationError() }}</span>
+      </div>
+    }
+
+    @if (verificationSuccess()) {
+      <div class="p-3 mb-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-medium text-center animate-fade-in flex items-center justify-center gap-2">
+        <lucide-icon name="check-circle-2" class="w-4 h-4 shrink-0"></lucide-icon>
+        <span>{{ verificationSuccess() }}</span>
+      </div>
+    }
+
+    <div class="space-y-4 mb-5">
+      <div>
+        <label class="block text-xs font-bold text-muted-foreground uppercase text-center mb-2">
+          Enter 6-Digit Code
+        </label>
+        <input
+          type="text"
+          maxlength="6"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          [value]="verificationCode()"
+          (input)="codeChange.emit($any($event.target).value)"
+          (keyup.enter)="verify.emit()"
+          placeholder="••••••"
+          class="w-full bg-muted/40 rounded-xl py-4 text-center text-2xl font-bold font-mono tracking-[0.35em] text-foreground border border-border focus:border-primary focus:bg-card focus:outline-none transition-colors"
+        />
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <button
+        (click)="verify.emit()"
+        [disabled]="isVerifying() || verificationCode().trim().length !== 6"
+        class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100"
+      >
+        @if (isVerifying()) {
+          <div class="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
+          <span>Verifying...</span>
+        } @else {
+          <span>Confirm &amp; Start Journey</span>
+          <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+        }
+      </button>
+
+      <div class="flex items-center justify-between pt-2 px-1">
+        <button
+          type="button"
+          (click)="close.emit()"
+          class="text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          Change Email
+        </button>
+
+        <button
+          type="button"
+          (click)="resend.emit()"
+          [disabled]="resendCooldown() > 0 || isResending()"
+          class="text-xs text-primary font-semibold hover:underline disabled:opacity-50 disabled:no-underline"
+        >
+          @if (resendCooldown() > 0) {
+            Resend code in {{ resendCooldown() }}s
+          } @else if (isResending()) {
+            Sending...
+          } @else {
+            Resend Code
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

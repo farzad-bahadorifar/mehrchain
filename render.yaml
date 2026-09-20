@@ -5,7 +5,7 @@ services:
     plan: free
     region: frankfurt
     buildCommand: npm ci && npx prisma generate --schema=apps/mehrchain-backend/prisma/schema.prisma && NX_DAEMON=false npx nx build mehrchain-backend
-    startCommand: node dist/mehrchain-backend/main.js
+    startCommand: node dist/apps/mehrchain-backend/main.js
     envVars:
       - key: NODE_ENV
         value: production

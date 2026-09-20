@@ -1,0 +1,15 @@
+<div class="flex flex-col h-full justify-end space-y-4">
+  <button
+    (click)="next.emit()"
+    class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300"
+  >
+    Start My Journey
+  </button>
+
+  <button
+    (click)="openLogin.emit()"
+    class="text-sm text-muted-foreground font-medium hover:text-primary transition-colors text-center"
+  >
+    I have an account
+  </button>
+</div>

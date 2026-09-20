@@ -1,0 +1,44 @@
+<div class="animate-fade-in h-full flex flex-col justify-between space-y-4">
+  <div>
+    <h2 class="text-xl sm:text-2xl font-bold mb-2 text-foreground leading-snug">
+      Why Walk Together?
+    </h2>
+    <p class="text-muted-foreground text-sm leading-relaxed mb-4">
+      A peaceful space to build consistency without pressure.
+    </p>
+
+    <div class="space-y-3">
+      <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
+        <div class="w-10 h-10 rounded-2xl bg-primary/15 text-primary flex items-center justify-center shrink-0 border border-primary/20">
+          <lucide-icon name="heart" class="w-5 h-5 text-primary"></lucide-icon>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-xs font-bold text-foreground mb-0.5">Gentle Companionship</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            No toxic pressure, streak shaming, or guilt. Mero stands by your side with quiet daily support.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-muted/40 border border-border/40 flex items-start gap-3.5 shadow-xs">
+        <div class="w-10 h-10 rounded-2xl bg-accent/15 text-accent flex items-center justify-center shrink-0 border border-accent/20">
+          <lucide-icon name="sparkles" class="w-5 h-5 text-accent"></lucide-icon>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-xs font-bold text-foreground mb-0.5">Meaningful Horizons</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Commit to 7, 14, or 21 days rooted in your personal purpose, celebrating every mindful step.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button
+    (click)="next.emit()"
+    class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+  >
+    <span>The Meaning of MehrChain</span>
+    <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+  </button>
+</div>
