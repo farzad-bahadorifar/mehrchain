@@ -17,33 +17,44 @@ enum Category {
   environment
 }
 
-// Status for two-way chain requests
-enum ChainRequestStatus {
+enum ChainStatus {
+  ACTIVE
+  RESTING
+  FADING
+  COMPLETED
+  DORMANT
+  DISCONNECTED
+}
+
+enum ChainInviteStatus {
   PENDING
   ACCEPTED
-  REJECTED
+  EXPIRED
   CANCELLED
 }
 
 // User model for persistent authentication and identity
 model User {
-  id                        String          @id @default(uuid())
-  email                     String          @unique
-  username                  String          @unique
+  id                        String    @id @default(uuid())
+  email                     String    @unique
+  username                  String    @unique
   name                      String?
   passwordHash              String
-  role                      String          @default("USER")
-  isEmailVerified           Boolean         @default(false)
+  role                      String    @default("USER")
+  isEmailVerified           Boolean   @default(false)
   verificationCode          String?
   verificationCodeExpiresAt DateTime?
-  metadata                  Json?           // Extensible metadata for future gamification & preferences
+  metadata                  Json? // Extensible metadata for future gamification & preferences
 
-  commitments               Commitment[]
-  sentChainRequests         ChainRequest[]  @relation("SentChainRequests")
-  receivedChainRequests     ChainRequest[]  @relation("ReceivedChainRequests")
+  commitments Commitment[]
 
-  createdAt                 DateTime        @default(now())
-  updatedAt                 DateTime        @updatedAt
+  // Relations for Chain
+  userChains    ChainConnection[] @relation("UserChains")
+  partnerChains ChainConnection[] @relation("PartnerChains")
+  chainInvites  ChainInvite[]     @relation("SenderInvites")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([username])
   @@map("users")
@@ -51,33 +62,36 @@ model User {
 
 // Core habit commitment model
 model Commitment {
-  id                    String          @id @default(uuid())
-  userId                String
-  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   title                 String
   category              Category
   why                   String?
   totalDays             Int
-  currentDay            Int             @default(0)
-  currentStreak         Int             @default(0)
-  startDate             DateTime        @default(now())
+  currentDay            Int       @default(0)
+  currentStreak         Int       @default(0)
+  consecutiveMissedDays Int       @default(0) // Used for Chain freeze logic
+  startDate             DateTime  @default(now())
   lastCompletedDate     DateTime?
   reminderTime          String?
-  isPublic              Boolean         @default(false)
-  isArchived            Boolean         @default(false)
+  isPublic              Boolean   @default(false)
+  isArchived            Boolean   @default(false)
 
-  rippleEffects         String[]        // Potential connected chain effects
-  history               String[]        // Legacy date strings
-  logs                  CommitmentLog[] // Granular completion logs
+  rippleEffects String[] // Potential connected chain effects
+  history       String[] // Legacy date strings
+  logs          CommitmentLog[] // Granular completion logs
 
-  senderChainRequests   ChainRequest[]  @relation("SenderCommitment")
-  receiverChainRequests ChainRequest[]  @relation("ReceiverCommitment")
+  // Relations for Chain
+  userChains    ChainConnection[] @relation("UserChainCommitment")
+  partnerChains ChainConnection[] @relation("PartnerChainCommitment")
+  chainInvites  ChainInvite[]     @relation("SenderCommitmentInvites")
 
-  metadata              Json?           // Extensible metadata for future modules
+  metadata Json? // Extensible metadata for future modules
 
-  createdAt             DateTime        @default(now())
-  updatedAt             DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@map("commitments")
@@ -89,37 +103,60 @@ model CommitmentLog {
   commitmentId String
   commitment   Commitment @relation(fields: [commitmentId], references: [id], onDelete: Cascade)
 
-  completedAt  DateTime   @default(now())
-  note         String?
-  metadata     Json?      // Future metrics (e.g. mood, energy level)
+  completedAt DateTime @default(now())
+  note        String?
+  metadata    Json? // Future metrics (e.g. mood, energy level)
 
   @@index([commitmentId])
   @@map("commitment_logs")
 }
 
-// Model for managing two-way chain connections & requests
-model ChainRequest {
-  id                   String             @id @default(uuid())
+// Two-way active chain connection between users
+model ChainConnection {
+  id String @id @default(uuid())
 
-  senderId             String
-  sender               User               @relation("SentChainRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  userId    String
+  partnerId String
 
-  receiverId           String
-  receiver             User               @relation("ReceivedChainRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+  userCommitmentId    String
+  partnerCommitmentId String
 
-  senderCommitmentId   String
-  senderCommitment     Commitment         @relation("SenderCommitment", fields: [senderCommitmentId], references: [id], onDelete: Cascade)
+  status                ChainStatus @default(ACTIVE)
+  consecutiveMissedDays Int         @default(0)
+  lastPartnerActivityAt DateTime?
+  lastNudgeSentAt       DateTime?
+  heartSent             Boolean     @default(false)
 
-  receiverCommitmentId String?
-  receiverCommitment   Commitment?        @relation("ReceiverCommitment", fields: [receiverCommitmentId], references: [id], onDelete: SetNull)
+  createdAt  DateTime  @default(now())
+  archivedAt DateTime?
 
-  status               ChainRequestStatus @default(PENDING)
+  user              User       @relation("UserChains", fields: [userId], references: [id], onDelete: Cascade)
+  partner           User       @relation("PartnerChains", fields: [partnerId], references: [id], onDelete: Cascade)
+  userCommitment    Commitment @relation("UserChainCommitment", fields: [userCommitmentId], references: [id], onDelete: Cascade)
+  partnerCommitment Commitment @relation("PartnerChainCommitment", fields: [partnerCommitmentId], references: [id], onDelete: Cascade)
 
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
+  @@unique([userId, partnerId, userCommitmentId])
+  @@map("chain_connections")
+}
 
-  @@unique([senderId, receiverId, senderCommitmentId])
-  @@index([receiverId, status])
-  @@index([senderId, status])
-  @@map("chain_requests")
+// Invite flow replacing old direct requests
+model ChainInvite {
+  id String @id @default(uuid())
+
+  senderId           String
+  senderCommitmentId String
+
+  inviteCode String            @unique @default(uuid())
+  status     ChainInviteStatus @default(PENDING)
+
+  acceptedById         String?
+  acceptedCommitmentId String?
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  sender           User       @relation("SenderInvites", fields: [senderId], references: [id], onDelete: Cascade)
+  senderCommitment Commitment @relation("SenderCommitmentInvites", fields: [senderCommitmentId], references: [id], onDelete: Cascade)
+
+  @@map("chain_invites")
 }
