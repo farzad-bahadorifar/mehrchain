@@ -6,23 +6,22 @@ import { AuthModule } from './auth/auth.module';
 import { CommitmentsModule } from './commitments/commitments.module';
 import { MailModule } from './mail/mail.module';
 import { PrismaModule } from './prisma/prisma.module';
-
 import { UsersModule } from './users/users.module';
+
+import { ScheduleModule } from '@nestjs/schedule';
+
+import { ChainModule } from './chain/chain.module';
+
 
 @Module({
   imports: [
-    ThrottlerModule.forRoot([
-      {
-        name: 'auth',
-        ttl: 60000, // 60 seconds window
-        limit: 10,  // max 10 requests per window
-      },
-    ]),
-    PrismaModule,
+    
+    ScheduleModule.forRoot(),
     MailModule,
     AuthModule,
     CommitmentsModule,
     UsersModule,
+    ChainModule,
   ],
   controllers: [AppController],
   providers: [AppService],
