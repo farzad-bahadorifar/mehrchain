@@ -124,6 +124,7 @@ npm run dev
 1. **State Management**: NgRx Signal Store with Facade pattern (`CommitmentStore` → `CommitmentService`)
 2. **Offline Strategy**: Optimistic local-first updates in localStorage, background sync to API when online
 3. **Auth**: JWT (30-day expiry) with OTP email verification; local dev fallback with `local_`/`mock_` token prefixes
-4. **Chain Feature**: Backend Prisma schema exists (`ChainRequest` model) but NO API controller/service yet. Frontend `ChainService` is localStorage-only.
+4. **Chain Feature**: Full design spec at `docs/chain_feature_spec.md`. New models: `ChainConnection` (support links) + `ChainInvite` (invite flow). Replaces old `ChainRequest`. Key rules: passive feed (no push), auto-notify on completion, 2-day freeze then auto-archive, heart icon-only reaction, contextual nudge button.
 5. **PWA**: Angular NGSW with `freshness` strategy for API data (3s timeout, 3-day cache)
 6. **Mobile**: Capacitor 8 with Ionic Angular (`mode: 'ios'`), Android builds via GitHub Actions CI
+7. **Mero Mascot**: Personality section removed. Customization limited to nickname + glow theme + dark/light mode until custom illustrations exist.

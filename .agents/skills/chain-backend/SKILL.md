@@ -3,79 +3,147 @@ name: chain-backend
 description: >-
   Use this skill when the user asks to build, implement, or work on the Chain
   feature backend API. This includes creating the ChainModule, ChainController,
-  ChainService, and related DTOs for managing chain requests between users.
+  ChainService, and related DTOs for managing chain connections between users.
+  Refer to docs/chain_feature_spec.md for the full design specification.
 ---
 
 # Build Chain Backend API
 
-The Chain feature is MehrChain's key differentiator — it connects users as "habit support partners." The database schema (`ChainRequest` model) already exists in Prisma, but there is NO controller or service yet.
+The Chain feature connects users as habit support partners. The complete design spec is at `docs/chain_feature_spec.md`.
 
 ## Current State
 
-- ✅ Prisma model `ChainRequest` exists with `PENDING/ACCEPTED/REJECTED/CANCELLED` status
-- ✅ Relations: `sender` → User, `receiver` → User, `senderCommitment` → Commitment, `receiverCommitment?` → Commitment
-- ✅ Unique constraint: `[senderId, receiverId, senderCommitmentId]`
+- ✅ Prisma model `ChainRequest` exists (legacy — will be replaced)
 - ❌ No `ChainModule`, `ChainController`, or `ChainService` exist
-- ❌ Frontend `ChainService` uses localStorage only (no API calls)
+- ❌ Frontend `ChainService` uses localStorage only
 
-## Implementation Steps
+## New Data Models (Prisma)
 
-### Step 1: Create Module Structure
+Replace the old `ChainRequest` model with two new models:
 
-Create these files in `apps/mehrchain-backend/src/app/chain/`:
+### `ChainConnection` — active link between two users' habits
+```prisma
+model ChainConnection {
+  id                    String      @id @default(uuid())
+  userId                String
+  partnerId             String
+  userCommitmentId      String
+  partnerCommitmentId   String
+  status                ChainStatus @default(ACTIVE)
+  consecutiveMissedDays Int         @default(0)
+  lastPartnerActivityAt DateTime?
+  lastNudgeSentAt       DateTime?
+  heartSent             Boolean     @default(false)
+  createdAt             DateTime    @default(now())
+  archivedAt            DateTime?
+
+  user              User       @relation("UserChains", fields: [userId], references: [id])
+  partner           User       @relation("PartnerChains", fields: [partnerId], references: [id])
+  userCommitment    Commitment @relation("UserChainCommitment", fields: [userCommitmentId], references: [id])
+  partnerCommitment Commitment @relation("PartnerChainCommitment", fields: [partnerCommitmentId], references: [id])
+
+  @@unique([userId, partnerId, userCommitmentId])
+}
+```
+
+### `ChainInvite` — invite link for joining a chain
+```prisma
+model ChainInvite {
+  id                   String            @id @default(uuid())
+  senderId             String
+  senderCommitmentId   String
+  inviteCode           String            @unique @default(uuid())
+  status               ChainInviteStatus @default(PENDING)
+  acceptedById         String?
+  acceptedCommitmentId String?
+  createdAt            DateTime          @default(now())
+  expiresAt            DateTime
+
+  sender           User       @relation(fields: [senderId], references: [id])
+  senderCommitment Commitment @relation(fields: [senderCommitmentId], references: [id])
+}
+```
+
+### New Enums
+```prisma
+enum ChainStatus {
+  ACTIVE
+  RESTING
+  FADING
+  COMPLETED
+  DORMANT
+  DISCONNECTED
+}
+
+enum ChainInviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  CANCELLED
+}
+```
+
+## Module Structure
 
 ```
-chain/
+apps/mehrchain-backend/src/app/chain/
 ├── chain.module.ts
 ├── chain.controller.ts
 ├── chain.service.ts
+├── chain-cron.service.ts          # Daily freeze/dormant checker
 └── dto/
-    ├── create-chain-request.dto.ts
-    └── respond-chain-request.dto.ts
+    ├── create-invite.dto.ts
+    ├── accept-invite.dto.ts
+    └── send-nudge.dto.ts
 ```
 
-### Step 2: DTOs
+## API Endpoints
 
-**`create-chain-request.dto.ts`:**
-- `receiverUsername: string` — `@IsNotEmpty()`, `@IsString()`
-- `senderCommitmentId: string` — `@IsNotEmpty()`, `@IsUUID()`
+| Method | Route | Auth | Purpose |
+|--------|-------|------|---------|
+| `POST` | `/api/chain/invite` | JWT | Generate invite for a public commitment |
+| `GET` | `/api/chain/invite/:code` | — | Get invite details (public) |
+| `POST` | `/api/chain/invite/:code/accept` | JWT | Accept invite with own commitment |
+| `DELETE` | `/api/chain/invite/:id` | JWT | Cancel own invite |
+| `GET` | `/api/chain/connections` | JWT | List active connections (sorted by lastActivityAt) |
+| `POST` | `/api/chain/connections/:id/heart` | JWT | Toggle heart (once per day) |
+| `POST` | `/api/chain/connections/:id/nudge` | JWT | Send nudge (only when Fading/Completed) |
+| `DELETE` | `/api/chain/connections/:id` | JWT | Disconnect chain |
+| `GET` | `/api/chain/unread` | JWT | Check unread activity (for navbar dot) |
 
-**`respond-chain-request.dto.ts`:**
-- `status: 'ACCEPTED' | 'REJECTED'` — `@IsEnum()`
-- `receiverCommitmentId?: string` — `@IsOptional()`, `@IsUUID()` (required when accepting)
+## Key Business Rules
 
-### Step 3: API Endpoints
+1. **Auto-notify on completion:** When `CommitmentsService.completeCommitment()` runs, also update `lastPartnerActivityAt` on all linked ChainConnections.
+2. **Cannot chain with yourself.**
+3. **Invite expires after 7 days.**
+4. **Nudge rate-limit:** Max 1 nudge per chain per 24 hours.
+5. **Heart resets daily:** `heartSent` resets to `false` at midnight.
 
-| Method | Route | Auth | DTO | Description |
-|--------|-------|------|-----|-------------|
-| `POST` | `/api/chain/request` | JWT | `CreateChainRequestDto` | Send chain request to another user |
-| `GET` | `/api/chain/requests/incoming` | JWT | — | List pending incoming requests |
-| `GET` | `/api/chain/requests/outgoing` | JWT | — | List outgoing requests (all statuses) |
-| `PATCH` | `/api/chain/requests/:id/respond` | JWT | `RespondChainRequestDto` | Accept or reject a request |
-| `DELETE` | `/api/chain/requests/:id` | JWT | — | Cancel a sent request (PENDING only) |
-| `GET` | `/api/chain/connections` | JWT | — | List active (ACCEPTED) chains with partner info |
-| `DELETE` | `/api/chain/connections/:id` | JWT | — | Disconnect from a chain |
+## Daily Cron Job (`chain-cron.service.ts`)
 
-### Step 4: Service Logic
+Runs at midnight UTC via `@nestjs/schedule`:
+1. For each ACTIVE/RESTING chain: check if partner completed yesterday
+2. If not completed: increment `consecutiveMissedDays`
+3. `missedDays == 1` → status = `RESTING`
+4. `missedDays == 2` → status = `FADING`
+5. `missedDays > 2` → status = `DORMANT`, archive the commitment, create Journey entry
+6. Reset `heartSent` to `false` for all connections
 
-Key business rules:
-1. **Cannot chain with yourself** — reject if `senderId === receiverId`
-2. **Unique constraint** — one active request per (sender, receiver, commitment) combination
-3. **Only PENDING requests can be accepted/rejected**
-4. **Cancellation** — only the sender can cancel, only while PENDING
-5. **Accept flow** — requires `receiverCommitmentId` to link the partner's habit
-6. **Connections query** — return ACCEPTED requests with joined User + Commitment data
+## Implementation Steps
 
-### Step 5: Register Module
-
-In `apps/mehrchain-backend/src/app/app.module.ts`, add `ChainModule` to imports:
-```typescript
-imports: [PrismaModule, MailModule, AuthModule, CommitmentsModule, UsersModule, ChainModule],
-```
+1. Run `npm install @nestjs/schedule` (for cron)
+2. Create Prisma migration with new models
+3. Create DTOs with class-validator decorators
+4. Implement `ChainService` with all business logic
+5. Implement `ChainCronService` for daily checks
+6. Create `ChainController` with Swagger decorators
+7. Register `ChainModule` in `app.module.ts`
+8. Modify `CommitmentsService.completeCommitment()` to auto-notify chains
 
 ## Validation
 
-1. Run tests: `npx nx test mehrchain-backend`
-2. Check Swagger: `http://localhost:3000/api/docs` — all chain endpoints should appear
-3. Manual test: Use Swagger UI to send a chain request between two test users
-4. Verify unique constraint: Sending duplicate request should return 409 Conflict
+1. Run: `npx nx test mehrchain-backend`
+2. Check Swagger: `http://localhost:3000/api/docs`
+3. Test: Create invite → accept → complete habit → verify partner feed updates
+4. Test: Miss 2 days → verify chain goes DORMANT
+5. Test: Nudge rate limit (second nudge within 24h should fail)

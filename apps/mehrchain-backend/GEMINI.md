@@ -41,6 +41,13 @@ src/app/
 │   ├── users.controller.ts    # GET search?q=, GET :username
 │   └── users.service.ts       # Case-insensitive search, public habits
 │
+├── chain/                     # Chain Support Network (Planned — see docs/chain_feature_spec.md)
+│   ├── chain.module.ts        # Imports PrismaModule, ScheduleModule
+│   ├── chain.controller.ts    # Invite CRUD, connections, heart, nudge, unread
+│   ├── chain.service.ts       # Business logic: invite, connect, freeze, nudge
+│   ├── chain-cron.service.ts  # Daily: check missed days, freeze/dormant transitions
+│   └── dto/                   # CreateInviteDto, AcceptInviteDto, SendNudgeDto
+│
 ├── mail/                      # Email Service
 │   ├── mail.module.ts         # @Global() — exports MailService
 │   └── mail.service.ts        # generateOtpCode(), sendVerificationEmail() (console fallback)

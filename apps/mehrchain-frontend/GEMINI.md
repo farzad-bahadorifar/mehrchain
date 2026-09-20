@@ -29,9 +29,9 @@
 |---------|------|---------------|
 | `AuthService` | `auth.service.ts` | Login, register, OTP verify, logout, session persistence |
 | `CommitmentService` | `commitment.service.ts` | Facade over CommitmentStore (CRUD, archive, restore) |
-| `ChainService` | `chain.service.ts` | Friend chains, invite links, reactions (**localStorage-only**) |
+| `ChainService` | `chain.service.ts` | Chain connections, invite links, heart react, nudge (**needs rewrite: localStorage → API, see `docs/chain_feature_spec.md`**) |
 | `MeroService` | `mero.service.ts` | Mascot emotional state (idle/happy/celebrating/etc.) |
-| `MeroCustomizationService` | `mero-customization.service.ts` | Glow themes, personality, nickname |
+| `MeroCustomizationService` | `mero-customization.service.ts` | Glow themes, nickname (**Personality section removed**) |
 | `ThemeService` | `theme.service.ts` | Dark/light/system mode |
 | `NotificationService` | `notification.service.ts` | Capacitor local notifications |
 
