@@ -1,6 +1,8 @@
 {
-  "name": "mehrchain-frontend",
-  "short_name": "mehrchain-frontend",
+  "name": "MehrChain",
+  "short_name": "MehrChain",
+  "theme_color": "#0d9488",
+  "background_color": "#0f172a",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
