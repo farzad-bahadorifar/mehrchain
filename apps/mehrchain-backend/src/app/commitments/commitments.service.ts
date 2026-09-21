@@ -2,10 +2,14 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCommitmentDto } from './dto/create-commitment.dto';
 import { UpdateCommitmentDto } from './dto/update-commitment.dto';
+import { ChainNotificationService } from '../chain/chain-notification.service';
 
 @Injectable()
 export class CommitmentsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly chainNotification: ChainNotificationService,
+  ) {}
 
   /**
    * Retrieves all active (non-archived) habit commitments for the specified user,
@@ -122,6 +126,11 @@ export class CommitmentsService {
         history: { push: todayUtc },
       },
     });
+
+    // Auto-notify: update lastPartnerActivityAt on all linked ChainConnections
+    // so the partner's feed reflects the new activity immediately.
+    // Fire-and-forget — error handling is inside ChainNotificationService.
+    void this.chainNotification.notifyChainPartners(commitment.id);
 
     return {
       ...updated,

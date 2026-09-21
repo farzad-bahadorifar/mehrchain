@@ -18,8 +18,12 @@ describe('CommitmentsService (Unit Tests)', () => {
     },
   };
 
+  const mockChainNotification = {
+    notifyChainPartners: jest.fn().mockResolvedValue(undefined),
+  };
+
   beforeEach(() => {
-    service = new CommitmentsService(mockPrisma as any);
+    service = new CommitmentsService(mockPrisma as any, mockChainNotification as any);
     jest.clearAllMocks();
   });
 
@@ -123,6 +127,47 @@ describe('CommitmentsService (Unit Tests)', () => {
       expect(mockPrisma.commitmentLog.create).not.toHaveBeenCalled();
       expect(mockPrisma.commitment.update).not.toHaveBeenCalled();
       expect(result.currentStreak).toBe(5);
+    });
+
+    it('should call notifyChainPartners after a successful new completion', async () => {
+      const yesterday = new Date(Date.now() - 86400000);
+      mockPrisma.commitment.findUnique.mockResolvedValue({
+        id: 'comm-1',
+        userId: 'user-1',
+        currentStreak: 1,
+        currentDay: 1,
+        totalDays: 21,
+        lastCompletedDate: yesterday,
+      });
+      mockPrisma.commitmentLog.create.mockResolvedValue({ id: 'log-1' });
+      mockPrisma.commitment.update.mockResolvedValue({
+        id: 'comm-1',
+        userId: 'user-1',
+        currentStreak: 2,
+        currentDay: 2,
+        totalDays: 21,
+        lastCompletedDate: new Date(),
+      });
+
+      await service.completeCommitment('user-1', 'comm-1');
+
+      expect(mockChainNotification.notifyChainPartners).toHaveBeenCalledWith('comm-1');
+    });
+
+    it('should NOT call notifyChainPartners if commitment was already completed today', async () => {
+      const today = new Date();
+      mockPrisma.commitment.findUnique.mockResolvedValue({
+        id: 'comm-1',
+        userId: 'user-1',
+        currentStreak: 3,
+        currentDay: 3,
+        totalDays: 21,
+        lastCompletedDate: today,
+      });
+
+      await service.completeCommitment('user-1', 'comm-1');
+
+      expect(mockChainNotification.notifyChainPartners).not.toHaveBeenCalled();
     });
 
     it('should throw ForbiddenException if commitment belongs to another user', async () => {
