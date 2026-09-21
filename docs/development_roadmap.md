@@ -1,0 +1,161 @@
+# MehrChain — Development Roadmap
+
+> From v0.9.0-preview to production-ready v1.0 and beyond.
+> Updated: 2026-09-21
+
+---
+
+## Infrastructure (Completed ✅)
+
+All deployment infrastructure is set up on **free-tier** services, sufficient for 200–500 test users:
+
+| Service | Provider | Status | URL |
+|---------|----------|--------|-----|
+| **Frontend** | Cloudflare Pages | ✅ Live | `https://mehrchain.pages.dev` |
+| **Backend API** | Render (Free) | ✅ Live | `https://mehrchain-api.onrender.com` |
+| **Database** | Neon PostgreSQL (Free: 0.5 GB) | ✅ Connected | — |
+| **SMTP Email** | Console fallback (Resend planned) | ⏳ Pending | — |
+| **Android APK** | GitHub Actions CI | ✅ Configured | — |
+
+> **Cost: $0/month** — No domain or paid hosting needed until 200+ users.
+
+---
+
+## Phase 1: Chain Engine (Priority: Critical) — 🔧 In Progress
+
+> Build the core social feature — the heart of "Mehr" (kindness) in MehrChain.
+
+### Backend (`chain-backend` skill)
+
+| Task | Status | Details |
+|------|--------|---------|
+| Prisma schema migration | ✅ Done | Replaced `ChainRequest` with `ChainConnection` + `ChainInvite` models |
+| `ChainModule` | ✅ Done | Controller, Service, DTOs with Swagger decorators |
+| `ChainCronService` | ✅ Done | Daily midnight job: check missed days, RESTING → FADING → DORMANT transitions |
+| Auto-notify on completion | ⏳ TODO | Modify `CommitmentsService.completeCommitment()` to update chain feeds |
+| Unit tests | ⏳ TODO | Jest tests for all service methods + edge cases |
+| DB migration on Neon | ✅ Auto | `prisma db push` runs automatically on every Render deploy |
+
+### Frontend (`chain-frontend-integration` skill)
+
+| Task | Status | Details |
+|------|--------|---------|
+| Rewrite `ChainService` | ⏳ TODO | localStorage → API hybrid (same pattern as `CommitmentStore`) |
+| New `ChainCardComponent` | ⏳ TODO | Minimal card with 5 states (completed/waiting/resting/fading/completed-period) |
+| Remove clutter | ⏳ TODO | Delete: Ring the Bell, Send Love/Cheer/Nudge buttons, all emojis, demo chain |
+| Unread dot on navbar | ⏳ TODO | Teal dot on Chain tab when partner has new activity |
+| Invite section cleanup | ⏳ TODO | Keep link/QR sharing, remove emojis, use Lucide icons |
+
+### Reference
+
+- Full design spec: `docs/chain_feature_spec.md`
+- Backend skill: `.agents/skills/chain-backend/SKILL.md`
+- Frontend skill: `.agents/skills/chain-frontend-integration/SKILL.md`
+
+---
+
+## Phase 2: Technical Debt & Security (Priority: High) — ✅ Partially Done
+
+> Clean up code, harden security, and reduce complexity before going live.
+
+### Security Hardening ✅
+
+| Task | Status | Details |
+|------|--------|---------|
+| CORS lockdown | ✅ Done | Strict allowed origins: `.pages.dev` + `localhost` |
+| Rate limiting | ✅ Done | `@nestjs/throttler` on auth endpoints |
+| JWT_SECRET check | ✅ Done | Startup fails if missing in production |
+| PWA app name fix | ✅ Done | `mehrchain-frontend` → `MehrChain` in manifest + HTML title |
+
+### Onboarding Refactor (`onboarding-refactor` skill)
+
+| Task | Status | Details |
+|------|--------|---------|
+| Split `OnboardingComponent` | ⏳ TODO | Extract 500-line god component into step components |
+| Extract auth modals | ⏳ TODO | `LoginModal`, `VerificationModal`, `ForgotPasswordModal` as standalone |
+
+### Mero Cleanup
+
+| Task | Status | Details |
+|------|--------|---------|
+| Remove Personality section | ⏳ TODO | Delete Energetic/Calm/Focused selector from Profile page |
+| Remove `console.log` debug calls | ⏳ TODO | Clean up all debug logging from frontend services |
+
+---
+
+## Phase 3: Production Polish (Priority: High)
+
+> This phase is simplified — no domain purchase or server migration needed.
+> We already have live infrastructure on free-tier services.
+
+| Task | Status | Details |
+|------|--------|---------|
+| SMTP setup (Resend) | ⏳ TODO | Free tier: 3K emails/month for real OTP emails |
+| Signed APK release | ⏳ TODO | Configure keystore for release builds via GitHub Actions |
+| CI: backend tests | ⏳ TODO | Run `npx nx test mehrchain-backend` in GitHub Actions |
+| Auto-deploy on merge | ✅ Done | Render + Cloudflare auto-deploy on push to `main` |
+
+---
+
+## Phase 4: UX Polish & Design System (Priority: Medium)
+
+> Standardize the visual language, improve accessibility, and add end-to-end tests.
+
+### Design System Documentation (`design-system-docs` skill)
+
+| Task | Details |
+|------|---------|
+| Document design tokens | HSL colors, shadows, radius, typography |
+| Component catalog | `McButton`, `McBadge`, `McCard` variants and usage |
+| Dark/light theme guide | CSS variable mapping documentation |
+
+### Accessibility (`a11y-improvements` skill)
+
+| Task | Details |
+|------|---------|
+| ARIA labels | All interactive elements, modals, forms |
+| Keyboard navigation | Full tab flow through all pages |
+| Motion preferences | `prefers-reduced-motion` media query for animations |
+| Color contrast | WCAG AA compliance check on all text |
+
+### E2E Tests
+
+| Task | Details |
+|------|---------|
+| API integration tests | Supertest in `mehrchain-backend-e2e`: register → verify → create habit → complete |
+| Chain flow test | Create invite → accept → complete → verify feed update → miss 3 days → verify dormant |
+
+---
+
+## Phase 5: Future Growth (Priority: Low — Post v1.0)
+
+> Expand to international audiences and add real-time features.
+
+### Internationalization (`i18n-setup` skill)
+
+| Task | Details |
+|------|---------|
+| Install Transloco | `@jsverse/transloco` setup |
+| Extract strings | All UI text to `en.json` |
+| Add Farsi | `fa.json` with RTL layout switch |
+| Language switcher | In Profile settings |
+
+### WebSocket Real-Time
+
+| Task | Details |
+|------|---------|
+| NestJS Gateway | WebSocket gateway for chain activity broadcasts |
+| Live feed updates | Chain page updates without refresh when partner completes |
+| Typing/presence | Optional: show when chain partner is active in app |
+
+---
+
+## Version Milestones
+
+| Version | Phase | Key Deliverable |
+|---------|-------|-----------------|
+| **v0.9.1** | Phase 1 | Chain backend API + frontend redesign complete |
+| **v0.9.2** | Phase 2 | Onboarding refactored + remaining security items |
+| **v1.0.0** | Phase 3 | SMTP live, signed APK, CI tests passing |
+| **v1.1.0** | Phase 4 | Design system documented, a11y compliant, E2E tests |
+| **v1.2.0** | Phase 5 | Multi-language support (EN + FA) |
