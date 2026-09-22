@@ -1,7 +1,7 @@
 # MehrChain — Development Roadmap
 
 > From v0.9.0-preview to production-ready v1.0 and beyond.
-> Updated: 2026-09-21
+> Updated: 2026-09-22
 
 ---
 
@@ -27,24 +27,24 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 ### Backend (`chain-backend` skill)
 
-| Task | Status | Details |
-|------|--------|---------|
-| Prisma schema migration | ✅ Done | Replaced `ChainRequest` with `ChainConnection` + `ChainInvite` models |
-| `ChainModule` | ✅ Done | Controller, Service, DTOs with Swagger decorators |
-| `ChainCronService` | ✅ Done | Daily midnight job: check missed days, RESTING → FADING → DORMANT transitions |
-| Auto-notify on completion | ⏳ TODO | Modify `CommitmentsService.completeCommitment()` to update chain feeds |
-| Unit tests | ⏳ TODO | Jest tests for all service methods + edge cases |
-| DB migration on Neon | ✅ Auto | `prisma db push` runs automatically on every Render deploy |
+| Task | Status | Issue | Details |
+|------|--------|-------|---------|
+| Prisma schema migration | ✅ Done | — | Replaced `ChainRequest` with `ChainConnection` + `ChainInvite` models |
+| `ChainModule` | ✅ Done | — | Controller, Service, DTOs with Swagger decorators |
+| `ChainCronService` | ✅ Done | — | Daily midnight job: RESTING → FADING → DORMANT transitions |
+| Auto-notify on completion | ✅ Done | — | `ChainNotificationService` updates partner feed on habit completion |
+| Unit tests | ⏳ TODO | [#6](https://github.com/farzad-bahadorifar/mehrchain/issues/6) | Jest tests for all service methods + edge cases |
+| DB migration on Neon | ✅ Auto | — | `prisma db push` runs automatically on every Render deploy |
 
 ### Frontend (`chain-frontend-integration` skill)
 
-| Task | Status | Details |
-|------|--------|---------|
-| Rewrite `ChainService` | ⏳ TODO | localStorage → API hybrid (same pattern as `CommitmentStore`) |
-| New `ChainCardComponent` | ⏳ TODO | Minimal card with 5 states (completed/waiting/resting/fading/completed-period) |
-| Remove clutter | ⏳ TODO | Delete: Ring the Bell, Send Love/Cheer/Nudge buttons, all emojis, demo chain |
-| Unread dot on navbar | ⏳ TODO | Teal dot on Chain tab when partner has new activity |
-| Invite section cleanup | ⏳ TODO | Keep link/QR sharing, remove emojis, use Lucide icons |
+| Task | Status | Issue | Details |
+|------|--------|-------|---------|
+| Rewrite `ChainService` | ⏳ TODO | [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | localStorage → API hybrid (same pattern as `CommitmentStore`) |
+| New `ChainCardComponent` | ⏳ TODO | [#8](https://github.com/farzad-bahadorifar/mehrchain/issues/8) | Minimal card with 5 states |
+| Remove clutter | ⏳ TODO | [#9](https://github.com/farzad-bahadorifar/mehrchain/issues/9) | Delete: Ring the Bell, Send Love/Cheer/Nudge, emojis, demo chain |
+| Unread dot on navbar | ⏳ TODO | [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Teal dot on Chain tab when partner has new activity |
+| Invite section cleanup | ⏳ TODO | [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Keep link/QR sharing, use Lucide icons |
 
 ### Reference
 
@@ -69,17 +69,16 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 ### Onboarding Refactor (`onboarding-refactor` skill)
 
-| Task | Status | Details |
-|------|--------|---------|
-| Split `OnboardingComponent` | ⏳ TODO | Extract 500-line god component into step components |
-| Extract auth modals | ⏳ TODO | `LoginModal`, `VerificationModal`, `ForgotPasswordModal` as standalone |
+| Task | Status | Issue | Details |
+|------|--------|-------|---------|
+| Split `OnboardingComponent` | ⏳ TODO | [#12](https://github.com/farzad-bahadorifar/mehrchain/issues/12) | Extract 500-line god component into step components + auth modals |
 
 ### Mero Cleanup
 
-| Task | Status | Details |
-|------|--------|---------|
-| Remove Personality section | ⏳ TODO | Delete Energetic/Calm/Focused selector from Profile page |
-| Remove `console.log` debug calls | ⏳ TODO | Clean up all debug logging from frontend services |
+| Task | Status | Issue | Details |
+|------|--------|-------|---------|
+| Remove Personality section | ⏳ TODO | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Delete Energetic/Calm/Focused selector from Profile page |
+| Remove `console.log` debug calls | ⏳ TODO | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Clean up all debug logging from frontend services |
 
 ---
 
@@ -88,12 +87,12 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 > This phase is simplified — no domain purchase or server migration needed.
 > We already have live infrastructure on free-tier services.
 
-| Task | Status | Details |
-|------|--------|---------|
-| SMTP setup (Resend) | ⏳ TODO | Free tier: 3K emails/month for real OTP emails |
-| Signed APK release | ⏳ TODO | Configure keystore for release builds via GitHub Actions |
-| CI: backend tests | ⏳ TODO | Run `npx nx test mehrchain-backend` in GitHub Actions |
-| Auto-deploy on merge | ✅ Done | Render + Cloudflare auto-deploy on push to `main` |
+| Task | Status | Issue | Details |
+|------|--------|-------|---------|
+| SMTP setup (Resend) | ⏳ TODO | [#17](https://github.com/farzad-bahadorifar/mehrchain/issues/17) | Free tier: 3K emails/month for real OTP emails |
+| Signed APK release | ⏳ TODO | [#15](https://github.com/farzad-bahadorifar/mehrchain/issues/15) | Configure keystore for release builds via GitHub Actions |
+| CI: backend tests | ⏳ TODO | [#16](https://github.com/farzad-bahadorifar/mehrchain/issues/16) | Run `npx nx test mehrchain-backend` in GitHub Actions |
+| Auto-deploy on merge | ✅ Done | — | Render + Cloudflare auto-deploy on push to `main` |
 
 ---
 
