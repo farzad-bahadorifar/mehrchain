@@ -40,7 +40,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 | Task | Status | Issue | Target Date | Details |
 |------|--------|-------|-------------|---------|
-| Rewrite `ChainService` | 🔧 In Progress | [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | Sep 23 | localStorage → API hybrid (same pattern as `CommitmentStore`) |
+| Rewrite `ChainService` | ✅ Done | [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | Sep 23 | localStorage → API hybrid (same pattern as `CommitmentStore`) |
 | New `ChainCardComponent` | ⏳ TODO | [#8](https://github.com/farzad-bahadorifar/mehrchain/issues/8) | Sep 24 | Minimal card with 5 states |
 | Remove clutter | ⏳ TODO | [#9](https://github.com/farzad-bahadorifar/mehrchain/issues/9) | Sep 24 | Delete: Ring the Bell, Send Love/Cheer/Nudge, emojis, demo chain |
 | Unread dot on navbar | ⏳ TODO | [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Sep 25 | Teal dot on Chain tab when partner has new activity |
