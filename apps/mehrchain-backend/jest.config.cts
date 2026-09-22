@@ -7,6 +7,7 @@ module.exports = {
   },
   moduleNameMapper: {
     '^@nestjs/jwt$': '<rootDir>/src/testing/jwt.mock.ts',
+    '^@nestjs/schedule$': '<rootDir>/src/testing/schedule.mock.ts',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/mehrchain-backend',
