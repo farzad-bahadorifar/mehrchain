@@ -67,6 +67,18 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | JWT_SECRET check | ✅ Done | Startup fails if missing in production |
 | PWA app name fix | ✅ Done | `mehrchain-frontend` → `MehrChain` in manifest + HTML title |
 
+### Mobile & PWA UX Optimization ✅
+
+| Task | Status | Issue | Details |
+|------|--------|-------|---------|
+| PWA Viewport, Zoom & Mobile Layout Fit | ✅ Done | [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Disabled pinch zoom, eliminated bounce scroll (`overscroll-behavior: none`), locked height with `100dvh`, and optimized responsive onboarding & modal cards |
+
+### Form & Commitment Validation ✅
+
+| Task | Status | Issue | Details |
+|------|--------|-------|---------|
+| Custom duration validation (Zero rejection) | ✅ Done | [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Disallow 0 or negative days in custom duration inputs (`NewCommitmentModal`, `EditCommitmentModal`, `DetailsStepComponent`), highlight borders in red (`border-red-500 bg-red-500/10`), display error message, and prevent saving/submitting |
+
 ### Onboarding Refactor (`onboarding-refactor` skill)
 
 | Task | Status | Issue | Details |
