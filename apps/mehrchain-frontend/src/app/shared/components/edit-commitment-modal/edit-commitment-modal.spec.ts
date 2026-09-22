@@ -67,6 +67,21 @@ describe('EditCommitmentModal', () => {
     });
   });
 
+  it('should invalidate and prevent submit when custom duration is 0 or negative', () => {
+    const saveSpy = vi.fn();
+    component.save.subscribe(saveSpy);
+
+    component.toggleCustomDuration();
+    component.onCustomDurationInput('0');
+
+    expect(component.duration()).toBe(0);
+    expect(component.isDurationValid()).toBe(false);
+    expect(component.isValid()).toBe(false);
+
+    component.onSubmit();
+    expect(saveSpy).not.toHaveBeenCalled();
+  });
+
   it('should emit close when Cancel is clicked', () => {
     const closeSpy = vi.fn();
     component.close.subscribe(closeSpy);

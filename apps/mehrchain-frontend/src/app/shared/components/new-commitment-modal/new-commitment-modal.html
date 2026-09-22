@@ -109,16 +109,24 @@
 
         @if (isCustomDuration()) {
           <div
-            class="flex-1 min-w-[50px] flex items-center justify-center p-0.5 rounded-xl border-2 border-primary bg-card animate-fade-in"
+            class="flex-1 min-w-[50px] flex items-center justify-center p-0.5 rounded-xl border-2 transition-all animate-fade-in"
+            [class]="
+              !isDurationValid()
+                ? 'border-red-500 bg-red-500/10 text-red-500 ring-2 ring-red-500/20'
+                : 'border-primary bg-card'
+            "
           >
             <input
               #durInput
               type="number"
-              [value]="isNonStandardDuration() ? duration() : ''"
-              class="w-full text-center font-bold text-sm outline-none bg-transparent h-full py-1 text-primary"
+              min="1"
+              max="365"
+              [value]="isNonStandardDuration() ? (duration() > 0 ? duration() : (duration() === 0 ? 0 : '')) : ''"
+              class="w-full text-center font-bold text-sm outline-none bg-transparent h-full py-1 transition-colors"
+              [class]="!isDurationValid() ? 'text-red-500 placeholder:text-red-400/50' : 'text-primary'"
               placeholder="#"
               (input)="onCustomDurationInput(durInput.value)"
-              (keyup.enter)="isCustomDuration.set(false)"
+              (keyup.enter)="onCustomDurationEnter()"
               autoFocus
             />
           </div>
@@ -141,6 +149,12 @@
           </button>
         }
       </div>
+
+      @if (isCustomDuration() && !isDurationValid()) {
+        <p class="text-[11px] text-red-500 mt-1.5 font-medium animate-fade-in">
+          Duration must be at least 1 day
+        </p>
+      }
     </div>
 
     <!-- Reminder Time -->
@@ -159,7 +173,8 @@
     <!-- Submit Button -->
     <button
       (click)="handleSubmit()"
-      class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/20 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2"
+      [disabled]="!isValid()"
+      class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/20 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed"
     >
       <span>Start Journey</span>
       <lucide-icon name="sparkles" class="w-5 h-5"></lucide-icon>

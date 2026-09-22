@@ -20,4 +20,53 @@ describe('NewCommitmentModal', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should invalidate and prevent submit when duration is 0 or negative', () => {
+    const submitSpy = vi.fn();
+    component.submit.subscribe(submitSpy);
+
+    component.title.set('Morning Jog');
+    component.toggleCustomDuration();
+    component.onCustomDurationInput('0');
+
+    expect(component.duration()).toBe(0);
+    expect(component.isDurationValid()).toBe(false);
+    expect(component.isValid()).toBe(false);
+
+    component.handleSubmit();
+    expect(submitSpy).not.toHaveBeenCalled();
+  });
+
+  it('should allow submit when custom duration is valid (> 0)', () => {
+    const submitSpy = vi.fn();
+    component.submit.subscribe(submitSpy);
+
+    component.title.set('Morning Jog');
+    component.toggleCustomDuration();
+    component.onCustomDurationInput('30');
+
+    expect(component.duration()).toBe(30);
+    expect(component.isDurationValid()).toBe(true);
+    expect(component.isValid()).toBe(true);
+
+    component.handleSubmit();
+    expect(submitSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: 'Morning Jog',
+        totalDays: 30,
+      })
+    );
+  });
+
+  it('should reject submission when title is too short regardless of duration', () => {
+    const submitSpy = vi.fn();
+    component.submit.subscribe(submitSpy);
+
+    component.title.set('A');
+    component.setStandardDuration(21);
+
+    expect(component.isValid()).toBe(false);
+    component.handleSubmit();
+    expect(submitSpy).not.toHaveBeenCalled();
+  });
 });

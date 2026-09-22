@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, computed, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
@@ -20,6 +20,9 @@ export class NewCommitmentModal {
   category = signal('health');
   isPublic = signal(false);
   reminderTime = signal('08:30');
+
+  isDurationValid = computed(() => this.duration() > 0);
+  isValid = computed(() => this.title().trim().length >= 2 && this.isDurationValid());
 
   categories = [
     { id: 'health', icon: 'heart', label: 'Health' },
@@ -58,9 +61,17 @@ export class NewCommitmentModal {
   }
 
   onCustomDurationInput(value: string) {
+    if (value.trim() === '') {
+      this.duration.set(0);
+      return;
+    }
     const days = parseInt(value, 10);
-    if (days > 0) {
-      this.duration.set(days);
+    this.duration.set(isNaN(days) ? 0 : days);
+  }
+
+  onCustomDurationEnter() {
+    if (this.isDurationValid()) {
+      this.isCustomDuration.set(false);
     }
   }
 
@@ -69,7 +80,7 @@ export class NewCommitmentModal {
   }
 
   handleSubmit() {
-    if (this.title().trim().length < 2) return;
+    if (!this.isValid()) return;
 
     this.submit.emit({
       title: this.title().trim(),

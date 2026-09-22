@@ -204,7 +204,9 @@ export class OnboardingComponent implements OnInit {
 
   setDuration(days: number) {
     this.selectedDuration.set(days);
-    this.isCustomDuration.set(false);
+    if ([7, 14, 21].includes(days)) {
+      this.isCustomDuration.set(false);
+    }
   }
 
   toggleCustomDuration() {
@@ -215,6 +217,8 @@ export class OnboardingComponent implements OnInit {
     const days = parseInt(value, 10);
     if (days > 0) {
       this.selectedDuration.set(days);
+    } else {
+      this.selectedDuration.set(0);
     }
   }
 
@@ -244,7 +248,12 @@ export class OnboardingComponent implements OnInit {
     }
   }
 
+  skipToMain() {
+    this.step.set(6);
+  }
+
   proceedToSignUp() {
+    if (this.selectedDuration() <= 0) return;
     this.step.set(7);
   }
 

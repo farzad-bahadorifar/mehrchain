@@ -30,21 +30,21 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | Task | Status | Issue | Details |
 |------|--------|-------|---------|
 | Prisma schema migration | ✅ Done | — | Replaced `ChainRequest` with `ChainConnection` + `ChainInvite` models |
-| `ChainModule` | ✅ Done | — | Controller, Service, DTOs with Swagger decorators |
+| `ChainModule` | ✅ Done | [#2](https://github.com/farzad-bahadorifar/mehrchain/issues/2) | Controller, Service, DTOs with Swagger decorators |
 | `ChainCronService` | ✅ Done | — | Daily midnight job: RESTING → FADING → DORMANT transitions |
 | Auto-notify on completion | ✅ Done | — | `ChainNotificationService` updates partner feed on habit completion |
-| Unit tests | ⏳ TODO | [#6](https://github.com/farzad-bahadorifar/mehrchain/issues/6) | Jest tests for all service methods + edge cases |
+| Unit tests (ChainService + Cron) | ✅ Done | [#6](https://github.com/farzad-bahadorifar/mehrchain/issues/6) | 76 unit tests passing across all services + edge cases |
 | DB migration on Neon | ✅ Auto | — | `prisma db push` runs automatically on every Render deploy |
 
 ### Frontend (`chain-frontend-integration` skill)
 
-| Task | Status | Issue | Details |
-|------|--------|-------|---------|
-| Rewrite `ChainService` | ⏳ TODO | [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | localStorage → API hybrid (same pattern as `CommitmentStore`) |
-| New `ChainCardComponent` | ⏳ TODO | [#8](https://github.com/farzad-bahadorifar/mehrchain/issues/8) | Minimal card with 5 states |
-| Remove clutter | ⏳ TODO | [#9](https://github.com/farzad-bahadorifar/mehrchain/issues/9) | Delete: Ring the Bell, Send Love/Cheer/Nudge, emojis, demo chain |
-| Unread dot on navbar | ⏳ TODO | [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Teal dot on Chain tab when partner has new activity |
-| Invite section cleanup | ⏳ TODO | [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Keep link/QR sharing, use Lucide icons |
+| Task | Status | Issue | Target Date | Details |
+|------|--------|-------|-------------|---------|
+| Rewrite `ChainService` | 🔧 In Progress | [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | Sep 23 | localStorage → API hybrid (same pattern as `CommitmentStore`) |
+| New `ChainCardComponent` | ⏳ TODO | [#8](https://github.com/farzad-bahadorifar/mehrchain/issues/8) | Sep 24 | Minimal card with 5 states |
+| Remove clutter | ⏳ TODO | [#9](https://github.com/farzad-bahadorifar/mehrchain/issues/9) | Sep 24 | Delete: Ring the Bell, Send Love/Cheer/Nudge, emojis, demo chain |
+| Unread dot on navbar | ⏳ TODO | [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Sep 25 | Teal dot on Chain tab when partner has new activity |
+| Invite section cleanup | ⏳ TODO | [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Sep 25 | Keep link/QR sharing, use Lucide icons |
 
 ### Reference
 

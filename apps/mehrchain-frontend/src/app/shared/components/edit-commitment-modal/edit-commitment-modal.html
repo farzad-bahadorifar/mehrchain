@@ -107,13 +107,24 @@
                 type="number"
                 min="1"
                 max="365"
-                [value]="duration()"
+                [value]="duration() > 0 ? duration() : (duration() === 0 ? 0 : '')"
                 (input)="onCustomDurationInput($any($event.target).value)"
-                class="w-full py-2.5 rounded-xl border border-primary bg-primary text-white font-bold text-center text-xs focus:outline-none ring-2 ring-primary/40 shadow-sm"
+                class="w-full py-2.5 rounded-xl border font-bold text-center text-xs focus:outline-none ring-2 shadow-sm transition-all"
+                [class]="
+                  !isDurationValid()
+                    ? 'border-red-500 bg-red-500/10 text-red-500 ring-red-500/20'
+                    : 'border-primary bg-primary text-white ring-primary/40'
+                "
               />
             </div>
           }
         </div>
+
+        @if (isCustomDuration() && !isDurationValid()) {
+          <p class="text-[11px] text-red-500 mt-1.5 font-medium animate-fade-in">
+            Duration must be at least 1 day
+          </p>
+        }
       </div>
 
       <!-- Daily Reminder Time -->
@@ -172,6 +183,7 @@
           size="lg"
           [fullWidth]="true"
           type="submit"
+          [disabled]="!isValid()"
         >
           Save Changes
         </mc-button>

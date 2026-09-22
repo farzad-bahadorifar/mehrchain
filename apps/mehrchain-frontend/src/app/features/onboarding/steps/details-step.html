@@ -4,7 +4,7 @@
       Commit for how long?
     </h2>
 
-    <div class="grid grid-cols-4 gap-2 mb-5">
+    <div class="grid grid-cols-4 gap-2 mb-2">
       @for (days of [7, 14, 21]; track days) {
         <button
           type="button"
@@ -23,16 +23,24 @@
 
       @if (isCustomDuration()) {
         <div
-          class="flex flex-col items-center justify-center p-1 rounded-xl border-2 border-primary bg-card animate-fade-in"
+          class="flex flex-col items-center justify-center p-1 rounded-xl border-2 transition-all animate-fade-in"
+          [class]="
+            !isDurationValid()
+              ? 'border-red-500 bg-red-500/10 ring-2 ring-red-500/20 text-red-500'
+              : 'border-primary bg-card text-primary'
+          "
         >
           <input
             #durInput
             type="number"
-            [value]="isNonStandardDuration() ? selectedDuration() : ''"
-            class="w-full text-center font-bold text-base outline-none bg-transparent text-primary"
+            min="1"
+            max="365"
+            [value]="isNonStandardDuration() ? (selectedDuration() > 0 ? selectedDuration() : (selectedDuration() === 0 ? 0 : '')) : ''"
+            class="w-full text-center font-bold text-base outline-none bg-transparent transition-colors"
+            [class]="!isDurationValid() ? 'text-red-500 placeholder:text-red-400/50' : 'text-primary'"
             placeholder="#"
-            (input)="durationChanged.emit(+durInput.value)"
-            (keyup.enter)="toggleCustomDuration.emit()"
+            (input)="onCustomInput(durInput.value)"
+            (keyup.enter)="onEnter()"
             autoFocus
           />
         </div>
@@ -56,6 +64,14 @@
         </button>
       }
     </div>
+
+    @if (isCustomDuration() && !isDurationValid()) {
+      <p class="text-xs text-red-500 text-center mb-3 font-medium animate-fade-in">
+        Duration must be at least 1 day
+      </p>
+    } @else {
+      <div class="mb-3"></div>
+    }
 
     <!-- Why Textarea -->
     <div
@@ -90,8 +106,9 @@
   </div>
 
   <button
-    (click)="proceedToSignUp.emit()"
-    class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 mt-2"
+    (click)="isDurationValid() ? proceedToSignUp.emit() : null"
+    [disabled]="!isDurationValid()"
+    class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 mt-2 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed"
   >
     Continue to Save Progress <lucide-icon name="arrow-right" class="w-5 h-5"></lucide-icon>
   </button>

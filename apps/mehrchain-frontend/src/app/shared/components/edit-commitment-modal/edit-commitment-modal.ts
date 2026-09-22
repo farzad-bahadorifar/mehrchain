@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, input, output, signal } from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Commitment } from '@mehrchain/shared-data';
@@ -31,6 +31,9 @@ export class EditCommitmentModal {
   reminderTime = signal('08:30');
   isPublic = signal(false);
   isCustomDuration = signal(false);
+
+  isDurationValid = computed(() => this.duration() > 0);
+  isValid = computed(() => this.title().trim().length >= 2 && this.isDurationValid());
 
   categories = [
     { id: 'health', icon: 'heart', label: 'Health' },
@@ -66,15 +69,18 @@ export class EditCommitmentModal {
   }
 
   onCustomDurationInput(val: string) {
-    const num = parseInt(val, 10);
-    if (!isNaN(num) && num > 0) {
-      this.duration.set(num);
+    if (val.trim() === '') {
+      this.duration.set(0);
       this.isCustomDuration.set(true);
+      return;
     }
+    const num = parseInt(val, 10);
+    this.duration.set(isNaN(num) ? 0 : num);
+    this.isCustomDuration.set(true);
   }
 
   onSubmit() {
-    if (!this.title().trim()) return;
+    if (!this.isValid()) return;
 
     this.save.emit({
       id: this.commitment().id,
