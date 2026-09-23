@@ -18,7 +18,6 @@
   <!-- Physical Mascot Body Container with Motion States -->
   <div
     class="relative w-full h-full flex items-center justify-center transform-gpu"
-    [class.mero-floating]="floating() && effectiveState() !== 'celebrating' && effectiveState() !== 'sleepy'"
     [class.mero-celebrating]="effectiveState() === 'celebrating'"
     [class.mero-sleepy]="effectiveState() === 'sleepy'"
     [class.mero-squished]="isSquished()"
