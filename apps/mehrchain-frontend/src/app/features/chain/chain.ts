@@ -86,6 +86,9 @@ export class ChainComponent {
         }
       }
     });
+
+    // Mark unread activity as read when visiting chain page
+    this.chainService.markAsRead();
   }
 
   toggleTheme(): void {

@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { filter } from 'rxjs';
+import { ChainService } from './core/services/chain.service';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ import { filter } from 'rxjs';
 })
 export class App {
   private router = inject(Router);
+  public chainService = inject(ChainService);
   showNavbar = signal(false);
 
   constructor() {

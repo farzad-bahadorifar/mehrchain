@@ -16,9 +16,17 @@
     <a
       routerLink="/chain"
       routerLinkActive="text-primary bg-primary/10"
-      class="flex flex-col items-center gap-1 p-2 rounded-xl text-muted-foreground transition-all"
+      class="flex flex-col items-center gap-1 p-2 rounded-xl text-muted-foreground transition-all relative"
     >
-      <lucide-icon name="link-2" class="w-6 h-6"></lucide-icon>
+      <div class="relative">
+        <lucide-icon name="link-2" class="w-6 h-6"></lucide-icon>
+        @if (chainService.hasUnread()) {
+          <span
+            class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-primary rounded-full ring-2 ring-card animate-pulse"
+            aria-label="New activity"
+          ></span>
+        }
+      </div>
       <span class="text-[10px] font-bold">Chain</span>
     </a>
 
