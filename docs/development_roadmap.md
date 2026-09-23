@@ -21,7 +21,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 ---
 
-## Phase 1: Chain Engine (Priority: Critical) — 🔧 In Progress
+## Phase 1: Chain Engine (Priority: Critical) — ✅ Done
 
 > Build the core social feature — the heart of "Mehr" (kindness) in MehrChain.
 
@@ -44,7 +44,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | New `ChainCardComponent` | ✅ Done | [#8](https://github.com/farzad-bahadorifar/mehrchain/issues/8) | Sep 24 | Minimal card with 5 states (Completed today, Waiting, Resting, Fading, Completed Journey) |
 | Remove clutter | ✅ Done | [#9](https://github.com/farzad-bahadorifar/mehrchain/issues/9) | Sep 24 | Delete: Ring the Bell, Send Love/Cheer/Nudge, emojis, demo chain & integrate ChainCardComponent |
 | Unread dot on navbar | ✅ Done | [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Sep 25 | Teal dot on Chain tab when partner has new activity |
-| Invite section cleanup | ⏳ TODO | [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Sep 25 | Keep link/QR sharing, use Lucide icons |
+| Invite section cleanup | ✅ Done | [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Sep 25 | Extracted modular `InviteSectionComponent`, QR modal, Lucide icons |
 
 ### Reference
 

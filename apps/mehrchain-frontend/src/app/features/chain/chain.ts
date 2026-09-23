@@ -7,9 +7,9 @@ import { CommitmentService } from '../../core/services/commitment.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { MeroCustomizationService } from '../../core/services/mero-customization.service';
-import { QrCodeComponent } from '../../shared/components/qr-code/qr-code';
 import { MeroComponent } from '../../shared/components/mero/mero';
 import { ChainCardComponent } from './components/chain-card/chain-card';
+import { InviteSectionComponent } from './components/invite-section/invite-section';
 
 @Component({
   selector: 'app-chain',
@@ -18,9 +18,9 @@ import { ChainCardComponent } from './components/chain-card/chain-card';
     CommonModule,
     RouterLink,
     LucideAngularModule,
-    QrCodeComponent,
     MeroComponent,
     ChainCardComponent,
+    InviteSectionComponent,
   ],
   templateUrl: './chain.html',
   styleUrls: ['./chain.css'],
@@ -46,32 +46,15 @@ export class ChainComponent {
     });
   });
 
-  readonly selectedCommitmentId = signal<string>('');
-  readonly isDropdownOpen = signal<boolean>(false);
-  readonly isQrModalOpen = signal<boolean>(false);
-  readonly copied = signal<boolean>(false);
   readonly toastMessage = signal<string | null>(null);
 
   // Incoming invite link parameters
   readonly incomingInvite = signal<ChainInvitePayload | null>(null);
   readonly inviteSelectedCommitmentId = signal<string>('');
 
-  readonly selectedCommitment = computed(() => {
-    const list = this.publicCommitments();
-    if (list.length === 0) return null;
-    const currentId = this.selectedCommitmentId();
-    return list.find((c) => c.id === currentId) || list[0];
-  });
-
-  readonly currentInviteUrl = computed(() => {
-    const commitment = this.selectedCommitment();
-    return this.chainService.getInviteUrl(commitment ? commitment.id : undefined);
-  });
-
   constructor() {
     const list = this.publicCommitments();
     if (list.length > 0) {
-      this.selectedCommitmentId.set(list[0].id);
       this.inviteSelectedCommitmentId.set(list[0].id);
     }
 
@@ -96,51 +79,9 @@ export class ChainComponent {
     this.themeService.setTheme(nextMode);
   }
 
-  selectCommitment(id: string): void {
-    this.selectedCommitmentId.set(id);
-    this.isDropdownOpen.set(false);
-  }
-
   getMyHabitTitle(userCommitmentId: string): string {
     const found = this.commitmentService.commitments().find((c) => c.id === userCommitmentId);
     return found ? found.title : 'My Habit';
-  }
-
-  getCategoryIcon(category?: string): string {
-    switch (category) {
-      case 'health':
-        return 'heart';
-      case 'environment':
-        return 'leaf';
-      case 'community':
-        return 'users';
-      case 'growth':
-        return 'trending-up';
-      default:
-        return 'sparkles';
-    }
-  }
-
-  async shareInviteLink(): Promise<void> {
-    const habit = this.selectedCommitment();
-    const habitTitle = habit ? habit.title : 'My Daily Habit';
-    const shared = await this.chainService.shareInvite(habitTitle);
-    if (shared) {
-      this.showToast('Invite link shared / copied to clipboard!');
-    }
-  }
-
-  async copyLinkOnly(): Promise<void> {
-    const success = await this.chainService.copyInviteToClipboard(this.currentInviteUrl());
-    if (success) {
-      this.copied.set(true);
-      this.showToast('Invite link copied to clipboard!');
-      setTimeout(() => this.copied.set(false), 2500);
-    }
-  }
-
-  toggleQrModal(open?: boolean): void {
-    this.isQrModalOpen.set(open !== undefined ? open : !this.isQrModalOpen());
   }
 
   // Accept incoming invite and link with local public habit
@@ -224,7 +165,7 @@ export class ChainComponent {
     this.showToast('Chain disconnected.');
   }
 
-  private showToast(msg: string): void {
+  showToast(msg: string): void {
     this.toastMessage.set(msg);
     setTimeout(() => {
       this.toastMessage.set(null);

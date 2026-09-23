@@ -32,14 +32,6 @@ describe('ChainComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should toggle QR modal state', () => {
-    expect(component.isQrModalOpen()).toBe(false);
-    component.toggleQrModal(true);
-    expect(component.isQrModalOpen()).toBe(true);
-    component.toggleQrModal(false);
-    expect(component.isQrModalOpen()).toBe(false);
-  });
-
   it('should sort connections by most recent activity first', async () => {
     // Add two connections
     await chainService.acceptInvite({
@@ -72,5 +64,10 @@ describe('ChainComponent', () => {
 
     component.handleDisconnect('conn-1');
     expect(disconnectSpy).toHaveBeenCalledWith('conn-1');
+  });
+
+  it('should display toast when showToast is called', () => {
+    component.showToast('Test Toast Notification');
+    expect(component.toastMessage()).toBe('Test Toast Notification');
   });
 });
