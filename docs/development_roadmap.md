@@ -116,7 +116,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 | Task | Status | Issue | Details |
 |------|--------|-------|---------|
-| Three.js On-Demand Visual Engine & Spark Button | ⏳ TODO | [#20](https://github.com/farzad-bahadorifar/mehrchain/issues/20) | Replace "I did it" with "Spark ⚡" + touch-origin particle burst, singleton WebGL renderer, lazy-loaded Three.js chunk (<1MB initial budget), 1000ms render window (0% idle GPU), and Mero mascot animation audit/calm-down |
+| Three.js On-Demand Visual Engine & Spark Button | ⏳ TODO | [#20](https://github.com/farzad-bahadorifar/mehrchain/issues/20) | Replace "I did it" with "Spark" + touch-origin particle burst, singleton WebGL renderer, lazy-loaded Three.js chunk (<1MB initial budget), 1000ms render window (0% idle GPU), and Mero mascot animation audit/calm-down |
 
 ### Design System Documentation (`design-system-docs` skill)
 
