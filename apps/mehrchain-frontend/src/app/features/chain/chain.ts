@@ -9,13 +9,7 @@ import { ThemeService } from '../../core/services/theme.service';
 import { MeroCustomizationService } from '../../core/services/mero-customization.service';
 import { QrCodeComponent } from '../../shared/components/qr-code/qr-code';
 import { MeroComponent } from '../../shared/components/mero/mero';
-
-interface FloatingHeartItem {
-  id: number;
-  x: number;
-  y: number;
-  emoji: string;
-}
+import { ChainCardComponent } from './components/chain-card/chain-card';
 
 @Component({
   selector: 'app-chain',
@@ -26,6 +20,7 @@ interface FloatingHeartItem {
     LucideAngularModule,
     QrCodeComponent,
     MeroComponent,
+    ChainCardComponent,
   ],
   templateUrl: './chain.html',
   styleUrls: ['./chain.css'],
@@ -40,7 +35,16 @@ export class ChainComponent {
   private router = inject(Router);
 
   readonly publicCommitments = this.chainService.publicCommitments;
-  readonly friendChains = this.chainService.friendChains;
+  readonly activeConnections = this.chainService.activeConnections;
+
+  // Sort connections: most recently active first
+  readonly sortedConnections = computed(() => {
+    return [...this.activeConnections()].sort((a, b) => {
+      const aTime = new Date(a.lastPartnerActivityAt || a.createdAt || 0).getTime();
+      const bTime = new Date(b.lastPartnerActivityAt || b.createdAt || 0).getTime();
+      return bTime - aTime;
+    });
+  });
 
   readonly selectedCommitmentId = signal<string>('');
   readonly isDropdownOpen = signal<boolean>(false);
@@ -51,9 +55,6 @@ export class ChainComponent {
   // Incoming invite link parameters
   readonly incomingInvite = signal<ChainInvitePayload | null>(null);
   readonly inviteSelectedCommitmentId = signal<string>('');
-
-  // Floating heart animations
-  readonly floatingHearts = signal<FloatingHeartItem[]>([]);
 
   readonly selectedCommitment = computed(() => {
     const list = this.publicCommitments();
@@ -97,6 +98,11 @@ export class ChainComponent {
     this.isDropdownOpen.set(false);
   }
 
+  getMyHabitTitle(userCommitmentId: string): string {
+    const found = this.commitmentService.commitments().find((c) => c.id === userCommitmentId);
+    return found ? found.title : 'My Habit';
+  }
+
   getCategoryIcon(category?: string): string {
     switch (category) {
       case 'health':
@@ -117,7 +123,7 @@ export class ChainComponent {
     const habitTitle = habit ? habit.title : 'My Daily Habit';
     const shared = await this.chainService.shareInvite(habitTitle);
     if (shared) {
-      this.showToast('Invite link shared / copied to clipboard! 🔗✨');
+      this.showToast('Invite link shared / copied to clipboard!');
     }
   }
 
@@ -125,7 +131,7 @@ export class ChainComponent {
     const success = await this.chainService.copyInviteToClipboard(this.currentInviteUrl());
     if (success) {
       this.copied.set(true);
-      this.showToast('Invite link copied to clipboard! 📋');
+      this.showToast('Invite link copied to clipboard!');
       setTimeout(() => this.copied.set(false), 2500);
     }
   }
@@ -155,7 +161,7 @@ export class ChainComponent {
       myCommitmentTitle: myHabit.title,
     });
 
-    this.showToast(`Support chain connected with ${invite.inviterName}! 🎉💙`);
+    this.showToast(`Support chain connected with @${invite.inviterName}!`);
     this.dismissIncomingInvite();
   }
 
@@ -179,7 +185,7 @@ export class ChainComponent {
       myCommitmentTitle: newHabit.title,
     });
 
-    this.showToast(`Public habit created and chained with ${invite.inviterName}! 🌟`);
+    this.showToast(`Public habit created and chained with @${invite.inviterName}!`);
     this.dismissIncomingInvite();
   }
 
@@ -192,55 +198,26 @@ export class ChainComponent {
     });
   }
 
-  // Trigger floating heart and send reaction
-  triggerHeart(event: MouseEvent, chainId: string, partnerName: string): void {
-    this.chainService.sendReaction(chainId, 'heart');
-
-    // Spawn floating heart
-    const heartId = Date.now() + Math.random();
-    const x = event.clientX || window.innerWidth / 2;
-    const y = event.clientY || window.innerHeight / 2;
-
-    this.floatingHearts.update((hearts) => [
-      ...hearts,
-      { id: heartId, x, y, emoji: '💙' },
-    ]);
-
-    setTimeout(() => {
-      this.floatingHearts.update((hearts) => hearts.filter((h) => h.id !== heartId));
-    }, 1200);
-
-    this.showToast(`Sent love and energy to @${partnerName}! 💙✨`);
+  handleHeart(connectionId: string): void {
+    this.chainService.sendHeart(connectionId);
   }
 
-  sendReaction(chainId: string, type: 'heart' | 'cheer' | 'nudge'): void {
-    this.chainService.sendReaction(chainId, type);
-    if (type === 'cheer') {
-      this.showToast('Cheered and sent positive energy to your friend! 🌟');
-    } else if (type === 'nudge') {
-      this.showToast('Gentle reminder sent! 🔔');
-    } else {
-      this.showToast('Sent heart and positive energy! 💙');
+  async handleNudge(connectionId: string): Promise<void> {
+    try {
+      await this.chainService.sendNudge(connectionId);
+      this.showToast('Gentle reminder sent!');
+    } catch {
+      this.showToast('Could not send reminder.');
     }
   }
 
-  loadDemoChain(): void {
-    this.chainService.addDemoFriendChain();
-    this.showToast('Demo friend chain (@sara) loaded! ✨');
+  handleCongratulate(connectionId: string): void {
+    this.chainService.sendHeart(connectionId);
+    this.showToast('Congratulations sent!');
   }
 
-  togglePartnerToday(chainId: string): void {
-    this.chainService.togglePartnerToday(chainId);
-    this.showToast('Partner check-in status toggled (Demo)');
-  }
-
-  togglePartnerBroadcastToday(chainId: string): void {
-    this.chainService.togglePartnerBroadcastToday(chainId);
-    this.showToast('Partner bell broadcast status toggled (Demo)');
-  }
-
-  removeChain(chainId: string): void {
-    this.chainService.removeChain(chainId);
+  handleDisconnect(connectionId: string): void {
+    this.chainService.disconnect(connectionId);
     this.showToast('Chain disconnected.');
   }
 

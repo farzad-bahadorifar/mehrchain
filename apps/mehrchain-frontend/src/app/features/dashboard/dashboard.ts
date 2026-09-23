@@ -87,24 +87,6 @@ export class DashboardComponent {
     setTimeout(() => this.meroService.setState('idle'), 2000);
   }
 
-  handleRingBell(id: string) {
-    const res = this.chainService.ringBellBroadcast(id);
-    this.commitmentService.updateCommitment(id, {
-      isBroadcastedToday: true,
-      lastBroadcastDate: new Date().toISOString(),
-    });
-    this.meroService.setState('celebrating');
-    if (typeof navigator !== 'undefined' && navigator.vibrate) {
-      navigator.vibrate([50, 50, 100]);
-    }
-    this.showToast(
-      res.count > 0
-        ? `Celebration bell broadcasted to ${res.count} chain supporter${res.count > 1 ? 's' : ''}! 🌟🔔`
-        : 'Bell rung! Your future chain supporters will be notified. ✨'
-    );
-    setTimeout(() => this.meroService.setState('idle'), 3500);
-  }
-
   private showToast(msg: string) {
     this.toastMessage.set(msg);
     setTimeout(() => {

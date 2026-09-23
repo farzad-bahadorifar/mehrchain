@@ -70,7 +70,6 @@
           [commitment]="c"
           [supportersCount]="chainService.getSupportersCount(c.id)"
           (onComplete)="handleComplete($event)"
-          (onRingBell)="handleRingBell($event)"
           (onDelete)="promptDelete($event)"
           (onArchive)="handleArchive($event)"
           (onEdit)="openEdit($event)"

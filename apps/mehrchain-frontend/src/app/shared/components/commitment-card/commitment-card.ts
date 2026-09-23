@@ -14,7 +14,6 @@ export class CommitmentCardComponent {
   commitment = input.required<Commitment>();
   supportersCount = input<number>(0);
   onComplete = output<string>();
-  onRingBell = output<string>();
   onDelete = output<string>();
   onArchive = output<string>();
   onEdit = output<string>();

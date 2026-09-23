@@ -125,10 +125,10 @@
     <mc-button
       [variant]="commitment().isCompletedToday ? 'secondary' : 'primary'"
       size="md"
-      [fullWidth]="!commitment().isCompletedToday || !commitment().isPublic"
+      [fullWidth]="true"
       [disabled]="commitment().isCompletedToday"
       (clicked)="onComplete.emit(commitment().id)"
-      class="flex-1"
+      class="w-full"
     >
       @if (commitment().isCompletedToday) {
         <span>Completed ✓</span>
@@ -137,29 +137,5 @@
         <span>I did it today</span>
       }
     </mc-button>
-
-    @if (commitment().isCompletedToday && commitment().isPublic) {
-      @if (!commitment().isBroadcastedToday) {
-        <button
-          type="button"
-          (click)="onRingBell.emit(commitment().id)"
-          class="h-10 px-3.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-400 border border-amber-500/30 text-xs font-bold transition-all active:scale-95 flex items-center justify-center gap-1.5 shrink-0 shadow-xs animate-fade-in"
-          title="Ring the bell to celebrate with your chain supporters"
-        >
-          <lucide-icon name="bell" class="w-4 h-4 text-amber-500 animate-pulse"></lucide-icon>
-          <span class="hidden sm:inline">Ring Bell 🔔</span>
-          <span class="sm:hidden">🔔</span>
-        </button>
-      } @else {
-        <div
-          class="h-10 px-3 rounded-2xl bg-teal-500/10 border border-teal-500/25 text-teal-600 dark:text-teal-400 text-xs font-bold flex items-center justify-center gap-1 shrink-0 animate-fade-in"
-          title="Supporters notified"
-        >
-          <lucide-icon name="sparkles" class="w-3.5 h-3.5 text-teal-500"></lucide-icon>
-          <span class="hidden sm:inline">Notified ✓</span>
-          <span class="sm:hidden">✓</span>
-        </div>
-      }
-    }
   </div>
 </mc-card>
