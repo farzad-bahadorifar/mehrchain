@@ -58,6 +58,26 @@ describe('NewCommitmentModal', () => {
     );
   });
 
+  it('should keep custom mode open when typing multi-digit numbers including standard values', () => {
+    component.toggleCustomDuration();
+    expect(component.isCustomDuration()).toBe(true);
+
+    // Typing '7'
+    component.onCustomDurationInput('7');
+    expect(component.isCustomDuration()).toBe(true);
+    expect(component.duration()).toBe(7);
+
+    // Typing '70'
+    component.onCustomDurationInput('70');
+    expect(component.isCustomDuration()).toBe(true);
+    expect(component.duration()).toBe(70);
+
+    // Typing '100'
+    component.onCustomDurationInput('100');
+    expect(component.isCustomDuration()).toBe(true);
+    expect(component.duration()).toBe(100);
+  });
+
   it('should reject submission when title is too short regardless of duration', () => {
     const submitSpy = vi.fn();
     component.submit.subscribe(submitSpy);

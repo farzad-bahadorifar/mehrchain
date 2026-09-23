@@ -13,6 +13,7 @@ export class NewCommitmentModal {
   close = output<void>();
   submit = output<any>();
   isCustomDuration = signal(false);
+  customDurationText = signal('');
 
   title = signal('');
   why = signal('');
@@ -54,29 +55,27 @@ export class NewCommitmentModal {
   setStandardDuration(days: number) {
     this.duration.set(days);
     this.isCustomDuration.set(false);
+    this.customDurationText.set('');
   }
 
   toggleCustomDuration() {
     this.isCustomDuration.set(true);
+    const cur = this.duration();
+    const initialText = cur > 0 && ![7, 14, 21].includes(cur) ? cur.toString() : '';
+    this.customDurationText.set(initialText);
+    if (!initialText) {
+      this.duration.set(0);
+    }
   }
 
   onCustomDurationInput(value: string) {
-    if (value.trim() === '') {
+    this.customDurationText.set(value);
+    const num = parseInt(value.trim(), 10);
+    if (!isNaN(num) && num > 0) {
+      this.duration.set(num);
+    } else {
       this.duration.set(0);
-      return;
     }
-    const days = parseInt(value, 10);
-    this.duration.set(isNaN(days) ? 0 : days);
-  }
-
-  onCustomDurationEnter() {
-    if (this.isDurationValid()) {
-      this.isCustomDuration.set(false);
-    }
-  }
-
-  isNonStandardDuration(): boolean {
-    return ![7, 14, 21].includes(this.duration());
   }
 
   handleSubmit() {

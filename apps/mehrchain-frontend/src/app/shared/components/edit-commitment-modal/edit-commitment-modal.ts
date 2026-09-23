@@ -31,6 +31,7 @@ export class EditCommitmentModal {
   reminderTime = signal('08:30');
   isPublic = signal(false);
   isCustomDuration = signal(false);
+  customDurationText = signal('');
 
   isDurationValid = computed(() => this.duration() > 0);
   isValid = computed(() => this.title().trim().length >= 2 && this.isDurationValid());
@@ -54,6 +55,10 @@ export class EditCommitmentModal {
         this.isPublic.set(c.isPublic || false);
         if (![7, 14, 21].includes(c.totalDays)) {
           this.isCustomDuration.set(true);
+          this.customDurationText.set(c.totalDays.toString());
+        } else {
+          this.isCustomDuration.set(false);
+          this.customDurationText.set('');
         }
       }
     });
@@ -62,21 +67,27 @@ export class EditCommitmentModal {
   setStandardDuration(days: number) {
     this.duration.set(days);
     this.isCustomDuration.set(false);
+    this.customDurationText.set('');
   }
 
   toggleCustomDuration() {
     this.isCustomDuration.set(true);
+    const cur = this.duration();
+    const initialText = cur > 0 && ![7, 14, 21].includes(cur) ? cur.toString() : '';
+    this.customDurationText.set(initialText);
+    if (!initialText) {
+      this.duration.set(0);
+    }
   }
 
   onCustomDurationInput(val: string) {
-    if (val.trim() === '') {
+    this.customDurationText.set(val);
+    const num = parseInt(val.trim(), 10);
+    if (!isNaN(num) && num > 0) {
+      this.duration.set(num);
+    } else {
       this.duration.set(0);
-      this.isCustomDuration.set(true);
-      return;
     }
-    const num = parseInt(val, 10);
-    this.duration.set(isNaN(num) ? 0 : num);
-    this.isCustomDuration.set(true);
   }
 
   onSubmit() {

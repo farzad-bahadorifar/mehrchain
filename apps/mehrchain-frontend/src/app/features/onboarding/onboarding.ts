@@ -70,6 +70,7 @@ export class OnboardingComponent implements OnInit {
   selectedHabit = signal<string | null>(null);
   selectedDuration = signal<number>(21);
   isCustomDuration = signal(false);
+  customDurationText = signal<string>('');
   isCustomHabit = signal(false);
   whyText = signal('To prove to myself that small steps matter.');
   reminderTime = signal('08:30');
@@ -202,28 +203,30 @@ export class OnboardingComponent implements OnInit {
     this.nextStep();
   }
 
-  setDuration(days: number) {
+  selectStandardDuration(days: number) {
     this.selectedDuration.set(days);
-    if ([7, 14, 21].includes(days)) {
-      this.isCustomDuration.set(false);
-    }
+    this.isCustomDuration.set(false);
+    this.customDurationText.set('');
   }
 
-  toggleCustomDuration() {
+  openCustomDuration() {
     this.isCustomDuration.set(true);
-  }
-
-  onCustomDurationInput(value: string) {
-    const days = parseInt(value, 10);
-    if (days > 0) {
-      this.selectedDuration.set(days);
-    } else {
+    const cur = this.selectedDuration();
+    const initialText = cur > 0 && ![7, 14, 21].includes(cur) ? cur.toString() : '';
+    this.customDurationText.set(initialText);
+    if (!initialText) {
       this.selectedDuration.set(0);
     }
   }
 
-  isNonStandardDuration(): boolean {
-    return ![7, 14, 21].includes(this.selectedDuration());
+  onCustomDurationChange(val: string) {
+    this.customDurationText.set(val);
+    const num = parseInt(val.trim(), 10);
+    if (!isNaN(num) && num > 0) {
+      this.selectedDuration.set(num);
+    } else {
+      this.selectedDuration.set(0);
+    }
   }
 
   enableCustomHabit() {

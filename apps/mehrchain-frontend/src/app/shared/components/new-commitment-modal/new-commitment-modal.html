@@ -98,7 +98,7 @@
             (click)="setStandardDuration(d)"
             class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2"
             [class]="
-              duration() === d && !isCustomDuration() && !isNonStandardDuration()
+              !isCustomDuration() && duration() === d
                 ? 'border-primary bg-primary text-white shadow-md'
                 : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
             "
@@ -121,24 +121,14 @@
               type="number"
               min="1"
               max="365"
-              [value]="isNonStandardDuration() ? (duration() > 0 ? duration() : (duration() === 0 ? 0 : '')) : ''"
+              [value]="customDurationText()"
               class="w-full text-center font-bold text-sm outline-none bg-transparent h-full py-1 transition-colors"
               [class]="!isDurationValid() ? 'text-red-500 placeholder:text-red-400/50' : 'text-primary'"
               placeholder="#"
               (input)="onCustomDurationInput(durInput.value)"
-              (keyup.enter)="onCustomDurationEnter()"
               autoFocus
             />
           </div>
-        } @else if (isNonStandardDuration()) {
-          <button
-            type="button"
-            (click)="toggleCustomDuration()"
-            class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2 border-primary bg-primary text-white shadow-md flex items-center justify-center gap-1"
-          >
-            <span>{{ duration() }}</span>
-            <span class="text-[10px] uppercase">Days</span>
-          </button>
         } @else {
           <button
             type="button"

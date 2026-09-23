@@ -82,6 +82,19 @@ describe('EditCommitmentModal', () => {
     expect(saveSpy).not.toHaveBeenCalled();
   });
 
+  it('should keep custom mode open when entering multi-digit values', () => {
+    component.toggleCustomDuration();
+    expect(component.isCustomDuration()).toBe(true);
+
+    component.onCustomDurationInput('2');
+    expect(component.isCustomDuration()).toBe(true);
+    expect(component.duration()).toBe(2);
+
+    component.onCustomDurationInput('25');
+    expect(component.isCustomDuration()).toBe(true);
+    expect(component.duration()).toBe(25);
+  });
+
   it('should emit close when Cancel is clicked', () => {
     const closeSpy = vi.fn();
     component.close.subscribe(closeSpy);
