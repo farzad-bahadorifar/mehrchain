@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+
+.chain-card {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}

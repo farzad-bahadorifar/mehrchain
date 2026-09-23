@@ -1,0 +1,152 @@
+<div class="chain-card relative p-4 bg-card rounded-2xl border border-border/80 shadow-xs hover:border-primary/40 transition-all duration-200">
+  <!-- Card Header -->
+  <div class="flex items-center justify-between gap-3">
+    <!-- Partner Info -->
+    <div class="flex items-center gap-3 min-w-0">
+      <div
+        class="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-base shrink-0 select-none"
+        aria-hidden="true"
+      >
+        {{ partnerAvatarInitial() }}
+      </div>
+      <div class="min-w-0">
+        <div class="flex items-center gap-1.5">
+          <p class="font-semibold text-foreground text-sm truncate">
+            @{{ partnerUsername() }}
+          </p>
+        </div>
+        <p class="text-xs text-muted-foreground truncate" [title]="partnerHabitTitle()">
+          {{ partnerHabitTitle() }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Actions: Heart & 3-dot Menu -->
+    <div class="flex items-center gap-1 shrink-0">
+      <!-- Heart Button (Silent Support) -->
+      @if (visualState() !== 'JOURNEY_COMPLETED') {
+        <button
+          type="button"
+          (click)="toggleHeart()"
+          class="p-2 rounded-xl text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 active:scale-90 transition-all cursor-pointer"
+          [attr.aria-label]="isHeartSent() ? 'Remove heart' : 'Send silent heart'"
+          [title]="isHeartSent() ? 'Heart sent' : 'Send heart'"
+        >
+          <lucide-icon
+            name="heart"
+            [class]="isHeartSent() ? 'w-5 h-5 text-rose-500 fill-rose-500 transition-transform scale-110' : 'w-5 h-5 transition-colors'"
+          ></lucide-icon>
+        </button>
+      }
+
+      <!-- 3-Dot Options Button -->
+      <div class="relative">
+        <button
+          type="button"
+          (click)="toggleMenu()"
+          class="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors cursor-pointer"
+          aria-label="Card options"
+          [attr.aria-expanded]="isMenuOpen()"
+        >
+          <lucide-icon name="more-vertical" class="w-4 h-4"></lucide-icon>
+        </button>
+
+        <!-- Dropdown Menu -->
+        @if (isMenuOpen()) {
+          <div
+            class="fixed inset-0 z-40"
+            (click)="closeMenu()"
+            tabindex="-1"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="absolute right-0 top-full mt-1 w-52 p-1.5 bg-popover/95 backdrop-blur-md border border-border rounded-xl shadow-lg z-50 animate-in fade-in zoom-in-95 duration-100"
+          >
+            <!-- Linked Habit Info -->
+            <div class="px-2.5 py-2 text-xs border-b border-border/60">
+              <span class="text-muted-foreground block text-[10px] font-medium uppercase tracking-wider">
+                Linked Habit
+              </span>
+              <span class="font-medium text-foreground truncate block mt-0.5" [title]="myHabitTitle()">
+                {{ myHabitTitle() }}
+              </span>
+            </div>
+
+            <!-- Disconnect Action -->
+            <button
+              type="button"
+              (click)="handleDisconnect()"
+              class="w-full mt-1 flex items-center gap-2 px-2.5 py-2 text-xs text-destructive hover:bg-destructive/10 rounded-lg font-medium transition-colors cursor-pointer"
+            >
+              <lucide-icon name="trash-2" class="w-3.5 h-3.5"></lucide-icon>
+              <span>Disconnect Chain</span>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Section (5 States) -->
+  <div class="mt-3 pt-2.5 border-t border-border/40 flex items-center justify-between gap-2 text-xs">
+    <!-- State 1: Completed Today -->
+    @if (visualState() === 'COMPLETED_TODAY') {
+      <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+        <span>Completed today</span>
+      </div>
+    }
+
+    <!-- State 2: Waiting for Today's Spark -->
+    @if (visualState() === 'WAITING') {
+      <div class="flex items-center gap-2 text-muted-foreground">
+        <span class="w-2 h-2 rounded-full border border-muted-foreground/60 bg-transparent shrink-0"></span>
+        <span>Waiting for today's spark</span>
+      </div>
+    }
+
+    <!-- State 3: Resting Today (1 day missed) -->
+    @if (visualState() === 'RESTING') {
+      <div class="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-medium">
+        <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
+        <span>Resting today</span>
+      </div>
+    }
+
+    <!-- State 4: Fading (2 days missed) -->
+    @if (visualState() === 'FADING') {
+      <div class="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-medium">
+        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0"></span>
+        <span>2 days away</span>
+      </div>
+
+      <button
+        type="button"
+        (click)="handleNudge()"
+        [disabled]="nudgeSent()"
+        class="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 active:scale-95 disabled:opacity-60 disabled:pointer-events-none transition-all cursor-pointer"
+      >
+        <lucide-icon name="bell" class="w-3.5 h-3.5"></lucide-icon>
+        <span>{{ nudgeSent() ? 'Reminder Sent' : 'Send Gentle Reminder' }}</span>
+      </button>
+    }
+
+    <!-- State 5: Journey Completed -->
+    @if (visualState() === 'JOURNEY_COMPLETED') {
+      <div class="flex items-center gap-1.5 text-primary font-medium">
+        <lucide-icon name="check-circle-2" class="w-4 h-4 text-primary shrink-0"></lucide-icon>
+        <span>Completed their journey!</span>
+      </div>
+
+      <button
+        type="button"
+        (click)="handleCongratulate()"
+        [disabled]="congratulated()"
+        class="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-primary/10 text-primary hover:bg-primary/20 active:scale-95 disabled:opacity-60 disabled:pointer-events-none transition-all cursor-pointer"
+      >
+        <lucide-icon name="sparkles" class="w-3.5 h-3.5"></lucide-icon>
+        <span>{{ congratulated() ? 'Congratulated!' : 'Congratulate' }}</span>
+      </button>
+    }
+  </div>
+</div>
