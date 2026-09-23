@@ -100,7 +100,14 @@ async function main() {
   }
   console.log(`Created Issue #${issue.number}: ${issue.html_url}`);
 
-  // 2. Close the Issue as completed
+  // 2. Close the Issue as completed (unless --open flag is passed)
+  const shouldKeepOpen = process.argv.includes('--open');
+  if (shouldKeepOpen) {
+    console.log(`\nIssue #${issue.number} created, assigned, and kept open for roadmap tracking!`);
+    console.log(`URL: ${issue.html_url}`);
+    return;
+  }
+
   console.log(`Closing Issue #${issue.number} as completed...`);
   await request(
     {

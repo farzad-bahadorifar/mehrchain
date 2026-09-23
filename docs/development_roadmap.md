@@ -1,7 +1,7 @@
 # MehrChain — Development Roadmap
 
 > From v0.9.0-preview to production-ready v1.0 and beyond.
-> Updated: 2026-09-22
+> Updated: 2026-09-23
 
 ---
 
@@ -111,6 +111,12 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 ## Phase 4: UX Polish & Design System (Priority: Medium)
 
 > Standardize the visual language, improve accessibility, and add end-to-end tests.
+
+### Visual Engine & Micro-Interactions (Three.js + Spark)
+
+| Task | Status | Issue | Details |
+|------|--------|-------|---------|
+| Three.js On-Demand Visual Engine & Spark Button | ⏳ TODO | [#20](https://github.com/farzad-bahadorifar/mehrchain/issues/20) | Replace "I did it" with "Spark ⚡" + touch-origin particle burst, singleton WebGL renderer, lazy-loaded Three.js chunk (<1MB initial budget), 1000ms render window (0% idle GPU), and Mero mascot animation audit/calm-down |
 
 ### Design System Documentation (`design-system-docs` skill)
 
