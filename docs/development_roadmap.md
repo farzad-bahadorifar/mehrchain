@@ -1,7 +1,33 @@
 # MehrChain — Development Roadmap
 
 > From v0.9.0-preview to production-ready v1.0 and beyond.
-> Updated: 2026-09-23
+> Updated: 2026-09-24
+
+---
+
+## 📅 Master Schedule & Timeline (زمان‌بندی جامع پروژه)
+
+| Issue | Task Title | Phase | Status | Start Date | Target Date | Notes |
+|:-----:|------------|-------|:------:|:----------:|:-----------:|-------|
+| [#2](https://github.com/farzad-bahadorifar/mehrchain/issues/2) | Implement ChainModule API & Prisma Migration | فاز ۱ (بک‌اند زنجیره) | ✅ Done | 20 Sep | 22 Sep | Prisma models, controller & service |
+| [#6](https://github.com/farzad-bahadorifar/mehrchain/issues/6) | Unit tests for ChainService + Cron | فاز ۱ (بک‌اند زنجیره) | ✅ Done | 21 Sep | 22 Sep | 76 unit tests passing |
+| [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | Rewrite ChainService frontend | فاز ۱ (فرانت زنجیره) | ✅ Done | 22 Sep | 23 Sep | localStorage + API hybrid sync |
+| [#8](https://github.com/farzad-bahadorifar/mehrchain/issues/8) | New ChainCardComponent (5 states) | فاز ۱ (فرانت زنجیره) | ✅ Done | 23 Sep | 24 Sep | Minimal 5-state card component |
+| [#9](https://github.com/farzad-bahadorifar/mehrchain/issues/9) | Remove Chain page clutter | فاز ۱ (فرانت زنجیره) | ✅ Done | 24 Sep | 24 Sep | Removed bell, love, emojis, demo chain |
+| [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Unread dot on Chain navbar tab | فاز ۱ (فرانت زنجیره) | ✅ Done | 24 Sep | 25 Sep | Activity badge indicator |
+| [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Invite section cleanup | فاز ۱ (فرانت زنجیره) | ✅ Done | 24 Sep | 25 Sep | InviteSectionComponent & Lucide icons |
+| [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Mobile & PWA UX optimization | فاز ۲ (بهینه‌سازی موبایل) | ✅ Done | 24 Sep | 24 Sep | Viewport bounce, zoom lock, 100dvh |
+| [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Custom commitment duration validation | فاز ۲ (اعتبارسنجی) | ✅ Done | 24 Sep | 24 Sep | Rejection of 0 or negative days |
+| [#12](https://github.com/farzad-bahadorifar/mehrchain/issues/12) | Refactor & Split OnboardingComponent | فاز ۲ (ریفکتور) | ⏳ TODO | 26 Sep | 27 Sep | Step components + auth modals |
+| [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | فاز ۲ (پاکسازی) | ⏳ TODO | 28 Sep | 28 Sep | Profile cleanup |
+| [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | فاز ۲ (پاکسازی) | ⏳ TODO | 28 Sep | 28 Sep | Codebase cleanup |
+| [#17](https://github.com/farzad-bahadorifar/mehrchain/issues/17) | Setup SMTP (Resend) | فاز ۳ (پایداری پروداکشن) | ⏳ TODO | 29 Sep | 30 Sep | Real OTP email dispatch |
+| [#16](https://github.com/farzad-bahadorifar/mehrchain/issues/16) | Add backend tests to CI pipeline | فاز ۳ (پایداری پروداکشن) | ⏳ TODO | 29 Sep | 30 Sep | GitHub Actions backend test step |
+| [#15](https://github.com/farzad-bahadorifar/mehrchain/issues/15) | Signed Release APK (GitHub Actions) | فاز ۳ (خروجی موبایل) | ⏳ TODO | 1 Oct | 1 Oct | Keystore signing CI workflow |
+| [#20](https://github.com/farzad-bahadorifar/mehrchain/issues/20) | Three.js Visual Engine & Spark Button | فاز ۴ (میکرواینتراکشن) | ⏳ TODO | 1 Oct | 2 Oct | WebGL particles & celebration |
+| — | تست آلفا (تست سراسری داخلی و دستگاه واقعی) | فاز تست و تثبیت | ⏳ Planned | 2 Oct | 5 Oct | Dogfooding, real device testing, bug fixes |
+| — | بسته‌بندی نهایی (مستندات و بررسی استقرار) | آماده‌سازی ریلیز | ⏳ Planned | 6 Oct | 7 Oct | Final checklist & deployment check |
+| — | 🚀 لانچ نهایی (Launch v1.0.0 — ارائه رسمی) | انتشار رسمی | ⏳ Planned | 8 Oct | 8 Oct | Public release v1.0.0 |
 
 ---
 
