@@ -2,14 +2,14 @@
   appSwipe
   (swipeLeft)="onSwipeLeft()"
   (swipeRight)="onSwipeRight()"
-  class="h-[100dvh] max-h-[100dvh] flex flex-col items-center justify-between p-3 sm:p-6 bg-background relative overflow-hidden font-sans select-none overscroll-none"
+  class="h-[100dvh] max-h-[100dvh] flex flex-col items-center justify-between px-3 sm:px-6 pb-3 sm:pb-6 safe-top-sm bg-background relative overflow-hidden font-sans select-none overscroll-none"
 >
   <!-- Floating Back Button -->
   @if (step() > 0) {
     <button
       type="button"
       (click)="prevStep()"
-      class="absolute top-3 sm:top-6 left-3 sm:left-6 z-50 w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-card/85 backdrop-blur-md border border-border/60 shadow-soft flex items-center justify-center text-foreground hover:bg-card active:scale-90 transition-all"
+      class="absolute top-[calc(env(safe-area-inset-top,0px)+0.75rem)] sm:top-[calc(env(safe-area-inset-top,0px)+1.5rem)] left-3 sm:left-6 z-50 w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-card/85 backdrop-blur-md border border-border/60 shadow-soft flex items-center justify-center text-foreground hover:bg-card active:scale-90 transition-all"
       aria-label="Previous step"
     >
       <lucide-icon name="arrow-left" class="w-4 h-4 sm:w-5 sm:h-5"></lucide-icon>
