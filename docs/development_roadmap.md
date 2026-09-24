@@ -20,7 +20,7 @@
 | [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Custom commitment duration validation | Phase 2 (Validation) | ✅ Done | 24 Sep | 24 Sep | Rejection of 0 or negative days |
 | [#12](https://github.com/farzad-bahadorifar/mehrchain/issues/12) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ⏳ TODO | 26 Sep | 27 Sep | Step components + auth modals |
 | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Profile cleanup & tests verified |
-| [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ⏳ TODO | 28 Sep | 28 Sep | Codebase cleanup |
+| [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Codebase cleanup |
 | [#17](https://github.com/farzad-bahadorifar/mehrchain/issues/17) | Setup SMTP (Resend) | Phase 3 (Production Stability) | ⏳ TODO | 29 Sep | 30 Sep | Real OTP email dispatch |
 | [#16](https://github.com/farzad-bahadorifar/mehrchain/issues/16) | Add backend tests to CI pipeline | Phase 3 (Production Stability) | ⏳ TODO | 29 Sep | 30 Sep | GitHub Actions backend test step |
 | [#15](https://github.com/farzad-bahadorifar/mehrchain/issues/15) | Signed Release APK (GitHub Actions) | Phase 3 (Mobile Release) | ⏳ TODO | 1 Oct | 1 Oct | Keystore signing CI workflow |
@@ -116,7 +116,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | Task | Status | Issue | Details |
 |------|--------|-------|---------|
 | Remove Personality section | ✅ Done | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Deleted Energetic/Calm/Focused selector from Profile page |
-| Remove `console.log` debug calls | ⏳ TODO | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Clean up all debug logging from frontend services |
+| Remove `console.log` debug calls | ✅ Done | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Cleaned up all debug logging from frontend services |
 
 ---
 
