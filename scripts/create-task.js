@@ -8,7 +8,10 @@
 const https = require('https');
 const { execSync } = require('child_process');
 
-const GITHUB_IPS = ['140.82.121.6', '140.82.113.6', '140.82.114.6', '140.82.112.6'];
+const dns = require('dns');
+dns.setServers(['178.22.122.100', '185.51.200.2', '10.202.10.202', '10.202.10.102', '8.8.8.8', '1.1.1.1']);
+
+const GITHUB_IPS = ['20.199.39.228', '140.82.121.6', '140.82.113.6', '140.82.114.6', '140.82.112.6'];
 
 function customLookup(hostname, options, callback) {
   if (typeof options === 'function') {
@@ -61,14 +64,17 @@ async function main() {
     process.exit(1);
   }
 
-  const creds = execSync('git credential fill', {
-    input: 'protocol=https\nhost=github.com\n',
-  }).toString();
-  const tokenMatch = creds.match(/password=(.+)/);
-  if (!tokenMatch) {
-    throw new Error('No GitHub token found in git credentials');
+  let token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+  if (!token) {
+    const creds = execSync('git credential fill', {
+      input: 'protocol=https\nhost=github.com\n',
+    }).toString();
+    const tokenMatch = creds.match(/password=(.+)/);
+    if (!tokenMatch) {
+      throw new Error('No GitHub token found in git credentials');
+    }
+    token = tokenMatch[1].trim();
   }
-  const token = tokenMatch[1].trim();
 
   const headers = {
     'User-Agent': 'MehrChain-Bot',
