@@ -131,15 +131,15 @@ npm run dev
 
 ---
 
-## Task Management & GitHub Workflow ("تسک‌اش کن" / "Task it")
+## Task Management & GitHub Workflow ("Task it" / "Log task" / "Track task")
 
-Whenever the user requests **"تسک‌اش کن"** (task it / create a task) after fixing a bug, adding a feature, or completing improvements (whether part of the existing roadmap or an ad-hoc fix):
+Whenever the user requests **"Task it"** (or synonyms like *"Log task"*, *"Track task"*, *"Close task"*, or in Persian *"تسک‌اش کن"* / *"تسکش کن"*), follow this automated workflow:
 
 1. **Create & Close GitHub Issue**:
    - Run: `node scripts/create-task.js "<Title>" "<Body with bullet points>"`
    - Automatically assigns to `@farzad-bahadorifar`, sets state to `closed` (`state_reason: 'completed'`), and outputs the issue number and URL.
 2. **Update Roadmap Documentation**:
-   - Add/update the task entry in `docs/development_roadmap.md` under the appropriate phase.
+   - Add/update the task entry in `docs/development_roadmap.md` under the Master Schedule table and the appropriate phase section.
    - Mark status as `✅ Done`.
    - Link the GitHub Issue in the `Issue` column (e.g. `[#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19)`).
 3. **Commit & Push**:
