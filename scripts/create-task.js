@@ -8,50 +8,67 @@
 const https = require('https');
 const { execSync } = require('child_process');
 
-const dns = require('dns');
-dns.setServers(['178.22.122.100', '185.51.200.2', '10.202.10.202', '10.202.10.102', '8.8.8.8', '1.1.1.1']);
+const GITHUB_IPS = ['140.82.121.6', '140.82.121.5', '140.82.113.6', '140.82.114.6', '140.82.112.6'];
 
-const GITHUB_IPS = ['20.199.39.228', '140.82.121.6', '140.82.113.6', '140.82.114.6', '140.82.112.6'];
-
-function customLookup(hostname, options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
-  if (hostname === 'api.github.com') {
-    const ip = GITHUB_IPS[0];
-    if (options && options.all) {
-      return callback(null, [{ address: ip, family: 4 }]);
+function makeLookup(ip) {
+  return function (hostname, options, cb) {
+    if (typeof options === 'function') {
+      cb = options;
+      options = {};
     }
-    return callback(null, ip, 4);
-  }
-  require('dns').lookup(hostname, options, callback);
+    if (options && options.all) {
+      return cb(null, [{ address: ip, family: 4 }]);
+    }
+    return cb(null, ip, 4);
+  };
 }
 
 function request(options, postData) {
   return new Promise((resolve, reject) => {
-    const reqOptions = {
-      ...options,
-      lookup: customLookup,
-      servername: options.hostname,
-    };
-    const req = https.request(reqOptions, (res) => {
-      let data = '';
-      res.on('data', (chunk) => (data += chunk));
-      res.on('end', () => {
-        try {
-          const parsed = JSON.parse(data);
-          resolve({ status: res.statusCode, headers: res.headers, data: parsed });
-        } catch {
-          resolve({ status: res.statusCode, headers: res.headers, data });
-        }
+    let lastError;
+    let tried = 0;
+
+    function tryIp(index) {
+      if (index >= GITHUB_IPS.length) {
+        return reject(lastError || new Error('All GitHub IPs failed'));
+      }
+      const ip = GITHUB_IPS[index];
+      const reqOptions = {
+        ...options,
+        lookup: makeLookup(ip),
+        servername: options.hostname,
+        timeout: 10000,
+      };
+
+      const req = https.request(reqOptions, (res) => {
+        let data = '';
+        res.on('data', (chunk) => (data += chunk));
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(data);
+            resolve({ status: res.statusCode, headers: res.headers, data: parsed });
+          } catch {
+            resolve({ status: res.statusCode, headers: res.headers, data });
+          }
+        });
       });
-    });
-    req.on('error', reject);
-    if (postData) {
-      req.write(typeof postData === 'string' ? postData : JSON.stringify(postData));
+
+      req.on('timeout', () => {
+        req.destroy(new Error(`Timeout with IP ${ip}`));
+      });
+
+      req.on('error', (err) => {
+        lastError = err;
+        tryIp(index + 1);
+      });
+
+      if (postData) {
+        req.write(typeof postData === 'string' ? postData : JSON.stringify(postData));
+      }
+      req.end();
     }
-    req.end();
+
+    tryIp(0);
   });
 }
 

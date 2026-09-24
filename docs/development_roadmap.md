@@ -17,6 +17,7 @@
 | [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Unread dot on Chain navbar tab | Phase 1 (Chain Frontend) | ✅ Done | 24 Sep | 25 Sep | Activity badge indicator |
 | [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Invite section cleanup | Phase 1 (Chain Frontend) | ✅ Done | 24 Sep | 25 Sep | InviteSectionComponent & Lucide icons |
 | [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Mobile & PWA UX optimization | Phase 2 (Mobile Optimization) | ✅ Done | 24 Sep | 24 Sep | Viewport bounce, zoom lock, 100dvh |
+| [#21](https://github.com/farzad-bahadorifar/mehrchain/issues/21) | Mobile & PWA status bar safe area overlap | Phase 2 (Mobile Optimization) | ✅ Done | 24 Sep | 24 Sep | Dynamic safe-area-inset-top padding for Status Bar & notches |
 | [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Custom commitment duration validation | Phase 2 (Validation) | ✅ Done | 24 Sep | 24 Sep | Rejection of 0 or negative days |
 | [#12](https://github.com/farzad-bahadorifar/mehrchain/issues/12) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ⏳ TODO | 26 Sep | 27 Sep | Step components + auth modals |
 | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Profile cleanup & tests verified |
@@ -98,6 +99,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | Task | Status | Issue | Details |
 |------|--------|-------|---------|
 | PWA Viewport, Zoom & Mobile Layout Fit | ✅ Done | [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Disabled pinch zoom, eliminated bounce scroll (`overscroll-behavior: none`), locked height with `100dvh`, and optimized responsive onboarding & modal cards |
+| Mobile & PWA Status Bar Safe Area Insets | ✅ Done | [#21](https://github.com/farzad-bahadorifar/mehrchain/issues/21) | Added dynamic `.safe-top` utilities with `env(safe-area-inset-top)` across all views (Dashboard, Chain, Journey, Profile, Onboarding) to eliminate status bar overlap |
 
 ### Form & Commitment Validation ✅
 
