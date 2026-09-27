@@ -19,6 +19,7 @@
 | [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Mobile & PWA UX optimization | Phase 2 (Mobile Optimization) | ✅ Done | 24 Sep | 24 Sep | Viewport bounce, zoom lock, 100dvh |
 | [#21](https://github.com/farzad-bahadorifar/mehrchain/issues/21) | Mobile & PWA status bar safe area overlap | Phase 2 (Mobile Optimization) | ✅ Done | 24 Sep | 24 Sep | Dynamic safe-area-inset-top padding for Status Bar & notches |
 | [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Custom commitment duration validation | Phase 2 (Validation) | ✅ Done | 24 Sep | 24 Sep | Rejection of 0 or negative days |
+| [#26](https://github.com/farzad-bahadorifar/mehrchain/issues/26) | Onboarding public habit toggle | Phase 2 (Validation) | ✅ Done | 27 Sep | 27 Sep | isPublic toggle in DetailsStepComponent |
 | [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ✅ Done | 26 Sep | 27 Sep | Step components + auth modals |
 | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Profile cleanup & tests verified |
 | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Codebase cleanup |
@@ -106,6 +107,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | Task | Status | Issue | Details |
 |------|--------|-------|---------|
 | Custom duration validation (Zero rejection) | ✅ Done | [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Disallow 0 or negative days in custom duration inputs (`NewCommitmentModal`, `EditCommitmentModal`, `DetailsStepComponent`), highlight borders in red (`border-red-500 bg-red-500/10`), display error message, and prevent saving/submitting |
+| Onboarding public habit toggle | ✅ Done | [#26](https://github.com/farzad-bahadorifar/mehrchain/issues/26) | Added `isPublic` toggle in `DetailsStepComponent` allowing new users to immediately connect their first habit in a chain |
 
 ### Onboarding Refactor (`onboarding-refactor` skill)
 

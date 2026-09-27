@@ -56,4 +56,10 @@ describe('OnboardingComponent', () => {
     expect(component.isCustomDuration()).toBe(true);
     expect(component.selectedDuration()).toBe(25);
   });
+
+  it('should initialize isHabitPublic as true and allow toggling', () => {
+    expect(component.isHabitPublic()).toBe(true);
+    component.isHabitPublic.set(false);
+    expect(component.isHabitPublic()).toBe(false);
+  });
 });

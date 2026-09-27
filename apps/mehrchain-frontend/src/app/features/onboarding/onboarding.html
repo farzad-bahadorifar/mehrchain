@@ -91,11 +91,13 @@
           [customDurationText]="customDurationText()"
           [whyText]="whyText()"
           [reminderTime]="reminderTime()"
+          [isPublic]="isHabitPublic()"
           (standardDurationSelected)="selectStandardDuration($event)"
           (openCustom)="openCustomDuration()"
           (customDurationChanged)="onCustomDurationChange($event)"
           (whyTextChanged)="whyText.set($event)"
           (reminderTimeChanged)="updateReminderTime($event)"
+          (isPublicChanged)="isHabitPublic.set($event)"
           (proceedToSignUp)="proceedToSignUp()"
         />
       }

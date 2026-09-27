@@ -74,6 +74,7 @@ export class OnboardingComponent implements OnInit {
   isCustomHabit = signal(false);
   whyText = signal('To prove to myself that small steps matter.');
   reminderTime = signal('08:30');
+  isHabitPublic = signal(true);
 
   // Sign Up Form State (Step 6/7)
   signUpUsername = signal('');
@@ -370,6 +371,7 @@ export class OnboardingComponent implements OnInit {
           totalDays: this.selectedDuration(),
           why: this.whyText(),
           reminderTime: this.reminderTime(),
+          isPublic: this.isHabitPublic(),
         });
 
         // Schedule local notification if reminderTime is set

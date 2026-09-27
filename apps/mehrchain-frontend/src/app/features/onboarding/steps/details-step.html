@@ -65,22 +65,22 @@
 
     <!-- Why Textarea -->
     <div
-      class="bg-gradient-to-br from-primary/5 to-accent/5 p-4 rounded-2xl border border-primary/10 flex gap-3 mb-3"
+      class="bg-gradient-to-br from-primary/5 to-accent/5 p-3.5 rounded-2xl border border-primary/10 flex gap-3 mb-2.5"
     >
-      <div class="text-lg">💡</div>
+      <div class="text-base">💡</div>
       <div class="w-full">
         <span class="font-bold text-foreground block mb-1 text-xs">Why this matters?</span>
         <textarea
           [value]="whyText()"
           (input)="whyTextChanged.emit($any($event.target).value)"
-          class="w-full bg-transparent text-xs text-muted-foreground resize-none focus:outline-none border-b border-primary/20 focus:border-primary h-12"
+          class="w-full bg-transparent text-xs text-muted-foreground resize-none focus:outline-none border-b border-primary/20 focus:border-primary h-10"
           placeholder="Write your reason..."
         ></textarea>
       </div>
     </div>
 
     <!-- Daily Phone Reminder Time -->
-    <div class="p-3 rounded-2xl bg-muted/40 border border-border/40 flex items-center justify-between mb-1">
+    <div class="p-3 rounded-2xl bg-muted/40 border border-border/40 flex items-center justify-between mb-2">
       <div class="flex items-center gap-2 text-xs font-semibold text-foreground">
         <lucide-icon name="bell" class="w-4 h-4 text-primary"></lucide-icon>
         <span>Daily Reminder:</span>
@@ -92,6 +92,34 @@
         (change)="reminderTimeChanged.emit(timeInput.value)"
         class="bg-card border border-border/70 rounded-xl px-2.5 py-1 text-xs font-bold text-foreground outline-none cursor-pointer"
       />
+    </div>
+
+    <!-- Public / Chain Shareable Toggle -->
+    <div
+      (click)="isPublicChanged.emit(!isPublic())"
+      class="p-3 rounded-2xl bg-muted/40 border border-border/40 flex items-center justify-between cursor-pointer hover:border-primary/40 transition-all select-none"
+    >
+      <div class="flex items-center gap-2.5">
+        <div
+          class="w-7 h-7 rounded-xl flex items-center justify-center transition-colors"
+          [class]="isPublic() ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'"
+        >
+          <lucide-icon name="link-2" class="w-4 h-4"></lucide-icon>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-foreground block">Share in Chain</span>
+          <span class="text-[10px] text-muted-foreground block">Allow linking with a partner</span>
+        </div>
+      </div>
+      <div
+        class="w-10 h-6 rounded-full transition-colors relative p-0.5"
+        [class]="isPublic() ? 'bg-primary' : 'bg-muted-foreground/30'"
+      >
+        <div
+          class="w-5 h-5 rounded-full bg-white shadow-xs transition-transform"
+          [class]="isPublic() ? 'translate-x-4' : 'translate-x-0'"
+        ></div>
+      </div>
     </div>
   </div>
 

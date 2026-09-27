@@ -13,12 +13,14 @@ export class DetailsStepComponent {
   readonly customDurationText = input.required<string>();
   readonly whyText = input.required<string>();
   readonly reminderTime = input.required<string>();
+  readonly isPublic = input.required<boolean>();
 
   readonly standardDurationSelected = output<number>();
   readonly openCustom = output<void>();
   readonly customDurationChanged = output<string>();
   readonly whyTextChanged = output<string>();
   readonly reminderTimeChanged = output<string>();
+  readonly isPublicChanged = output<boolean>();
   readonly proceedToSignUp = output<void>();
 
   isDurationValid(): boolean {
