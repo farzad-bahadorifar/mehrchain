@@ -205,6 +205,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 |---------|-------|-----------------|
 | **v0.9.1** | Phase 1 | Chain backend API + frontend redesign complete |
 | **v1.0.0-rc1** | Phase 1-3 | Complete Phase 1-3 features, security, SMTP & signed APK release candidate |
+| **v1.0.0-rc2** | Phase 1-3 | RC1 + UI Loading Spinners & Anti-Spam Click Protection across all forms |
 | **v1.0.0** | Phase 4 | Three.js Spark Button micro-interactions + Alpha validation & official launch |
 | **v1.1.0** | Phase 4 | Design system documented, a11y compliant, E2E tests |
 | **v1.2.0** | Phase 5 | Multi-language support (EN + FA) |
