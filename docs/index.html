@@ -1,192 +1,1149 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MehrChain | Small Acts. Big Change.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MehrChain | مهرچین — عادت‌سازی آرام، پیوند‌های پایدار</title>
+    <meta name="description" content="مهرچین: پلتفرم مینیمال، آرام و متن‌باز برای ساخت عادت‌ها با همراهی صمیمانه یک دوست. بدون نوتیفیکیشن مزاحم و بدون دیوار ثبت‌نام.">
+
+    <!-- Open Graph / Meta -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MehrChain | مهرچین — Small Acts. Big Change.">
+    <meta property="og:description" content="عادت‌سازی آرام با همراهی صمیمانه یک دوست. کاملاً آفلاین، متن‌باز و بدون اسپم.">
+    <meta property="og:image" content="https://farzad-bahadorifar.github.io/mehrchain/app-screenshot.png">
+    <meta name="theme-color" content="#008080">
+
+    <link rel="icon" type="image/png" href="./app/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        primary: '#008080', // Teal
-                        accent: '#009E9E', // Bright Teal
-                        offwhite: '#F8FAFC',
+                        primary: {
+                            DEFAULT: '#008080',
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#008080',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        },
+                        accent: '#009E9E',
+                        surface: '#FFFFFF',
+                        darkBg: '#090D12',
+                        darkCard: '#111827',
                     },
                     fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
+                        fa: ['Vazirmatn', 'sans-serif'],
+                        en: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 8s infinite ease-in-out',
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(1deg)' },
+                        },
+                        glow: {
+                            '0%': { opacity: '0.4', filter: 'blur(60px)' },
+                            '100%': { opacity: '0.8', filter: 'blur(80px)' },
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
+        :root {
+            --font-current: 'Vazirmatn', sans-serif;
+        }
         body {
-            background-color: #F8FAFC;
+            font-family: var(--font-current);
+            background-color: #FAFCFC;
+            overflow-x: hidden;
         }
-
-        .blob {
-            position: absolute;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: float 10s infinite ease-in-out;
+        [dir="ltr"] {
+            --font-current: '"Plus Jakarta Sans"', sans-serif;
         }
-
-        @keyframes float {
-            0% {
-                transform: translate(0px, 0px) scale(1);
-            }
-
-            33% {
-                transform: translate(30px, -50px) scale(1.1);
-            }
-
-            66% {
-                transform: translate(-20px, 20px) scale(0.9);
-            }
-
-            100% {
-                transform: translate(0px, 0px) scale(1);
-            }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
-
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+        .dark .glass-panel {
+            background: rgba(17, 24, 39, 0.78);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-
-        .phone-mockup {
-            box-shadow: 0 20px 50px -12px rgba(0, 128, 128, 0.25);
-            border: 8px solid white;
+        .gradient-border {
+            background: linear-gradient(135deg, rgba(0, 128, 128, 0.3), rgba(0, 158, 158, 0.05));
+        }
+        .phone-frame {
+            box-shadow: 0 25px 60px -15px rgba(0, 128, 128, 0.2), 0 0 0 1px rgba(0, 128, 128, 0.1);
+        }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #008080;
         }
     </style>
 </head>
 
-<body class="text-slate-800 antialiased overflow-x-hidden selection:bg-primary/20">
+<body class="text-slate-800 antialiased selection:bg-primary-100 selection:text-primary-900 transition-colors duration-300">
 
-    <div class="blob bg-primary w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
-    <div
-        class="blob bg-accent w-80 h-80 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3 animation-delay-2000">
+    <!-- Glowing Background Ambient Spheres -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-gradient-to-br from-primary-400/20 to-teal-500/10 blur-[100px] animate-pulse-slow"></div>
+        <div class="absolute top-1/3 -left-40 w-[30rem] h-[30rem] rounded-full bg-gradient-to-tr from-accent/15 to-emerald-400/10 blur-[120px] animate-float"></div>
+        <div class="absolute -bottom-40 right-1/4 w-96 h-96 rounded-full bg-primary-200/20 blur-[100px]"></div>
     </div>
 
-    <nav class="w-full py-6 px-6 flex justify-between items-center max-w-6xl mx-auto">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
-                <i data-lucide="flame" class="w-5 h-5"></i>
-            </div>
-            <span class="font-bold text-xl tracking-tight text-slate-800">MehrChain</span>
-        </div>
-
-        <a href="https://github.com/farzad-bahadorifar/mehrchain" target="_blank"
-            class="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 transition-all shadow-md hover:shadow-lg">
-            <i data-lucide="github" class="w-4 h-4"></i>
-            <span>Contribute on GitHub</span>
-        </a>
-    </nav>
-
-    <main class="flex flex-col lg:flex-row items-center justify-between max-w-6xl mx-auto px-6 py-12 lg:py-24 gap-12">
-
-        <div class="flex-1 text-center lg:text-left space-y-8">
-            <div
-                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-                <span class="relative flex h-2 w-2">
-                    <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+    <!-- Top Announcement Bar -->
+    <div class="relative z-50 bg-gradient-to-r from-primary-900 via-primary-800 to-teal-900 text-white text-xs md:text-sm py-2 px-4 shadow-sm">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2 mx-auto sm:mx-0">
+                <span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20 backdrop-blur text-teal-100 uppercase tracking-wider">
+                    v1.0.0
                 </span>
-                Active Development
+                <span data-i18n="announcement_text">
+                    🎉 مهرچین آماده است! نسخه جدید وب (PWA) و فایل نصبی اندروید منتشر شد.
+                </span>
             </div>
-
-            <h1 class="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
-                Small Acts.<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Big Change.</span>
-            </h1>
-
-            <p class="text-lg text-slate-500 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                "You, light your own lamp." — Rumi.<br>
-                A mindful companion designed to help you commit to positive goals and build empowering habits.
-            </p>
-
-            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                <a href="./app/"
-                    class="px-7 py-4 bg-primary text-white rounded-2xl font-bold text-base shadow-lg shadow-primary/30 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
-                    Launch Web App <i data-lucide="sparkles" class="w-5 h-5"></i>
-                </a>
-                <a href="https://github.com/farzad-bahadorifar/mehrchain/releases" target="_blank"
-                    class="px-7 py-4 bg-white text-slate-700 border border-slate-200 rounded-2xl font-bold text-base hover:border-primary hover:text-primary hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 shadow-sm">
-                    <i data-lucide="download" class="w-5 h-5 text-primary"></i>
-                    <span>Download APK</span>
-                </a>
-            </div>
+            <a href="https://github.com/farzad-bahadorifar/mehrchain/releases" target="_blank" class="hidden sm:inline-flex items-center gap-1 text-teal-200 hover:text-white font-medium transition-colors">
+                <span data-i18n="announcement_link">دانلود نسخه جدید</span>
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5 rtl:inline ltr:hidden"></i>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 ltr:inline rtl:hidden"></i>
+            </a>
         </div>
+    </div>
 
-        <div class="flex-1 relative w-full max-w-[22rem] mx-auto">
-            <div class="relative z-10 bg-white rounded-[2.5rem] overflow-hidden phone-mockup aspect-[9/19.5]">
-
-                <div class="w-full h-full bg-slate-50 flex flex-col items-center justify-center text-center p-5">
-                    <div class="w-full h-full bg-slate-50 overflow-hidden">
-                        <img src="./app-screenshot.png" alt="MehrChain App Screenshot"
-                            class="w-full h-full object-fill">
-                    </div>
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-200/60 transition-all duration-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+            
+            <!-- Logo & Brand -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform duration-200">
+                    <i data-lucide="flame" class="w-5 h-5 fill-white/20"></i>
                 </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-extrabold text-xl tracking-tight text-slate-900 font-en">MehrChain</span>
+                        <span class="text-xs font-bold text-primary px-1.5 py-0.2 rounded bg-primary/10">مهرچین</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 font-medium leading-none hidden sm:block" data-i18n="brand_subtitle">عادت‌سازی آرام و بدون هیاهو</p>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-600">
+                <a href="#features" class="hover:text-primary transition-colors" data-i18n="nav_features">ویژگی‌ها</a>
+                <a href="#chain-system" class="hover:text-primary transition-colors" data-i18n="nav_chain">زنجیره مهر</a>
+                <a href="#demo" class="hover:text-primary transition-colors" data-i18n="nav_demo">دموی تعاملی</a>
+                <a href="#download" class="hover:text-primary transition-colors" data-i18n="nav_download">دانلود و نصب</a>
+                <a href="#faq" class="hover:text-primary transition-colors" data-i18n="nav_faq">پرسش‌ها</a>
+            </nav>
+
+            <!-- Actions & Controls -->
+            <div class="flex items-center gap-2.5">
+                <!-- Language Switcher Button -->
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white/80 hover:bg-slate-100 text-xs font-bold text-slate-700 shadow-sm transition-all">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-primary"></i>
+                    <span id="langLabel">English</span>
+                </button>
+
+                <!-- GitHub Button -->
+                <a href="https://github.com/farzad-bahadorifar/mehrchain" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white/80 hover:bg-slate-100 text-xs font-bold text-slate-700 shadow-sm transition-all" title="GitHub Repository">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                    <span class="font-en">GitHub</span>
+                </a>
+
+                <!-- Launch App CTA -->
+                <a href="https://mehrchain.pages.dev" target="_blank" class="px-4 py-2 bg-gradient-to-r from-primary to-teal-700 hover:from-teal-700 hover:to-primary text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-1.5">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span data-i18n="nav_launch">اجرای اپلیکیشن</span>
+                </a>
             </div>
-        </div>
-    </main>
 
-    <section id="features" class="py-24 bg-white/50">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div
-                    class="p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-                    <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6">
-                        <i data-lucide="zap" class="w-6 h-6"></i>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                
+                <!-- Hero Content Left / Right -->
+                <div class="lg:col-span-7 text-center lg:text-start space-y-7">
+                    
+                    <!-- Badge & Quote -->
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold shadow-sm">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                        </span>
+                        <span data-i18n="hero_badge">رویکردی نو در پایبندی به اهداف</span>
                     </div>
-                    <h3 class="font-bold text-xl mb-3">Guest-First</h3>
-                    <p class="text-slate-500 leading-relaxed">No login walls. Start your journey immediately. We respect
-                        your time and privacy.</p>
-                </div>
-                <div
-                    class="p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-                    <div
-                        class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-500 mb-6">
-                        <i data-lucide="flame" class="w-6 h-6"></i>
+
+                    <!-- Main Catchy Heading -->
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.25] sm:leading-[1.2]">
+                        <span data-i18n="hero_title_1">قدم‌های کوچک،</span><br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-500 font-extrabold" data-i18n="hero_title_highlight">تغییرات پایدار.</span>
+                    </h1>
+
+                    <!-- Rumi Quote & Subtitle -->
+                    <div class="space-y-3 max-w-xl mx-auto lg:mx-0">
+                        <p class="text-base sm:text-lg text-slate-600 font-medium leading-relaxed" data-i18n="hero_quote">
+                            «تو، خودت چراغ خودت باش.» — مولانا
+                        </p>
+                        <p class="text-sm sm:text-base text-slate-500 leading-relaxed" data-i18n="hero_desc">
+                            مهرچین یک همراه خلوت و آرام برای پایبندی به عادت‌هاست. بدون نوتیفیکیشن‌های استرس‌زا، بدون فروش داده و بدون نیاز به ثبت‌نام اجباری؛ رشد کنید و با همراهی صمیمانه یک دوست، در مسیر بمانید.
+                        </p>
                     </div>
-                    <h3 class="font-bold text-xl mb-3">Chain Effects</h3>
-                    <p class="text-slate-500 leading-relaxed">Visualize how small, consistent acts create a massive
-                        ripple effect in your life.</p>
-                </div>
-                <div
-                    class="p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-500 mb-6">
-                        <i data-lucide="smartphone" class="w-6 h-6"></i>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
+                        <a href="https://mehrchain.pages.dev" target="_blank"
+                            class="px-7 py-3.5 bg-primary hover:bg-primary-700 text-white rounded-2xl font-bold text-sm sm:text-base shadow-lg shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2.5">
+                            <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+                            <span data-i18n="btn_web_app">اجرای نسخه وب (PWA)</span>
+                        </a>
+
+                        <a href="https://github.com/farzad-bahadorifar/mehrchain/releases" target="_blank"
+                            class="px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/90 rounded-2xl font-bold text-sm sm:text-base shadow-sm hover:border-primary/40 hover:text-primary hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2.5">
+                            <i data-lucide="download" class="w-4 h-4 text-primary"></i>
+                            <span data-i18n="btn_download_apk">دانلود مستقیم APK</span>
+                        </a>
+
+                        <a href="#chain-system"
+                            class="px-5 py-3.5 text-slate-600 hover:text-primary rounded-2xl font-bold text-sm flex items-center gap-1.5 transition-colors">
+                            <span data-i18n="btn_learn_more">آشنایی با سیستم زنجیره</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </a>
                     </div>
-                    <h3 class="font-bold text-xl mb-3">PWA Ready</h3>
-                    <p class="text-slate-500 leading-relaxed">Install on any device. Works offline. An app store
-                        experience, without the store.</p>
+
+                    <!-- Micro Trust Highlights -->
+                    <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-semibold border-t border-slate-200/60">
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-teal-600"></i>
+                            <span data-i18n="trust_guest">۱۰۰٪ بدون نیاز به ثبت‌نام</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="wifi-off" class="w-4 h-4 text-teal-600"></i>
+                            <span data-i18n="trust_offline">کارکرد کامل آفلاین</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="code-2" class="w-4 h-4 text-teal-600"></i>
+                            <span data-i18n="trust_opensource">متن‌باز و رایگان</span>
+                        </div>
+                    </div>
+
                 </div>
+
+                <!-- Hero Interactive Phone Mockup Right / Left -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-full max-w-[320px] sm:max-w-[340px]">
+                        
+                        <!-- Floating Pill Badge -->
+                        <div class="absolute -top-4 -right-4 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2.5 animate-float">
+                            <div class="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
+                                <i data-lucide="flame" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <div class="text-[11px] font-bold text-slate-800" data-i18n="pill_streak">استریک ۲۱ روزه!</div>
+                                <div class="text-[9px] text-slate-400 font-medium" data-i18n="pill_streak_sub">عادت مطالعه روزانه</div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Partner Support Pill -->
+                        <div class="absolute -bottom-5 -left-4 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-xs">
+                                م
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-bold text-slate-800" data-i18n="pill_partner">همراهت امروز عادتش را انجام داد</div>
+                                <div class="text-[9px] text-primary font-semibold flex items-center gap-1">
+                                    <i data-lucide="heart" class="w-2.5 h-2.5 fill-current"></i>
+                                    <span data-i18n="pill_partner_sub">پیوند مهر برقرار است</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phone Mockup Container -->
+                        <div class="relative bg-slate-900 rounded-[3rem] p-3 shadow-2xl phone-frame border-4 border-slate-800">
+                            <!-- Screen Top Island -->
+                            <div class="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-4 bg-slate-950 rounded-full z-20"></div>
+
+                            <!-- Screen Frame Inner -->
+                            <div class="bg-slate-50 rounded-[2.3rem] overflow-hidden aspect-[9/18.5] flex flex-col justify-between p-4 pt-8 text-start relative select-none">
+                                
+                                <!-- App Header In Mockup -->
+                                <div class="flex items-center justify-between border-b border-slate-200/80 pb-3">
+                                    <div>
+                                        <div class="text-[10px] text-slate-400 font-bold" data-i18n="mock_greeting">امروز، یکشنبه</div>
+                                        <div class="text-sm font-extrabold text-slate-800" data-i18n="mock_headline">مسیر روزانه شما</div>
+                                    </div>
+                                    <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
+                                        🌱
+                                    </div>
+                                </div>
+
+                                <!-- Habit Card Demo Inside Phone -->
+                                <div class="space-y-2.5 my-auto">
+                                    
+                                    <!-- Interactive Habit Card -->
+                                    <div id="heroHabitCard" onclick="triggerHeroCheckIn()" class="p-3.5 bg-white rounded-2xl border border-teal-100 shadow-sm hover:shadow-md transition-all cursor-pointer group active:scale-95">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <div id="heroHabitIconBox" class="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center transition-colors">
+                                                    <i id="heroHabitIcon" data-lucide="book-open" class="w-4 h-4"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="text-xs font-bold text-slate-800" data-i18n="mock_habit_title">مطالعه کتاب (۲۰ صفحه)</div>
+                                                    <div class="text-[10px] text-slate-400" data-i18n="mock_habit_target">هدف: هر روز عصر</div>
+                                                </div>
+                                            </div>
+                                            <div id="heroHabitCheck" class="w-6 h-6 rounded-lg border-2 border-teal-500 flex items-center justify-center text-white bg-transparent transition-all">
+                                                <i data-lucide="check" class="w-3.5 h-3.5 opacity-0 transition-opacity"></i>
+                                            </div>
+                                        </div>
+                                        <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                            <div id="heroHabitBar" class="bg-primary h-full rounded-full transition-all duration-500" style="width: 70%"></div>
+                                        </div>
+                                        <div class="flex justify-between items-center mt-1.5 text-[9px] text-slate-400 font-medium">
+                                            <span data-i18n="mock_click_hint">👈 برای ثبت تپ کنید!</span>
+                                            <span id="heroHabitStreak">🔥 ۱۴ روز پیوسته</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Chain Buddy Preview Card -->
+                                    <div class="p-3 bg-gradient-to-br from-teal-50/70 to-emerald-50/50 rounded-2xl border border-teal-100/80">
+                                        <div class="flex items-center justify-between text-[11px]">
+                                            <div class="flex items-center gap-1.5 font-bold text-slate-700">
+                                                <i data-lucide="link-2" class="w-3.5 h-3.5 text-primary"></i>
+                                                <span data-i18n="mock_buddy_name">زنجیره سارا و فرزاد</span>
+                                            </div>
+                                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800" data-i18n="mock_status_active">همگام ✅</span>
+                                        </div>
+                                        <p class="text-[9px] text-slate-500 mt-1" data-i18n="mock_buddy_desc">سارا امروز عادت «ورزش صبحگاهی» را کامل کرد.</p>
+                                    </div>
+
+                                </div>
+
+                                <!-- Bottom Tab Bar Inside Phone -->
+                                <div class="bg-white rounded-2xl p-2 flex justify-around items-center border border-slate-100 shadow-sm text-slate-400">
+                                    <div class="text-primary flex flex-col items-center">
+                                        <i data-lucide="home" class="w-4 h-4"></i>
+                                        <span class="text-[8px] font-bold" data-i18n="tab_home">خانه</span>
+                                    </div>
+                                    <div class="flex flex-col items-center hover:text-slate-600">
+                                        <i data-lucide="link" class="w-4 h-4"></i>
+                                        <span class="text-[8px] font-medium" data-i18n="tab_chain">زنجیره</span>
+                                    </div>
+                                    <div class="flex flex-col items-center hover:text-slate-600">
+                                        <i data-lucide="user" class="w-4 h-4"></i>
+                                        <span class="text-[8px] font-medium" data-i18n="tab_profile">پروفایل</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <footer class="py-12 text-center text-slate-400 text-sm">
-        <p class="mb-4">Open Source with ❤️ by the MehrChain Community.</p>
-        <div class="flex justify-center gap-4">
-            <a href="#" class="hover:text-primary transition-colors">Telegram</a>
-            <a href="#" class="hover:text-primary transition-colors">GitHub</a>
+    <!-- Why MehrChain? (Problem vs Solution) Section -->
+    <section class="py-20 bg-white border-y border-slate-100 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <h2 class="text-xs font-bold tracking-widest text-primary uppercase" data-i18n="sec_why_badge">فلسفه طراحی</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight" data-i18n="sec_why_title">
+                    چرا به هبیت‌ترکر متفاوتی نیاز داشتیم؟
+                </p>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed" data-i18n="sec_why_sub">
+                    اکثر برنامه‌های عادت‌سازی با هشدارهای پی‌درپی و احساس گناه، آرامش شما را به هم می‌زنند. مهرچین بر پایه همدلی و همراهی آرام بنا شده است.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- Old Way Box -->
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center font-bold">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-extrabold text-lg text-slate-800" data-i18n="why_old_title">برنامه‌های متداول عادت‌سازی</h3>
+                    </div>
+                    <ul class="space-y-4 text-sm text-slate-600">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="alert-circle" class="w-4 h-4 text-red-500 mt-0.5 shrink-0"></i>
+                            <span data-i18n="why_old_1">نوتیفیکیشن‌های آزاردهنده و ایجاد اضطراب و احساس گناه در روزهای شلوغ.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="alert-circle" class="w-4 h-4 text-red-500 mt-0.5 shrink-0"></i>
+                            <span data-i18n="why_old_2">اجبار به ساخت حساب، ایمیل و فروش داده‌ها و تبلیغات درون‌برنامه‌ای.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="alert-circle" class="w-4 h-4 text-red-500 mt-0.5 shrink-0"></i>
+                            <span data-i18n="why_old_3">تنهایی محض در مسیر یا رقابت‌های فرساینده با افراد غریبه.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- MehrChain Way Box -->
+                <div class="p-8 rounded-3xl bg-gradient-to-br from-teal-50/90 to-emerald-50/50 border-2 border-teal-200 space-y-6 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-teal-600 text-white flex items-center justify-center font-bold shadow-md shadow-teal-600/30">
+                            <i data-lucide="check" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-extrabold text-lg text-slate-900" data-i18n="why_new_title">تجربه آرامش‌بخش مهرچین</h3>
+                    </div>
+                    <ul class="space-y-4 text-sm text-slate-700 font-medium">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-teal-600 mt-0.5 shrink-0"></i>
+                            <span data-i18n="why_new_1"><strong>پاسخگویی آرام و بی‌صدا (Quiet Accountability):</strong> دیدن پیشرفت دوست بدون هیچ نوتیفیکیشن مزاحم.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-teal-600 mt-0.5 shrink-0"></i>
+                            <span data-i18n="why_new_2"><strong>مهمان‌محور (Guest-First):</strong> شروع آنی بدون لاگین. دیتای شما در وهله اول روی گوشی خودتان ذخیره می‌شود.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="heart" class="w-4 h-4 text-teal-600 mt-0.5 shrink-0"></i>
+                            <span data-i18n="why_new_3"><strong>مهر و همدلی دونفره:</strong> امکان ریکاوری و وضعیت استراحت (`Resting`) به جای نابود شدن انگیزه.</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Bento Grid Features Section -->
+    <section id="features" class="py-24 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <h2 class="text-xs font-bold tracking-widest text-primary uppercase" data-i18n="bento_badge">امکانات کلیدی</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight" data-i18n="bento_title">
+                    هر آنچه برای تداوم نیاز دارید، بدون هیچ شلوغی
+                </p>
+            </div>
+
+            <!-- Bento Grid 3x2 -->
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <!-- Card 1: Chain Feature (Large 2 cols) -->
+                <div class="md:col-span-2 p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 relative overflow-hidden group">
+                    <div class="max-w-md space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold mb-4">
+                            <i data-lucide="link-2" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900" data-i18n="feat_chain_title">زنجیره مهر (The Silent Chain)</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed" data-i18n="feat_chain_desc">
+                            یک دوست یا هم‌مسیر انتخاب کنید. هر زمان که عادت خود را انجام دهید، فید همراهتان بدون ایجاد سر و صدا به‌روز می‌شود. ۵ وضعیت هوشمند شامل انجام‌شده، در انتظار، در حال استراحت و پایان سفر.
+                        </p>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-2 text-xs font-bold">
+                        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800" data-i18n="state_done">✅ انجام شده</span>
+                        <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800" data-i18n="state_waiting">⏳ در انتظار</span>
+                        <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-800" data-i18n="state_resting">🌿 استراحت</span>
+                        <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700" data-i18n="state_completed">🏆 پایان دوره</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Guest-First -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold">
+                        <i data-lucide="user-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900" data-i18n="feat_guest_title">ورود مهمان و حریم خصوصی</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="feat_guest_desc">
+                        بدون اتلاف وقت در فرم‌های ثبت‌نام، در کمتر از ۵ ثانیه اولین عادت خود را تعریف کنید. اطلاعات شما محلی ذخیره شده و فقط در صورت تمایل ابری می‌شود.
+                    </p>
+                </div>
+
+                <!-- Card 3: PWA & Offline -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                        <i data-lucide="smartphone" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900" data-i18n="feat_pwa_title">نصب وب (PWA) و آفلاین</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="feat_pwa_desc">
+                        مانند یک اپلیکیشن بومی روی آیفون، اندروید و کامپیوتر نصب می‌شود. بدون نیاز به اتصال دائم اینترنت، پیشرفت شما را در حافظه محلی ذخیره می‌کند.
+                    </p>
+                </div>
+
+                <!-- Card 4: Minimal UI -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+                        <i data-lucide="palette" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900" data-i18n="feat_ui_title">طراحی ارگونومیک و مینیمال</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="feat_ui_desc">
+                        فونت چشم‌نواز وزیرمتن، پالت رنگی فیروزه‌ای آرامش‌بخش، سازگاری کامل با تم روشن و تاریک، و دسترسی راحت با یک دست روی موبایل.
+                    </p>
+                </div>
+
+                <!-- Card 5: Open Source (1 Col) -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                        <i data-lucide="code" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900" data-i18n="feat_open_title">کاملاً متن‌باز و شفاف</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="feat_open_desc">
+                        کد منبع پروژه تحت مجوز آزاد روی گیت‌هاب در دسترس عموم است. بدون بک‌دورهای تجاری و بدون ردیابی رفتاری کاربران.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Interactive Chain Sandbox / 5 States Demo -->
+    <section id="demo" class="py-20 bg-slate-900 text-white relative overflow-hidden z-10">
+        <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-teal-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-10">
+            
+            <div class="space-y-3">
+                <span class="px-3.5 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold uppercase tracking-wider" data-i18n="demo_badge">
+                    تجربه زنده همراهی
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight" data-i18n="demo_title">
+                    ۵ وضعیت هوشمند در زنجیره مهر
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto" data-i18n="demo_sub">
+                    روی هر وضعیت کلیک کنید تا ببینید کارت همراه در شرایط مختلف چگونه نمایش داده می‌شود:
+                </p>
+            </div>
+
+            <!-- State Buttons Controller -->
+            <div class="flex flex-wrap justify-center gap-2 p-1.5 bg-slate-800/80 backdrop-blur rounded-2xl max-w-2xl mx-auto border border-slate-700/60">
+                <button onclick="setChainState('active')" id="btn-state-active" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow">
+                    <span data-i18n="state_btn_active">امروز انجام داد ✅</span>
+                </button>
+                <button onclick="setChainState('waiting')" id="btn-state-waiting" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60">
+                    <span data-i18n="state_btn_waiting">در انتظار ⏳</span>
+                </button>
+                <button onclick="setChainState('resting')" id="btn-state-resting" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60">
+                    <span data-i18n="state_btn_resting">روز استراحت 🌿</span>
+                </button>
+                <button onclick="setChainState('fading')" id="btn-state-fading" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60">
+                    <span data-i18n="state_btn_fading">نیاز به یادآوری 💬</span>
+                </button>
+                <button onclick="setChainState('completed')" id="btn-state-completed" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60">
+                    <span data-i18n="state_btn_completed">پایان ۲۱ روز 🏆</span>
+                </button>
+            </div>
+
+            <!-- Dynamic Preview Card Container -->
+            <div class="max-w-md mx-auto">
+                <div id="demoCard" class="p-6 rounded-3xl bg-slate-800/90 border border-teal-500/30 text-start shadow-2xl transition-all duration-300">
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div id="demoAvatar" class="w-11 h-11 rounded-2xl bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-base border border-teal-500/30">
+                                س
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm" data-i18n="demo_user_name">سارا محمدی</h4>
+                                <p class="text-xs text-slate-400" data-i18n="demo_habit_title">هدف: نیم ساعت ورزش روزانه</p>
+                            </div>
+                        </div>
+                        <span id="demoBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                            انجام شده امروز
+                        </span>
+                    </div>
+
+                    <p id="demoDescription" class="text-xs text-slate-300 leading-relaxed mb-4">
+                        سارا امروز در ساعت ۱۸:۳۰ تمرین ورزشی خود را تکمیل کرد و زنجیره استمرار شما با هم ۱۲ روزه شد!
+                    </p>
+
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-700/60 text-xs">
+                        <span id="demoStreakText" class="text-teal-400 font-bold flex items-center gap-1">
+                            <i data-lucide="flame" class="w-4 h-4"></i>
+                            ۱۲ روز پیوستگی
+                        </span>
+                        <button onclick="sendHeartReact()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-pink-500/20 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 font-bold transition-all active:scale-90">
+                            <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+                            <span data-i18n="demo_send_heart">ارسال مهر ❤️</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Download & QR Code Section -->
+    <section id="download" class="py-24 bg-gradient-to-b from-slate-50 to-white relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <h2 class="text-xs font-bold tracking-widest text-primary uppercase" data-i18n="dl_badge">دریافت و نصب</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight" data-i18n="dl_title">
+                    همین حالا روی گوشی یا کامپیوتر اجرا کنید
+                </p>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed" data-i18n="dl_sub">
+                    بدون نیاز به فروشگاه‌های اپلیکیشن، در چند ثانیه مهرچین را مانند یک برنامه بومی نصب کنید.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Left: 3 Install Paths -->
+                <div class="lg:col-span-7 space-y-4">
+                    
+                    <!-- Web App Card -->
+                    <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:border-primary/40 transition-all flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold">
+                                <i data-lucide="globe" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-base text-slate-900" data-i18n="dl_web_title">نسخه وب پیشرو (Cloudflare / PWA)</h4>
+                                <p class="text-xs text-slate-500" data-i18n="dl_web_desc">سازگار با مرورگر همه دستگاه‌ها (iOS، اندروید، ویندوز و مک)</p>
+                            </div>
+                        </div>
+                        <a href="https://mehrchain.pages.dev" target="_blank" class="px-5 py-2.5 bg-primary hover:bg-teal-700 text-white font-bold text-xs rounded-xl transition-all shrink-0">
+                            <span data-i18n="dl_web_btn">باز کردن ↗</span>
+                        </a>
+                    </div>
+
+                    <!-- Android APK Card -->
+                    <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:border-primary/40 transition-all flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                                <i data-lucide="download-cloud" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-base text-slate-900" data-i18n="dl_apk_title">فایل نصبی مستقیم APK (اندروید)</h4>
+                                <p class="text-xs text-slate-500" data-i18n="dl_apk_desc">امضا شده رسمی (Release Signed APK) برای نصب آسان روی اندروید</p>
+                            </div>
+                        </div>
+                        <a href="https://github.com/farzad-bahadorifar/mehrchain/releases" target="_blank" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all shrink-0 flex items-center gap-1.5">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="dl_apk_btn">دانلود APK</span>
+                        </a>
+                    </div>
+
+                    <!-- iOS Guide Card -->
+                    <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center">
+                                <i data-lucide="apple" class="w-5 h-5"></i>
+                            </div>
+                            <h4 class="font-bold text-sm text-slate-900" data-i18n="dl_ios_title">راهنمای نصب در آیفون (iOS):</h4>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed ps-12" data-i18n="dl_ios_desc">
+                            سایت را در مرورگر Safari باز کنید، روی دکمه اشتراک‌گذاری (Share) در پایین بزنید و گزینه <strong>«Add to Home Screen»</strong> را انتخاب کنید.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Right: QR Code Scan -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="p-8 rounded-3xl bg-white border-2 border-slate-200/90 shadow-xl text-center space-y-4 max-w-xs w-full">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="qr_title">اسکن با دوربین گوشی</div>
+                        
+                        <!-- QR Box -->
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 inline-block">
+                            <div id="qrcode" class="flex justify-center"></div>
+                        </div>
+
+                        <p class="text-xs text-slate-500 font-medium" data-i18n="qr_desc">
+                            دوربین گوشی خود را روبه‌روی کیوآرکد بگیرید تا مستقیماً اپلیکیشن برایتان باز شود.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FAQ Accordion Section -->
+    <section id="faq" class="py-20 bg-white relative z-10 border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            
+            <div class="text-center space-y-3 mb-12">
+                <h2 class="text-xs font-bold tracking-widest text-primary uppercase" data-i18n="faq_badge">پاسخ به سوالات متداول</h2>
+                <p class="text-3xl font-extrabold text-slate-900 tracking-tight" data-i18n="faq_title">
+                    هر آنچه ممکن است بپرسید
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <details class="group p-6 rounded-2xl bg-slate-50 border border-slate-200/80 open:bg-white open:border-primary/30 open:shadow-md transition-all">
+                    <summary class="flex justify-between items-center cursor-pointer font-bold text-sm sm:text-base text-slate-800 list-none">
+                        <span data-i18n="faq_q1">آیا استفاده از مهرچین کاملاً رایگان است؟</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-3" data-i18n="faq_a1">
+                        بله! مهرچین یک پروژه متن‌باز (Open Source) و رایگان است و هیچ پلن پولی یا تبلیغات آزاردهنده‌ای نخواهد داشت.
+                    </p>
+                </details>
+
+                <details class="group p-6 rounded-2xl bg-slate-50 border border-slate-200/80 open:bg-white open:border-primary/30 open:shadow-md transition-all">
+                    <summary class="flex justify-between items-center cursor-pointer font-bold text-sm sm:text-base text-slate-800 list-none">
+                        <span data-i18n="faq_q2">چگونه دوستم را به زنجیره همراهی دعوت کنم؟</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-3" data-i18n="faq_a2">
+                        در تب «زنجیره» درون برنامه، روی دکمه «دعوت همراه» کلیک کرده و لینک یا کد اختصاصی را برای دوستتان در تلگرام یا پیامک بفرستید. به محض قبول دعوت، پیوند شما برقرار می‌شود.
+                    </p>
+                </details>
+
+                <details class="group p-6 rounded-2xl bg-slate-50 border border-slate-200/80 open:bg-white open:border-primary/30 open:shadow-md transition-all">
+                    <summary class="flex justify-between items-center cursor-pointer font-bold text-sm sm:text-base text-slate-800 list-none">
+                        <span data-i18n="faq_q3">اگر چند روز اینترنت نداشته باشم اطلاعاتم پاک می‌شود؟</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-3" data-i18n="faq_a3">
+                        خیر؛ مهرچین کاملاً Local-First طراحی شده است. تمام عادت‌ها و تیک‌های روزانه در حافظه دستگاه شما ثبت شده و به محض اتصال به اینترنت، با سرور همگام‌سازی می‌شود.
+                    </p>
+                </details>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800 relative z-10 text-xs">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-slate-800">
+                
+                <!-- Brand Info -->
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white">
+                        <i data-lucide="flame" class="w-5 h-5 fill-white/20"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white text-base">MehrChain | مهرچین</div>
+                        <div class="text-slate-500 text-[11px]" data-i18n="footer_slogan">Small Acts. Big Change.</div>
+                    </div>
+                </div>
+
+                <!-- Footer Social Links -->
+                <div class="flex items-center gap-6 font-semibold">
+                    <a href="https://github.com/farzad-bahadorifar/mehrchain" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5">
+                        <i data-lucide="github" class="w-4 h-4"></i>
+                        <span class="font-en">GitHub</span>
+                    </a>
+                    <a href="https://t.me/mehrchain" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        <span data-i18n="footer_telegram">کانال تلگرام</span>
+                    </a>
+                    <a href="https://github.com/farzad-bahadorifar/mehrchain/blob/main/LICENSE" target="_blank" class="hover:text-white transition-colors">
+                        MIT License
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="pt-8 text-center text-slate-500 space-y-2">
+                <p data-i18n="footer_copy">توسعه یافته با ❤️ توسط جامعه کاربری مهرچین برای ساختن عادت‌های ماندگار و رشد فردی آرام.</p>
+                <p class="font-en text-[11px] text-slate-600">© 2026 MehrChain Open Source Project. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
+    <!-- I18N Translation Dictionaries & Interactive Scripts -->
     <script>
-        lucide.createIcons();
+        const translations = {
+            fa: {
+                announcement_text: "🎉 مهرچین آماده است! نسخه جدید وب (PWA) و فایل نصبی اندروید منتشر شد.",
+                announcement_link: "دانلود نسخه جدید",
+                brand_subtitle: "عادت‌سازی آرام و بدون هیاهو",
+                nav_features: "ویژگی‌ها",
+                nav_chain: "زنجیره مهر",
+                nav_demo: "دموی تعاملی",
+                nav_download: "دانلود و نصب",
+                nav_faq: "پرسش‌ها",
+                nav_launch: "اجرای اپلیکیشن",
+                hero_badge: "رویکردی نو در پایبندی به اهداف",
+                hero_title_1: "قدم‌های کوچک،",
+                hero_title_highlight: "تغییرات پایدار.",
+                hero_quote: "«تو، خودت چراغ خودت باش.» — مولانا",
+                hero_desc: "مهرچین یک همراه خلوت و آرام برای پایبندی به عادت‌هاست. بدون نوتیفیکیشن‌های استرس‌زا، بدون فروش داده و بدون نیاز به ثبت‌نام اجباری؛ رشد کنید و با همراهی صمیمانه یک دوست، در مسیر بمانید.",
+                btn_web_app: "اجرای نسخه وب (PWA)",
+                btn_download_apk: "دانلود مستقیم APK",
+                btn_learn_more: "آشنایی با سیستم زنجیره",
+                trust_guest: "۱۰۰٪ بدون نیاز به ثبت‌نام",
+                trust_offline: "کارکرد کامل آفلاین",
+                trust_opensource: "متن‌باز و رایگان",
+                pill_streak: "استریک ۲۱ روزه!",
+                pill_streak_sub: "عادت مطالعه روزانه",
+                pill_partner: "همراهت امروز عادتش را انجام داد",
+                pill_partner_sub: "پیوند مهر برقرار است",
+                mock_greeting: "امروز، یکشنبه",
+                mock_headline: "مسیر روزانه شما",
+                mock_habit_title: "مطالعه کتاب (۲۰ صفحه)",
+                mock_habit_target: "هدف: هر روز عصر",
+                mock_click_hint: "👈 برای ثبت تپ کنید!",
+                mock_buddy_name: "زنجیره سارا و فرزاد",
+                mock_status_active: "همگام ✅",
+                mock_buddy_desc: "سارا امروز عادت «ورزش صبحگاهی» را کامل کرد.",
+                tab_home: "خانه",
+                tab_chain: "زنجیره",
+                tab_profile: "پروفایل",
+                sec_why_badge: "فلسفه طراحی",
+                sec_why_title: "چرا به هبیت‌ترکر متفاوتی نیاز داشتیم؟",
+                sec_why_sub: "اکثر برنامه‌های عادت‌سازی با هشدارهای پی‌درپی و احساس گناه، آرامش شما را به هم می‌زنند. مهرچین بر پایه همدلی و همراهی آرام بنا شده است.",
+                why_old_title: "برنامه‌های متداول عادت‌سازی",
+                why_old_1: "نوتیفیکیشن‌های آزاردهنده و ایجاد اضطراب و احساس گناه در روزهای شلوغ.",
+                why_old_2: "اجبار به ساخت حساب، ایمیل و فروش داده‌ها و تبلیغات درون‌برنامه‌ای.",
+                why_old_3: "تنهایی محض در مسیر یا رقابت‌های فرساینده با افراد غریبه.",
+                why_new_title: "تجربه آرامش‌بخش مهرچین",
+                why_new_1: "پاسخگویی آرام و بی‌صدا (Quiet Accountability): دیدن پیشرفت دوست بدون هیچ نوتیفیکیشن مزاحم.",
+                why_new_2: "مهمان‌محور (Guest-First): شروع آنی بدون لاگین. دیتای شما در وهله اول روی گوشی خودتان ذخیره می‌شود.",
+                why_new_3: "مهر و همدلی دونفره: امکان ریکاوری و وضعیت استراحت (Resting) به جای نابود شدن انگیزه.",
+                bento_badge: "امکانات کلیدی",
+                bento_title: "هر آنچه برای تداوم نیاز دارید، بدون هیچ شلوغی",
+                feat_chain_title: "زنجیره مهر (The Silent Chain)",
+                feat_chain_desc: "یک دوست یا هم‌مسیر انتخاب کنید. هر زمان که عادت خود را انجام دهید، فید همراهتان بدون ایجاد سر و صدا به‌روز می‌شود. ۵ وضعیت هوشمند شامل انجام‌شده، در انتظار، در حال استراحت و پایان سفر.",
+                state_done: "✅ انجام شده",
+                state_waiting: "⏳ در انتظار",
+                state_resting: "🌿 استراحت",
+                state_completed: "🏆 پایان دوره",
+                feat_guest_title: "ورود مهمان و حریم خصوصی",
+                feat_guest_desc: "بدون اتلاف وقت در فرم‌های ثبت‌نام، در کمتر از ۵ ثانیه اولین عادت خود را تعریف کنید. اطلاعات شما محلی ذخیره شده و فقط در صورت تمایل ابری می‌شود.",
+                feat_pwa_title: "نصب وب (PWA) و آفلاین",
+                feat_pwa_desc: "مانند یک اپلیکیشن بومی روی آیفون، اندروید و کامپیوتر نصب می‌شود. بدون نیاز به اتصال دائم اینترنت، پیشرفت شما را در حافظه محلی ذخیره می‌کند.",
+                feat_ui_title: "طراحی ارگونومیک و مینیمال",
+                feat_ui_desc: "فونت چشم‌نواز وزیرمتن، پالت رنگی فیروزه‌ای آرامش‌بخش، سازگاری کامل با تم روشن و تاریک، و دسترسی راحت با یک دست روی موبایل.",
+                feat_open_title: "کاملاً متن‌باز و شفاف",
+                feat_open_desc: "کد منبع پروژه تحت مجوز آزاد روی گیت‌هاب در دسترس عموم است. بدون بک‌دورهای تجاری و بدون ردیابی رفتاری کاربران.",
+                demo_badge: "تجربه زنده همراهی",
+                demo_title: "۵ وضعیت هوشمند در زنجیره مهر",
+                demo_sub: "روی هر وضعیت کلیک کنید تا ببینید کارت همراه در شرایط مختلف چگونه نمایش داده می‌شود:",
+                state_btn_active: "امروز انجام داد ✅",
+                state_btn_waiting: "در انتظار ⏳",
+                state_btn_resting: "روز استراحت 🌿",
+                state_btn_fading: "نیاز به یادآوری 💬",
+                state_btn_completed: "پایان ۲۱ روز 🏆",
+                demo_user_name: "سارا محمدی",
+                demo_habit_title: "هدف: نیم ساعت ورزش روزانه",
+                demo_send_heart: "ارسال مهر ❤️",
+                dl_badge: "دریافت و نصب",
+                dl_title: "همین حالا روی گوشی یا کامپیوتر اجرا کنید",
+                dl_sub: "بدون نیاز به فروشگاه‌های اپلیکیشن، در چند ثانیه مهرچین را مانند یک برنامه بومی نصب کنید.",
+                dl_web_title: "نسخه وب پیشرو (Cloudflare / PWA)",
+                dl_web_desc: "سازگار با مرورگر همه دستگاه‌ها (iOS، اندروید، ویندوز و مک)",
+                dl_web_btn: "باز کردن ↗",
+                dl_apk_title: "فایل نصبی مستقیم APK (اندروید)",
+                dl_apk_desc: "امضا شده رسمی (Release Signed APK) برای نصب آسان روی اندروید",
+                dl_apk_btn: "دانلود APK",
+                dl_ios_title: "راهنمای نصب در آیفون (iOS):",
+                dl_ios_desc: "سایت را در مرورگر Safari باز کنید، روی دکمه اشتراک‌گذاری (Share) در پایین بزنید و گزینه «Add to Home Screen» را انتخاب کنید.",
+                qr_title: "اسکن با دوربین گوشی",
+                qr_desc: "دوربین گوشی خود را روبه‌روی کیوآرکد بگیرید تا مستقیماً اپلیکیشن برایتان باز شود.",
+                faq_badge: "پاسخ به سوالات متداول",
+                faq_title: "هر آنچه ممکن است بپرسید",
+                faq_q1: "آیا استفاده از مهرچین کاملاً رایگان است؟",
+                faq_a1: "بله! مهرچین یک پروژه متن‌باز (Open Source) و رایگان است و هیچ پلن پولی یا تبلیغات آزاردهنده‌ای نخواهد داشت.",
+                faq_q2: "چگونه دوستم را به زنجیره همراهی دعوت کنم؟",
+                faq_a2: "در تب «زنجیره» درون برنامه، روی دکمه «دعوت همراه» کلیک کرده و لینک یا کد اختصاصی را برای دوستتان در تلگرام یا پیامک بفرستید. به محض قبول دعوت، پیوند شما برقرار می‌شود.",
+                faq_q3: "اگر چند روز اینترنت نداشته باشم اطلاعاتم پاک می‌شود؟",
+                faq_a3: "خیر؛ مهرچین کاملاً Local-First طراحی شده است. تمام عادت‌ها و تیک‌های روزانه در حافظه دستگاه شما ثبت شده و به محض اتصال به اینترنت، با سرور همگام‌سازی می‌شود.",
+                footer_slogan: "Small Acts. Big Change.",
+                footer_telegram: "کانال تلگرام",
+                footer_copy: "توسعه یافته با ❤️ توسط جامعه کاربری مهرچین برای ساختن عادت‌های ماندگار و رشد فردی آرام."
+            },
+            en: {
+                announcement_text: "🎉 MehrChain v1.0.0 is live! New Web PWA & Android Release APK available.",
+                announcement_link: "Download Release",
+                brand_subtitle: "Mindful & Quiet Habit Accountability",
+                nav_features: "Features",
+                nav_chain: "Chain System",
+                nav_demo: "Live Sandbox",
+                nav_download: "Download & PWA",
+                nav_faq: "FAQ",
+                nav_launch: "Launch App",
+                hero_badge: "A Mindful Approach to Habits",
+                hero_title_1: "Small Acts.",
+                hero_title_highlight: "Big Change.",
+                hero_quote: "\"You, light your own lamp.\" — Rumi",
+                hero_desc: "MehrChain is a quiet, mindful habit companion. No noisy push alerts, no guilt-trips, no login barriers. Form empowering daily routines with gentle, mutual accountability.",
+                btn_web_app: "Launch Web App (PWA)",
+                btn_download_apk: "Download Android APK",
+                btn_learn_more: "Explore Chain System",
+                trust_guest: "100% Guest-First (No Login Required)",
+                trust_offline: "Fully Works Offline",
+                trust_opensource: "Open Source & Free",
+                pill_streak: "21-Day Streak!",
+                pill_streak_sub: "Daily Reading Habit",
+                pill_partner: "Your partner completed their habit",
+                pill_partner_sub: "Chain connection active",
+                mock_greeting: "Today, Sunday",
+                mock_headline: "Your Daily Journey",
+                mock_habit_title: "Read Book (20 Pages)",
+                mock_habit_target: "Target: Every Evening",
+                mock_click_hint: "👈 Tap to check in!",
+                mock_buddy_name: "Sara & Farzad's Chain",
+                mock_status_active: "Synced ✅",
+                mock_buddy_desc: "Sara completed Morning Workout today.",
+                tab_home: "Home",
+                tab_chain: "Chain",
+                tab_profile: "Profile",
+                sec_why_badge: "Our Philosophy",
+                sec_why_title: "Why did we build a different habit tracker?",
+                sec_why_sub: "Most habit apps cause anxiety with relentless reminders and guilt. MehrChain is built on empathy, respect for attention, and peaceful mutual support.",
+                why_old_title: "Traditional Habit Trackers",
+                why_old_1: "Noisy, stress-inducing push notifications that penalize busy days.",
+                why_old_2: "Mandatory account walls, data harvesting, and in-app advertisements.",
+                why_old_3: "Solitary struggle or exhausting public leaderboards.",
+                why_new_title: "The MehrChain Way",
+                why_new_1: "Quiet Accountability: Passive feeds that celebrate partner progress with zero noise.",
+                why_new_2: "Guest-First & Local-First: Instant start without signup. Your data stays on your device.",
+                why_new_3: "Mutual Kindness (Mehr): Gentle recovery and resting states instead of crushing streaks.",
+                bento_badge: "Key Capabilities",
+                bento_title: "Everything you need to sustain positive change",
+                feat_chain_title: "The Silent Chain",
+                feat_chain_desc: "Pair up with a friend or buddy. When you complete your daily habit, their quiet feed updates seamlessly. Supports 5 thoughtful states.",
+                state_done: "✅ Completed",
+                state_waiting: "⏳ Waiting",
+                state_resting: "🌿 Resting",
+                state_completed: "🏆 Journey Complete",
+                feat_guest_title: "Guest-First & Privacy",
+                feat_guest_desc: "Zero onboarding walls. Create your first commitment in 5 seconds. Data is saved locally and synced only when you choose.",
+                feat_pwa_title: "PWA & Offline Ready",
+                feat_pwa_desc: "Installs smoothly on iOS, Android, and Desktop as a standalone PWA. Fully functional offline in planes or commutes.",
+                feat_ui_title: "Ergonomic & Minimal UI",
+                feat_ui_desc: "Polished typography, mindful teal palette, dark mode support, and effortless single-thumb navigation on mobile.",
+                feat_open_title: "100% Open Source & Transparent",
+                feat_open_desc: "Publicly auditable code on GitHub under MIT license. No telemetry tracking or third-party ad SDKs.",
+                demo_badge: "Live Companion Sandbox",
+                demo_title: "5 Intelligent Chain States",
+                demo_sub: "Click any state below to preview how partner cards adapt in the app:",
+                state_btn_active: "Completed Today ✅",
+                state_btn_waiting: "Waiting ⏳",
+                state_btn_resting: "Resting Day 🌿",
+                state_btn_fading: "Needs Nudge 💬",
+                state_btn_completed: "Journey Complete 🏆",
+                demo_user_name: "Sara M.",
+                demo_habit_title: "Goal: 30-min Daily Workout",
+                demo_send_heart: "Send Love ❤️",
+                dl_badge: "Download & Install",
+                dl_title: "Start on Web or Install on Your Phone",
+                dl_sub: "Skip app store friction. Enjoy an instant native experience on any device.",
+                dl_web_title: "Progressive Web App (Cloudflare / PWA)",
+                dl_web_desc: "Instant access from any modern browser (iOS Safari, Android Chrome, Mac, Windows)",
+                dl_web_btn: "Open App ↗",
+                dl_apk_title: "Direct Android APK Download",
+                dl_apk_desc: "Official Release Signed APK for rapid sideloading without Google Play",
+                dl_apk_btn: "Download APK",
+                dl_ios_title: "iOS Safari Installation:",
+                dl_ios_desc: "Open the web app in Safari, tap the Share icon, and select 'Add to Home Screen'.",
+                qr_title: "Scan with Phone Camera",
+                qr_desc: "Point your phone camera to launch MehrChain instantly.",
+                faq_badge: "Frequently Asked Questions",
+                faq_title: "Everything you might wonder about",
+                faq_q1: "Is MehrChain completely free?",
+                faq_a1: "Yes! MehrChain is an open-source, community-driven project with no paywalls or intrusive ads.",
+                faq_q2: "How do I invite a buddy to my Chain?",
+                faq_a2: "Navigate to the 'Chain' tab, tap 'Invite Buddy', and share your unique 6-character code or link with your friend.",
+                faq_q3: "Will I lose data if I go offline?",
+                faq_a3: "No! MehrChain is built Local-First. Habits and logs are stored on your device immediately and sync in the background when connected.",
+                footer_slogan: "Small Acts. Big Change.",
+                footer_telegram: "Telegram Channel",
+                footer_copy: "Crafted with ❤️ by the MehrChain open source community for mindful, sustainable habit growth."
+            }
+        };
+
+        let currentLang = 'fa';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
+            
+            // Toggle label
+            document.getElementById('langLabel').innerText = lang === 'fa' ? 'English' : 'فارسی';
+
+            // Apply text translations
+            const dict = translations[lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    el.innerText = dict[key];
+                }
+            });
+
+            // Persist
+            localStorage.setItem('mehrchain_landing_lang', lang);
+            lucide.createIcons();
+        }
+
+        function toggleLanguage() {
+            setLanguage(currentLang === 'fa' ? 'en' : 'fa');
+        }
+
+        // Hero check-in interactive celebration
+        let heroChecked = false;
+        function triggerHeroCheckIn() {
+            heroChecked = !heroChecked;
+            const check = document.getElementById('heroHabitCheck');
+            const icon = document.getElementById('heroHabitIconBox');
+            const streak = document.getElementById('heroHabitStreak');
+            const bar = document.getElementById('heroHabitBar');
+
+            if (heroChecked) {
+                check.classList.add('bg-primary');
+                check.querySelector('i').classList.remove('opacity-0');
+                icon.classList.add('bg-teal-600', 'text-white');
+                bar.style.width = '100%';
+                streak.innerText = currentLang === 'fa' ? '🔥 ۱۵ روز پیوسته!' : '🔥 15-Day Streak!';
+
+                // Fire joyful confetti
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 50,
+                        spread: 60,
+                        origin: { y: 0.6 },
+                        colors: ['#008080', '#009E9E', '#2dd4bf', '#fbbf24']
+                    });
+                }
+            } else {
+                check.classList.remove('bg-primary');
+                check.querySelector('i').classList.add('opacity-0');
+                icon.classList.remove('bg-teal-600', 'text-white');
+                bar.style.width = '70%';
+                streak.innerText = currentLang === 'fa' ? '🔥 ۱۴ روز پیوسته' : '🔥 14-Day Streak';
+            }
+        }
+
+        // Demo chain 5 states switcher
+        const stateConfigs = {
+            active: {
+                badge: { fa: 'انجام شده امروز ✅', en: 'Completed Today ✅', class: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
+                desc: { fa: 'سارا امروز در ساعت ۱۸:۳۰ تمرین ورزشی خود را تکمیل کرد و زنجیره استمرار شما با هم ۱۲ روزه شد!', en: 'Sara completed her 30-min workout at 6:30 PM. Your combined chain reached 12 days!' },
+                streak: { fa: '۱۲ روز پیوستگی 🔥', en: '12-Day Streak 🔥' }
+            },
+            waiting: {
+                badge: { fa: 'در انتظار انجام ⏳', en: 'Waiting for Today ⏳', class: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
+                desc: { fa: 'سارا هنوز عادت امروز را انجام نداده است. معمولاً او تا ساعت ۲۱:۰۰ هدفش را تکمیل می‌کند.', en: 'Sara hasn’t checked in yet today. She usually logs her habit before 9:00 PM.' },
+                streak: { fa: '۱۱ روز پیوستگی', en: '11-Day Streak' }
+            },
+            resting: {
+                badge: { fa: 'روز استراحت 🌿', en: 'Resting Day 🌿', class: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
+                desc: { fa: 'سارا امروز را به عنوان روز ریکاوری و استراحت برنامه‌ریزی کرده است. زنجیره شما محفوظ می‌ماند.', en: 'Sara scheduled today as a rest day. Your streak is safely preserved without pressure.' },
+                streak: { fa: '۱۱ روز (حفظ شده)', en: '11-Day (Preserved)' }
+            },
+            fading: {
+                badge: { fa: 'نیاز به یادآوری 💬', en: 'Needs a Gentle Nudge 💬', class: 'bg-orange-500/20 text-orange-300 border-orange-500/30' },
+                desc: { fa: 'سارا ۲ روز است که عادتی ثبت نکرده است. با ارسال یک مهر یا احوال‌پرسی به او یادآوری کنید.', en: 'Sara hasn’t logged for 2 days. Send a warm heart to encourage her back on track.' },
+                streak: { fa: 'در حال محو شدن (۲ روز)', en: 'Fading (2 days)' }
+            },
+            completed: {
+                badge: { fa: 'پایان سفر ۲۱ روزه 🏆', en: 'Journey Completed 🏆', class: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
+                desc: { fa: 'تبریک! شما و سارا با موفقیت دوره ۲۱ روزه عادت را به پایان رساندید و پیوندتان جاودانه شد!', en: 'Congratulations! You and Sara completed the full 21-day journey together with glowing success!' },
+                streak: { fa: '۲۱ روز کامل (موفقیت)', en: '21 Days Completed' }
+            }
+        };
+
+        function setChainState(stateKey) {
+            const config = stateConfigs[stateKey];
+            if (!config) return;
+
+            // Update UI
+            const badge = document.getElementById('demoBadge');
+            badge.className = `text-xs font-bold px-3 py-1 rounded-full border ${config.badge.class}`;
+            badge.innerText = config.badge[currentLang];
+
+            document.getElementById('demoDescription').innerText = config.desc[currentLang];
+            document.getElementById('demoStreakText').innerHTML = `<i data-lucide="flame" class="w-4 h-4"></i> ${config.streak[currentLang]}`;
+
+            // Reset active button styling
+            ['active', 'waiting', 'resting', 'fading', 'completed'].forEach(s => {
+                const btn = document.getElementById(`btn-state-${s}`);
+                if (btn) {
+                    if (s === stateKey) {
+                        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow';
+                    } else {
+                        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60';
+                    }
+                }
+            });
+
+            lucide.createIcons();
+        }
+
+        function sendHeartReact() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 25,
+                    spread: 45,
+                    origin: { y: 0.7 },
+                    colors: ['#ec4899', '#f43f5e', '#fb7185']
+                });
+            }
+        }
+
+        // Initialize QR code and icons
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // Setup QR code pointing to production PWA
+            new QRCode(document.getElementById("qrcode"), {
+                text: "https://mehrchain.pages.dev",
+                width: 140,
+                height: 140,
+                colorDark : "#008080",
+                colorLight : "#F8FAFC",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            // Auto-detect or saved language
+            const savedLang = localStorage.getItem('mehrchain_landing_lang') || (navigator.language.startsWith('fa') ? 'fa' : 'fa');
+            setLanguage(savedLang);
+        });
     </script>
 </body>
 
