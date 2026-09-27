@@ -14,6 +14,7 @@ export class SignupStepComponent {
   readonly signUpError = input.required<string>();
   readonly isDuplicateEmailError = input.required<boolean>();
   readonly showSignUpPassword = input.required<boolean>();
+  readonly isSubmitting = input<boolean>(false);
 
   readonly usernameChange = output<string>();
   readonly emailChange = output<string>();

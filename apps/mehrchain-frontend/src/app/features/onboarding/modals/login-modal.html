@@ -112,9 +112,16 @@
 
       <button
         (click)="login.emit()"
-        class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+        [disabled]="isLoggingIn() || !loginEmail() || !loginPassword()"
+        class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100"
       >
-        Sign In <lucide-icon name="arrow-right" class="w-5 h-5"></lucide-icon>
+        @if (isLoggingIn()) {
+          <div class="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
+          <span>Signing in...</span>
+        } @else {
+          <span>Sign In</span>
+          <lucide-icon name="arrow-right" class="w-5 h-5"></lucide-icon>
+        }
       </button>
     } @else {
       <!-- Forgot Password View -->
@@ -166,9 +173,16 @@
         <div class="space-y-2">
           <button
             (click)="forgotPasswordSubmit.emit()"
-            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+            [disabled]="isResettingPassword() || !forgotPasswordEmail()"
+            class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100"
           >
-            Send Reset Instructions <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+            @if (isResettingPassword()) {
+              <div class="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
+              <span>Sending Instructions...</span>
+            } @else {
+              <span>Send Reset Instructions</span>
+              <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+            }
           </button>
           <button
             type="button"

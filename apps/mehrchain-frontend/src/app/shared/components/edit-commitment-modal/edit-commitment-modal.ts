@@ -90,8 +90,11 @@ export class EditCommitmentModal {
     }
   }
 
+  isSubmitting = signal(false);
+
   onSubmit() {
-    if (!this.isValid()) return;
+    if (this.isSubmitting() || !this.isValid()) return;
+    this.isSubmitting.set(true);
 
     this.save.emit({
       id: this.commitment().id,

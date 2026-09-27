@@ -18,6 +18,8 @@ export class LoginModalComponent {
   readonly isForgotPasswordMode = input.required<boolean>();
   readonly forgotPasswordEmail = input.required<string>();
   readonly forgotPasswordSubmitted = input.required<boolean>();
+  readonly isLoggingIn = input<boolean>(false);
+  readonly isResettingPassword = input<boolean>(false);
 
   readonly emailChange = output<string>();
   readonly passwordChange = output<string>();

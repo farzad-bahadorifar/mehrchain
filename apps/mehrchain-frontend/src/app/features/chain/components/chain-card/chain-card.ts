@@ -82,7 +82,12 @@ export class ChainCardComponent {
     return 'WAITING';
   });
 
+  private lastHeartToggleTime = 0;
+
   toggleHeart(): void {
+    const now = Date.now();
+    if (now - this.lastHeartToggleTime < 400) return;
+    this.lastHeartToggleTime = now;
     this.heartToggle.emit(this.connection().id);
   }
 

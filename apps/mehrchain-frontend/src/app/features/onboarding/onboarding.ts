@@ -84,6 +84,7 @@ export class OnboardingComponent implements OnInit {
   signUpError = signal('');
   isDuplicateEmailError = signal(false);
   showSignUpPassword = signal(false);
+  isSigningUp = signal(false);
 
   // Email Verification Modal State
   isVerificationModalOpen = signal(false);
@@ -103,11 +104,13 @@ export class OnboardingComponent implements OnInit {
   isNoAccountFound = signal(false);
   showLoginPassword = signal(false);
   isPrefilledFromSignUp = signal(false);
+  isLoggingIn = signal(false);
 
   // Forgot Password State
   isForgotPasswordMode = signal(false);
   forgotPasswordEmail = signal('');
   forgotPasswordSubmitted = signal(false);
+  isResettingPassword = signal(false);
 
   toggleSignUpPassword() {
     this.showSignUpPassword.update((v) => !v);
@@ -276,6 +279,8 @@ export class OnboardingComponent implements OnInit {
   }
 
   async handleSignUp() {
+    if (this.isSigningUp()) return;
+
     this.signUpError.set('');
     this.isDuplicateEmailError.set(false);
 
@@ -300,6 +305,8 @@ export class OnboardingComponent implements OnInit {
       this.signUpError.set('Password must be at least 6 characters.');
       return;
     }
+
+    this.isSigningUp.set(true);
 
     // Register user profile
     try {
@@ -330,6 +337,8 @@ export class OnboardingComponent implements OnInit {
         this.signUpError.set(err?.message || 'Registration failed. Please check your details and network.');
       }
       return;
+    } finally {
+      this.isSigningUp.set(false);
     }
   }
 
@@ -474,16 +483,26 @@ export class OnboardingComponent implements OnInit {
   }
 
   handleForgotPassword() {
+    if (this.isResettingPassword()) return;
+
     const email = this.forgotPasswordEmail().trim();
     if (!email || !email.includes('@')) {
       this.loginError.set('Please enter a valid email address.');
       return;
     }
     this.loginError.set('');
-    this.forgotPasswordSubmitted.set(true);
+    this.isResettingPassword.set(true);
+
+    try {
+      this.forgotPasswordSubmitted.set(true);
+    } finally {
+      this.isResettingPassword.set(false);
+    }
   }
 
   async handleLogin() {
+    if (this.isLoggingIn()) return;
+
     this.loginError.set('');
     this.isNoAccountFound.set(false);
     const email = this.loginEmail().trim();
@@ -498,6 +517,8 @@ export class OnboardingComponent implements OnInit {
       this.loginError.set('Please enter your password.');
       return;
     }
+
+    this.isLoggingIn.set(true);
 
     try {
       await this.authService.login(email, password);
@@ -517,6 +538,8 @@ export class OnboardingComponent implements OnInit {
       } else {
         this.loginError.set(msg);
       }
+    } finally {
+      this.isLoggingIn.set(false);
     }
   }
 }

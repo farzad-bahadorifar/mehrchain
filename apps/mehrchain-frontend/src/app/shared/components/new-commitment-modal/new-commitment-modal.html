@@ -163,11 +163,16 @@
     <!-- Submit Button -->
     <button
       (click)="handleSubmit()"
-      [disabled]="!isValid()"
-      class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/20 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed"
+      [disabled]="!isValid() || isSubmitting()"
+      class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-base shadow-lg shadow-primary/20 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:scale-100"
     >
-      <span>Start Journey</span>
-      <lucide-icon name="sparkles" class="w-5 h-5"></lucide-icon>
+      @if (isSubmitting()) {
+        <div class="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
+        <span>Starting...</span>
+      } @else {
+        <span>Start Journey</span>
+        <lucide-icon name="sparkles" class="w-5 h-5"></lucide-icon>
+      }
     </button>
   </div>
 </div>

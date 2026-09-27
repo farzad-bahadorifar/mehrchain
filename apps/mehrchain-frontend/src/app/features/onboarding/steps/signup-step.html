@@ -110,9 +110,16 @@
   <div class="pt-2">
     <button
       (click)="signUp.emit()"
-      class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+      [disabled]="isSubmitting()"
+      class="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/25 hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100"
     >
-      Create Account &amp; Light Lamp <lucide-icon name="sparkles" class="w-5 h-5"></lucide-icon>
+      @if (isSubmitting()) {
+        <div class="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
+        <span>Creating Account...</span>
+      } @else {
+        <span>Create Account &amp; Light Lamp</span>
+        <lucide-icon name="sparkles" class="w-5 h-5"></lucide-icon>
+      }
     </button>
   </div>
 </div>
