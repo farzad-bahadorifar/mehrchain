@@ -42,7 +42,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | **Frontend** | Cloudflare Pages | ✅ Live | `https://mehrchain.pages.dev` |
 | **Backend API** | Render (Free) | ✅ Live | `https://mehrchain-api.onrender.com` |
 | **Database** | Neon PostgreSQL (Free: 0.5 GB) | ✅ Connected | — |
-| **SMTP Email** | Console fallback (Resend planned) | ⏳ Pending | — |
+| **SMTP Email** | Resend API + Console Fallback | ✅ Configured | `https://resend.com` |
 | **Android APK** | GitHub Actions CI | ✅ Configured | — |
 
 > **Cost: $0/month** — No domain or paid hosting needed until 200+ users.
