@@ -1,0 +1,40 @@
+name: CI Test Suite
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: 🧪 Automated Test Suite (Frontend & Backend)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js 22 (LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: 📦 Install Node Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🧬 Generate Prisma Client
+        run: npx prisma generate --schema=apps/mehrchain-backend/prisma/schema.prisma
+
+      - name: 🧪 Run Backend Tests (Jest)
+        run: npx nx test mehrchain-backend
+
+      - name: 🧪 Run Frontend Tests (Vitest)
+        run: npx nx test mehrchain-frontend

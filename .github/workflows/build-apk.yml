@@ -53,6 +53,9 @@ jobs:
       - name: 🧬 Generate Prisma Client
         run: npx prisma generate --schema=apps/mehrchain-backend/prisma/schema.prisma || true
 
+      - name: 🧪 Run Backend Automated Tests
+        run: npx nx test mehrchain-backend
+
       - name: 🧪 Run Frontend Automated Tests
         run: npx nx test mehrchain-frontend
 
