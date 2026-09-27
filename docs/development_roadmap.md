@@ -19,7 +19,7 @@
 | [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Mobile & PWA UX optimization | Phase 2 (Mobile Optimization) | ✅ Done | 24 Sep | 24 Sep | Viewport bounce, zoom lock, 100dvh |
 | [#21](https://github.com/farzad-bahadorifar/mehrchain/issues/21) | Mobile & PWA status bar safe area overlap | Phase 2 (Mobile Optimization) | ✅ Done | 24 Sep | 24 Sep | Dynamic safe-area-inset-top padding for Status Bar & notches |
 | [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Custom commitment duration validation | Phase 2 (Validation) | ✅ Done | 24 Sep | 24 Sep | Rejection of 0 or negative days |
-| [#12](https://github.com/farzad-bahadorifar/mehrchain/issues/12) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ⏳ TODO | 26 Sep | 27 Sep | Step components + auth modals |
+| [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ✅ Done | 26 Sep | 27 Sep | Step components + auth modals |
 | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Profile cleanup & tests verified |
 | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Codebase cleanup |
 | [#17](https://github.com/farzad-bahadorifar/mehrchain/issues/17) | Setup SMTP (Resend) | Phase 3 (Production Stability) | ⏳ TODO | 29 Sep | 30 Sep | Real OTP email dispatch |
@@ -81,7 +81,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 ---
 
-## Phase 2: Technical Debt & Security (Priority: High) — ✅ Partially Done
+## Phase 2: Technical Debt & Security (Priority: High) — ✅ Done
 
 > Clean up code, harden security, and reduce complexity before going live.
 
@@ -111,7 +111,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 | Task | Status | Issue | Details |
 |------|--------|-------|---------|
-| Split `OnboardingComponent` | ⏳ TODO | [#12](https://github.com/farzad-bahadorifar/mehrchain/issues/12) | Extract 500-line god component into step components + auth modals |
+| Split `OnboardingComponent` | ✅ Done | [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Extract 500-line god component into step components + auth modals |
 
 ### Mero Cleanup
 
