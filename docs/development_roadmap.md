@@ -22,7 +22,7 @@
 | [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ✅ Done | 26 Sep | 27 Sep | Step components + auth modals |
 | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Profile cleanup & tests verified |
 | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Codebase cleanup |
-| [#17](https://github.com/farzad-bahadorifar/mehrchain/issues/17) | Setup SMTP (Resend) | Phase 3 (Production Stability) | ⏳ TODO | 29 Sep | 30 Sep | Real OTP email dispatch |
+| [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Setup SMTP (Resend) | Phase 3 (Production Stability) | ✅ Done | 27 Sep | 27 Sep | Real OTP email dispatch |
 | [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Add backend tests to CI pipeline | Phase 3 (Production Stability) | ✅ Done | 27 Sep | 27 Sep | GitHub Actions backend test step |
 | [#15](https://github.com/farzad-bahadorifar/mehrchain/issues/15) | Signed Release APK (GitHub Actions) | Phase 3 (Mobile Release) | ⏳ TODO | 1 Oct | 1 Oct | Keystore signing CI workflow |
 | [#20](https://github.com/farzad-bahadorifar/mehrchain/issues/20) | Three.js Visual Engine & Spark Button | Phase 4 (Micro-Interactions) | ⏳ TODO | 1 Oct | 2 Oct | WebGL particles & celebration |
@@ -129,7 +129,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 | Task | Status | Issue | Details |
 |------|--------|-------|---------|
-| SMTP setup (Resend) | ⏳ TODO | [#17](https://github.com/farzad-bahadorifar/mehrchain/issues/17) | Free tier: 3K emails/month for real OTP emails |
+| SMTP setup (Resend) | ✅ Done | [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Free tier: 3K emails/month for real OTP emails |
 | Signed APK release | ⏳ TODO | [#15](https://github.com/farzad-bahadorifar/mehrchain/issues/15) | Configure keystore for release builds via GitHub Actions |
 | CI: backend tests | ✅ Done | [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Run `npx nx test mehrchain-backend` in GitHub Actions |
 | Auto-deploy on merge | ✅ Done | — | Render + Cloudflare auto-deploy on push to `main` |
