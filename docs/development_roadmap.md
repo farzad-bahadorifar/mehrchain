@@ -24,7 +24,7 @@
 | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Codebase cleanup |
 | [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Setup SMTP (Resend) | Phase 3 (Production Stability) | ✅ Done | 27 Sep | 27 Sep | Real OTP email dispatch |
 | [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Add backend tests to CI pipeline | Phase 3 (Production Stability) | ✅ Done | 27 Sep | 27 Sep | GitHub Actions backend test step |
-| [#15](https://github.com/farzad-bahadorifar/mehrchain/issues/15) | Signed Release APK (GitHub Actions) | Phase 3 (Mobile Release) | ⏳ TODO | 1 Oct | 1 Oct | Keystore signing CI workflow |
+| [#25](https://github.com/farzad-bahadorifar/mehrchain/issues/25) | Signed Release APK (GitHub Actions) | Phase 3 (Mobile Release) | ✅ Done | 27 Sep | 27 Sep | Keystore signing CI workflow |
 | [#20](https://github.com/farzad-bahadorifar/mehrchain/issues/20) | Three.js Visual Engine & Spark Button | Phase 4 (Micro-Interactions) | ⏳ TODO | 1 Oct | 2 Oct | WebGL particles & celebration |
 | — | Internal Alpha Testing & Device Validation | Phase Test & Stabilize | ⏳ Planned | 2 Oct | 5 Oct | Dogfooding, real device testing, bug fixes |
 | — | Final Packaging & Deployment Audit | Release Preparation | ⏳ Planned | 6 Oct | 7 Oct | Final checklist & deployment check |
@@ -122,7 +122,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 ---
 
-## Phase 3: Production Polish (Priority: High)
+## Phase 3: Production Polish (Priority: High) — ✅ Done
 
 > This phase is simplified — no domain purchase or server migration needed.
 > We already have live infrastructure on free-tier services.
@@ -130,7 +130,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | Task | Status | Issue | Details |
 |------|--------|-------|---------|
 | SMTP setup (Resend) | ✅ Done | [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Free tier: 3K emails/month for real OTP emails |
-| Signed APK release | ⏳ TODO | [#15](https://github.com/farzad-bahadorifar/mehrchain/issues/15) | Configure keystore for release builds via GitHub Actions |
+| Signed APK release | ✅ Done | [#25](https://github.com/farzad-bahadorifar/mehrchain/issues/25) | Configure keystore for release builds via GitHub Actions |
 | CI: backend tests | ✅ Done | [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Run `npx nx test mehrchain-backend` in GitHub Actions |
 | Auto-deploy on merge | ✅ Done | — | Render + Cloudflare auto-deploy on push to `main` |
 

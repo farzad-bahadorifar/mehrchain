@@ -65,31 +65,69 @@ jobs:
       - name: 📱 Accept Android SDK Licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-      - name: 🤖 Build Android APK (Debug)
+      - name: 🤖 Build Android APKs (Debug & Release)
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
-          # Copy to clean name for release attachment
-          cp app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/mehrchain.apk
+          ./gradlew assembleDebug assembleRelease --no-daemon --stacktrace
 
-      - name: 🚀 Upload APK Artifact (Internal Build)
+      - name: 🔏 Sign Release APK (If Keystore Secret Provided)
+        id: sign_release
+        run: |
+          RELEASE_DIR="android/app/build/outputs/apk/release"
+          DEBUG_DIR="android/app/build/outputs/apk/debug"
+          mkdir -p dist/apk
+
+          # Copy debug apk
+          if [ -f "$DEBUG_DIR/app-debug.apk" ]; then
+            cp "$DEBUG_DIR/app-debug.apk" dist/apk/mehrchain-debug.apk
+          fi
+
+          # Check if Keystore Base64 secret exists
+          if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "🔐 Keystore secret found. Decoding and signing release APK..."
+            echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > /tmp/release.keystore
+
+            # Find apksigner and zipalign in Android SDK
+            BUILD_TOOLS_DIR=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -n 1)
+            echo "Using Android Build Tools: $BUILD_TOOLS_DIR"
+
+            # Align & Sign
+            $BUILD_TOOLS_DIR/zipalign -v -p 4 "$RELEASE_DIR/app-release-unsigned.apk" /tmp/app-release-aligned.apk || cp "$RELEASE_DIR/app-release-unsigned.apk" /tmp/app-release-aligned.apk
+            
+            $BUILD_TOOLS_DIR/apksigner sign --ks /tmp/release.keystore \
+              --ks-pass pass:"${{ secrets.KEYSTORE_PASSWORD }}" \
+              --ks-key-alias "${{ secrets.KEY_ALIAS }}" \
+              --key-pass pass:"${{ secrets.KEY_PASSWORD }}" \
+              --out dist/apk/mehrchain-release.apk /tmp/app-release-aligned.apk
+
+            echo "✅ Release APK signed successfully!"
+            rm -f /tmp/release.keystore /tmp/app-release-aligned.apk
+          else
+            echo "ℹ️ No ANDROID_KEYSTORE_BASE64 secret provided. Exporting unsigned release APK and debug APK."
+            if [ -f "$RELEASE_DIR/app-release-unsigned.apk" ]; then
+              cp "$RELEASE_DIR/app-release-unsigned.apk" dist/apk/mehrchain-release-unsigned.apk
+            fi
+            # Use debug apk as default downloadable mehrchain.apk if not signed
+            cp "$DEBUG_DIR/app-debug.apk" dist/apk/mehrchain.apk
+          fi
+
+      - name: 🚀 Upload APK Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: mehrchain-debug-apk
-          path: android/app/build/outputs/apk/debug/mehrchain.apk
+          name: mehrchain-apk-builds
+          path: dist/apk/*
           retention-days: 14
 
-      - name: 🏷️ Publish Official GitHub Release (Only on Tags or Manual Request)
+      - name: 🏷️ Publish Official GitHub Release
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish_release == true
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || inputs.version_tag }}
           name: MehrChain ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || inputs.version_tag }}
-          files: |
-            android/app/build/outputs/apk/debug/mehrchain.apk
+          files: dist/apk/*
           draft: false
-          prerelease: true
+          prerelease: ${{ !startsWith(github.ref, 'refs/tags/v1.') }}
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
