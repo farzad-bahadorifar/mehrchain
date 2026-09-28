@@ -213,4 +213,54 @@ describe('ChainService (Frontend Hybrid)', () => {
     expect(service.hasUnread()).toBe(false);
     expect(service.lastVisitAt()).toBeTruthy();
   });
+
+  it('should generate full invite URL with production fallback when on localhost/capacitor and include habit details', () => {
+    vi.spyOn(authService, 'currentUser').mockReturnValue({
+      id: 'user-1',
+      email: 'test@example.com',
+      username: 'farzad',
+      name: 'Farzad',
+      createdAt: new Date().toISOString(),
+    });
+
+    const mockCommitment = {
+      id: 'comm-123',
+      title: 'Morning Yoga',
+      category: 'health' as const,
+      totalDays: 21,
+      currentDay: 1,
+      currentStreak: 0,
+      isCompletedToday: false,
+      startDate: new Date().toISOString(),
+      isPublic: true,
+    };
+
+    const commitmentService = TestBed.inject(CommitmentService);
+    vi.spyOn(commitmentService, 'commitments').mockReturnValue([mockCommitment]);
+
+    const url = service.getInviteUrl('comm-123');
+    expect(url).toContain('https://mehrchain.pages.dev/chain?');
+    expect(url).toContain('invite=comm-123');
+    expect(url).toContain('inviter=Farzad');
+    expect(url).toContain('habit=Morning+Yoga');
+    expect(url).toContain('category=health');
+  });
+
+  it('should parse invite parameters correctly', () => {
+    const params = {
+      invite: 'comm-123',
+      inviter: 'Sara',
+      habit: 'Reading Books',
+      category: 'growth',
+    };
+
+    const parsed = service.parseInviteParams(params);
+    expect(parsed).toEqual({
+      inviteCode: 'comm-123',
+      inviterName: 'Sara',
+      habitTitle: 'Reading Books',
+      category: 'growth',
+      commitmentId: 'comm-123',
+    });
+  });
 });

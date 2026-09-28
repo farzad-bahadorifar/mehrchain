@@ -59,7 +59,7 @@ export class InviteSectionComponent {
   async shareInviteLink(): Promise<void> {
     const habit = this.selectedCommitment();
     const habitTitle = habit ? habit.title : 'My Daily Habit';
-    const shared = await this.chainService.shareInvite(habitTitle);
+    const shared = await this.chainService.shareInvite(habitTitle, habit ? habit.id : undefined);
     if (shared) {
       this.notifyToast.emit('Invite link shared / copied to clipboard!');
     }

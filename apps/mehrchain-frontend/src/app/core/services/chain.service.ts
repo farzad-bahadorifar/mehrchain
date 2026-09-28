@@ -406,10 +406,43 @@ export class ChainService {
 
   // --- Helpers & UI Integration ---
 
+  getBaseAppUrl(): string {
+    if (typeof window !== 'undefined') {
+      const origin = window.location.origin;
+      const isNativeOrLocalhost =
+        !origin ||
+        origin.startsWith('capacitor://') ||
+        origin.startsWith('ionic://') ||
+        origin.startsWith('file://') ||
+        origin === 'https://localhost' ||
+        origin === 'http://localhost';
+
+      if (!isNativeOrLocalhost && !origin.includes('localhost')) {
+        return origin;
+      }
+    }
+    return (environment as any).appUrl || 'https://mehrchain.pages.dev';
+  }
+
   getInviteUrl(commitmentId?: string): string {
-    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://mehrchain.pages.dev';
+    const baseUrl = this.getBaseAppUrl();
     const activeCommitmentId = commitmentId || this.selectedCommitmentId();
-    return `${origin}/chain?invite=${activeCommitmentId || 'general'}`;
+    const commitment = this.commitmentService.commitments().find((c) => c.id === activeCommitmentId);
+    const user = this.authService.currentUser();
+
+    const params = new URLSearchParams();
+    params.set('invite', activeCommitmentId || 'general');
+    if (user?.name || user?.username) {
+      params.set('inviter', user.name || user.username || '');
+    }
+    if (commitment?.title) {
+      params.set('habit', commitment.title);
+    }
+    if (commitment?.category) {
+      params.set('category', commitment.category);
+    }
+
+    return `${baseUrl}/chain?${params.toString()}`;
   }
 
   parseInviteParams(params: any): ChainInvitePayload | null {
@@ -423,8 +456,8 @@ export class ChainService {
     };
   }
 
-  async shareInvite(habitTitle: string): Promise<boolean> {
-    const url = this.getInviteUrl();
+  async shareInvite(habitTitle: string, commitmentId?: string): Promise<boolean> {
+    const url = this.getInviteUrl(commitmentId);
     const text = `Join my habit chain on MehrChain: "${habitTitle}" 🌟`;
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {

@@ -21,6 +21,7 @@
 | [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Custom commitment duration validation | Phase 2 (Validation) | ✅ Done | 24 Sep | 24 Sep | Rejection of 0 or negative days |
 | [#26](https://github.com/farzad-bahadorifar/mehrchain/issues/26) | Onboarding public habit toggle | Phase 2 (Validation) | ✅ Done | 27 Sep | 27 Sep | isPublic toggle in DetailsStepComponent |
 | [#27](https://github.com/farzad-bahadorifar/mehrchain/issues/27) | UI Loading & Anti-Spam click protection | Phase 2 (UX & Validation) | ✅ Done | 27 Sep | 27 Sep | Loading spinners & request debouncing |
+| [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Fix Chain Invite URL for Mobile APK & PWA | Phase 2 (Mobile Optimization) | ✅ Done | 28 Sep | 28 Sep | Fallback to https://mehrchain.pages.dev and include habit query params |
 | [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ✅ Done | 26 Sep | 27 Sep | Step components + auth modals |
 | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Profile cleanup & tests verified |
 | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Codebase cleanup |
@@ -102,6 +103,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 |------|--------|-------|---------|
 | PWA Viewport, Zoom & Mobile Layout Fit | ✅ Done | [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Disabled pinch zoom, eliminated bounce scroll (`overscroll-behavior: none`), locked height with `100dvh`, and optimized responsive onboarding & modal cards |
 | Mobile & PWA Status Bar Safe Area Insets | ✅ Done | [#21](https://github.com/farzad-bahadorifar/mehrchain/issues/21) | Added dynamic `.safe-top` utilities with `env(safe-area-inset-top)` across all views (Dashboard, Chain, Journey, Profile, Onboarding) to eliminate status bar overlap |
+| Chain Invite URL for Mobile APK & PWA | ✅ Done | [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Detect Capacitor localhost/native scheme and default to `https://mehrchain.pages.dev/chain?invite=...` with full inviter name, habit title, and category parameters |
 
 ### Form & Commitment Validation ✅
 
