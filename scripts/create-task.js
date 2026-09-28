@@ -83,14 +83,65 @@ async function main() {
 
   let token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
   if (!token) {
-    const creds = execSync('git credential fill', {
-      input: 'protocol=https\nhost=github.com\n',
-    }).toString();
-    const tokenMatch = creds.match(/password=(.+)/);
-    if (!tokenMatch) {
-      throw new Error('No GitHub token found in git credentials');
+    try {
+      const psScript = `
+Add-Type -TypeDefinition @"
+using System; using System.Runtime.InteropServices; using System.Text;
+public class WinCred {
+    [DllImport("advapi32.dll", EntryPoint = "CredReadW", CharSet = CharSet.Unicode, SetLastError = true)]
+    public static extern bool CredRead(string target, int type, int reservedFlag, out IntPtr credentialPtr);
+    [DllImport("advapi32.dll", EntryPoint = "CredFree", SetLastError = true)]
+    public static extern void CredFree(IntPtr cred);
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    public struct CREDENTIAL {
+        public int Flags; public int Type; public string TargetName; public string Comment;
+        public System.Runtime.InteropServices.ComTypes.FILETIME LastWritten;
+        public int CredentialBlobSize; public IntPtr CredentialBlob; public int Persist;
+        public int AttributeCount; public IntPtr Attributes; public string TargetAlias; public string UserName;
     }
-    token = tokenMatch[1].trim();
+    public static string GetPassword(string target) {
+        IntPtr credPtr;
+        if (CredRead(target, 1, 0, out credPtr)) {
+            CREDENTIAL cred = (CREDENTIAL)Marshal.PtrToStructure(credPtr, typeof(CREDENTIAL));
+            byte[] bytes = new byte[cred.CredentialBlobSize];
+            Marshal.Copy(cred.CredentialBlob, bytes, 0, cred.CredentialBlobSize);
+            CredFree(credPtr);
+            return Encoding.Unicode.GetString(bytes);
+        }
+        return null;
+    }
+}
+"@
+foreach ($t in @('git:https://farzad-bahadorifar@github.com', 'git:https://github.com', 'LegacyGeneric:target=https://github.com/')) {
+    $p = [WinCred]::GetPassword($t)
+    if ($p) { Write-Output $p; break }
+}
+`;
+      const encoded = Buffer.from(psScript, 'utf16le').toString('base64');
+      const psOutput = execSync(`powershell -NoProfile -EncodedCommand ${encoded}`, { timeout: 8000 }).toString().trim();
+      if (psOutput) {
+        token = psOutput;
+      }
+    } catch (e) {
+      // Fallback
+    }
+  }
+
+  if (!token) {
+    try {
+      const creds = execSync('git credential fill', {
+        input: 'protocol=https\nhost=github.com\n\n',
+        timeout: 5000,
+      }).toString();
+      const tokenMatch = creds.match(/password=(.+)/);
+      if (tokenMatch) {
+        token = tokenMatch[1].trim();
+      }
+    } catch {}
+  }
+
+  if (!token) {
+    throw new Error('No GitHub token found in git credentials or environment variables');
   }
 
   const headers = {
