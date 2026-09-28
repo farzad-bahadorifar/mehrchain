@@ -125,6 +125,44 @@ describe('AuthService (Frontend)', () => {
     expect(mockCommitmentStore.resetState).toHaveBeenCalled();
   });
 
+  it('should throw error when email verification fails with 400 bad request', async () => {
+    const verifyPromise = service.verifyEmail('farzad@example.com', '999999');
+
+    const req = httpMock.expectOne('http://localhost:3000/api/auth/verify-email');
+    req.flush({ message: 'Invalid or expired verification code' }, { status: 400, statusText: 'Bad Request' });
+
+    await expect(verifyPromise).rejects.toThrow('Invalid or expired verification code');
+    expect(service.isAuthenticated()).toBe(false);
+  });
+
+  it('should throw connection error on login when backend is unreachable (status 0)', async () => {
+    const loginPromise = service.login('farzad@example.com', 'pass123');
+
+    const req = httpMock.expectOne('http://localhost:3000/api/auth/login');
+    req.error(new ProgressEvent('error'), { status: 0, statusText: 'Unknown Error' });
+
+    await expect(loginPromise).rejects.toThrow('Unable to connect to the server');
+    expect(service.isAuthenticated()).toBe(false);
+  });
+
+  it('should clear USERS_CACHE_KEY on deleteAccount', async () => {
+    localStorage.setItem('mehrchain_auth_user_v1', JSON.stringify({ id: 'user-1' }));
+    localStorage.setItem('mehrchain_auth_token_v1', 'remote_token_123');
+    localStorage.setItem('mehrchain_registered_users_cache_v1', JSON.stringify([{ email: 'farzad@example.com' }]));
+
+    const deletePromise = service.deleteAccount();
+
+    const req = httpMock.expectOne('http://localhost:3000/api/auth/account');
+    expect(req.request.method).toBe('DELETE');
+    req.flush({ success: true });
+
+    await deletePromise;
+
+    expect(localStorage.getItem('mehrchain_registered_users_cache_v1')).toBeNull();
+    expect(localStorage.getItem('mehrchain_auth_user_v1')).toBeNull();
+    expect(service.currentUser()).toBeNull();
+  });
+
   it('should accurately detect local dev/mock tokens vs remote JWT tokens', () => {
     expect(service.isLocalToken('local_jwt_token_12345')).toBe(true);
     expect(service.isLocalToken('local_dev_token_12345')).toBe(true);

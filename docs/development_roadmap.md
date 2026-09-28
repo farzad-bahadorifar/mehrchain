@@ -28,7 +28,7 @@
 | [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Setup SMTP (Resend) | Phase 3 (Production Stability) | ✅ Done | 27 Sep | 27 Sep | Real OTP email dispatch |
 | [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Add backend tests to CI pipeline | Phase 3 (Production Stability) | ✅ Done | 27 Sep | 27 Sep | GitHub Actions backend test step |
 | [#25](https://github.com/farzad-bahadorifar/mehrchain/issues/25) | Signed Release APK (GitHub Actions) | Phase 3 (Mobile Release) | ✅ Done | 27 Sep | 27 Sep | Keystore signing CI workflow |
-| [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Fix OTP Verification Bypass, Resend SMTP & Account Deletion Cache | Phase 3 (Production Stability) | ⏳ TODO | 28 Sep | 29 Sep | Remove 123456 fallback, configure Resend API key, clear cache on delete |
+| [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Fix OTP Verification Bypass, Resend SMTP & Account Deletion Cache | Phase 3 (Production Stability) | ✅ Done | 28 Sep | 28 Sep | Remove 123456 fallback, configure Resend API key, clear cache on delete |
 | [#20](https://github.com/farzad-bahadorifar/mehrchain/issues/20) | Three.js Visual Engine & Spark Button | Phase 4 (Micro-Interactions) | ⏳ TODO | 1 Oct | 2 Oct | WebGL particles & celebration |
 | — | Internal Alpha Testing & Device Validation | Phase Test & Stabilize | ⏳ Planned | 2 Oct | 5 Oct | Dogfooding, real device testing, bug fixes |
 | — | Final Packaging & Deployment Audit | Release Preparation | ⏳ Planned | 6 Oct | 7 Oct | Final checklist & deployment check |
@@ -140,13 +140,13 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | Signed APK release | ✅ Done | [#25](https://github.com/farzad-bahadorifar/mehrchain/issues/25) | Configure keystore for release builds via GitHub Actions |
 | CI: backend tests | ✅ Done | [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Run `npx nx test mehrchain-backend` in GitHub Actions |
 | Auto-deploy on merge | ✅ Done | — | Render + Cloudflare auto-deploy on push to `main` |
-| Fix OTP Bypass, Resend SMTP & Account Deletion Cache | ⏳ TODO | [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Harden auth flow: remove 123456 bypass, enforce Resend API key delivery, clear cached user data on account deletion |
+| Fix OTP Bypass, Resend SMTP & Account Deletion Cache | ✅ Done | [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Harden auth flow: remove 123456 bypass, enforce Resend API key delivery, clear cached user data on account deletion |
 
 ### Auth & Production Hardening Checklist (Issue #28)
-- [ ] **Remove OTP Fallback Bypass (`AuthService`)**: Remove hardcoded `cleanCode === '123456'` in `verifyEmail` so invalid code errors from the backend are properly shown to the user instead of triggering local dev session.
-- [ ] **Live Resend Email Delivery**: Ensure `RESEND_API_KEY` and `MAIL_FROM` are populated in `.env` and production environments to dispatch real verification emails.
-- [ ] **Account Deletion Cache Invalidation**: Update `AuthService.deleteAccount()` to explicitly remove `USERS_CACHE_KEY` (`mehrchain_registered_users_cache_v1`) from `localStorage` preventing ghost sessions.
-- [ ] **Graceful Offline/Unreachable Errors**: Prevent `login()` from automatically creating dummy sessions without authentication when the backend server is unreachable.
+- [x] **Remove OTP Fallback Bypass (`AuthService`)**: Remove hardcoded `cleanCode === '123456'` in `verifyEmail` so invalid code errors from the backend are properly shown to the user instead of triggering local dev session.
+- [x] **Live Resend Email Delivery**: Ensure `RESEND_API_KEY` and `MAIL_FROM` are populated in `.env` and production environments to dispatch real verification emails.
+- [x] **Account Deletion Cache Invalidation**: Update `AuthService.deleteAccount()` to explicitly remove `USERS_CACHE_KEY` (`mehrchain_registered_users_cache_v1`) from `localStorage` preventing ghost sessions.
+- [x] **Graceful Offline/Unreachable Errors**: Prevent `login()` from automatically creating dummy sessions without authentication when the backend server is unreachable.
 
 ---
 

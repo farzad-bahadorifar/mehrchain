@@ -89,6 +89,7 @@ export class OnboardingComponent implements OnInit {
   // Email Verification Modal State
   isVerificationModalOpen = signal(false);
   verificationCode = signal('');
+  previewOtpCode = signal('');
   verificationError = signal('');
   verificationSuccess = signal('');
   isVerifying = signal(false);
@@ -312,6 +313,7 @@ export class OnboardingComponent implements OnInit {
     try {
       const res = await this.authService.register(username, email, password);
       if (res.requiresVerification) {
+        this.previewOtpCode.set(res.previewCode || '');
         this.verificationCode.set('');
         this.verificationError.set('');
         this.verificationSuccess.set('');
@@ -354,6 +356,13 @@ export class OnboardingComponent implements OnInit {
         clearInterval(this.resendTimerInterval);
       }
     }, 1000);
+  }
+
+  autoFillVerificationCode(code: string) {
+    if (code) {
+      this.verificationCode.set(code);
+      this.handleVerifyEmail();
+    }
   }
 
   async handleVerifyEmail() {
@@ -416,7 +425,10 @@ export class OnboardingComponent implements OnInit {
     this.verificationSuccess.set('');
 
     try {
-      await this.authService.resendVerificationCode(this.signUpEmail());
+      const res = await this.authService.resendVerificationCode(this.signUpEmail());
+      if (res.previewCode) {
+        this.previewOtpCode.set(res.previewCode);
+      }
       this.verificationSuccess.set('A new verification code has been sent to your email.');
       this.startResendTimer();
     } catch (err: any) {

@@ -90,6 +90,7 @@ export class AuthService {
       email: cleanEmail,
       username: cleanUsername,
       message: 'Verification code sent to your email address.',
+      previewCode: otpCode,
     };
   }
 
@@ -200,6 +201,7 @@ export class AuthService {
     return {
       success: true,
       message: 'A new verification code has been sent to your email.',
+      previewCode: otpCode,
     };
   }
 

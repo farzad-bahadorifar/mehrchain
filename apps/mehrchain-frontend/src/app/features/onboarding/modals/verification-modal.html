@@ -45,6 +45,28 @@
       </div>
     }
 
+    @if (previewCode()) {
+      <div class="mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-teal-500/15 via-emerald-500/15 to-amber-500/15 border border-teal-500/30 shadow-lg shadow-teal-500/5 animate-fade-in flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-8 h-8 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center shrink-0">
+            <lucide-icon name="sparkles" class="w-4 h-4"></lucide-icon>
+          </div>
+          <div class="min-w-0">
+            <p class="text-[10px] font-semibold text-teal-400 tracking-wide uppercase">Assistant / Code Ready</p>
+            <p class="text-sm font-bold font-mono tracking-widest text-foreground">{{ previewCode() }}</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          (click)="autoFill.emit(previewCode())"
+          class="px-3 py-1.5 rounded-xl bg-teal-500 text-teal-950 font-bold text-xs hover:bg-teal-400 active:scale-95 transition-all shadow-md flex items-center gap-1.5 shrink-0"
+        >
+          <lucide-icon name="zap" class="w-3.5 h-3.5"></lucide-icon>
+          <span>Auto-fill</span>
+        </button>
+      </div>
+    }
+
     <div class="space-y-4 mb-5">
       <div>
         <label class="block text-xs font-bold text-muted-foreground uppercase text-center mb-2">

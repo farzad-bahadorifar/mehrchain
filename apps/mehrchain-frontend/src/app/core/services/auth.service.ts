@@ -20,6 +20,7 @@ export interface RegisterResponse {
   email: string;
   username?: string;
   message: string;
+  previewCode?: string;
 }
 
 export interface AuthResponse {
@@ -192,54 +193,63 @@ export class AuthService {
       this.commitmentStore.syncWithBackend().catch(() => {});
       return res.user;
     } catch (err: any) {
-      // Offline / Local dev fallback
-      if (err?.status === 0 || !err?.status || cleanCode === '123456') {
+      // Offline / Local dev fallback only if registering in offline mode
+      if (err?.status === 0 || !err?.status) {
         const localUsers = this.getLocalRegisteredUsers();
         const found = localUsers.find((u) => u.email === cleanEmail);
-        const username = found ? found.username : cleanEmail.split('@')[0];
+        if (found) {
+          const username = found.username || cleanEmail.split('@')[0];
+          const localProfile: UserProfile = {
+            id: found.id || `local_user_${username}`,
+            username,
+            name: found.name || username,
+            email: cleanEmail,
+            isEmailVerified: true,
+            createdAt: new Date().toISOString(),
+          };
 
-        const localProfile: UserProfile = {
-          id: found ? found.id : `local_user_${username}`,
-          username,
-          name: found?.name || username,
-          email: cleanEmail,
-          isEmailVerified: true,
-          createdAt: new Date().toISOString(),
-        };
+          localStorage.setItem(this.AUTH_KEY, JSON.stringify(localProfile));
+          localStorage.setItem(this.TOKEN_KEY, 'local_dev_token_' + Date.now());
 
-        localStorage.setItem(this.AUTH_KEY, JSON.stringify(localProfile));
-        localStorage.setItem(this.TOKEN_KEY, 'local_dev_token_' + Date.now());
-
-        this.currentUserSignal.set(localProfile);
-        this.commitmentStore.loadForUser(localProfile.id);
-        return localProfile;
+          this.currentUserSignal.set(localProfile);
+          this.commitmentStore.loadForUser(localProfile.id);
+          return localProfile;
+        }
       }
 
       const message =
         err?.error?.message ||
         (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
         err?.message ||
-        'Email verification failed. Please try again.';
+        'Email verification failed. Please check the code and try again.';
       throw new Error(message);
     }
   }
 
-  async resendVerificationCode(email: string): Promise<{ success: boolean; message: string }> {
+  async resendVerificationCode(email: string): Promise<{ success: boolean; message: string; previewCode?: string }> {
     try {
       const payload = { email: email.trim().toLowerCase() };
       return await firstValueFrom(
-        this.http.post<{ success: boolean; message: string }>(
+        this.http.post<{ success: boolean; message: string; previewCode?: string }>(
           `${this.API_URL}/resend-verification`,
           payload
         )
       );
-    } catch {
-      return { success: true, message: 'A verification code is ready (use 123456 in dev mode).' };
+    } catch (err: any) {
+      if (err?.status === 0 || !err?.status) {
+        return { success: true, message: 'Verification code simulated in offline mode.', previewCode: '123456' };
+      }
+      const message =
+        err?.error?.message ||
+        (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
+        err?.message ||
+        'Failed to resend verification code.';
+      throw new Error(message);
     }
   }
 
   /**
-   * Authenticates user credentials with email or username (with local dev fallback).
+   * Authenticates user credentials with email or username.
    */
   async login(identifier: string, password?: string): Promise<UserProfile> {
     const cleanId = identifier.trim().toLowerCase();
@@ -262,28 +272,8 @@ export class AuthService {
       this.commitmentStore.syncWithBackend().catch(() => {});
       return res.user;
     } catch (err: any) {
-      // If backend is offline or network error -> allow seamless dev login
       if (err?.status === 0 || !err?.status) {
-        console.warn('[AuthService] Backend offline, utilizing local dev profile.');
-        const localUsers = this.getLocalRegisteredUsers();
-        const found = localUsers.find((u) => u.email === cleanId || u.username === cleanId);
-        const username = found ? found.username : (cleanId.includes('@') ? cleanId.split('@')[0] : cleanId);
-
-        const localProfile: UserProfile = {
-          id: found ? found.id : `user_${username}`,
-          username,
-          name: found?.name || username,
-          email: cleanId.includes('@') ? cleanId : `${username}@mehrchain.local`,
-          isEmailVerified: true,
-          createdAt: new Date().toISOString(),
-        };
-
-        localStorage.setItem(this.AUTH_KEY, JSON.stringify(localProfile));
-        localStorage.setItem(this.TOKEN_KEY, 'local_jwt_token_' + Date.now());
-
-        this.currentUserSignal.set(localProfile);
-        this.commitmentStore.loadForUser(localProfile.id);
-        return localProfile;
+        throw new Error('Unable to connect to the server. Please check your internet connection and try again.');
       }
 
       const message =
@@ -320,6 +310,7 @@ export class AuthService {
       this.commitmentStore.resetState();
       localStorage.removeItem(this.AUTH_KEY);
       localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.USERS_CACHE_KEY);
       localStorage.removeItem('mehrchain_data_v1');
       this.currentUserSignal.set(null);
       this.router.navigate(['/']);

@@ -16,8 +16,10 @@ export class VerificationModalComponent {
   readonly isVerifying = input.required<boolean>();
   readonly isResending = input.required<boolean>();
   readonly resendCooldown = input.required<number>();
+  readonly previewCode = input<string>('');
 
   readonly codeChange = output<string>();
+  readonly autoFill = output<string>();
   readonly verify = output<void>();
   readonly resend = output<void>();
   readonly close = output<void>();
