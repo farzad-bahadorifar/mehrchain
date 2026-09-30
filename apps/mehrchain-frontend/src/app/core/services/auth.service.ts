@@ -297,24 +297,26 @@ export class AuthService {
 
   async deleteAccount(): Promise<void> {
     const user = this.currentUserSignal();
-    try {
-      const token = this.getToken();
-      if (token) {
+    const token = this.getToken();
+
+    if (token && !this.isLocalToken(token)) {
+      try {
         await firstValueFrom(this.http.delete(`${this.API_URL}/account`));
+      } catch (err: any) {
+        console.error('[AuthService] Backend account deletion failed:', err);
+        throw new Error('Account deletion failed. Please try again.');
       }
-    } catch (err) {
-      console.warn('[AuthService] Backend account deletion warning:', err);
-    } finally {
-      if (user) {
-        this.commitmentStore.clearUserStorage(user.id);
-      }
-      this.commitmentStore.resetState();
-      localStorage.removeItem(this.AUTH_KEY);
-      localStorage.removeItem(this.TOKEN_KEY);
-      localStorage.removeItem(this.USERS_CACHE_KEY);
-      localStorage.removeItem('mehrchain_data_v1');
-      this.currentUserSignal.set(null);
-      this.router.navigate(['/']);
     }
+
+    if (user) {
+      this.commitmentStore.clearUserStorage(user.id);
+    }
+    this.commitmentStore.resetState();
+    localStorage.removeItem(this.AUTH_KEY);
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USERS_CACHE_KEY);
+    localStorage.removeItem('mehrchain_data_v1');
+    this.currentUserSignal.set(null);
+    this.router.navigate(['/']);
   }
 }

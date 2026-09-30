@@ -1,4 +1,4 @@
-﻿# MehrChain — Architecture Analysis & Dependency Map
+# MehrChain — Architecture Analysis & Dependency Map
 
 > **Version:** v0.9.0-preview  
 > **Generated:** September 2026  

@@ -167,7 +167,11 @@ export class ProfileComponent {
         'Are you sure you want to delete your account? All habits and consistency data will be permanently removed.',
       )
     ) {
-      await this.authService.deleteAccount();
+      try {
+        await this.authService.deleteAccount();
+      } catch (err: any) {
+        alert(err?.message || 'Account deletion failed. Please try again.');
+      }
     }
   }
 

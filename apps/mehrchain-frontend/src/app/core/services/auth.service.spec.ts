@@ -181,6 +181,24 @@ describe('AuthService (Frontend)', () => {
     expect(service.currentUser()).toBeNull();
   });
 
+  it('should not clear local state and should throw error when backend account deletion fails', async () => {
+    localStorage.setItem('mehrchain_auth_user_v1', JSON.stringify({ id: 'user-1' }));
+    localStorage.setItem('mehrchain_auth_token_v1', 'remote_token_123');
+    localStorage.setItem('mehrchain_registered_users_cache_v1', JSON.stringify([{ email: 'farzad@example.com' }]));
+
+    const deletePromise = service.deleteAccount();
+
+    const req = httpMock.expectOne('http://localhost:3000/api/auth/account');
+    expect(req.request.method).toBe('DELETE');
+    req.flush({ message: 'Internal Server Error' }, { status: 500, statusText: 'Server Error' });
+
+    await expect(deletePromise).rejects.toThrow('Account deletion failed. Please try again.');
+
+    expect(localStorage.getItem('mehrchain_registered_users_cache_v1')).not.toBeNull();
+    expect(localStorage.getItem('mehrchain_auth_user_v1')).not.toBeNull();
+    expect(localStorage.getItem('mehrchain_auth_token_v1')).toBe('remote_token_123');
+  });
+
   it('should accurately detect local dev/mock tokens vs remote JWT tokens', () => {
     expect(service.isLocalToken('local_jwt_token_12345')).toBe(true);
     expect(service.isLocalToken('local_dev_token_12345')).toBe(true);

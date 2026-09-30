@@ -1,4 +1,4 @@
-﻿# 🔥 MehrChain
+# 🔥 MehrChain
 
 **"You, light your own lamp." — Rumi**
 

@@ -156,7 +156,7 @@ Always follow this lifecycle protocol for any task worked on in this project:
    - Add the task to `docs/development_roadmap.md` under the appropriate Sprint/Phase section with status `🔄 In Progress` and link to the newly created issue.
    - Add the issue to the GitHub Project Board with status `In progress` and appropriate priority/dates.
 
-### Phase 2: Finishing a Task ("Task it" / "Log task" / "Track task" / "Close task" / "تسک‌اش کن")
+### Phase 2: Finishing a Task ("Task it" / "Log task" / "Track task" / "Close task")
 1. **Close GitHub Issue & Update Project**:
    - Close the issue as completed (`state: closed`, `state_reason: 'completed'`).
    - If issue was created on the fly, run `node scripts/create-task.js "<Title>" "<Body>"`.
