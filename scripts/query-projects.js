@@ -85,19 +85,18 @@ function gql(query, token) {
 async function main() {
   const token = getToken();
   if (!token) { console.error('No token found'); process.exit(1); }
-  console.log('Token found, querying projects...');
+  console.log('Token found (length:', token.length, ')');
 
-  const result = await gql(`
-    query {
-      user(login: "farzad-bahadorifar") {
-        projectsV2(first: 20) {
-          nodes { id title number }
-        }
-      }
-    }
-  `, token);
+  // Try viewer
+  console.log('\n--- viewer.projectsV2 ---');
+  const r1 = await gql(`query { viewer { login projectsV2(first: 20) { nodes { id title number } } } }`, token);
+  console.log(JSON.stringify(r1?.data?.viewer || r1?.errors || r1, null, 2));
 
-  console.log(JSON.stringify(result, null, 2));
+  // Try repository linked projects
+  console.log('\n--- repository.projectsV2 ---');
+  const r2 = await gql(`query { repository(owner: "farzad-bahadorifar", name: "mehrchain") { projectsV2(first: 10) { nodes { id title number } } } }`, token);
+  console.log(JSON.stringify(r2?.data?.repository || r2?.errors || r2, null, 2));
 }
 
 main().catch(e => console.error(e));
+

@@ -12,7 +12,7 @@
 
 | Day | Date | Focus | Tasks | Status |
 |-----|------|-------|-------|:------:|
-| 1 | 8 Mehr (Oct 1) | 🔴 Bug Fixes | OTP `previewCode` auto-fill • Account deletion fix • English email template | ⏳ TODO |
+| 1 | 8 Mehr (Oct 1) | 🔴 Bug Fixes | OTP `previewCode` auto-fill (✅) • Account deletion fix • English email template | 🔄 In Progress |
 | 2 | 9 Mehr (Oct 2) | 🟡 Profile Simplify | Remove color swatch grid • Remove scroll-on-tap • Keep nickname + 21-day only | ⏳ TODO |
 | 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | Remove user card • "Endless Journey" + Custom duration • "I did it" → "Spark" + CSS animation | ⏳ TODO |
 | 4 | 11 Mehr (Oct 4) | 🟡 Loading UX | Skeleton loading • Cold start message • Shorten all UI text | ⏳ TODO |
@@ -25,6 +25,7 @@
 
 | Issue | Task Title | Phase | Status | Date | Notes |
 |:-----:|------------|-------|:------:|:----:|-------|
+| [#30](https://github.com/farzad-bahadorifar/mehrchain/issues/30) | OTP auto-fill from previewCode | v1.0 Launch Sprint | ✅ Done | Sep 30 | Auto-fill verification code & helper message |
 | [#2](https://github.com/farzad-bahadorifar/mehrchain/issues/2) | Implement ChainModule API & Prisma Migration | Phase 1 (Chain Backend) | ✅ Done | Sep 22 | Prisma models, controller & service |
 | [#6](https://github.com/farzad-bahadorifar/mehrchain/issues/6) | Unit tests for ChainService + Cron | Phase 1 (Chain Backend) | ✅ Done | Sep 22 | 76 unit tests passing |
 | [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | Rewrite ChainService frontend | Phase 1 (Chain Frontend) | ✅ Done | Sep 23 | localStorage + API hybrid sync |

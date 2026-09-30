@@ -90,19 +90,19 @@ foreach($t in @('git:https://farzad-bahadorifar@github.com','git:https://github.
 async function main() {
   const token = getToken();
 
-  // 1. Find the project
+  // 1. Find the project using viewer (works with project scope)
   console.log('Fetching project info...');
   const projectQuery = await graphql(`
     query {
-      user(login: "farzad-bahadorifar") {
-        projectsV2(first: 10) {
+      viewer {
+        projectsV2(first: 20) {
           nodes { id title number }
         }
       }
     }
   `, {}, token);
 
-  const projects = projectQuery?.data?.user?.projectsV2?.nodes || [];
+  const projects = projectQuery?.data?.viewer?.projectsV2?.nodes || [];
   const project = projects.find(p => p.title === 'MehrChain');
   if (!project) {
     console.log('Available projects:', projects.map(p => p.title).join(', '));
