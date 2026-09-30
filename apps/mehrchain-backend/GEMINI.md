@@ -41,7 +41,7 @@ src/app/
 │   ├── users.controller.ts    # GET search?q=, GET :username
 │   └── users.service.ts       # Case-insensitive search, public habits
 │
-├── chain/                     # Chain Support Network (Planned — see docs/chain_feature_spec.md)
+├── chain/                     # Chain Support Network (Implemented — see docs/chain_feature_spec.md)
 │   ├── chain.module.ts        # Imports PrismaModule, ScheduleModule
 │   ├── chain.controller.ts    # Invite CRUD, connections, heart, nudge, unread
 │   ├── chain.service.ts       # Business logic: invite, connect, freeze, nudge
@@ -98,20 +98,20 @@ All routes prefixed with `/api`. Swagger docs at `/api/docs`.
 | `User` | `users` | id (UUID), email (unique), username (unique), passwordHash, isEmailVerified, verificationCode |
 | `Commitment` | `commitments` | id (UUID), userId (FK→User), title, category (enum), totalDays, currentDay, currentStreak, isPublic, isArchived |
 | `CommitmentLog` | `commitment_logs` | id (UUID), commitmentId (FK→Commitment), completedAt, note |
-| `ChainRequest` | `chain_requests` | id (UUID), senderId (FK→User), receiverId (FK→User), senderCommitmentId, receiverCommitmentId, status (enum) |
+| `ChainConnection` | `chain_connections` | id (UUID), userId, partnerId, userCommitmentId, partnerCommitmentId, status (enum), consecutiveMissedDays |
+| `ChainInvite` | `chain_invites` | id (UUID), senderId, senderCommitmentId, inviteCode (unique), status (enum), expiresAt |
 
 ### Enums
 - `Category`: health, growth, community, environment
-- `ChainRequestStatus`: PENDING, ACCEPTED, REJECTED, CANCELLED
+- `ChainStatus`: ACTIVE, RESTING, FADING, COMPLETED, DORMANT, DISCONNECTED
+- `ChainInviteStatus`: PENDING, ACCEPTED, EXPIRED, CANCELLED
 
 ### Key Relations
 - User → Commitment (1:N, cascade delete)
 - Commitment → CommitmentLog (1:N, cascade delete)
-- User → ChainRequest (1:N as sender, 1:N as receiver)
-- ChainRequest unique constraint: `[senderId, receiverId, senderCommitmentId]`
-
-### Important: `ChainRequest` has NO API yet
-The Prisma model exists but there is no `ChainController` or `ChainService`. See skill `chain-backend` for implementation guide.
+- User → ChainConnection (1:N as user, 1:N as partner)
+- User → ChainInvite (1:N as sender)
+- ChainConnection unique constraint: `[userId, partnerId, userCommitmentId]`
 
 ---
 

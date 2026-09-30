@@ -1,38 +1,49 @@
 # MehrChain — Development Roadmap
 
 > From v0.9.0-preview to production-ready v1.0 and beyond.
-> Updated: 2026-09-24
+> Updated: 2026-09-30 (8 Mehr 1405)
+> Target Audience: English-speaking users
 
 ---
 
 ## 📅 Master Schedule & Timeline
 
-| Issue | Task Title | Phase | Status | Start Date | Target Date | Notes |
-|:-----:|------------|-------|:------:|:----------:|:-----------:|-------|
-| [#2](https://github.com/farzad-bahadorifar/mehrchain/issues/2) | Implement ChainModule API & Prisma Migration | Phase 1 (Chain Backend) | ✅ Done | 20 Sep | 22 Sep | Prisma models, controller & service |
-| [#6](https://github.com/farzad-bahadorifar/mehrchain/issues/6) | Unit tests for ChainService + Cron | Phase 1 (Chain Backend) | ✅ Done | 21 Sep | 22 Sep | 76 unit tests passing |
-| [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | Rewrite ChainService frontend | Phase 1 (Chain Frontend) | ✅ Done | 22 Sep | 23 Sep | localStorage + API hybrid sync |
-| [#8](https://github.com/farzad-bahadorifar/mehrchain/issues/8) | New ChainCardComponent (5 states) | Phase 1 (Chain Frontend) | ✅ Done | 23 Sep | 24 Sep | Minimal 5-state card component |
-| [#9](https://github.com/farzad-bahadorifar/mehrchain/issues/9) | Remove Chain page clutter | Phase 1 (Chain Frontend) | ✅ Done | 24 Sep | 24 Sep | Removed bell, love, emojis, demo chain |
-| [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Unread dot on Chain navbar tab | Phase 1 (Chain Frontend) | ✅ Done | 24 Sep | 25 Sep | Activity badge indicator |
-| [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Invite section cleanup | Phase 1 (Chain Frontend) | ✅ Done | 24 Sep | 25 Sep | InviteSectionComponent & Lucide icons |
-| [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Mobile & PWA UX optimization | Phase 2 (Mobile Optimization) | ✅ Done | 24 Sep | 24 Sep | Viewport bounce, zoom lock, 100dvh |
-| [#21](https://github.com/farzad-bahadorifar/mehrchain/issues/21) | Mobile & PWA status bar safe area overlap | Phase 2 (Mobile Optimization) | ✅ Done | 24 Sep | 24 Sep | Dynamic safe-area-inset-top padding for Status Bar & notches |
-| [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Custom commitment duration validation | Phase 2 (Validation) | ✅ Done | 24 Sep | 24 Sep | Rejection of 0 or negative days |
-| [#26](https://github.com/farzad-bahadorifar/mehrchain/issues/26) | Onboarding public habit toggle | Phase 2 (Validation) | ✅ Done | 27 Sep | 27 Sep | isPublic toggle in DetailsStepComponent |
-| [#27](https://github.com/farzad-bahadorifar/mehrchain/issues/27) | UI Loading & Anti-Spam click protection | Phase 2 (UX & Validation) | ✅ Done | 27 Sep | 27 Sep | Loading spinners & request debouncing |
-| [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Fix Chain Invite URL for Mobile APK & PWA | Phase 2 (Mobile Optimization) | ✅ Done | 28 Sep | 28 Sep | Fallback to https://mehrchain.pages.dev and include habit query params |
-| [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ✅ Done | 26 Sep | 27 Sep | Step components + auth modals |
-| [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Profile cleanup & tests verified |
-| [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ✅ Done | 24 Sep | 24 Sep | Codebase cleanup |
-| [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Setup SMTP (Resend) | Phase 3 (Production Stability) | ✅ Done | 27 Sep | 27 Sep | Real OTP email dispatch |
-| [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Add backend tests to CI pipeline | Phase 3 (Production Stability) | ✅ Done | 27 Sep | 27 Sep | GitHub Actions backend test step |
-| [#25](https://github.com/farzad-bahadorifar/mehrchain/issues/25) | Signed Release APK (GitHub Actions) | Phase 3 (Mobile Release) | ✅ Done | 27 Sep | 27 Sep | Keystore signing CI workflow |
-| [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Fix OTP Verification Bypass, Resend SMTP & Account Deletion Cache | Phase 3 (Production Stability) | ✅ Done | 28 Sep | 28 Sep | Remove 123456 fallback, configure Resend API key, clear cache on delete |
-| [#20](https://github.com/farzad-bahadorifar/mehrchain/issues/20) | Three.js Visual Engine & Spark Button | Phase 4 (Micro-Interactions) | ⏳ TODO | 1 Oct | 2 Oct | WebGL particles & celebration |
-| — | Internal Alpha Testing & Device Validation | Phase Test & Stabilize | ⏳ Planned | 2 Oct | 5 Oct | Dogfooding, real device testing, bug fixes |
-| — | Final Packaging & Deployment Audit | Release Preparation | ⏳ Planned | 6 Oct | 7 Oct | Final checklist & deployment check |
-| — | 🚀 Launch v1.0.0 — Official Release | Public Release | ⏳ Planned | 8 Oct | 8 Oct | Public release v1.0.0 |
+### v1.0.0 Launch Sprint (8 Mehr – 16 Mehr / Oct 1–8)
+
+| Day | Date | Focus | Tasks | Status |
+|-----|------|-------|-------|:------:|
+| 1 | 8 Mehr (Oct 1) | 🔴 Bug Fixes | OTP `previewCode` auto-fill • Account deletion fix • English email template | ⏳ TODO |
+| 2 | 9 Mehr (Oct 2) | 🟡 Profile Simplify | Remove color swatch grid • Remove scroll-on-tap • Keep nickname + 21-day only | ⏳ TODO |
+| 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | Remove user card • "Endless Journey" + Custom duration • "I did it" → "Spark" + CSS animation | ⏳ TODO |
+| 4 | 11 Mehr (Oct 4) | 🟡 Loading UX | Skeleton loading • Cold start message • Shorten all UI text | ⏳ TODO |
+| 5 | 12 Mehr (Oct 5) | 🟢 New Features | Articles "Coming Soon" • What's New section • Badge system foundations | ⏳ TODO |
+| 6 | 13 Mehr (Oct 6) | 🟢 Landing + Polish | Landing page CTA • Direct PWA/APK links • Final text review | ⏳ TODO |
+| 7-8 | 14–15 Mehr (Oct 7-8) | 🧪 User Testing | 3-5 testers • Full flow: register → verify → habit → chain → spark | ⏳ TODO |
+| 9 | 16 Mehr (Oct 8) | 📦 Launch | Tag v1.0.0 • Final deployment audit • Public release | ⏳ Planned |
+
+### Completed Tasks (Pre-Launch)
+
+| Issue | Task Title | Phase | Status | Date | Notes |
+|:-----:|------------|-------|:------:|:----:|-------|
+| [#2](https://github.com/farzad-bahadorifar/mehrchain/issues/2) | Implement ChainModule API & Prisma Migration | Phase 1 (Chain Backend) | ✅ Done | Sep 22 | Prisma models, controller & service |
+| [#6](https://github.com/farzad-bahadorifar/mehrchain/issues/6) | Unit tests for ChainService + Cron | Phase 1 (Chain Backend) | ✅ Done | Sep 22 | 76 unit tests passing |
+| [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | Rewrite ChainService frontend | Phase 1 (Chain Frontend) | ✅ Done | Sep 23 | localStorage + API hybrid sync |
+| [#8](https://github.com/farzad-bahadorifar/mehrchain/issues/8) | New ChainCardComponent (5 states) | Phase 1 (Chain Frontend) | ✅ Done | Sep 24 | Minimal 5-state card component |
+| [#9](https://github.com/farzad-bahadorifar/mehrchain/issues/9) | Remove Chain page clutter | Phase 1 (Chain Frontend) | ✅ Done | Sep 24 | Removed bell, love, emojis, demo chain |
+| [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Unread dot on Chain navbar tab | Phase 1 (Chain Frontend) | ✅ Done | Sep 25 | Activity badge indicator |
+| [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Invite section cleanup | Phase 1 (Chain Frontend) | ✅ Done | Sep 25 | InviteSectionComponent & Lucide icons |
+| [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Mobile & PWA UX optimization | Phase 2 (Mobile) | ✅ Done | Sep 24 | Viewport bounce, zoom lock, 100dvh |
+| [#21](https://github.com/farzad-bahadorifar/mehrchain/issues/21) | Status bar safe area overlap | Phase 2 (Mobile) | ✅ Done | Sep 24 | Dynamic safe-area-inset-top padding |
+| [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Custom commitment duration validation | Phase 2 (Validation) | ✅ Done | Sep 24 | Rejection of 0 or negative days |
+| [#26](https://github.com/farzad-bahadorifar/mehrchain/issues/26) | Onboarding public habit toggle | Phase 2 (Validation) | ✅ Done | Sep 27 | isPublic toggle in DetailsStepComponent |
+| [#27](https://github.com/farzad-bahadorifar/mehrchain/issues/27) | UI Loading & Anti-Spam click protection | Phase 2 (UX) | ✅ Done | Sep 27 | Loading spinners & request debouncing |
+| [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Fix Chain Invite URL + OTP + Account Deletion | Phase 3 (Stability) | ✅ Done | Sep 28 | Capacitor URL fallback, auth hardening |
+| [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ✅ Done | Sep 27 | Step components + auth modals |
+| [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | Phase 2 (Cleanup) | ✅ Done | Sep 24 | Profile cleanup & tests verified |
+| [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ✅ Done | Sep 24 | Codebase cleanup |
+| [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Setup SMTP (Resend) | Phase 3 (Stability) | ✅ Done | Sep 27 | Free tier: 3K emails/month |
+| [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Add backend tests to CI pipeline | Phase 3 (Stability) | ✅ Done | Sep 27 | GitHub Actions backend test step |
+| [#25](https://github.com/farzad-bahadorifar/mehrchain/issues/25) | Signed Release APK (GitHub Actions) | Phase 3 (Mobile) | ✅ Done | Sep 27 | Keystore signing CI workflow |
 
 ---
 
@@ -45,177 +56,168 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | **Frontend** | Cloudflare Pages | ✅ Live | `https://mehrchain.pages.dev` |
 | **Backend API** | Render (Free) | ✅ Live | `https://mehrchain-api.onrender.com` |
 | **Database** | Neon PostgreSQL (Free: 0.5 GB) | ✅ Connected | — |
-| **SMTP Email** | Resend API + Console Fallback | ✅ Configured | `https://resend.com` |
+| **SMTP Email** | Resend API + Console Fallback | ⚠️ Needs real domain | `https://resend.com` |
 | **Android APK** | GitHub Actions CI | ✅ Configured | — |
+| **Landing Page** | GitHub Pages | ✅ Live | `https://farzad-bahadorifar.github.io/mehrchain/` |
 
 > **Cost: $0/month** — No domain or paid hosting needed until 200+ users.
+> **Note:** Resend requires a verified custom domain for email delivery. Until then, OTP codes are auto-filled via `previewCode` in the API response.
 
 ---
 
-## Phase 1: Chain Engine (Priority: Critical) — ✅ Done
+## v1.0.0 Launch Tasks — Detail
 
-> Build the core social feature — the heart of "Mehr" (kindness) in MehrChain.
-
-### Backend (`chain-backend` skill)
-
-| Task | Status | Issue | Details |
-|------|--------|-------|---------|
-| Prisma schema migration | ✅ Done | — | Replaced `ChainRequest` with `ChainConnection` + `ChainInvite` models |
-| `ChainModule` | ✅ Done | [#2](https://github.com/farzad-bahadorifar/mehrchain/issues/2) | Controller, Service, DTOs with Swagger decorators |
-| `ChainCronService` | ✅ Done | — | Daily midnight job: RESTING → FADING → DORMANT transitions |
-| Auto-notify on completion | ✅ Done | — | `ChainNotificationService` updates partner feed on habit completion |
-| Unit tests (ChainService + Cron) | ✅ Done | [#6](https://github.com/farzad-bahadorifar/mehrchain/issues/6) | 76 unit tests passing across all services + edge cases |
-| DB migration on Neon | ✅ Auto | — | `prisma db push` runs automatically on every Render deploy |
-
-### Frontend (`chain-frontend-integration` skill)
-
-| Task | Status | Issue | Target Date | Details |
-|------|--------|-------|-------------|---------|
-| Rewrite `ChainService` | ✅ Done | [#7](https://github.com/farzad-bahadorifar/mehrchain/issues/7) | Sep 23 | localStorage → API hybrid (same pattern as `CommitmentStore`) |
-| New `ChainCardComponent` | ✅ Done | [#8](https://github.com/farzad-bahadorifar/mehrchain/issues/8) | Sep 24 | Minimal card with 5 states (Completed today, Waiting, Resting, Fading, Completed Journey) |
-| Remove clutter | ✅ Done | [#9](https://github.com/farzad-bahadorifar/mehrchain/issues/9) | Sep 24 | Delete: Ring the Bell, Send Love/Cheer/Nudge, emojis, demo chain & integrate ChainCardComponent |
-| Unread dot on navbar | ✅ Done | [#10](https://github.com/farzad-bahadorifar/mehrchain/issues/10) | Sep 25 | Teal dot on Chain tab when partner has new activity |
-| Invite section cleanup | ✅ Done | [#11](https://github.com/farzad-bahadorifar/mehrchain/issues/11) | Sep 25 | Extracted modular `InviteSectionComponent`, QR modal, Lucide icons |
-
-### Reference
-
-- Full design spec: `docs/chain_feature_spec.md`
-- Backend skill: `.agents/skills/chain-backend/SKILL.md`
-- Frontend skill: `.agents/skills/chain-frontend-integration/SKILL.md`
-
----
-
-## Phase 2: Technical Debt & Security (Priority: High) — ✅ Done
-
-> Clean up code, harden security, and reduce complexity before going live.
-
-### Security Hardening ✅
-
-| Task | Status | Details |
-|------|--------|---------|
-| CORS lockdown | ✅ Done | Strict allowed origins: `.pages.dev` + `localhost` |
-| Rate limiting | ✅ Done | `@nestjs/throttler` on auth endpoints |
-| JWT_SECRET check | ✅ Done | Startup fails if missing in production |
-| PWA app name fix | ✅ Done | `mehrchain-frontend` → `MehrChain` in manifest + HTML title |
-
-### Mobile & PWA UX Optimization ✅
-
-| Task | Status | Issue | Details |
-|------|--------|-------|---------|
-| PWA Viewport, Zoom & Mobile Layout Fit | ✅ Done | [#18](https://github.com/farzad-bahadorifar/mehrchain/issues/18) | Disabled pinch zoom, eliminated bounce scroll (`overscroll-behavior: none`), locked height with `100dvh`, and optimized responsive onboarding & modal cards |
-| Mobile & PWA Status Bar Safe Area Insets | ✅ Done | [#21](https://github.com/farzad-bahadorifar/mehrchain/issues/21) | Added dynamic `.safe-top` utilities with `env(safe-area-inset-top)` across all views (Dashboard, Chain, Journey, Profile, Onboarding) to eliminate status bar overlap |
-| Chain Invite URL for Mobile APK & PWA | ✅ Done | [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Detect Capacitor localhost/native scheme and default to `https://mehrchain.pages.dev/chain?invite=...` with full inviter name, habit title, and category parameters |
-
-### Form & Commitment Validation ✅
-
-| Task | Status | Issue | Details |
-|------|--------|-------|---------|
-| Custom duration validation (Zero rejection) | ✅ Done | [#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19) | Disallow 0 or negative days in custom duration inputs (`NewCommitmentModal`, `EditCommitmentModal`, `DetailsStepComponent`), highlight borders in red (`border-red-500 bg-red-500/10`), display error message, and prevent saving/submitting |
-| Onboarding public habit toggle | ✅ Done | [#26](https://github.com/farzad-bahadorifar/mehrchain/issues/26) | Added `isPublic` toggle in `DetailsStepComponent` allowing new users to immediately connect their first habit in a chain |
-| UI Loading & Anti-Spam click protection | ✅ Done | [#27](https://github.com/farzad-bahadorifar/mehrchain/issues/27) | Added loading spinners, button disabling, and in-flight request guards across Auth forms, Commitment modals, and Chain reactions |
-
-### Onboarding Refactor (`onboarding-refactor` skill)
-
-| Task | Status | Issue | Details |
-|------|--------|-------|---------|
-| Split `OnboardingComponent` | ✅ Done | [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Extract 500-line god component into step components + auth modals |
-
-### Mero Cleanup
-
-| Task | Status | Issue | Details |
-|------|--------|-------|---------|
-| Remove Personality section | ✅ Done | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Deleted Energetic/Calm/Focused selector from Profile page |
-| Remove `console.log` debug calls | ✅ Done | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Cleaned up all debug logging from frontend services |
-
----
-
-## Phase 3: Production Polish (Priority: High) — ✅ Done
-
-> This phase is simplified — no domain purchase or server migration needed.
-> We already have live infrastructure on free-tier services.
-
-| Task | Status | Issue | Details |
-|------|--------|-------|---------|
-| SMTP setup (Resend) | ✅ Done | [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Free tier: 3K emails/month for real OTP emails |
-| Signed APK release | ✅ Done | [#25](https://github.com/farzad-bahadorifar/mehrchain/issues/25) | Configure keystore for release builds via GitHub Actions |
-| CI: backend tests | ✅ Done | [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Run `npx nx test mehrchain-backend` in GitHub Actions |
-| Auto-deploy on merge | ✅ Done | — | Render + Cloudflare auto-deploy on push to `main` |
-| Fix OTP Bypass, Resend SMTP & Account Deletion Cache | ✅ Done | [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Harden auth flow: remove 123456 bypass, enforce Resend API key delivery, clear cached user data on account deletion |
-
-### Auth & Production Hardening Checklist (Issue #28)
-- [x] **Remove OTP Fallback Bypass (`AuthService`)**: Remove hardcoded `cleanCode === '123456'` in `verifyEmail` so invalid code errors from the backend are properly shown to the user instead of triggering local dev session.
-- [x] **Live Resend Email Delivery**: Ensure `RESEND_API_KEY` and `MAIL_FROM` are populated in `.env` and production environments to dispatch real verification emails.
-- [x] **Account Deletion Cache Invalidation**: Update `AuthService.deleteAccount()` to explicitly remove `USERS_CACHE_KEY` (`mehrchain_registered_users_cache_v1`) from `localStorage` preventing ghost sessions.
-- [x] **Graceful Offline/Unreachable Errors**: Prevent `login()` from automatically creating dummy sessions without authentication when the backend server is unreachable.
-
----
-
-## Phase 4: UX Polish & Design System (Priority: Medium)
-
-> Standardize the visual language, improve accessibility, and add end-to-end tests.
-
-### Visual Engine & Micro-Interactions (Three.js + Spark)
-
-| Task | Status | Issue | Details |
-|------|--------|-------|---------|
-| Three.js On-Demand Visual Engine & Spark Button | ⏳ TODO | [#20](https://github.com/farzad-bahadorifar/mehrchain/issues/20) | Replace "I did it" with "Spark" + touch-origin particle burst, singleton WebGL renderer, lazy-loaded Three.js chunk (<1MB initial budget), 1000ms render window (0% idle GPU), and Mero mascot animation audit/calm-down |
-
-### Design System Documentation (`design-system-docs` skill)
+### Day 1: Bug Fixes (Critical)
 
 | Task | Details |
 |------|---------|
-| Document design tokens | HSL colors, shadows, radius, typography |
-| Component catalog | `McButton`, `McBadge`, `McCard` variants and usage |
-| Dark/light theme guide | CSS variable mapping documentation |
+| **OTP auto-fill** | Frontend reads `previewCode` from register/resend response → auto-fills OTP field → shows message: *"Your verification code has been auto-filled. In the future, this code will be sent to your email."* |
+| **Account deletion fix** | Only clear localStorage when backend returns 200. On error: show *"Account deletion failed. Please try again."* Don't clear in `finally` block. |
+| **English email template** | Rewrite Farsi email template in `mail.service.ts` to English. Keep branded dark theme design. |
 
-### Accessibility (`a11y-improvements` skill)
+### Day 2: Profile Simplification
+
+| Action | What |
+|--------|------|
+| ❌ Remove | Belly Glow Color grid (8+ color swatches with streak-based locks) |
+| ❌ Remove | Scroll-to-bottom animation on mascot tap |
+| ❌ Remove | "Tap to interact ✨" tooltip (emoji not allowed) |
+| ✅ Keep | Nickname editor + speech bubble |
+| ✅ Keep | 21-Day Custom Glow unlock (only color reward) |
+| ✅ Keep | Dark/Light/System theme selector |
+| ✅ Keep | Account settings (Sign Out / Delete) |
+
+### Day 3: Journey + Duration + Spark
+
+| Task | Details |
+|------|---------|
+| **Journey simplify** | Remove User Profile Card (duplicate). Keep Stats + Heatmap + Archived. |
+| **Duration options** | Replace 7d/14d/21d/30d/Custom with: **"Endless Journey"** (`totalDays = -1`) + **Custom** |
+| **Spark button** | Rename "I did it" → "Spark" with Lucide `sparkles` icon + CSS scale/glow animation |
+| **Badge foundations** | Add badge data model. 5 initial badges: First Spark, Chain Starter, 7-Day Streak, 21-Day Master, Kind Soul. All use Lucide icons (no external emoji). |
+
+### Day 4: Loading UX
+
+| Task | Details |
+|------|---------|
+| **Skeleton loading** | Add skeleton screens for Dashboard, Chain, Journey initial loads |
+| **Cold start message** | After 5s wait: *"Waking up Mero... Free servers need a moment."* |
+| **Text shortening** | Review all UI text. Make everything shorter and minimal. |
+
+### Day 5: New Features
+
+| Task | Details |
+|------|---------|
+| **Articles placeholder** | Add "Articles — Coming Soon" card in Chain page |
+| **What's New** | Add changelog section in Profile + blue dot on Profile tab for new version |
+
+### Day 6: Landing & Polish
+
+| Task | Details |
+|------|---------|
+| **Landing page** | Improve CTA, add direct links to PWA and APK download |
+| **Final text review** | Ensure all text is English, short, minimal. No Farsi anywhere in the app. |
+
+### Days 7-8: User Testing
+
+| Task | Details |
+|------|---------|
+| **Recruit testers** | 3-5 people (friends/family) |
+| **Test full flow** | Register → Verify OTP → Create habit → Spark → Chain invite → Accept → Heart |
+| **Collect feedback** | "Is the app understandable? Anything confusing?" |
+| **Fix blockers** | Address any blocking issues found |
+
+### Day 9: Launch
+
+| Task | Details |
+|------|---------|
+| **Tag v1.0.0** | Create release tag |
+| **Deployment audit** | Verify frontend, backend, database all stable |
+| **Public release** | Announce via landing page |
+
+---
+
+## Post-Launch Roadmap
+
+### v1.1.0 — UX Polish & Micro-Interactions (Target: Late Oct 2026)
+
+| Task | Details |
+|------|---------|
+| Three.js Spark Button | WebGL particle burst on habit completion. Lazy-loaded chunk (<1MB). |
+| Real Articles | Chain page articles about kindness, habit chaining, human connection (CMS/Markdown) |
+| Badge illustrations | Custom Mero-based badge designs (not emoji) |
+| Design system docs | Document tokens, components, theme guide |
+| E2E tests | Supertest: register → verify → habit → chain flow |
+| PWA `SwUpdate` | Automatic "New version available" notifications |
+
+### v1.2.0 — Accessibility & i18n (Target: Nov 2026)
 
 | Task | Details |
 |------|---------|
 | ARIA labels | All interactive elements, modals, forms |
 | Keyboard navigation | Full tab flow through all pages |
-| Motion preferences | `prefers-reduced-motion` media query for animations |
-| Color contrast | WCAG AA compliance check on all text |
+| Motion preferences | `prefers-reduced-motion` media query |
+| Color contrast | WCAG AA compliance |
+| Multi-language | English + Farsi via Transloco |
+| RTL layout | Farsi RTL support |
 
-### E2E Tests
-
-| Task | Details |
-|------|---------|
-| API integration tests | Supertest in `mehrchain-backend-e2e`: register → verify → create habit → complete |
-| Chain flow test | Create invite → accept → complete → verify feed update → miss 3 days → verify dormant |
-
----
-
-## Phase 5: Future Growth (Priority: Low — Post v1.0)
-
-> Expand to international audiences and add real-time features.
-
-### Internationalization (`i18n-setup` skill)
+### v1.3.0 — Real Email & Domain (Target: Dec 2026)
 
 | Task | Details |
 |------|---------|
-| Install Transloco | `@jsverse/transloco` setup |
-| Extract strings | All UI text to `en.json` |
-| Add Farsi | `fa.json` with RTL layout switch |
-| Language switcher | In Profile settings |
+| Custom domain | Purchase and configure |
+| Resend verified domain | Real OTP email delivery |
+| Remove `previewCode` | No more auto-fill fallback |
+| Paid hosting | If user count > 200 |
+| Google Play Store | App listing with signed APK |
 
-### WebSocket Real-Time
+### v2.0.0 — Beyond Habit Tracker (Target: Q1 2027)
+
+> **The true vision: charity, mindful companion, self-growth, people connection**
 
 | Task | Details |
 |------|---------|
-| NestJS Gateway | WebSocket gateway for chain activity broadcasts |
-| Live feed updates | Chain page updates without refresh when partner completes |
-| Typing/presence | Optional: show when chain partner is active in app |
+| WebSocket real-time | Live chain activity updates |
+| Kindness challenges | Community goals and challenges |
+| Mero illustrations | Custom animated mascot (replace emoji-based) |
+| Charity integration | Link habits to real-world causes |
+| Advanced analytics | Personal insights and growth patterns |
 
 ---
 
 ## Version Milestones
 
-| Version | Phase | Key Deliverable |
-|---------|-------|-----------------|
-| **v0.9.1** | Phase 1 | Chain backend API + frontend redesign complete |
-| **v1.0.0-rc1** | Phase 1-3 | Complete Phase 1-3 features, security, SMTP & signed APK release candidate |
-| **v1.0.0-rc2** | Phase 1-3 | RC1 + UI Loading Spinners & Anti-Spam Click Protection across all forms |
-| **v1.0.0** | Phase 4 | Three.js Spark Button micro-interactions + Alpha validation & official launch |
-| **v1.1.0** | Phase 4 | Design system documented, a11y compliant, E2E tests |
-| **v1.2.0** | Phase 5 | Multi-language support (EN + FA) |
+| Version | Date | Key Deliverable |
+|---------|------|-----------------|
+| **v0.9.0-preview** | Sep 2026 | Initial MVP with habit tracking |
+| **v0.9.1** | Sep 22 | Chain backend API + frontend redesign |
+| **v1.0.0-rc1** | Sep 27 | Security, SMTP, signed APK |
+| **v1.0.0-rc2** | Sep 27 | Loading spinners & anti-spam |
+| **v1.0.0-rc3** | Sep 28 | OTP fix, Resend config, invite URL fix |
+| **v1.0.0** | Oct 8 | Official launch — bug fixes, UI simplification, badges, Spark |
+| **v1.1.0** | Late Oct | Three.js Spark, articles, design system |
+| **v1.2.0** | Nov | Accessibility + multi-language |
+| **v1.3.0** | Dec | Real email, custom domain, Play Store |
+| **v2.0.0** | Q1 2027 | Beyond habit tracker — charity, real-time, community |
+
+---
+
+## Test Suite Status
+
+| Suite | Framework | Tests | Suites |
+|-------|-----------|:-----:|:------:|
+| Frontend | Vitest | 105 | 24 |
+| Backend | Jest | 80 | 10 |
+| **Total** | | **185** | **34** |
+
+---
+
+## Design Principles (Must Follow)
+
+1. **Minimal** — no clutter, no pressure, no feature bloat
+2. **No external emoji** — only Lucide icons or Mero-based designs
+3. **English only** — all UI, emails, and user-facing text in English
+4. **Short text** — concise, clear, measured words
+5. **Support, not competition** — no leaderboards, no streak shaming
+6. **Growth in the shadows** — not social media show-off
+7. **Kindness first** — the "Mehr" in MehrChain means kindness

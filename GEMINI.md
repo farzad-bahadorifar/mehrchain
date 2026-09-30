@@ -87,11 +87,12 @@ docs/short-description
 | `DATABASE_URL` | PostgreSQL connection (Neon) | — |
 | `JWT_SECRET` | JWT signing key | — |
 | `PORT` | Backend HTTP port | `3000` |
-| `SMTP_HOST` | Email SMTP (optional) | Console fallback |
+| `RESEND_API_KEY` | Resend email API key (optional) | Console fallback |
+| `MAIL_FROM` | Sender email address | `MehrChain <onboarding@resend.dev>` |
 
 | Platform | Service | Config File |
 |----------|---------|-------------|
-| Frontend | Vercel | `vercel.json` |
+| Frontend | Cloudflare Pages | — (auto-deploy from `main`) |
 | Backend | Render | `render.yaml` |
 | Database | Neon PostgreSQL | `prisma/schema.prisma` |
 | Android | Capacitor + GitHub Actions | `capacitor.config.ts`, `.github/workflows/build-apk.yml` |
@@ -101,10 +102,10 @@ docs/short-description
 ## Testing Commands
 
 ```bash
-# Frontend (Vitest — 38 tests)
+# Frontend (Vitest — 105 tests across 24 suites)
 npx nx test mehrchain-frontend
 
-# Backend (Jest — 22 tests)
+# Backend (Jest — 80 tests across 10 suites)
 npx nx test mehrchain-backend
 
 # Both
@@ -123,11 +124,15 @@ npm run dev
 
 1. **State Management**: NgRx Signal Store with Facade pattern (`CommitmentStore` → `CommitmentService`)
 2. **Offline Strategy**: Optimistic local-first updates in localStorage, background sync to API when online
-3. **Auth**: JWT (30-day expiry) with OTP email verification; local dev fallback with `local_`/`mock_` token prefixes
-4. **Chain Feature**: Full design spec at `docs/chain_feature_spec.md`. New models: `ChainConnection` (support links) + `ChainInvite` (invite flow). Replaces old `ChainRequest`. Key rules: passive feed (no push), auto-notify on completion, 2-day freeze then auto-archive, heart icon-only reaction, contextual nudge button.
+3. **Auth**: JWT (30-day expiry) with OTP email verification; local dev fallback with `local_`/`mock_` token prefixes. OTP auto-filled from `previewCode` until real email domain is configured.
+4. **Chain Feature**: Full design spec at `docs/chain_feature_spec.md`. Models: `ChainConnection` (support links) + `ChainInvite` (invite flow). Key rules: passive feed (no push), auto-notify on completion, 2-day freeze then auto-archive, heart icon-only reaction, contextual nudge button.
 5. **PWA**: Angular NGSW with `freshness` strategy for API data (3s timeout, 3-day cache)
 6. **Mobile**: Capacitor 8 with Ionic Angular (`mode: 'ios'`), Android builds via GitHub Actions CI
-7. **Mero Mascot**: Personality section removed. Customization limited to nickname + glow theme + dark/light mode until custom illustrations exist.
+7. **Mero Mascot**: Customization limited to nickname + 21-day custom glow unlock. No personality selector. No color swatch grid.
+8. **Language**: All UI, emails, and user-facing text must be **English only**. No Farsi/Persian in the application. i18n planned for v1.2+.
+9. **Design**: Minimal — no external emoji (Lucide icons or Mero-based only), short text, no clutter.
+10. **Commitment Duration**: Two options — "Endless Journey" (no end date) + Custom (user-defined days).
+11. **Spark Button**: "I did it" renamed to "Spark" with CSS animation. Three.js particle burst deferred to v1.1.
 
 ---
 
