@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { VerificationModalComponent } from './verification-modal';
+import { commonTestProviders } from '../../../../testing/test-providers';
 
 describe('VerificationModalComponent', () => {
   let component: VerificationModalComponent;
@@ -8,6 +9,7 @@ describe('VerificationModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [VerificationModalComponent],
+      providers: [...commonTestProviders],
     }).compileComponents();
 
     fixture = TestBed.createComponent(VerificationModalComponent);

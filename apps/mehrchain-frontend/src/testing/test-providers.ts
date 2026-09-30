@@ -45,6 +45,7 @@ import {
   RotateCcw,
   Palette,
   Wand2,
+  AlertCircle,
 } from 'lucide-angular';
 
 export const commonTestProviders = [
@@ -94,6 +95,7 @@ export const commonTestProviders = [
       RotateCcw,
       Palette,
       Wand2,
+      AlertCircle,
     })
   ),
 ];
