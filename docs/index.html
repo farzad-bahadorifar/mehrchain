@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MehrChain — Small Acts. Big Change.</title>
-    <meta name="description" content="A mindful, calm, and open-source companion designed for quiet habit formation and gentle buddy accountability. No noisy alerts, no login barriers.">
+    <title>MehrChain — Grow in the Shadows. Kindness is the Chain.</title>
+    <meta name="description" content="MehrChain is your mindful growth companion. Focus on building real habits while people who care support you silently. No noise. No pressure. Just growth.">
 
     <!-- Open Graph / Social Meta -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="MehrChain — Small Acts. Big Change.">
-    <meta property="og:description" content="Mindful habit tracking with quiet partner accountability. Free, open source, and offline-ready.">
+    <meta property="og:title" content="MehrChain — Grow in the Shadows. Kindness is the Chain.">
+    <meta property="og:description" content="A calm companion for self-growth, kindness, and human connection. Chain yourself to good habits — and to people who care.">
     <meta property="og:image" content="https://farzad-bahadorifar.github.io/mehrchain/app-screenshot.png">
     <meta name="theme-color" content="#008080">
 
@@ -51,45 +51,63 @@
                     animation: {
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'float': 'float 7s infinite ease-in-out',
+                        'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+                        'spark': 'spark 0.6s ease-out forwards',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
                             '50%': { transform: 'translateY(-12px) rotate(0.8deg)' },
-                        }
+                        },
+                        glowPulse: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(0,128,128,0.3), 0 0 40px rgba(0,128,128,0.15)' },
+                            '50%': { boxShadow: '0 0 30px rgba(0,128,128,0.5), 0 0 60px rgba(0,128,128,0.25)' },
+                        },
+                        spark: {
+                            '0%': { transform: 'scale(1)', boxShadow: 'none' },
+                            '50%': { transform: 'scale(1.12)', boxShadow: '0 0 0 8px rgba(0,128,128,0.2)' },
+                            '100%': { transform: 'scale(1)', boxShadow: 'none' },
+                        },
                     }
                 }
             }
         }
     </script>
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #FAFCFC;
-            overflow-x: hidden;
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAFCFC; overflow-x: hidden; }
+        .glass-panel { background: rgba(255,255,255,0.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.8); }
+        .phone-frame { box-shadow: 0 25px 60px -15px rgba(0,128,128,0.22), 0 0 0 1px rgba(0,128,128,0.1); }
+
+        /* Mero mascot */
+        .mero-body {
+            width: 90px; height: 90px; border-radius: 50%;
+            background: radial-gradient(circle at 38% 35%, #1de9d0, #008080 70%);
+            position: relative; display: flex; align-items: center; justify-content: center;
+            animation: glowPulse 3s ease-in-out infinite;
         }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.82);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+        .mero-body::before {
+            content: ''; position: absolute; inset: -4px; border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 40%, rgba(0,200,180,0.4) 60%, transparent 80%);
+            animation: spin 4s linear infinite;
         }
-        .phone-frame {
-            box-shadow: 0 25px 60px -15px rgba(0, 128, 128, 0.22), 0 0 0 1px rgba(0, 128, 128, 0.1);
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #008080;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .mero-face { position: relative; z-index: 2; width: 54px; height: 54px; }
+        .mero-eye { width: 9px; height: 9px; border-radius: 50%; background: #fff; position: absolute; }
+        .mero-eye.left { left: 10px; top: 17px; }
+        .mero-eye.right { right: 10px; top: 17px; }
+        .mero-eye::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #005f5f; position: absolute; top: 2px; left: 2px; }
+        .mero-smile { width: 22px; height: 11px; border: 3px solid #fff; border-radius: 0 0 20px 20px; border-top: none; position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); }
+        .mero-glow-ring { position: absolute; inset: -12px; border-radius: 50%; border: 2px solid rgba(0,200,180,0.25); }
+
+        /* Spark button animation */
+        .spark-btn { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+        .spark-btn:active { transform: scale(0.94); }
+        .spark-btn.sparked { animation: spark 0.6s ease-out; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #008080; }
     </style>
 </head>
 
@@ -106,12 +124,8 @@
     <div class="relative z-50 bg-gradient-to-r from-primary-900 via-primary-800 to-teal-900 text-white text-xs md:text-sm py-2 px-4 shadow-sm">
         <div class="max-w-6xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-2 mx-auto sm:mx-0">
-                <span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20 backdrop-blur text-teal-100 uppercase tracking-wider">
-                    v1.0.0
-                </span>
-                <span>
-                    🎉 MehrChain is live! Web PWA and official Android Signed APK are ready.
-                </span>
+                <span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20 backdrop-blur text-teal-100 uppercase tracking-wider">v1.0 RC3</span>
+                <span>MehrChain is live — Web PWA + Android APK available now</span>
             </div>
             <a href="https://github.com/farzad-bahadorifar/mehrchain/releases" target="_blank" class="hidden sm:inline-flex items-center gap-1 text-teal-200 hover:text-white font-medium transition-colors">
                 <span>Download Release</span>
@@ -123,40 +137,40 @@
     <!-- Header Navigation -->
     <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-200/60 transition-all duration-200">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
-            
-            <!-- Logo & Brand -->
             <a href="#" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform duration-200">
-                    <i data-lucide="flame" class="w-5 h-5 fill-white/20"></i>
+                <!-- Mero mini in header -->
+                <div class="w-10 h-10 rounded-2xl flex items-center justify-center overflow-hidden shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform duration-200" style="background: radial-gradient(circle at 38% 35%, #1de9d0, #008080 70%);">
+                    <svg width="24" height="24" viewBox="0 0 54 54" fill="none">
+                        <circle cx="17" cy="21" r="5" fill="white"/>
+                        <circle cx="19" cy="23" r="3" fill="#005f5f"/>
+                        <circle cx="37" cy="21" r="5" fill="white"/>
+                        <circle cx="39" cy="23" r="3" fill="#005f5f"/>
+                        <path d="M 16 36 Q 27 44 38 36" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    </svg>
                 </div>
                 <div>
                     <span class="font-extrabold text-xl tracking-tight text-slate-900">MehrChain</span>
-                    <p class="text-[10px] text-slate-400 font-semibold leading-none hidden sm:block">Small Acts. Big Change.</p>
+                    <p class="text-[10px] text-slate-400 font-semibold leading-none hidden sm:block">Grow in the Shadows.</p>
                 </div>
             </a>
 
-            <!-- Navigation Links -->
             <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                <a href="#philosophy" class="hover:text-primary transition-colors">Philosophy</a>
+                <a href="#mero" class="hover:text-primary transition-colors">Meet Mero</a>
                 <a href="#features" class="hover:text-primary transition-colors">Features</a>
-                <a href="#chain-system" class="hover:text-primary transition-colors">Chain Engine</a>
-                <a href="#demo" class="hover:text-primary transition-colors">Live Sandbox</a>
-                <a href="#download" class="hover:text-primary transition-colors">Download & PWA</a>
-                <a href="#faq" class="hover:text-primary transition-colors">FAQ</a>
+                <a href="#download" class="hover:text-primary transition-colors">Download</a>
             </nav>
 
-            <!-- Actions -->
             <div class="flex items-center gap-3">
-                <a href="https://github.com/farzad-bahadorifar/mehrchain" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white/80 hover:bg-slate-100 text-xs font-bold text-slate-700 shadow-sm transition-all" title="GitHub Repository">
+                <a href="https://github.com/farzad-bahadorifar/mehrchain" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white/80 hover:bg-slate-100 text-xs font-bold text-slate-700 shadow-sm transition-all">
                     <i data-lucide="github" class="w-4 h-4"></i>
                     <span>GitHub</span>
                 </a>
-
                 <a href="https://mehrchain.pages.dev" target="_blank" class="px-4 py-2 bg-gradient-to-r from-primary to-teal-700 hover:from-teal-700 hover:to-primary text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-1.5">
                     <i data-lucide="sparkles" class="w-4 h-4"></i>
-                    <span>Launch App</span>
+                    <span>Open App</span>
                 </a>
             </div>
-
         </div>
     </header>
 
@@ -164,29 +178,29 @@
     <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden z-10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-                
+
                 <!-- Hero Content Left -->
                 <div class="lg:col-span-7 text-center lg:text-left space-y-7">
-                    
+
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold shadow-sm">
                         <span class="relative flex h-2 w-2">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                         </span>
-                        <span>Mindful & Gentle Habit Accountability</span>
+                        <span>Self-Growth — Kindness — Human Connection</span>
                     </div>
 
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
-                        Small Acts.<br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-500 font-extrabold">Big Change.</span>
+                        Grow in the shadows.<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-500 font-extrabold">Kindness is the chain.</span>
                     </h1>
 
                     <div class="space-y-3 max-w-xl mx-auto lg:mx-0">
                         <p class="text-base sm:text-lg text-slate-600 font-medium italic leading-relaxed">
-                            "You, light your own lamp." — Rumi
+                            "Mehr" means kindness. MehrChain is a calm companion for the habits that change you from the inside.
                         </p>
                         <p class="text-sm sm:text-base text-slate-500 leading-relaxed">
-                            MehrChain is a calm, distraction-free habit companion. No stress-inducing push notifications, no privacy trade-offs, and zero signup walls. Build lasting habits with the quiet, supportive presence of a trusted buddy.
+                            Focus on what you want to build. We find people who can support you quietly — no social media performance, no pressure, no noise. Just you, your habits, and a small circle of care.
                         </p>
                     </div>
 
@@ -194,18 +208,17 @@
                     <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
                         <a href="https://mehrchain.pages.dev" target="_blank"
                             class="px-7 py-3.5 bg-primary hover:bg-primary-700 text-white rounded-2xl font-bold text-sm sm:text-base shadow-lg shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2.5">
-                            <i data-lucide="play" class="w-4 h-4 fill-white"></i>
-                            <span>Launch Web App (PWA)</span>
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                            <span>Open Web App (PWA)</span>
                         </a>
 
                         <a href="https://github.com/farzad-bahadorifar/mehrchain/releases" target="_blank"
                             class="px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/90 rounded-2xl font-bold text-sm sm:text-base shadow-sm hover:border-primary/40 hover:text-primary hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2.5">
                             <i data-lucide="download" class="w-4 h-4 text-primary"></i>
-                            <span>Download Android APK</span>
+                            <span>Android APK</span>
                         </a>
 
-                        <a href="#chain-system"
-                            class="px-4 py-3.5 text-slate-600 hover:text-primary rounded-2xl font-bold text-sm flex items-center gap-1.5 transition-colors">
+                        <a href="#philosophy" class="px-4 py-3.5 text-slate-600 hover:text-primary rounded-2xl font-bold text-sm flex items-center gap-1.5 transition-colors">
                             <span>How it works</span>
                             <i data-lucide="chevron-down" class="w-4 h-4"></i>
                         </a>
@@ -214,122 +227,159 @@
                     <!-- Trust Points -->
                     <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-semibold border-t border-slate-200/60">
                         <div class="flex items-center gap-1.5">
-                            <i data-lucide="shield-check" class="w-4 h-4 text-teal-600"></i>
-                            <span>100% Guest-First (No Login Needed)</span>
+                            <i data-lucide="heart" class="w-4 h-4 text-teal-600"></i>
+                            <span>Zero pressure</span>
                         </div>
                         <div class="flex items-center gap-1.5">
                             <i data-lucide="wifi-off" class="w-4 h-4 text-teal-600"></i>
-                            <span>Full Offline Functionality</span>
+                            <span>Works offline</span>
                         </div>
                         <div class="flex items-center gap-1.5">
                             <i data-lucide="code-2" class="w-4 h-4 text-teal-600"></i>
-                            <span>Open Source & Free</span>
+                            <span>Open source</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-teal-600"></i>
+                            <span>Free forever</span>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Hero Interactive Phone Mockup Right -->
+                <!-- Hero Right — Mero + Phone Mockup -->
                 <div class="lg:col-span-5 flex justify-center">
                     <div class="relative w-full max-w-[320px] sm:max-w-[340px]">
-                        
-                        <!-- Floating Streak Pill -->
-                        <div class="absolute -top-4 -right-4 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2.5 animate-float">
-                            <div class="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
-                                <i data-lucide="flame" class="w-4 h-4"></i>
+
+                        <!-- Mero floating above the phone -->
+                        <div class="absolute -top-14 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 animate-float">
+                            <!-- Mero mascot -->
+                            <div class="mero-body shadow-2xl">
+                                <div class="mero-glow-ring"></div>
+                                <svg class="mero-face" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Eyes -->
+                                    <circle cx="17" cy="22" r="6" fill="white"/>
+                                    <circle cx="19.5" cy="24" r="3.5" fill="#004d4d"/>
+                                    <circle cx="37" cy="22" r="6" fill="white"/>
+                                    <circle cx="39.5" cy="24" r="3.5" fill="#004d4d"/>
+                                    <!-- Eye shine -->
+                                    <circle cx="21" cy="22.5" r="1.5" fill="white"/>
+                                    <circle cx="41" cy="22.5" r="1.5" fill="white"/>
+                                    <!-- Smile -->
+                                    <path d="M 17 36 Q 27 45 37 36" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                    <!-- Cheeks -->
+                                    <ellipse cx="11" cy="30" rx="4" ry="2.5" fill="rgba(255,255,255,0.2)"/>
+                                    <ellipse cx="43" cy="30" rx="4" ry="2.5" fill="rgba(255,255,255,0.2)"/>
+                                </svg>
                             </div>
-                            <div>
-                                <div class="text-[11px] font-bold text-slate-800">21-Day Milestone!</div>
-                                <div class="text-[9px] text-slate-400 font-medium">Daily Reading Habit</div>
+                            <!-- Mero speech bubble -->
+                            <div class="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg border border-slate-100 text-[11px] font-bold text-slate-700 whitespace-nowrap">
+                                Spark your habit today
                             </div>
                         </div>
 
-                        <!-- Floating Partner Support Pill -->
-                        <div class="absolute -bottom-5 -left-4 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2.5">
-                            <div class="w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-xs">
-                                S
-                            </div>
+                        <!-- Floating Chain pill -->
+                        <div class="absolute top-8 -right-4 z-30 bg-white/95 backdrop-blur-md px-3 py-2 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-[10px]">S</div>
                             <div>
-                                <div class="text-[10px] font-bold text-slate-800">Partner logged their habit</div>
+                                <div class="text-[10px] font-bold text-slate-800">Sara sparked today</div>
                                 <div class="text-[9px] text-primary font-semibold flex items-center gap-1">
                                     <i data-lucide="heart" class="w-2.5 h-2.5 fill-current"></i>
-                                    <span>Chain connection active</span>
+                                    <span>Chain active</span>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Floating badge pill -->
+                        <div class="absolute -bottom-5 -left-4 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-teal-100 flex items-center justify-center text-teal-700">
+                                <i data-lucide="trophy" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <div class="text-[11px] font-bold text-slate-800">21-Day Master</div>
+                                <div class="text-[9px] text-slate-400 font-medium">Custom glow unlocked</div>
+                            </div>
+                        </div>
+
                         <!-- Phone Frame -->
-                        <div class="relative bg-slate-900 rounded-[3rem] p-3 shadow-2xl phone-frame border-4 border-slate-800">
-                            <!-- Screen Top Dynamic Island -->
+                        <div class="relative bg-slate-900 rounded-[3rem] p-3 shadow-2xl phone-frame border-4 border-slate-800 mt-16">
                             <div class="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-4 bg-slate-950 rounded-full z-20"></div>
 
-                            <!-- Screen Frame Inner -->
                             <div class="bg-slate-50 rounded-[2.3rem] overflow-hidden aspect-[9/18.5] flex flex-col justify-between p-4 pt-8 text-left relative select-none">
-                                
+
                                 <!-- App Header Inside Phone -->
                                 <div class="flex items-center justify-between border-b border-slate-200/80 pb-3">
                                     <div>
-                                        <div class="text-[10px] text-slate-400 font-bold">Today, Sunday</div>
-                                        <div class="text-sm font-extrabold text-slate-800">Your Daily Journey</div>
+                                        <div class="text-[10px] text-slate-400 font-bold">Today</div>
+                                        <div class="text-sm font-extrabold text-slate-800">Your Daily Spark</div>
                                     </div>
-                                    <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
-                                        🌱
+                                    <!-- Mini Mero avatar -->
+                                    <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background: radial-gradient(circle at 38% 35%, #1de9d0, #008080 70%);">
+                                        <svg width="20" height="20" viewBox="0 0 54 54" fill="none">
+                                            <circle cx="17" cy="22" r="6" fill="white"/>
+                                            <circle cx="20" cy="24" r="3" fill="#004d4d"/>
+                                            <circle cx="37" cy="22" r="6" fill="white"/>
+                                            <circle cx="40" cy="24" r="3" fill="#004d4d"/>
+                                            <path d="M 17 36 Q 27 44 37 36" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                        </svg>
                                     </div>
                                 </div>
 
                                 <!-- Cards Section -->
                                 <div class="space-y-2.5 my-auto">
-                                    
-                                    <!-- Interactive Habit Card -->
-                                    <div id="heroHabitCard" onclick="triggerHeroCheckIn()" class="p-3.5 bg-white rounded-2xl border border-teal-100 shadow-sm hover:shadow-md transition-all cursor-pointer group active:scale-95">
-                                        <div class="flex items-center justify-between mb-2">
+
+                                    <!-- Habit Card with Spark button -->
+                                    <div class="p-3.5 bg-white rounded-2xl border border-teal-100 shadow-sm">
+                                        <div class="flex items-center justify-between mb-2.5">
                                             <div class="flex items-center gap-2">
-                                                <div id="heroHabitIconBox" class="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center transition-colors">
-                                                    <i id="heroHabitIcon" data-lucide="book-open" class="w-4 h-4"></i>
+                                                <div class="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
+                                                    <i data-lucide="book-open" class="w-4 h-4"></i>
                                                 </div>
                                                 <div>
-                                                    <div class="text-xs font-bold text-slate-800">Read Book (20 pages)</div>
-                                                    <div class="text-[10px] text-slate-400">Target: Every Evening</div>
+                                                    <div class="text-xs font-bold text-slate-800">Read 20 Pages</div>
+                                                    <div class="text-[10px] text-slate-400">Endless Journey</div>
                                                 </div>
                                             </div>
-                                            <div id="heroHabitCheck" class="w-6 h-6 rounded-lg border-2 border-teal-500 flex items-center justify-center text-white bg-transparent transition-all">
-                                                <i data-lucide="check" class="w-3.5 h-3.5 opacity-0 transition-opacity"></i>
+                                            <div id="phoneStreak" class="text-[10px] font-bold text-teal-600 flex items-center gap-1">
+                                                <i data-lucide="flame" class="w-3 h-3"></i>
+                                                <span>14</span>
                                             </div>
                                         </div>
-                                        <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                                            <div id="heroHabitBar" class="bg-primary h-full rounded-full transition-all duration-500" style="width: 70%"></div>
-                                        </div>
-                                        <div class="flex justify-between items-center mt-1.5 text-[9px] text-slate-400 font-medium">
-                                            <span>👈 Tap to test check-in!</span>
-                                            <span id="heroHabitStreak">🔥 14-day streak</span>
-                                        </div>
+                                        <!-- Spark button -->
+                                        <button id="phoneSparkBtn" onclick="phoneSparkAction()" class="spark-btn w-full py-2 rounded-xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm shadow-primary/30">
+                                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                            <span>Spark</span>
+                                        </button>
                                     </div>
 
-                                    <!-- Chain Buddy Preview Card -->
+                                    <!-- Chain Card -->
                                     <div class="p-3 bg-gradient-to-br from-teal-50/70 to-emerald-50/50 rounded-2xl border border-teal-100/80">
                                         <div class="flex items-center justify-between text-[11px]">
                                             <div class="flex items-center gap-1.5 font-bold text-slate-700">
                                                 <i data-lucide="link-2" class="w-3.5 h-3.5 text-primary"></i>
                                                 <span>Sara's Chain</span>
                                             </div>
-                                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">Synced ✅</span>
+                                            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-teal-100 text-teal-800">Completed</span>
                                         </div>
-                                        <p class="text-[9px] text-slate-500 mt-1">Sara completed Morning Workout today.</p>
+                                        <p class="text-[9px] text-slate-500 mt-1">Sara sparked Morning Workout today.</p>
                                     </div>
 
                                 </div>
 
-                                <!-- Bottom Navigation Bar Inside Phone -->
+                                <!-- Bottom Navigation Bar -->
                                 <div class="bg-white rounded-2xl p-2 flex justify-around items-center border border-slate-100 shadow-sm text-slate-400">
                                     <div class="text-primary flex flex-col items-center">
                                         <i data-lucide="home" class="w-4 h-4"></i>
                                         <span class="text-[8px] font-bold">Home</span>
                                     </div>
-                                    <div class="flex flex-col items-center hover:text-slate-600">
+                                    <div class="flex flex-col items-center relative">
                                         <i data-lucide="link" class="w-4 h-4"></i>
                                         <span class="text-[8px] font-medium">Chain</span>
+                                        <span class="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full"></span>
                                     </div>
-                                    <div class="flex flex-col items-center hover:text-slate-600">
+                                    <div class="flex flex-col items-center">
+                                        <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                                        <span class="text-[8px] font-medium">Journey</span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
                                         <i data-lucide="user" class="w-4 h-4"></i>
                                         <span class="text-[8px] font-medium">Profile</span>
                                     </div>
@@ -345,367 +395,416 @@
         </div>
     </section>
 
-    <!-- Why MehrChain (Problem vs Solution) Section -->
-    <section class="py-20 bg-white border-y border-slate-100 relative z-10">
+    <!-- Philosophy Section -->
+    <section id="philosophy" class="py-20 bg-white border-y border-slate-100 relative z-10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
-            
+
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <h2 class="text-xs font-bold tracking-widest text-primary uppercase">Our Philosophy</h2>
+                <h2 class="text-xs font-bold tracking-widest text-primary uppercase">The MehrChain Philosophy</h2>
                 <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                    Why did we build a different habit companion?
+                    Not a habit tracker. A growth companion.
                 </p>
                 <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
-                    Most habit apps produce anxiety with aggressive notifications, guilt, and invasive tracking. MehrChain is grounded in empathy (Mehr), quiet accountability, and mindful simplicity.
+                    MehrChain is not built to compete with Habitify or Streaks. It's built for a different kind of person — one who wants to grow quietly, with kindness, and with real human connection.
                 </p>
             </div>
 
+            <!-- 4 pillars -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                <div class="p-6 rounded-3xl bg-teal-50 border border-teal-100 space-y-3 text-center">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center mx-auto shadow-md shadow-teal-600/30">
+                        <i data-lucide="heart" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900">Mindful Companion</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Your growth guide. No pressure, no judgment. Mero is always there.</p>
+                </div>
+                <div class="p-6 rounded-3xl bg-emerald-50 border border-emerald-100 space-y-3 text-center">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-md shadow-emerald-600/30">
+                        <i data-lucide="trending-up" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900">Self Growth</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Build habits that actually matter to you. Not to impress anyone.</p>
+                </div>
+                <div class="p-6 rounded-3xl bg-blue-50 border border-blue-100 space-y-3 text-center">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center mx-auto shadow-md shadow-blue-600/30">
+                        <i data-lucide="link-2" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900">People Connection</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Chain yourself to people who care. Quiet, passive support — no show-off feed.</p>
+                </div>
+                <div class="p-6 rounded-3xl bg-purple-50 border border-purple-100 space-y-3 text-center">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center mx-auto shadow-md shadow-purple-600/30">
+                        <i data-lucide="globe" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900">Kindness First</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Mehr means kindness. Future features: charity, community acts, giving back.</p>
+                </div>
+            </div>
+
+            <!-- Problem / Solution -->
             <div class="grid md:grid-cols-2 gap-8">
-                
-                <!-- Old Way Box -->
+
+                <!-- Old Way -->
                 <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-6">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center font-bold">
+                        <div class="w-10 h-10 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center">
                             <i data-lucide="x" class="w-5 h-5"></i>
                         </div>
-                        <h3 class="font-extrabold text-lg text-slate-800">Traditional Habit Apps</h3>
+                        <h3 class="font-extrabold text-lg text-slate-800">Other Habit Apps</h3>
                     </div>
                     <ul class="space-y-4 text-sm text-slate-600">
                         <li class="flex items-start gap-3">
                             <i data-lucide="alert-circle" class="w-4 h-4 text-red-500 mt-0.5 shrink-0"></i>
-                            <span><strong>Noisy Notifications:</strong> High-pressure alerts that trigger guilt and anxiety on busy days.</span>
+                            <span><strong>Aggressive notifications</strong> — guilt and pressure on every off day.</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i data-lucide="alert-circle" class="w-4 h-4 text-red-500 mt-0.5 shrink-0"></i>
-                            <span><strong>Account & Data Walls:</strong> Mandatory signups, email verifications, and user behavioral tracking.</span>
+                            <span><strong>Social performance</strong> — leaderboards, streaks to show off, anxiety loops.</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i data-lucide="alert-circle" class="w-4 h-4 text-red-500 mt-0.5 shrink-0"></i>
-                            <span><strong>Zero Recovery Room:</strong> Missing a single day abruptly destroys motivation and progress.</span>
+                            <span><strong>Fake streaks</strong> — preset 7/14/21-day limits that lose meaning fast.</span>
                         </li>
                     </ul>
                 </div>
 
-                <!-- MehrChain Way Box -->
+                <!-- MehrChain Way -->
                 <div class="p-8 rounded-3xl bg-gradient-to-br from-teal-50/90 to-emerald-50/50 border-2 border-teal-200 space-y-6 shadow-sm">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-2xl bg-teal-600 text-white flex items-center justify-center font-bold shadow-md shadow-teal-600/30">
-                            <i data-lucide="check" class="w-5 h-5"></i>
+                        <div class="w-10 h-10 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-600/30">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
                         </div>
                         <h3 class="font-extrabold text-lg text-slate-900">The MehrChain Way</h3>
                     </div>
                     <ul class="space-y-4 text-sm text-slate-700 font-medium">
                         <li class="flex items-start gap-3">
-                            <i data-lucide="sparkles" class="w-4 h-4 text-teal-600 mt-0.5 shrink-0"></i>
-                            <span><strong>Quiet Accountability:</strong> A calm, passive feed where you observe partner progress without spammy alerts.</span>
+                            <i data-lucide="heart" class="w-4 h-4 text-teal-600 mt-0.5 shrink-0"></i>
+                            <span><strong>Quiet accountability</strong> — your chain partner sees you, silently cheers you on.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="infinity" class="w-4 h-4 text-teal-600 mt-0.5 shrink-0"></i>
+                            <span><strong>Endless Journey</strong> — no artificial end date. Grow for as long as you choose.</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i data-lucide="shield-check" class="w-4 h-4 text-teal-600 mt-0.5 shrink-0"></i>
-                            <span><strong>Guest-First & Local-First:</strong> Start instantly without an account. Your habits stay on your device.</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i data-lucide="heart" class="w-4 h-4 text-teal-600 mt-0.5 shrink-0"></i>
-                            <span><strong>Mindful Recovery & Rest:</strong> Built-in resting states and gentle heart reactions preserve continuity.</span>
+                            <span><strong>Growth in the shadows</strong> — no feed, no followers, no performance. Just you and your growth.</span>
                         </li>
                     </ul>
                 </div>
 
             </div>
-
         </div>
     </section>
 
-    <!-- Bento Grid Features Section -->
-    <section id="features" class="py-24 relative z-10">
+    <!-- Meet Mero Section -->
+    <section id="mero" class="py-24 relative z-10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
-            
+
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+                <!-- Left: Mero visual + states -->
+                <div class="flex flex-col items-center gap-8">
+
+                    <!-- Large Mero -->
+                    <div class="relative">
+                        <div id="meroHero" class="mero-body" style="width: 140px; height: 140px; cursor: pointer;" onclick="cycleMeroState()" title="Click to see Mero's moods">
+                            <div class="mero-glow-ring"></div>
+                            <svg style="width: 84px; height: 84px; position: relative; z-index: 2;" viewBox="0 0 54 54" fill="none">
+                                <circle id="meroLeftEye" cx="17" cy="22" r="6" fill="white"/>
+                                <circle id="meroLeftPupil" cx="19.5" cy="24" r="3.5" fill="#004d4d"/>
+                                <circle id="meroRightEye" cx="37" cy="22" r="6" fill="white"/>
+                                <circle id="meroRightPupil" cx="39.5" cy="24" r="3.5" fill="#004d4d"/>
+                                <circle cx="21" cy="22.5" r="1.5" fill="white"/>
+                                <circle cx="41" cy="22.5" r="1.5" fill="white"/>
+                                <path id="meroMouth" d="M 17 36 Q 27 45 37 36" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <ellipse cx="11" cy="30" rx="4" ry="2.5" fill="rgba(255,255,255,0.2)"/>
+                                <ellipse cx="43" cy="30" rx="4" ry="2.5" fill="rgba(255,255,255,0.2)"/>
+                            </svg>
+                        </div>
+                        <div id="meroState" class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white px-4 py-1.5 rounded-full shadow-lg border border-slate-100 text-xs font-bold text-slate-700 whitespace-nowrap">
+                            Happy
+                        </div>
+                    </div>
+
+                    <!-- Mood selector -->
+                    <p class="text-xs text-slate-400 text-center">Tap Mero to see all moods</p>
+
+                    <!-- Mood pills -->
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <button onclick="setMeroMood('happy')" class="px-3 py-1.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800 hover:bg-teal-200 transition-colors">Happy</button>
+                        <button onclick="setMeroMood('celebrating')" class="px-3 py-1.5 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800 hover:bg-yellow-200 transition-colors">Celebrating</button>
+                        <button onclick="setMeroMood('waiting')" class="px-3 py-1.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors">Waiting</button>
+                        <button onclick="setMeroMood('sleepy')" class="px-3 py-1.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 hover:bg-purple-200 transition-colors">Sleepy</button>
+                        <button onclick="setMeroMood('content')" class="px-3 py-1.5 rounded-full text-xs font-bold bg-green-100 text-green-800 hover:bg-green-200 transition-colors">Content</button>
+                    </div>
+
+                </div>
+
+                <!-- Right: Mero description -->
+                <div class="space-y-6">
+                    <div class="space-y-3">
+                        <h2 class="text-xs font-bold tracking-widest text-primary uppercase">Your Companion</h2>
+                        <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                            Meet Mero, your growth guide.
+                        </p>
+                        <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                            Mero is the heart of MehrChain — a quiet, warm presence that reacts to your journey. When you Spark a habit, Mero celebrates. When you've been away, Mero waits patiently.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
+                                <i data-lucide="sun" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm text-slate-800">Reacts to your habits</p>
+                                <p class="text-xs text-slate-500 mt-1">Mero has 7 emotional states — celebrating when you Spark, content when you're consistent, gentle when you've been away.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                                <i data-lucide="award" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm text-slate-800">Unlockable custom glow</p>
+                                <p class="text-xs text-slate-500 mt-1">After 21 days of consistent sparks, unlock Mero's custom glow — your color, your journey.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm text-slate-800">A nickname, not just an avatar</p>
+                                <p class="text-xs text-slate-500 mt-1">Give Mero a name. They'll greet you every day with it — quiet, personal, yours.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section id="features" class="py-24 bg-white border-t border-slate-100 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <h2 class="text-xs font-bold tracking-widest text-primary uppercase">Core Features</h2>
+                <h2 class="text-xs font-bold tracking-widest text-primary uppercase">Features</h2>
                 <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                    Everything you need to sustain positive habits
+                    Built for real growth, not streaks
                 </p>
             </div>
 
-            <!-- Bento Grid 3x2 -->
             <div class="grid md:grid-cols-3 gap-6">
-                
-                <!-- Card 1: Chain Feature (Large 2 cols) -->
-                <div class="md:col-span-2 p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 relative overflow-hidden group">
+
+                <!-- Chain (large) -->
+                <div class="md:col-span-2 p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 relative overflow-hidden">
                     <div class="max-w-md space-y-3">
-                        <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold mb-4">
+                        <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center mb-4">
                             <i data-lucide="link-2" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900">The Silent Chain (Buddy Engine)</h3>
+                        <h3 class="text-xl font-bold text-slate-900">The Silent Chain</h3>
                         <p class="text-slate-500 text-sm leading-relaxed">
-                            Pair up with a partner or friend. Whenever you log your habit, your partner’s feed reflects your completion quietly. Includes 5 intelligent states: Completed, Waiting, Resting, Fading, and Completed Journey.
+                            Pair up with someone. When you Spark your habit, their feed updates quietly. No noise, no push — just silent mutual accountability. The chain has 5 intelligent states.
                         </p>
                     </div>
                     <div class="mt-6 flex flex-wrap gap-2 text-xs font-bold">
-                        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">✅ Completed Today</span>
-                        <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800">⏳ Waiting</span>
-                        <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-800">🌿 Resting</span>
-                        <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-800">🏆 Completed Journey</span>
+                        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">Completed</span>
+                        <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800">Waiting</span>
+                        <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-800">Resting</span>
+                        <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-800">Fading</span>
+                        <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-800">Journey Complete</span>
                     </div>
                 </div>
 
-                <!-- Card 2: Guest-First -->
+                <!-- Spark -->
                 <div class="p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 space-y-4">
-                    <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold">
-                        <i data-lucide="user-check" class="w-6 h-6"></i>
+                    <div class="w-12 h-12 rounded-2xl bg-yellow-50 text-yellow-600 flex items-center justify-center">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900">Guest-First & Privacy</h3>
+                    <h3 class="text-xl font-bold text-slate-900">One Tap. Spark.</h3>
                     <p class="text-slate-500 text-sm leading-relaxed">
-                        No login walls. Create your first habit in 5 seconds. All records are stored securely in local storage and synced to cloud only when you want.
+                        No "I did it" checkbox. One big button: Spark. Complete your habit, light up Mero, notify your chain — all in one tap.
                     </p>
                 </div>
 
-                <!-- Card 3: PWA & Offline -->
+                <!-- Endless Journey -->
                 <div class="p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 space-y-4">
-                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-                        <i data-lucide="smartphone" class="w-6 h-6"></i>
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                        <i data-lucide="infinity" class="w-6 h-6"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900">PWA & Offline Freedom</h3>
+                    <h3 class="text-xl font-bold text-slate-900">Endless Journey</h3>
                     <p class="text-slate-500 text-sm leading-relaxed">
-                        Installs instantly on iOS, Android, and Desktop as a lightweight standalone web app. Works seamlessly offline during flights or commutes.
+                        No 30-day limit. Choose "Endless Journey" — a commitment with no expiry date — or set your own duration.
                     </p>
                 </div>
 
-                <!-- Card 4: Minimal UI -->
+                <!-- Badges -->
                 <div class="p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 space-y-4">
-                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-                        <i data-lucide="palette" class="w-6 h-6"></i>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <i data-lucide="award" class="w-6 h-6"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900">Ergonomic & Minimal UI</h3>
+                    <h3 class="text-xl font-bold text-slate-900">Badges, Not Streaks</h3>
                     <p class="text-slate-500 text-sm leading-relaxed">
-                        Thoughtful typography, mindful teal palette, full light and dark mode compatibility, and effortless single-thumb mobile navigation.
+                        Earn badges for milestones that matter: First Spark, Chain Starter, 7-Day Streak, 21-Day Master, Kind Soul.
                     </p>
                 </div>
 
-                <!-- Card 5: Open Source -->
+                <!-- Offline -->
                 <div class="p-8 rounded-3xl bg-white border border-slate-200/90 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 space-y-4">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                        <i data-lucide="code" class="w-6 h-6"></i>
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <i data-lucide="wifi-off" class="w-6 h-6"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900">100% Open Source</h3>
+                    <h3 class="text-xl font-bold text-slate-900">Offline First</h3>
                     <p class="text-slate-500 text-sm leading-relaxed">
-                        Fully transparent codebase licensed under MIT. No tracking telemetry, no commercial lock-in, and open to community contributions.
+                        Works everywhere. PWA on any browser, Android APK for native feel. Data syncs when you're back online.
                     </p>
                 </div>
 
             </div>
-
         </div>
     </section>
 
-    <!-- Interactive Chain Sandbox Section -->
-    <section id="demo" class="py-20 bg-slate-900 text-white relative overflow-hidden z-10">
-        <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-teal-500/10 rounded-full blur-[120px] pointer-events-none"></div>
-
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-10">
-            
-            <div class="space-y-3">
-                <span class="px-3.5 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold uppercase tracking-wider">
-                    Interactive Companion Sandbox
-                </span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                    5 Intelligent Chain States
-                </h2>
-                <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
-                    Click any state below to preview how partner cards adapt in real time:
-                </p>
-            </div>
-
-            <!-- State Buttons Controller -->
-            <div class="flex flex-wrap justify-center gap-2 p-1.5 bg-slate-800/80 backdrop-blur rounded-2xl max-w-2xl mx-auto border border-slate-700/60">
-                <button onclick="setChainState('active')" id="btn-state-active" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow">
-                    Completed Today ✅
-                </button>
-                <button onclick="setChainState('waiting')" id="btn-state-waiting" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60">
-                    Waiting ⏳
-                </button>
-                <button onclick="setChainState('resting')" id="btn-state-resting" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60">
-                    Resting Day 🌿
-                </button>
-                <button onclick="setChainState('fading')" id="btn-state-fading" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60">
-                    Needs Nudge 💬
-                </button>
-                <button onclick="setChainState('completed')" id="btn-state-completed" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60">
-                    Journey Complete 🏆
-                </button>
-            </div>
-
-            <!-- Dynamic Preview Card Container -->
-            <div class="max-w-md mx-auto">
-                <div id="demoCard" class="p-6 rounded-3xl bg-slate-800/90 border border-teal-500/30 text-left shadow-2xl transition-all duration-300">
-                    
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <div id="demoAvatar" class="w-11 h-11 rounded-2xl bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-base border border-teal-500/30">
-                                S
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white text-sm">Sara M.</h4>
-                                <p class="text-xs text-slate-400">Goal: 30-min Daily Workout</p>
-                            </div>
-                        </div>
-                        <span id="demoBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                            Completed Today
-                        </span>
-                    </div>
-
-                    <p id="demoDescription" class="text-xs text-slate-300 leading-relaxed mb-4">
-                        Sara completed her 30-min workout at 6:30 PM. Your combined chain reached 12 consecutive days!
-                    </p>
-
-                    <div class="flex items-center justify-between pt-3 border-t border-slate-700/60 text-xs">
-                        <span id="demoStreakText" class="text-teal-400 font-bold flex items-center gap-1">
-                            <i data-lucide="flame" class="w-4 h-4"></i>
-                            12-Day Streak
-                        </span>
-                        <button onclick="sendHeartReact()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-pink-500/20 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 font-bold transition-all active:scale-90">
-                            <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
-                            <span>Send Love ❤️</span>
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Download & QR Code Section -->
+    <!-- Download Section -->
     <section id="download" class="py-24 bg-gradient-to-b from-slate-50 to-white relative z-10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
-            
+
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <h2 class="text-xs font-bold tracking-widest text-primary uppercase">Download & Install</h2>
+                <h2 class="text-xs font-bold tracking-widest text-primary uppercase">Get Started</h2>
                 <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                    Run instantly on phone or desktop
+                    Open instantly — no app store needed
                 </p>
                 <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
-                    Skip app store friction. Enjoy an instant native experience across all modern platforms.
+                    Web app, Android APK, iOS Safari — start your Endless Journey right now.
                 </p>
             </div>
 
             <div class="grid lg:grid-cols-12 gap-8 items-center">
-                
-                <!-- Left: 3 Install Paths -->
+
                 <div class="lg:col-span-7 space-y-4">
-                    
-                    <!-- Web App Card -->
+
+                    <!-- PWA -->
                     <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:border-primary/40 transition-all flex items-center justify-between">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold">
+                            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center">
                                 <i data-lucide="globe" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-base text-slate-900">Progressive Web App (PWA)</h4>
-                                <p class="text-xs text-slate-500">Accessible from any browser (iOS Safari, Android Chrome, Mac, Windows)</p>
+                                <h4 class="font-bold text-base text-slate-900">Web App (PWA)</h4>
+                                <p class="text-xs text-slate-500">Works on iOS, Android, Mac, Windows — any browser</p>
                             </div>
                         </div>
                         <a href="https://mehrchain.pages.dev" target="_blank" class="px-5 py-2.5 bg-primary hover:bg-teal-700 text-white font-bold text-xs rounded-xl transition-all shrink-0">
-                            <span>Open App ↗</span>
+                            Open App
                         </a>
                     </div>
 
-                    <!-- Android APK Card -->
+                    <!-- APK -->
                     <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:border-primary/40 transition-all flex items-center justify-between">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
-                                <i data-lucide="download-cloud" class="w-6 h-6"></i>
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                                <i data-lucide="smartphone" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-base text-slate-900">Official Android Release APK</h4>
-                                <p class="text-xs text-slate-500">Official Release Signed APK for fast sideloading</p>
+                                <h4 class="font-bold text-base text-slate-900">Android APK</h4>
+                                <p class="text-xs text-slate-500">Official signed release — direct sideload, no Play Store needed</p>
                             </div>
                         </div>
                         <a href="https://github.com/farzad-bahadorifar/mehrchain/releases" target="_blank" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all shrink-0 flex items-center gap-1.5">
                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                            <span>Download APK</span>
+                            <span>Download</span>
                         </a>
                     </div>
 
-                    <!-- iOS Guide Card -->
+                    <!-- iOS -->
                     <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-2">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center">
                                 <i data-lucide="apple" class="w-5 h-5"></i>
                             </div>
-                            <h4 class="font-bold text-sm text-slate-900">iOS Safari Installation Guide:</h4>
+                            <h4 class="font-bold text-sm text-slate-900">iOS — Add to Home Screen</h4>
                         </div>
                         <p class="text-xs text-slate-500 leading-relaxed ps-12">
-                            Open the web app in Safari, tap the Share icon at the bottom, and select <strong>"Add to Home Screen"</strong>.
+                            Open <strong>mehrchain.pages.dev</strong> in Safari, tap the Share icon, then "Add to Home Screen". Done.
                         </p>
                     </div>
 
                 </div>
 
-                <!-- Right: QR Code Scan -->
+                <!-- QR Code -->
                 <div class="lg:col-span-5 flex justify-center">
                     <div class="p-8 rounded-3xl bg-white border-2 border-slate-200/90 shadow-xl text-center space-y-4 max-w-xs w-full">
-                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Scan with Phone Camera</div>
-                        
-                        <!-- QR Box -->
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Scan to open</div>
                         <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 inline-block">
                             <div id="qrcode" class="flex justify-center"></div>
                         </div>
-
                         <p class="text-xs text-slate-500 font-medium">
-                            Point your mobile camera at the QR code to open MehrChain instantly.
+                            Point your camera at the QR code to open MehrChain instantly.
                         </p>
                     </div>
                 </div>
 
             </div>
-
         </div>
     </section>
 
-    <!-- FAQ Section -->
+    <!-- FAQ -->
     <section id="faq" class="py-20 bg-white relative z-10 border-t border-slate-100">
         <div class="max-w-4xl mx-auto px-4 sm:px-6">
-            
+
             <div class="text-center space-y-3 mb-12">
-                <h2 class="text-xs font-bold tracking-widest text-primary uppercase">Frequently Asked Questions</h2>
-                <p class="text-3xl font-extrabold text-slate-900 tracking-tight">
-                    Everything you need to know
-                </p>
+                <h2 class="text-xs font-bold tracking-widest text-primary uppercase">FAQ</h2>
+                <p class="text-3xl font-extrabold text-slate-900 tracking-tight">Common questions</p>
             </div>
 
             <div class="space-y-4">
-                
+
                 <details class="group p-6 rounded-2xl bg-slate-50 border border-slate-200/80 open:bg-white open:border-primary/30 open:shadow-md transition-all">
                     <summary class="flex justify-between items-center cursor-pointer font-bold text-sm sm:text-base text-slate-800 list-none">
-                        <span>Is MehrChain completely free?</span>
+                        <span>What does "Mehr" mean?</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
                     </summary>
                     <p class="mt-4 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-3">
-                        Yes! MehrChain is a 100% free and open-source project with no paid paywalls, subscriptions, or intrusive third-party ads.
+                        "Mehr" is a Persian word meaning kindness, affection, and love. MehrChain is named after this because we believe kindness — to yourself and to others — is what makes growth sustainable and meaningful.
                     </p>
                 </details>
 
                 <details class="group p-6 rounded-2xl bg-slate-50 border border-slate-200/80 open:bg-white open:border-primary/30 open:shadow-md transition-all">
                     <summary class="flex justify-between items-center cursor-pointer font-bold text-sm sm:text-base text-slate-800 list-none">
-                        <span>How do I invite a buddy to my Chain?</span>
+                        <span>Is this just another habit tracker?</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
                     </summary>
                     <p class="mt-4 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-3">
-                        In the "Chain" tab inside the app, tap "Invite Buddy" and share your unique 6-character invite code or link with your friend. Once accepted, your mutual habit connection goes live.
+                        No. The v1.0 is habit-tracking focused by necessity — you need to build the foundation before the house. But our real target is: charity, mindful companionship, self-growth, and human connection. Future versions will go well beyond habits.
                     </p>
                 </details>
 
                 <details class="group p-6 rounded-2xl bg-slate-50 border border-slate-200/80 open:bg-white open:border-primary/30 open:shadow-md transition-all">
                     <summary class="flex justify-between items-center cursor-pointer font-bold text-sm sm:text-base text-slate-800 list-none">
-                        <span>What happens if I go offline?</span>
+                        <span>How does Chain work?</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
                     </summary>
                     <p class="mt-4 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-3">
-                        Nothing is lost. MehrChain is architected Local-First. Your habit updates and activity logs are written immediately to local storage and sync in the background when an active internet connection is restored.
+                        Create a public habit, go to the Chain tab, and share your invite link. Your partner accepts and links one of their own habits. From then on, when either of you Sparks your habit, the other sees it silently in their Chain feed. No notifications, no pressure — just quiet mutual support.
+                    </p>
+                </details>
+
+                <details class="group p-6 rounded-2xl bg-slate-50 border border-slate-200/80 open:bg-white open:border-primary/30 open:shadow-md transition-all">
+                    <summary class="flex justify-between items-center cursor-pointer font-bold text-sm sm:text-base text-slate-800 list-none">
+                        <span>Is MehrChain free?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-3">
+                        100% free, open source (MIT license), no ads, no subscriptions, no data selling. Ever.
                     </p>
                 </details>
 
             </div>
-
         </div>
     </section>
 
@@ -713,166 +812,108 @@
     <footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800 relative z-10 text-xs">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-slate-800">
-                
-                <!-- Brand Info -->
+
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white">
-                        <i data-lucide="flame" class="w-5 h-5 fill-white/20"></i>
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: radial-gradient(circle at 38% 35%, #1de9d0, #008080 70%);">
+                        <svg width="20" height="20" viewBox="0 0 54 54" fill="none">
+                            <circle cx="17" cy="22" r="6" fill="white"/>
+                            <circle cx="20" cy="24" r="3" fill="#004d4d"/>
+                            <circle cx="37" cy="22" r="6" fill="white"/>
+                            <circle cx="40" cy="24" r="3" fill="#004d4d"/>
+                            <path d="M 17 36 Q 27 44 37 36" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        </svg>
                     </div>
                     <div>
                         <div class="font-bold text-white text-base">MehrChain</div>
-                        <div class="text-slate-500 text-[11px]">Small Acts. Big Change.</div>
+                        <div class="text-slate-500 text-[11px]">Grow in the Shadows. Kindness is the Chain.</div>
                     </div>
                 </div>
 
-                <!-- Footer Social Links -->
                 <div class="flex items-center gap-6 font-semibold">
                     <a href="https://github.com/farzad-bahadorifar/mehrchain" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5">
                         <i data-lucide="github" class="w-4 h-4"></i>
                         <span>GitHub</span>
                     </a>
-                    <a href="https://t.me/mehrchain" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5">
-                        <i data-lucide="send" class="w-4 h-4"></i>
-                        <span>Telegram</span>
-                    </a>
                     <a href="https://github.com/farzad-bahadorifar/mehrchain/blob/main/LICENSE" target="_blank" class="hover:text-white transition-colors">
                         MIT License
+                    </a>
+                    <a href="https://mehrchain.pages.dev" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span>Open App</span>
                     </a>
                 </div>
 
             </div>
 
             <div class="pt-8 text-center text-slate-500 space-y-2">
-                <p>Crafted with ❤️ by the MehrChain community for mindful, sustainable habit growth.</p>
-                <p class="text-[11px] text-slate-600">© 2026 MehrChain Open Source Project. All rights reserved.</p>
+                <p>Crafted with kindness for mindful, sustainable growth.</p>
+                <p class="text-[11px] text-slate-600">© 2026 MehrChain — Open Source. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Interactive Scripts -->
+    <!-- Scripts -->
     <script>
-        // Hero check-in interactive celebration
-        let heroChecked = false;
-        function triggerHeroCheckIn() {
-            heroChecked = !heroChecked;
-            const check = document.getElementById('heroHabitCheck');
-            const icon = document.getElementById('heroHabitIconBox');
-            const streak = document.getElementById('heroHabitStreak');
-            const bar = document.getElementById('heroHabitBar');
-
-            if (heroChecked) {
-                check.classList.add('bg-primary');
-                check.querySelector('i').classList.remove('opacity-0');
-                icon.classList.add('bg-teal-600', 'text-white');
-                bar.style.width = '100%';
-                streak.innerText = '🔥 15-Day Streak!';
-
-                // Fire celebratory confetti
+        // --- Phone Spark Demo ---
+        let phoneSparkState = false;
+        function phoneSparkAction() {
+            const btn = document.getElementById('phoneSparkBtn');
+            const streak = document.getElementById('phoneStreak');
+            phoneSparkState = !phoneSparkState;
+            if (phoneSparkState) {
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6L9 17l-5-5"/></svg><span>Sparked!</span>';
+                btn.classList.add('bg-emerald-600');
+                btn.classList.remove('bg-primary');
+                streak.innerHTML = '<i data-lucide="flame" class="w-3 h-3"></i><span>15</span>';
+                btn.classList.add('sparked');
+                setTimeout(() => btn.classList.remove('sparked'), 700);
                 if (typeof confetti === 'function') {
-                    confetti({
-                        particleCount: 50,
-                        spread: 60,
-                        origin: { y: 0.6 },
-                        colors: ['#008080', '#009E9E', '#2dd4bf', '#fbbf24']
-                    });
+                    confetti({ particleCount: 40, spread: 55, origin: { y: 0.5 }, colors: ['#008080', '#14b8a6', '#2dd4bf'] });
                 }
             } else {
-                check.classList.remove('bg-primary');
-                check.querySelector('i').classList.add('opacity-0');
-                icon.classList.remove('bg-teal-600', 'text-white');
-                bar.style.width = '70%';
-                streak.innerText = '🔥 14-day streak';
+                btn.innerHTML = '<i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Spark</span>';
+                btn.classList.remove('bg-emerald-600');
+                btn.classList.add('bg-primary');
+                streak.innerHTML = '<i data-lucide="flame" class="w-3 h-3"></i><span>14</span>';
             }
-        }
-
-        // Demo chain 5 states switcher
-        const stateConfigs = {
-            active: {
-                badge: 'Completed Today ✅',
-                badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-                desc: 'Sara completed her 30-min workout at 6:30 PM. Your combined chain reached 12 consecutive days!',
-                streak: '12-Day Streak 🔥'
-            },
-            waiting: {
-                badge: 'Waiting for Today ⏳',
-                badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-                desc: 'Sara hasn’t logged her habit yet today. She usually checks in before 9:00 PM.',
-                streak: '11-Day Streak'
-            },
-            resting: {
-                badge: 'Resting Day 🌿',
-                badgeClass: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-                desc: 'Sara scheduled today as a rest day. Your mutual streak is safely preserved without anxiety.',
-                streak: '11-Day (Preserved)'
-            },
-            fading: {
-                badge: 'Needs a Gentle Nudge 💬',
-                badgeClass: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
-                desc: 'Sara hasn’t checked in for 2 days. Send a warm heart or nudge to encourage her back on track.',
-                streak: 'Fading (2 days)'
-            },
-            completed: {
-                badge: 'Journey Completed 🏆',
-                badgeClass: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-                desc: 'Congratulations! You and Sara completed the full 21-day journey together with glowing success!',
-                streak: '21 Days Completed'
-            }
-        };
-
-        function setChainState(stateKey) {
-            const config = stateConfigs[stateKey];
-            if (!config) return;
-
-            // Update badge
-            const badge = document.getElementById('demoBadge');
-            badge.className = `text-xs font-bold px-3 py-1 rounded-full border ${config.badgeClass}`;
-            badge.innerText = config.badge;
-
-            // Update description & streak
-            document.getElementById('demoDescription').innerText = config.desc;
-            document.getElementById('demoStreakText').innerHTML = `<i data-lucide="flame" class="w-4 h-4"></i> ${config.streak}`;
-
-            // Reset active button styling
-            ['active', 'waiting', 'resting', 'fading', 'completed'].forEach(s => {
-                const btn = document.getElementById(`btn-state-${s}`);
-                if (btn) {
-                    if (s === stateKey) {
-                        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow';
-                    } else {
-                        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700/60';
-                    }
-                }
-            });
-
             lucide.createIcons();
         }
 
-        function sendHeartReact() {
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 25,
-                    spread: 45,
-                    origin: { y: 0.7 },
-                    colors: ['#ec4899', '#f43f5e', '#fb7185']
-                });
-            }
+        // --- Mero Mood System ---
+        const meroMoods = {
+            happy: { label: 'Happy', mouth: 'M 17 36 Q 27 45 37 36', eyeScale: 1, glow: '#008080' },
+            celebrating: { label: 'Celebrating!', mouth: 'M 14 34 Q 27 48 40 34', eyeScale: 1.1, glow: '#14b8a6' },
+            waiting: { label: 'Waiting...', mouth: 'M 19 38 Q 27 38 35 38', eyeScale: 0.9, glow: '#0f766e' },
+            sleepy: { label: 'Sleepy', mouth: 'M 19 38 Q 27 36 35 38', eyeScale: 0.7, glow: '#134e4a' },
+            content: { label: 'Content', mouth: 'M 18 37 Q 27 42 36 37', eyeScale: 1, glow: '#009E9E' },
+        };
+        const moodKeys = Object.keys(meroMoods);
+        let currentMoodIndex = 0;
+
+        function setMeroMood(key) {
+            const mood = meroMoods[key];
+            if (!mood) return;
+            document.getElementById('meroMouth').setAttribute('d', mood.mouth);
+            document.getElementById('meroState').textContent = mood.label;
+            currentMoodIndex = moodKeys.indexOf(key);
         }
 
-        // Initialize QR code and icons
+        function cycleMeroState() {
+            currentMoodIndex = (currentMoodIndex + 1) % moodKeys.length;
+            setMeroMood(moodKeys[currentMoodIndex]);
+        }
+
+        // --- Init ---
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-
-            // Setup QR code pointing to production PWA
-            new QRCode(document.getElementById("qrcode"), {
-                text: "https://mehrchain.pages.dev",
-                width: 140,
-                height: 140,
-                colorDark : "#008080",
-                colorLight : "#F8FAFC",
-                correctLevel : QRCode.CorrectLevel.H
+            new QRCode(document.getElementById('qrcode'), {
+                text: 'https://mehrchain.pages.dev',
+                width: 140, height: 140,
+                colorDark: '#008080', colorLight: '#F8FAFC',
+                correctLevel: QRCode.CorrectLevel.H
             });
         });
     </script>
-</body>
 
+</body>
 </html>
