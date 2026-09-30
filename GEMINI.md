@@ -141,18 +141,32 @@ npm run dev
 
 ---
 
-## Task Management & GitHub Workflow ("Task it" / "Log task" / "Track task")
+## Task Management & GitHub Lifecycle Protocol
 
-Whenever the user requests **"Task it"** (or synonyms like *"Log task"*, *"Track task"*, *"Close task"*, or in Persian *"تسک‌اش کن"* / *"تسکش کن"*), follow this automated workflow:
+Always follow this lifecycle protocol for any task worked on in this project:
 
-1. **Create & Close GitHub Issue**:
-   - Run: `node scripts/create-task.js "<Title>" "<Body with bullet points>"`
-   - Automatically assigns to `@farzad-bahadorifar`, sets state to `closed` (`state_reason: 'completed'`), and outputs the issue number and URL.
+### Phase 1: Before Starting a Task
+1. **Check Roadmap**: First inspect `docs/development_roadmap.md` to check if the task already exists.
+2. **If Task Exists in Roadmap**:
+   - Retrieve its GitHub Issue number (e.g., `#31`).
+   - Update its GitHub Project Board item status to `In progress` (or `Ready`).
+   - Update `docs/development_roadmap.md` status if needed (e.g. `🔄 In Progress`).
+3. **If Task Does NOT Exist in Roadmap**:
+   - Create a new GitHub Issue using `node scripts/create-task.js "<Title>" "<Body>" --open`.
+   - Add the task to `docs/development_roadmap.md` under the appropriate Sprint/Phase section with status `🔄 In Progress` and link to the newly created issue.
+   - Add the issue to the GitHub Project Board with status `In progress` and appropriate priority/dates.
+
+### Phase 2: Finishing a Task ("Task it" / "Log task" / "Track task" / "Close task" / "تسک‌اش کن")
+1. **Close GitHub Issue & Update Project**:
+   - Close the issue as completed (`state: closed`, `state_reason: 'completed'`).
+   - If issue was created on the fly, run `node scripts/create-task.js "<Title>" "<Body>"`.
+   - Move the task to `Done` status on the GitHub Project Board.
 2. **Update Roadmap Documentation**:
-   - Add/update the task entry in `docs/development_roadmap.md` under the Master Schedule table and the appropriate phase section.
-   - Mark status as `✅ Done`.
-   - Link the GitHub Issue in the `Issue` column (e.g. `[#19](https://github.com/farzad-bahadorifar/mehrchain/issues/19)`).
+   - Mark the task status as `✅ Done` in `docs/development_roadmap.md`.
+   - Ensure the task row links to the GitHub issue (e.g. `[#31](https://github.com/farzad-bahadorifar/mehrchain/issues/31)`).
+   - Record completion date and relevant notes.
 3. **Commit & Push**:
    - Commit roadmap updates: `git commit -am "docs: update roadmap with Issue #XX"`
    - Push to GitHub: `git push origin main`
+
 

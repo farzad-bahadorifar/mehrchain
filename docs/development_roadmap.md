@@ -10,18 +10,18 @@
 
 ### v1.0.0 Launch Sprint (8 Mehr – 16 Mehr / Oct 1–8)
 
-| Day | Date | Focus | Tasks | Status |
-|-----|------|-------|-------|:------:|
-| 1 | 8 Mehr (Oct 1) | 🔴 Bug Fixes | OTP `previewCode` auto-fill (✅) • Account deletion fix • English email template | 🔄 In Progress |
-| 2 | 9 Mehr (Oct 2) | 🟡 Profile Simplify | Remove color swatch grid • Remove scroll-on-tap • Keep nickname + 21-day only | ⏳ TODO |
-| 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | Remove user card • "Endless Journey" + Custom duration • "I did it" → "Spark" + CSS animation | ⏳ TODO |
-| 4 | 11 Mehr (Oct 4) | 🟡 Loading UX | Skeleton loading • Cold start message • Shorten all UI text | ⏳ TODO |
-| 5 | 12 Mehr (Oct 5) | 🟢 New Features | Articles "Coming Soon" • What's New section • Badge system foundations | ⏳ TODO |
-| 6 | 13 Mehr (Oct 6) | 🟢 Landing + Polish | Landing page CTA • Direct PWA/APK links • Final text review | ⏳ TODO |
-| 7-8 | 14–15 Mehr (Oct 7-8) | 🧪 User Testing | 3-5 testers • Full flow: register → verify → habit → chain → spark | ⏳ TODO |
+| Day | Date | Focus | Tasks & GitHub Issues | Status |
+|-----|------|-------|-----------------------|:------:|
+| 1 | 8 Mehr (Oct 1) | 🔴 Bug Fixes | [[#30]](https://github.com/farzad-bahadorifar/mehrchain/issues/30) OTP `previewCode` auto-fill (✅) • [[#31]](https://github.com/farzad-bahadorifar/mehrchain/issues/31) Account deletion fix • [[#32]](https://github.com/farzad-bahadorifar/mehrchain/issues/32) English email template | 🔄 In Progress |
+| 2 | 9 Mehr (Oct 2) | 🟡 Profile Simplify | [[#33]](https://github.com/farzad-bahadorifar/mehrchain/issues/33) Remove color swatch grid & scroll-on-tap • Keep nickname + 21-day only | ⏳ Ready |
+| 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | [[#34]](https://github.com/farzad-bahadorifar/mehrchain/issues/34) Journey redesign & badges • [[#35]](https://github.com/farzad-bahadorifar/mehrchain/issues/35) "Endless Journey" + Custom duration • [[#36]](https://github.com/farzad-bahadorifar/mehrchain/issues/36) "I did it" → "Spark" + CSS animation | ⏳ Backlog |
+| 4 | 11 Mehr (Oct 4) | 🟡 Loading UX | [[#37]](https://github.com/farzad-bahadorifar/mehrchain/issues/37) Skeleton loading • Cold start message • Shorten all UI text | ⏳ Backlog |
+| 5 | 12 Mehr (Oct 5) | 🟢 New Features | [[#38]](https://github.com/farzad-bahadorifar/mehrchain/issues/38) Articles "Coming Soon" • [[#39]](https://github.com/farzad-bahadorifar/mehrchain/issues/39) What's New section & version dot | ⏳ Backlog |
+| 6 | 13 Mehr (Oct 6) | 🟢 Landing + Polish | [[#40]](https://github.com/farzad-bahadorifar/mehrchain/issues/40) Landing page CTA • Direct PWA/APK links • Final text review | ⏳ Backlog |
+| 7-8 | 14–15 Mehr (Oct 7-8) | 🧪 User Testing | 3-5 testers • Full flow: register → verify → habit → chain → spark | ⏳ Planned |
 | 9 | 16 Mehr (Oct 8) | 📦 Launch | Tag v1.0.0 • Final deployment audit • Public release | ⏳ Planned |
 
-### Completed Tasks (Pre-Launch)
+### Completed Tasks (Pre-Launch & Sprint)
 
 | Issue | Task Title | Phase | Status | Date | Notes |
 |:-----:|------------|-------|:------:|:----:|-------|
@@ -39,12 +39,12 @@
 | [#26](https://github.com/farzad-bahadorifar/mehrchain/issues/26) | Onboarding public habit toggle | Phase 2 (Validation) | ✅ Done | Sep 27 | isPublic toggle in DetailsStepComponent |
 | [#27](https://github.com/farzad-bahadorifar/mehrchain/issues/27) | UI Loading & Anti-Spam click protection | Phase 2 (UX) | ✅ Done | Sep 27 | Loading spinners & request debouncing |
 | [#28](https://github.com/farzad-bahadorifar/mehrchain/issues/28) | Fix Chain Invite URL + OTP + Account Deletion | Phase 3 (Stability) | ✅ Done | Sep 28 | Capacitor URL fallback, auth hardening |
-| [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ✅ Done | Sep 27 | Step components + auth modals |
+| [#22](https://github.com/farzad-bahadorifar/mehrchain/issues/22) | Refactor & Split OnboardingComponent | Phase 2 (Refactor) | ✅ Done | Sep 27 | Step components + auth modals (closed #5, #12) |
 | [#13](https://github.com/farzad-bahadorifar/mehrchain/issues/13) | Remove Mero Personality section | Phase 2 (Cleanup) | ✅ Done | Sep 24 | Profile cleanup & tests verified |
 | [#14](https://github.com/farzad-bahadorifar/mehrchain/issues/14) | Remove console.log debug calls | Phase 2 (Cleanup) | ✅ Done | Sep 24 | Codebase cleanup |
-| [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Setup SMTP (Resend) | Phase 3 (Stability) | ✅ Done | Sep 27 | Free tier: 3K emails/month |
-| [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Add backend tests to CI pipeline | Phase 3 (Stability) | ✅ Done | Sep 27 | GitHub Actions backend test step |
-| [#25](https://github.com/farzad-bahadorifar/mehrchain/issues/25) | Signed Release APK (GitHub Actions) | Phase 3 (Mobile) | ✅ Done | Sep 27 | Keystore signing CI workflow |
+| [#24](https://github.com/farzad-bahadorifar/mehrchain/issues/24) | Setup SMTP (Resend) | Phase 3 (Stability) | ✅ Done | Sep 27 | Free tier: 3K emails/month (closed #17) |
+| [#23](https://github.com/farzad-bahadorifar/mehrchain/issues/23) | Add backend tests to CI pipeline | Phase 3 (Stability) | ✅ Done | Sep 27 | GitHub Actions backend test step (closed #16) |
+| [#25](https://github.com/farzad-bahadorifar/mehrchain/issues/25) | Signed Release APK (GitHub Actions) | Phase 3 (Mobile) | ✅ Done | Sep 27 | Keystore signing CI workflow (closed #15) |
 
 ---
 
@@ -70,54 +70,49 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 ### Day 1: Bug Fixes (Critical)
 
-| Task | Details |
-|------|---------|
-| **OTP auto-fill** | Frontend reads `previewCode` from register/resend response → auto-fills OTP field → shows message: *"Your verification code has been auto-filled. In the future, this code will be sent to your email."* |
-| **Account deletion fix** | Only clear localStorage when backend returns 200. On error: show *"Account deletion failed. Please try again."* Don't clear in `finally` block. |
-| **English email template** | Rewrite Farsi email template in `mail.service.ts` to English. Keep branded dark theme design. |
+| Issue | Task | Priority | Details |
+|:-----:|------|:--------:|---------|
+| [#30](https://github.com/farzad-bahadorifar/mehrchain/issues/30) | **OTP auto-fill** | 🔴 P0 (Done) | Frontend reads `previewCode` from register/resend response → auto-fills OTP field → shows message: *"Your verification code has been auto-filled. In the future, this code will be sent to your email."* |
+| [#31](https://github.com/farzad-bahadorifar/mehrchain/issues/31) | **Account deletion fix** | 🔴 P0 (Ready) | Only clear localStorage when backend returns 200. On error: show *"Account deletion failed. Please try again."* Don't clear in `finally` block. |
+| [#32](https://github.com/farzad-bahadorifar/mehrchain/issues/32) | **English email template** | 🔴 P0 (Ready) | Rewrite Farsi email template in `mail.service.ts` to English. Keep branded dark theme design. |
 
 ### Day 2: Profile Simplification
 
-| Action | What |
-|--------|------|
-| ❌ Remove | Belly Glow Color grid (8+ color swatches with streak-based locks) |
-| ❌ Remove | Scroll-to-bottom animation on mascot tap |
-| ❌ Remove | "Tap to interact ✨" tooltip (emoji not allowed) |
-| ✅ Keep | Nickname editor + speech bubble |
-| ✅ Keep | 21-Day Custom Glow unlock (only color reward) |
-| ✅ Keep | Dark/Light/System theme selector |
-| ✅ Keep | Account settings (Sign Out / Delete) |
+| Issue | Task / Action | Priority | Details |
+|:-----:|---------------|:--------:|---------|
+| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | ❌ Remove Belly Glow Grid | 🟡 P1 (Ready) | Remove color swatch grid (8+ swatches with streak-based locks) |
+| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | ❌ Remove Scroll-on-tap | 🟡 P1 (Ready) | Remove scroll-to-bottom animation on mascot tap and "Tap to interact ✨" tooltip |
+| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | ✅ Keep Essential Profile | 🟡 P1 (Ready) | Nickname editor + speech bubble, 21-Day Custom Glow unlock (only color reward), Dark/Light/System theme, Sign Out / Delete |
 
 ### Day 3: Journey + Duration + Spark
 
-| Task | Details |
-|------|---------|
-| **Journey simplify** | Remove User Profile Card (duplicate). Keep Stats + Heatmap + Archived. |
-| **Duration options** | Replace 7d/14d/21d/30d/Custom with: **"Endless Journey"** (`totalDays = -1`) + **Custom** |
-| **Spark button** | Rename "I did it" → "Spark" with Lucide `sparkles` icon + CSS scale/glow animation |
-| **Badge foundations** | Add badge data model. 5 initial badges: First Spark, Chain Starter, 7-Day Streak, 21-Day Master, Kind Soul. All use Lucide icons (no external emoji). |
+| Issue | Task | Priority | Details |
+|:-----:|------|:--------:|---------|
+| [#34](https://github.com/farzad-bahadorifar/mehrchain/issues/34) | **Journey simplify & Badges** | 🟡 P1 (Backlog) | Remove User Profile Card (duplicate). Keep Stats + Heatmap + Archived. Add badge data model with 5 initial badges (First Spark, Chain Starter, 7-Day Streak, 21-Day Master, Kind Soul) using Lucide icons. |
+| [#35](https://github.com/farzad-bahadorifar/mehrchain/issues/35) | **Duration options** | 🟡 P1 (Backlog) | Replace 7d/14d/21d/30d/Custom with: **"Endless Journey"** (`totalDays = -1`) + **Custom** |
+| [#36](https://github.com/farzad-bahadorifar/mehrchain/issues/36) | **Spark button** | 🟡 P1 (Backlog) | Rename "I did it" → "Spark" with Lucide `sparkles` icon + CSS scale/glow animation |
 
 ### Day 4: Loading UX
 
-| Task | Details |
-|------|---------|
-| **Skeleton loading** | Add skeleton screens for Dashboard, Chain, Journey initial loads |
-| **Cold start message** | After 5s wait: *"Waking up Mero... Free servers need a moment."* |
-| **Text shortening** | Review all UI text. Make everything shorter and minimal. |
+| Issue | Task | Priority | Details |
+|:-----:|------|:--------:|---------|
+| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Skeleton loading** | 🟡 P1 (Backlog) | Add skeleton screens for Dashboard, Chain, Journey initial loads |
+| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Cold start message** | 🟡 P1 (Backlog) | After 5s wait: *"Waking up Mero... Free servers need a moment."* |
+| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Text shortening** | 🟡 P1 (Backlog) | Review all UI text. Make everything shorter and minimal. |
 
 ### Day 5: New Features
 
-| Task | Details |
-|------|---------|
-| **Articles placeholder** | Add "Articles — Coming Soon" card in Chain page |
-| **What's New** | Add changelog section in Profile + blue dot on Profile tab for new version |
+| Issue | Task | Priority | Details |
+|:-----:|------|:--------:|---------|
+| [#38](https://github.com/farzad-bahadorifar/mehrchain/issues/38) | **Articles placeholder** | 🟢 P2 (Backlog) | Add "Articles — Coming Soon" card in Chain page |
+| [#39](https://github.com/farzad-bahadorifar/mehrchain/issues/39) | **What's New** | 🟢 P2 (Backlog) | Add changelog section in Profile + blue dot on Profile tab for new version |
 
 ### Day 6: Landing & Polish
 
-| Task | Details |
-|------|---------|
-| **Landing page** | Improve CTA, add direct links to PWA and APK download |
-| **Final text review** | Ensure all text is English, short, minimal. No Farsi anywhere in the app. |
+| Issue | Task | Priority | Details |
+|:-----:|------|:--------:|---------|
+| [#40](https://github.com/farzad-bahadorifar/mehrchain/issues/40) | **Landing page** | 🟢 P2 (Backlog) | Complete redesign of `docs/index.html` (GitHub Pages), Mero hero section, philosophy, direct PWA/APK download links |
+| [#40](https://github.com/farzad-bahadorifar/mehrchain/issues/40) | **Final text review** | 🟢 P2 (Backlog) | Ensure all text is English, short, minimal. No Farsi anywhere in the app. |
 
 ### Days 7-8: User Testing
 
@@ -144,7 +139,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 | Task | Details |
 |------|---------|
-| Three.js Spark Button | WebGL particle burst on habit completion. Lazy-loaded chunk (<1MB). |
+| Three.js Spark Button | WebGL particle burst on habit completion. Lazy-loaded chunk (<1MB). (Ref: #20) |
 | Real Articles | Chain page articles about kindness, habit chaining, human connection (CMS/Markdown) |
 | Badge illustrations | Custom Mero-based badge designs (not emoji) |
 | Design system docs | Document tokens, components, theme guide |
@@ -160,6 +155,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | Motion preferences | `prefers-reduced-motion` media query |
 | Color contrast | WCAG AA compliance |
 | Multi-language | English + Farsi via Transloco |
+| RTL layout | Farsi RTL support |
 | RTL layout | Farsi RTL support |
 
 ### v1.3.0 — Real Email & Domain (Target: Dec 2026)
