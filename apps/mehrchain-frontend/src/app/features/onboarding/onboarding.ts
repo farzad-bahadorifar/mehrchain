@@ -313,8 +313,9 @@ export class OnboardingComponent implements OnInit {
     try {
       const res = await this.authService.register(username, email, password);
       if (res.requiresVerification) {
-        this.previewOtpCode.set(res.previewCode || '');
-        this.verificationCode.set('');
+        const previewCode = res.previewCode || '';
+        this.previewOtpCode.set(previewCode);
+        this.verificationCode.set(previewCode);
         this.verificationError.set('');
         this.verificationSuccess.set('');
         this.isVerificationModalOpen.set(true);
@@ -428,6 +429,7 @@ export class OnboardingComponent implements OnInit {
       const res = await this.authService.resendVerificationCode(this.signUpEmail());
       if (res.previewCode) {
         this.previewOtpCode.set(res.previewCode);
+        this.verificationCode.set(res.previewCode);
       }
       this.verificationSuccess.set('A new verification code has been sent to your email.');
       this.startResendTimer();

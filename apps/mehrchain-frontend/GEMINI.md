@@ -33,6 +33,16 @@
 | `MeroService` | `mero.service.ts` | Mascot emotional state (idle/happy/celebrating/etc.) |
 | `MeroCustomizationService` | `mero-customization.service.ts` | Glow themes, nickname (**Personality section removed**) |
 | `ThemeService` | `theme.service.ts` | Dark/light/system mode |
+
+### Official Mero Mascot Rules
+> **CRITICAL — AI agents must follow these rules in every file they touch:**
+
+- **Official asset**: `public/assets/mero.png` — a 3D-rendered teal penguin/chick with warm yellow glowing belly
+- **NEVER** use emoji, CSS circles, SVG-drawn faces, or any non-official illustration as Mero
+- **States** (`idle`, `happy`, `celebrating`, `sleepy`, `waiting`, `missing`, `content`) are implemented as CSS class overlays on the `<app-mero>` component — the underlying `mero.png` is always the same image
+- **Belly glow** is a CSS `radial-gradient` overlay at `bottom: 16%` of the container (see `mero.css`)
+- **Badges**: Use only Lucide icons — badge icons must never be emoji or Mero face drawings
+- **Component**: Use `<app-mero>` with `[size]`, `[state]`, `[showGlow]`, `[interactive]` inputs — never render mero.png directly in feature components
 | `NotificationService` | `notification.service.ts` | Capacitor local notifications |
 
 ### State Management (`core/store/`)

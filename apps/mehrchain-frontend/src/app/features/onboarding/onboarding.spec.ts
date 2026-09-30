@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { AuthService } from '../../core/services/auth.service';
 import { OnboardingComponent } from './onboarding';
 
 describe('OnboardingComponent', () => {
@@ -61,5 +61,41 @@ describe('OnboardingComponent', () => {
     expect(component.isHabitPublic()).toBe(true);
     component.isHabitPublic.set(false);
     expect(component.isHabitPublic()).toBe(false);
+  });
+
+  it('should auto-fill verificationCode when register returns previewCode', async () => {
+    const authService = TestBed.inject(AuthService);
+    vi.spyOn(authService, 'register').mockResolvedValue({
+      requiresVerification: true,
+      email: 'test@example.com',
+      username: 'testuser',
+      message: 'Code sent',
+      previewCode: '555444',
+    });
+
+    component.signUpUsername.set('testuser');
+    component.signUpEmail.set('test@example.com');
+    component.signUpPassword.set('password123');
+
+    await component.handleSignUp();
+
+    expect(component.isVerificationModalOpen()).toBe(true);
+    expect(component.previewOtpCode()).toBe('555444');
+    expect(component.verificationCode()).toBe('555444');
+  });
+
+  it('should auto-fill verificationCode when resendVerificationCode returns previewCode', async () => {
+    const authService = TestBed.inject(AuthService);
+    vi.spyOn(authService, 'resendVerificationCode').mockResolvedValue({
+      success: true,
+      message: 'Code resent',
+      previewCode: '777888',
+    });
+
+    component.signUpEmail.set('test@example.com');
+    await component.handleResendVerificationCode();
+
+    expect(component.previewOtpCode()).toBe('777888');
+    expect(component.verificationCode()).toBe('777888');
   });
 });

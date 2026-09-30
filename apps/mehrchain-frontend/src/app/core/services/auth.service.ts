@@ -155,6 +155,7 @@ export class AuthService {
           requiresVerification: true,
           email: cleanEmail,
           username: cleanUsername,
+          previewCode: '123456',
           message: 'Verification code sent (use 123456 or any 6 digits in offline mode).',
         };
       }

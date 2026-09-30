@@ -129,6 +129,11 @@ npm run dev
 5. **PWA**: Angular NGSW with `freshness` strategy for API data (3s timeout, 3-day cache)
 6. **Mobile**: Capacitor 8 with Ionic Angular (`mode: 'ios'`), Android builds via GitHub Actions CI
 7. **Mero Mascot**: Customization limited to nickname + 21-day custom glow unlock. No personality selector. No color swatch grid.
+   - **Official asset**: `apps/mehrchain-frontend/public/assets/mero.png` — a 3D-rendered penguin/chick character with teal body and warm yellow glowing belly
+   - **NEVER** replace Mero with emoji, CSS circles, hand-drawn SVG faces, or any non-official illustration
+   - **States** (idle/happy/celebrating/sleepy/waiting/missing/content) are CSS class overlays only — same underlying PNG
+   - **Belly glow** is a CSS radial-gradient overlay positioned at `bottom: 16%` of the container
+   - **Badges**: Must use Lucide icons only — NEVER generic emoji or Mero face drawings as badge icons
 8. **Language**: All UI, emails, and user-facing text must be **English only**. No Farsi/Persian in the application. i18n planned for v1.2+.
 9. **Design**: Minimal — no external emoji (Lucide icons or Mero-based only), short text, no clutter.
 10. **Commitment Duration**: Two options — "Endless Journey" (no end date) + Custom (user-defined days).

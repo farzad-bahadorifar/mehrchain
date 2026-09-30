@@ -48,7 +48,7 @@ describe('AuthService (Frontend)', () => {
     expect(service.isAuthenticated()).toBe(false);
   });
 
-  it('should call register endpoint and return verification status', async () => {
+  it('should call register endpoint and return verification status with previewCode', async () => {
     const registerPromise = service.register('Farzad', 'farzad@example.com', 'pass123');
 
     const req = httpMock.expectOne('http://localhost:3000/api/auth/register');
@@ -57,11 +57,29 @@ describe('AuthService (Frontend)', () => {
       requiresVerification: true,
       email: 'farzad@example.com',
       message: 'Verification code sent to your email address.',
+      previewCode: '654321',
     });
 
     const res = await registerPromise;
     expect(res.requiresVerification).toBe(true);
     expect(res.email).toBe('farzad@example.com');
+    expect(res.previewCode).toBe('654321');
+  });
+
+  it('should resend verification code and return previewCode', async () => {
+    const resendPromise = service.resendVerificationCode('farzad@example.com');
+
+    const req = httpMock.expectOne('http://localhost:3000/api/auth/resend-verification');
+    expect(req.request.method).toBe('POST');
+    req.flush({
+      success: true,
+      message: 'A new verification code has been sent.',
+      previewCode: '987654',
+    });
+
+    const res = await resendPromise;
+    expect(res.success).toBe(true);
+    expect(res.previewCode).toBe('987654');
   });
 
   it('should verify email code and save JWT token to localStorage', async () => {
