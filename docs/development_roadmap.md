@@ -13,7 +13,7 @@
 | Day | Date | Focus | Tasks & GitHub Issues | Status |
 |-----|------|-------|-----------------------|:------:|
 | 1 | 8 Mehr (Oct 1) | 🔴 Bug Fixes | [[#30]](https://github.com/farzad-bahadorifar/mehrchain/issues/30) OTP `previewCode` auto-fill (✅) • [[#31]](https://github.com/farzad-bahadorifar/mehrchain/issues/31) Account deletion fix (✅) • [[#32]](https://github.com/farzad-bahadorifar/mehrchain/issues/32) English email template (✅) | ✅ Done |
-| 2 | 9 Mehr (Oct 2) | 🟡 Profile Simplify | [[#33]](https://github.com/farzad-bahadorifar/mehrchain/issues/33) Remove color swatch grid & scroll-on-tap • Keep nickname + 21-day only | ⏳ Ready |
+| 2 | 9 Mehr (Oct 2) | 🟡 Profile Simplify | [[#33]](https://github.com/farzad-bahadorifar/mehrchain/issues/33) Remove color swatch grid & scroll-on-tap • Keep nickname + 21-day only | ✅ Done |
 | 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | [[#34]](https://github.com/farzad-bahadorifar/mehrchain/issues/34) Journey redesign & badges • [[#35]](https://github.com/farzad-bahadorifar/mehrchain/issues/35) "Endless Journey" + Custom duration • [[#36]](https://github.com/farzad-bahadorifar/mehrchain/issues/36) "I did it" → "Spark" + CSS animation | ⏳ Backlog |
 | 4 | 11 Mehr (Oct 4) | 🟡 Loading UX | [[#37]](https://github.com/farzad-bahadorifar/mehrchain/issues/37) Skeleton loading • Cold start message • Shorten all UI text | ⏳ Backlog |
 | 5 | 12 Mehr (Oct 5) | 🟢 New Features | [[#38]](https://github.com/farzad-bahadorifar/mehrchain/issues/38) Articles "Coming Soon" • [[#39]](https://github.com/farzad-bahadorifar/mehrchain/issues/39) What's New section & version dot | ⏳ Backlog |
@@ -25,6 +25,7 @@
 
 | Issue | Task Title | Phase | Status | Date | Notes |
 |:-----:|------------|-------|:------:|:----:|-------|
+| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | Profile Simplification — remove swatches grid & scroll-on-tap, keep nickname & 21-day glow | v1.0 Launch Sprint | ✅ Done | Oct 1 | Removed color swatch grid & tap tooltip, preserved 21-day custom glow reward |
 | [#31](https://github.com/farzad-bahadorifar/mehrchain/issues/31) | Fix account deletion — only clear local state on backend success | v1.0 Launch Sprint | ✅ Done | Sep 30 | Fixed deleteAccount error handling & storage retention |
 | [#32](https://github.com/farzad-bahadorifar/mehrchain/issues/32) | Translate OTP email template to English | v1.0 Launch Sprint | ✅ Done | Sep 30 | English dark-themed HTML/text OTP email template |
 | [#30](https://github.com/farzad-bahadorifar/mehrchain/issues/30) | OTP auto-fill from previewCode | v1.0 Launch Sprint | ✅ Done | Sep 30 | Auto-fill verification code & helper message |
@@ -79,12 +80,12 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | [#32](https://github.com/farzad-bahadorifar/mehrchain/issues/32) | **English email template** | 🔴 P0 (Done) | Rewrite Farsi email template in `mail.service.ts` to English. Keep branded dark theme design. |
 
 ### Day 2: Profile Simplification
-
+ 
 | Issue | Task / Action | Priority | Details |
 |:-----:|---------------|:--------:|---------|
-| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | ❌ Remove Belly Glow Grid | 🟡 P1 (Ready) | Remove color swatch grid (8+ swatches with streak-based locks) |
-| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | ❌ Remove Scroll-on-tap | 🟡 P1 (Ready) | Remove scroll-to-bottom animation on mascot tap and "Tap to interact ✨" tooltip |
-| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | ✅ Keep Essential Profile | 🟡 P1 (Ready) | Nickname editor + speech bubble, 21-Day Custom Glow unlock (only color reward), Dark/Light/System theme, Sign Out / Delete |
+| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | ❌ Remove Belly Glow Grid | 🟡 P1 (Done) | Remove color swatch grid (8+ swatches with streak-based locks) |
+| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | ❌ Remove Scroll-on-tap | 🟡 P1 (Done) | Remove scroll-to-bottom animation on mascot tap and "Tap to interact ✨" tooltip |
+| [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | ✅ Keep Essential Profile | 🟡 P1 (Done) | Nickname editor + speech bubble, 21-Day Custom Glow unlock (only color reward), Dark/Light/System theme, Sign Out / Delete |
 
 ### Day 3: Journey + Duration + Spark
 

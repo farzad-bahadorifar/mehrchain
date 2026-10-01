@@ -83,6 +83,7 @@ export class OnboardingComponent implements OnInit {
   signUpPassword = signal('');
   signUpError = signal('');
   isDuplicateEmailError = signal(false);
+  isNetworkSignUpError = signal(false);
   showSignUpPassword = signal(false);
   isSigningUp = signal(false);
 
@@ -92,6 +93,8 @@ export class OnboardingComponent implements OnInit {
   previewOtpCode = signal('');
   verificationError = signal('');
   verificationSuccess = signal('');
+  isNetworkVerifyError = signal(false);
+  isDemoModeActive = signal(false);
   isVerifying = signal(false);
   isResending = signal(false);
   resendCooldown = signal(0);
@@ -140,12 +143,12 @@ export class OnboardingComponent implements OnInit {
       id: 'community',
       label: 'Community',
       icon: Users,
-      color: 'text-teal-600',
-      bg: 'bg-teal-100 border-teal-200',
+      color: 'text-emerald-600',
+      bg: 'bg-emerald-100 border-emerald-200',
     },
     {
       id: 'growth',
-      label: 'Growth',
+      label: 'Personal Growth',
       icon: TrendingUp,
       color: 'text-cyan-600',
       bg: 'bg-cyan-100 border-cyan-200',
@@ -269,10 +272,12 @@ export class OnboardingComponent implements OnInit {
     const clean = value.replace(/^@/, '').toLowerCase().trim();
     this.signUpUsername.set(clean);
     this.signUpError.set('');
+    this.isNetworkSignUpError.set(false);
   }
 
   onSignUpEmailChange(value: string) {
     this.signUpEmail.set(value);
+    this.isNetworkSignUpError.set(false);
     if (this.isDuplicateEmailError()) {
       this.isDuplicateEmailError.set(false);
       this.signUpError.set('');
@@ -284,6 +289,8 @@ export class OnboardingComponent implements OnInit {
 
     this.signUpError.set('');
     this.isDuplicateEmailError.set(false);
+    this.isNetworkSignUpError.set(false);
+    this.isDemoModeActive.set(false);
 
     const username = this.signUpUsername().trim().toLowerCase();
     const email = this.signUpEmail().trim();
@@ -309,7 +316,6 @@ export class OnboardingComponent implements OnInit {
 
     this.isSigningUp.set(true);
 
-    // Register user profile
     try {
       const res = await this.authService.register(username, email, password);
       if (res.requiresVerification) {
@@ -318,11 +324,18 @@ export class OnboardingComponent implements OnInit {
         this.verificationCode.set(previewCode);
         this.verificationError.set('');
         this.verificationSuccess.set('');
+        this.isNetworkVerifyError.set(false);
         this.isVerificationModalOpen.set(true);
         this.startResendTimer();
         return;
       }
     } catch (err: any) {
+      if (this.authService.isNetworkError(err)) {
+        this.isNetworkSignUpError.set(true);
+        this.signUpError.set('Unable to connect to the server. Please check your network connection or VPN.');
+        return;
+      }
+
       const msg = (err?.message || '').toLowerCase();
       if (
         msg.includes('already exists') ||
@@ -337,12 +350,28 @@ export class OnboardingComponent implements OnInit {
           this.signUpError.set('This email is already registered.');
         }
       } else {
-        this.signUpError.set(err?.message || 'Registration failed. Please check your details and network.');
+        this.signUpError.set(err?.message || 'Registration failed. Please check your details.');
       }
       return;
     } finally {
       this.isSigningUp.set(false);
     }
+  }
+
+  handleUseDemoMode() {
+    const username = this.signUpUsername().trim().toLowerCase() || 'demo_user';
+    const email = this.signUpEmail().trim().toLowerCase() || 'demo@example.com';
+    const res = this.authService.registerOffline(username, email);
+    this.isDemoModeActive.set(true);
+    this.isNetworkSignUpError.set(false);
+    this.signUpError.set('');
+    this.previewOtpCode.set(res.previewCode || '123456');
+    this.verificationCode.set(res.previewCode || '123456');
+    this.verificationError.set('');
+    this.verificationSuccess.set('');
+    this.isNetworkVerifyError.set(false);
+    this.isVerificationModalOpen.set(true);
+    this.startResendTimer();
   }
 
   startResendTimer() {
@@ -369,6 +398,7 @@ export class OnboardingComponent implements OnInit {
   async handleVerifyEmail() {
     this.verificationError.set('');
     this.verificationSuccess.set('');
+    this.isNetworkVerifyError.set(false);
     const code = this.verificationCode().trim();
 
     if (!code || code.length !== 6) {
@@ -378,7 +408,11 @@ export class OnboardingComponent implements OnInit {
 
     this.isVerifying.set(true);
     try {
-      await this.authService.verifyEmail(this.signUpEmail(), code);
+      if (this.isDemoModeActive()) {
+        this.authService.verifyEmailOffline(this.signUpEmail(), code);
+      } else {
+        await this.authService.verifyEmail(this.signUpEmail(), code);
+      }
       this.verificationSuccess.set('Account verified successfully!');
       this.isVerificationModalOpen.set(false);
 
@@ -413,10 +447,27 @@ export class OnboardingComponent implements OnInit {
       this.meroService.setState('celebrating');
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
-      this.verificationError.set(err?.message || 'Invalid or expired verification code.');
+      if (this.authService.isNetworkError(err)) {
+        this.isNetworkVerifyError.set(true);
+        this.verificationError.set('Connection lost. Please retry or continue in Demo Mode.');
+      } else {
+        this.verificationError.set(err?.message || 'Invalid or expired verification code.');
+      }
     } finally {
       this.isVerifying.set(false);
     }
+  }
+
+  async handleUseDemoModeInVerification() {
+    this.isDemoModeActive.set(true);
+    this.isNetworkVerifyError.set(false);
+    this.verificationCode.set('123456');
+    this.previewOtpCode.set('123456');
+    this.authService.registerOffline(
+      this.signUpUsername() || 'demo_user',
+      this.signUpEmail() || 'demo@example.com'
+    );
+    await this.handleVerifyEmail();
   }
 
   async handleResendVerificationCode() {
@@ -424,17 +475,29 @@ export class OnboardingComponent implements OnInit {
     this.isResending.set(true);
     this.verificationError.set('');
     this.verificationSuccess.set('');
+    this.isNetworkVerifyError.set(false);
 
     try {
-      const res = await this.authService.resendVerificationCode(this.signUpEmail());
-      if (res.previewCode) {
-        this.previewOtpCode.set(res.previewCode);
-        this.verificationCode.set(res.previewCode);
+      if (this.isDemoModeActive()) {
+        this.previewOtpCode.set('123456');
+        this.verificationCode.set('123456');
+        this.verificationSuccess.set('Demo Mode: Verification code 123456 auto-filled.');
+      } else {
+        const res = await this.authService.resendVerificationCode(this.signUpEmail());
+        if (res.previewCode) {
+          this.previewOtpCode.set(res.previewCode);
+          this.verificationCode.set(res.previewCode);
+        }
+        this.verificationSuccess.set('A new verification code has been sent to your email.');
       }
-      this.verificationSuccess.set('A new verification code has been sent to your email.');
       this.startResendTimer();
     } catch (err: any) {
-      this.verificationError.set(err?.message || 'Failed to resend code.');
+      if (this.authService.isNetworkError(err)) {
+        this.isNetworkVerifyError.set(true);
+        this.verificationError.set('Unable to reach server. Please retry or use Demo Mode.');
+      } else {
+        this.verificationError.set(err?.message || 'Failed to resend code.');
+      }
     } finally {
       this.isResending.set(false);
     }

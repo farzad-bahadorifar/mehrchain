@@ -46,6 +46,8 @@ import {
   Palette,
   Wand2,
   AlertCircle,
+  RefreshCw,
+  WifiOff,
 } from 'lucide-angular';
 
 export const commonTestProviders = [
@@ -96,6 +98,8 @@ export const commonTestProviders = [
       Palette,
       Wand2,
       AlertCircle,
+      RefreshCw,
+      WifiOff,
     })
   ),
 ];

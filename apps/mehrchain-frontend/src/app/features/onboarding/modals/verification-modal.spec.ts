@@ -29,9 +29,26 @@ describe('VerificationModalComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain(
-      'Your verification code has been auto-filled. In the future, this code will be sent to your email.'
-    );
+    expect(compiled.textContent).toContain('654321');
+    expect(compiled.textContent).toContain('received and auto-filled from the server');
+  });
+
+  it('should render demo mode notification when isDemoMode is true', () => {
+    fixture.componentRef.setInput('signUpEmail', 'test@example.com');
+    fixture.componentRef.setInput('verificationCode', '123456');
+    fixture.componentRef.setInput('verificationError', '');
+    fixture.componentRef.setInput('verificationSuccess', '');
+    fixture.componentRef.setInput('isVerifying', false);
+    fixture.componentRef.setInput('isResending', false);
+    fixture.componentRef.setInput('resendCooldown', 0);
+    fixture.componentRef.setInput('previewCode', '123456');
+    fixture.componentRef.setInput('isDemoMode', true);
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Demo Mode Active');
+    expect(compiled.textContent).toContain('123456');
   });
 
   it('should not render auto-fill notification when previewCode is empty', () => {
@@ -47,7 +64,7 @@ describe('VerificationModalComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).not.toContain('Your verification code has been auto-filled');
+    expect(compiled.textContent).not.toContain('received and auto-filled from the server');
   });
 
   it('should emit verify when confirm button is clicked', () => {
@@ -69,5 +86,23 @@ describe('VerificationModalComponent', () => {
     verifyBtn.click();
 
     expect(verifySpy).toHaveBeenCalled();
+  });
+
+  it('should render network connection recovery card when isNetworkError is true', () => {
+    fixture.componentRef.setInput('signUpEmail', 'test@example.com');
+    fixture.componentRef.setInput('verificationCode', '654321');
+    fixture.componentRef.setInput('verificationError', '');
+    fixture.componentRef.setInput('verificationSuccess', '');
+    fixture.componentRef.setInput('isVerifying', false);
+    fixture.componentRef.setInput('isResending', false);
+    fixture.componentRef.setInput('resendCooldown', 0);
+    fixture.componentRef.setInput('previewCode', '654321');
+    fixture.componentRef.setInput('isNetworkError', true);
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Connection Interrupted');
+    expect(compiled.textContent).toContain('Use Demo (123456)');
   });
 });

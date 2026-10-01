@@ -108,6 +108,7 @@
           [signUpPassword]="signUpPassword()"
           [signUpError]="signUpError()"
           [isDuplicateEmailError]="isDuplicateEmailError()"
+          [isNetworkError]="isNetworkSignUpError()"
           [showSignUpPassword]="showSignUpPassword()"
           [isSubmitting]="isSigningUp()"
           (usernameChange)="onSignUpUsernameChange($event)"
@@ -115,6 +116,7 @@
           (passwordChange)="signUpPassword.set($event)"
           (togglePassword)="toggleSignUpPassword()"
           (signUp)="handleSignUp()"
+          (useDemoMode)="handleUseDemoMode()"
           (switchToLogin)="switchToLoginWithEmail()"
           (openLoginWithForgot)="openLoginModal(); toggleForgotPassword(true)"
         />
@@ -167,6 +169,8 @@
       [verificationCode]="verificationCode()"
       [verificationError]="verificationError()"
       [verificationSuccess]="verificationSuccess()"
+      [isNetworkError]="isNetworkVerifyError()"
+      [isDemoMode]="isDemoModeActive()"
       [isVerifying]="isVerifying()"
       [isResending]="isResending()"
       [resendCooldown]="resendCooldown()"
@@ -175,6 +179,7 @@
       (autoFill)="autoFillVerificationCode($event)"
       (verify)="handleVerifyEmail()"
       (resend)="handleResendVerificationCode()"
+      (useDemoMode)="handleUseDemoModeInVerification()"
       (close)="closeVerificationModal()"
     />
   }

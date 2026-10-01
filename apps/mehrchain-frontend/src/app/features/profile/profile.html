@@ -2,8 +2,8 @@
   <!-- Top Navigation / Title -->
   <div class="flex justify-between items-center mb-6">
     <div>
-      <h1 class="text-2xl font-black text-foreground tracking-tight">Profile & Customization</h1>
-      <p class="text-xs sm:text-sm text-muted-foreground mt-0.5">Personal companion & Mero settings</p>
+      <h1 class="text-2xl font-black text-foreground tracking-tight">Profile & Companion</h1>
+      <p class="text-xs sm:text-sm text-muted-foreground mt-0.5">Personal companion & settings</p>
     </div>
 
     <!-- Quick User Status -->
@@ -27,14 +27,14 @@
       <button
         type="button"
         (click)="saveFeedbackMessage.set(null)"
-        class="text-primary hover:opacity-75 p-0.5"
+        class="text-primary hover:opacity-75 p-0.5 cursor-pointer"
       >
         <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
       </button>
     </div>
   }
 
-  <!-- 1. Hero Companion Card (Live Preview + Interactive Mero) -->
+  <!-- 1. Hero Companion Card (Live Mero Mascot + Nickname Editor + Dynamic Greeting) -->
   <div
     class="relative overflow-hidden bg-gradient-to-b from-card to-card/70 rounded-3xl p-6 border border-border/70 shadow-sm mb-6 transition-all"
   >
@@ -45,20 +45,14 @@
     ></div>
 
     <div class="relative z-10 flex flex-col items-center text-center">
-      <!-- Live Interactive Mero Mascot -->
-      <div class="relative mb-3 cursor-pointer group">
+      <!-- Live Mero Mascot -->
+      <div class="relative mb-3">
         <app-mero
           size="hero"
           [showGlow]="true"
           [floating]="true"
           [interactive]="true"
-          [customGradient]="heroPreviewGradient()"
         />
-        <div
-          class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] text-muted-foreground/70 bg-background/80 backdrop-blur-xs px-2 py-0.5 rounded-full border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
-        >
-          Tap to interact ✨
-        </div>
       </div>
 
       <!-- Companion Nickname Editor -->
@@ -78,7 +72,7 @@
             <button
               type="button"
               (click)="saveNickname()"
-              class="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shrink-0 hover:bg-primary/90 active:scale-95 transition-transform"
+              class="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shrink-0 hover:bg-primary/90 active:scale-95 transition-transform cursor-pointer"
               title="Save"
             >
               <lucide-icon name="check" class="w-4 h-4"></lucide-icon>
@@ -86,7 +80,7 @@
             <button
               type="button"
               (click)="cancelEditingNickname()"
-              class="w-8 h-8 rounded-xl bg-muted text-muted-foreground flex items-center justify-center shrink-0 hover:bg-muted/80 active:scale-95 transition-transform"
+              class="w-8 h-8 rounded-xl bg-muted text-muted-foreground flex items-center justify-center shrink-0 hover:bg-muted/80 active:scale-95 transition-transform cursor-pointer"
               title="Cancel"
             >
               <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
@@ -100,7 +94,7 @@
             <button
               type="button"
               (click)="startEditingNickname()"
-              class="w-7 h-7 rounded-full bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground flex items-center justify-center transition-all active:scale-95"
+              class="w-7 h-7 rounded-full bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground flex items-center justify-center transition-all active:scale-95 cursor-pointer"
               title="Change companion name"
             >
               <lucide-icon name="edit" class="w-3.5 h-3.5"></lucide-icon>
@@ -130,96 +124,26 @@
             class="w-2 h-2 rounded-full shadow-xs"
             [style.backgroundColor]="customization.activeTheme().previewColor"
           ></span>
-          <span>Theme: {{ customization.activeTheme().name }}</span>
+          <span>Glow: {{ customization.activeTheme().name }}</span>
         </span>
       </div>
     </div>
   </div>
 
-  <!-- 2. Belly Glow Color Selector (Palettes) -->
+  <!-- 2. 21-Day Custom Glow Studio (Exclusive Streak Milestone) -->
   <div class="mb-8">
-    <div class="flex items-center justify-between mb-3 px-1">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-500 flex items-center justify-center">
-          <lucide-icon name="sparkles" class="w-4 h-4"></lucide-icon>
-        </div>
-        <div>
-          <h3 class="text-base font-bold text-foreground">Belly Glow Color</h3>
-          <p class="text-[11px] text-muted-foreground">Calibrated for day & night radiance</p>
-        </div>
+    <div class="flex items-center gap-2 mb-3 px-1">
+      <div class="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-500 flex items-center justify-center">
+        <lucide-icon name="sparkles" class="w-4 h-4"></lucide-icon>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-foreground">Custom Glow Studio</h3>
+        <p class="text-[11px] text-muted-foreground">Unlock your signature aura at 21 consecutive days</p>
       </div>
     </div>
 
-    <!-- Swatch Cards Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-      @for (t of customization.availableThemes(); track t.id) {
-        @let isSelected = customization.selectedThemeId() === t.id;
-        @let isUnlocked = customization.isThemeUnlocked()(t.id);
-
-        <button
-          type="button"
-          (click)="handleSelectTheme(t.id)"
-          (mouseenter)="hoveredThemeId.set(t.id)"
-          (mouseleave)="hoveredThemeId.set(null)"
-          class="relative p-3.5 rounded-2xl bg-card border text-left transition-all flex flex-col justify-between h-32 group active:scale-[0.98]"
-          [class.border-primary]="isSelected"
-          [class.ring-2]="isSelected"
-          [class.ring-primary/30]="isSelected"
-          [class.shadow-md]="isSelected"
-          [class.border-border/60]="!isSelected"
-          [class.hover:border-primary/50]="!isSelected && isUnlocked"
-          [class.opacity-60]="!isUnlocked"
-        >
-          <!-- Top row: Color Swatch + Selection Status / Lock -->
-          <div class="flex items-center justify-between w-full">
-            <!-- Glow Swatch Circle with dynamic halo -->
-            <div class="relative w-8 h-8 flex items-center justify-center">
-              <div
-                class="absolute inset-0 rounded-full blur-[6px] opacity-70 transition-transform group-hover:scale-125"
-                [style.backgroundColor]="t.previewColor"
-              ></div>
-              <div
-                class="relative w-6 h-6 rounded-full border-2 border-white/80 dark:border-zinc-800 shadow-sm"
-                [style.backgroundColor]="t.previewColor"
-              ></div>
-            </div>
-
-            <!-- Status Indicator -->
-            @if (isSelected) {
-              <div class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center shadow-xs">
-                <lucide-icon name="check" class="w-3 h-3"></lucide-icon>
-              </div>
-            } @else if (!isUnlocked) {
-              <div
-                class="flex items-center gap-1 bg-muted/80 text-muted-foreground px-1.5 py-0.5 rounded-md text-[10px] font-bold"
-                [title]="'Requires ' + t.minStreak + '-day streak'"
-              >
-                <lucide-icon name="lock" class="w-3 h-3"></lucide-icon>
-                <span>{{ t.minStreak }}d</span>
-              </div>
-            } @else if (t.id === 'custom') {
-              <div class="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shadow-xs">
-                <lucide-icon name="palette" class="w-3 h-3"></lucide-icon>
-              </div>
-            }
-          </div>
-
-          <!-- Bottom row: Name & Subtitle -->
-          <div>
-            <div class="flex items-center gap-1">
-              <span class="text-xs font-bold text-foreground group-hover:text-primary transition-colors truncate">
-                {{ t.name }}
-              </span>
-            </div>
-            <p class="text-[10px] text-muted-foreground truncate mt-0.5">{{ t.description }}</p>
-          </div>
-        </button>
-      }
-    </div>
-
-    <!-- 21-Day Custom Glow Studio -->
     @if (isCustomThemeUnlocked()) {
-      <div class="mt-4 p-5 rounded-3xl bg-gradient-to-br from-card via-card to-primary/5 border border-primary/25 shadow-sm space-y-4 animate-fade-in">
+      <div class="p-5 rounded-3xl bg-gradient-to-br from-card via-card to-primary/5 border border-primary/25 shadow-sm space-y-4 animate-fade-in">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
@@ -237,7 +161,7 @@
           </div>
         </div>
 
-        <!-- Quick Palette Swatches -->
+        <!-- Preset Vibrancies -->
         <div>
           <label class="block text-[11px] font-bold text-muted-foreground mb-2">Preset Vibrancies</label>
           <div class="flex flex-wrap gap-2">
@@ -300,8 +224,18 @@
           </div>
         </div>
 
-        <!-- Save Action Button -->
-        <div class="pt-1 flex justify-end">
+        <!-- Action Buttons -->
+        <div class="pt-1 flex flex-col sm:flex-row items-center justify-end gap-2.5">
+          @if (customization.selectedThemeId() === 'custom') {
+            <button
+              type="button"
+              (click)="resetToDefaultGlow()"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-muted hover:bg-muted/80 text-foreground text-xs font-bold transition-all cursor-pointer border border-border/60"
+            >
+              <lucide-icon name="rotate-ccw" class="w-3.5 h-3.5 text-muted-foreground"></lucide-icon>
+              <span>Reset to Default Glow</span>
+            </button>
+          }
           <button
             type="button"
             (click)="saveCustomGlow()"
@@ -314,7 +248,7 @@
       </div>
     } @else {
       <!-- 21-Day Custom Glow Locked Teaser Card -->
-      <div class="mt-4 p-5 rounded-3xl bg-card border border-border/60 shadow-xs space-y-3">
+      <div class="p-5 rounded-3xl bg-card border border-border/60 shadow-xs space-y-3">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-xl bg-muted text-muted-foreground flex items-center justify-center">
@@ -347,7 +281,7 @@
     }
   </div>
 
-  <!-- 3. Companion Stats & Journey Insights -->
+  <!-- 3. Companion Stats -->
   <div class="mb-8">
     <div class="flex items-center gap-2 mb-3 px-1">
       <div class="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
@@ -359,7 +293,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+    <div class="grid grid-cols-2 gap-3">
       <!-- Streak Card -->
       <div class="bg-card border border-border/60 rounded-2xl p-4 flex flex-col justify-between shadow-xs">
         <div class="flex items-center justify-between text-muted-foreground mb-2">
@@ -383,20 +317,6 @@
           <span class="text-xs text-muted-foreground ml-1">Habits</span>
         </div>
       </div>
-
-      <!-- Unlocked Themes Card -->
-      <div class="bg-card border border-border/60 rounded-2xl p-4 flex flex-col justify-between shadow-xs col-span-2 sm:col-span-1">
-        <div class="flex items-center justify-between text-muted-foreground mb-2">
-          <span class="text-xs font-bold">Unlocked Themes</span>
-          <lucide-icon name="heart" class="w-4 h-4 text-rose-500"></lucide-icon>
-        </div>
-        <div>
-          <span class="text-2xl font-black text-foreground">
-            {{ unlockedThemesCount() }}
-          </span>
-          <span class="text-xs text-muted-foreground ml-1">of {{ totalThemesCount() }}</span>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -415,7 +335,7 @@
         <button
           type="button"
           (click)="setThemeMode('light')"
-          class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95"
+          class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 cursor-pointer"
           [class.bg-primary/15]="themeService.mode() === 'light'"
           [class.text-primary]="themeService.mode() === 'light'"
           [class.border-primary/40]="themeService.mode() === 'light'"
@@ -429,7 +349,7 @@
         <button
           type="button"
           (click)="setThemeMode('system')"
-          class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95"
+          class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 cursor-pointer"
           [class.bg-primary/15]="themeService.mode() === 'system'"
           [class.text-primary]="themeService.mode() === 'system'"
           [class.border-primary/40]="themeService.mode() === 'system'"
@@ -443,7 +363,7 @@
         <button
           type="button"
           (click)="setThemeMode('dark')"
-          class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95"
+          class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 cursor-pointer"
           [class.bg-primary/15]="themeService.mode() === 'dark'"
           [class.text-primary]="themeService.mode() === 'dark'"
           [class.border-primary/40]="themeService.mode() === 'dark'"

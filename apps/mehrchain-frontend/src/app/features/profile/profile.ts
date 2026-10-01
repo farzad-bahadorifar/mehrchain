@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import {
   MeroCustomizationService,
-  MeroGlowThemeId,
 } from '../../core/services/mero-customization.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService, ThemeMode } from '../../core/services/theme.service';
@@ -41,7 +40,6 @@ export class ProfileComponent {
   // Custom Glow 21-Day Studio State
   customColorInput = signal<string>(this.customization.customGlowColor());
   customNameInput = signal<string>(this.customization.customGlowName());
-  isCustomStudioOpen = signal<boolean>(false);
 
   readonly PRESET_CUSTOM_COLORS: PresetCustomColor[] = [
     { name: 'Royal Violet', hex: '#8b5cf6' },
@@ -56,9 +54,6 @@ export class ProfileComponent {
     { name: 'Lime Spark', hex: '#84cc16' },
   ];
 
-  // Temporary Preview of Theme
-  hoveredThemeId = signal<MeroGlowThemeId | null>(null);
-
   // User details
   currentUser = this.authService.currentUser;
   currentStreak = this.commitmentService.overallStreak;
@@ -69,22 +64,6 @@ export class ProfileComponent {
   customStreakProgress = computed(() =>
     Math.min(100, Math.round((this.currentStreak() / 21) * 100))
   );
-
-  // Dynamic Theme Counts
-  unlockedThemesCount = this.customization.unlockedThemesCount;
-  totalThemesCount = computed(() => this.customization.availableThemes().length);
-
-  // Effective preview gradient for Hero Mero
-  heroPreviewGradient = computed(() => {
-    const hovered = this.hoveredThemeId();
-    if (hovered) {
-      const theme = this.customization.availableThemes().find((t) => t.id === hovered);
-      if (theme) {
-        return this.themeService.isDark() ? theme.darkGradient : theme.lightGradient;
-      }
-    }
-    return this.customization.effectiveGlowGradient();
-  });
 
   startEditingNickname(): void {
     this.nicknameInput.set(this.customization.nickname());
@@ -103,32 +82,6 @@ export class ProfileComponent {
   cancelEditingNickname(): void {
     this.nicknameInput.set(this.customization.nickname());
     this.isEditingNickname.set(false);
-  }
-
-  handleSelectTheme(themeId: MeroGlowThemeId): void {
-    const isUnlocked = this.customization.isThemeUnlocked()(themeId);
-    if (!isUnlocked) {
-      const theme = this.customization.availableThemes().find((t) => t.id === themeId);
-      const req = theme?.minStreak ?? 0;
-      this.showSaveFeedback(
-        `Locked! Requires a ${req}-day streak (Current: ${this.currentStreak()}d) 🔒`
-      );
-      return;
-    }
-
-    const success = this.customization.setGlowTheme(themeId);
-    if (success) {
-      if (themeId === 'custom') {
-        this.isCustomStudioOpen.set(true);
-        this.showSaveFeedback('Active glow set to your Custom Palette 🎨');
-      } else {
-        this.showSaveFeedback('Mero belly glow updated successfully 🌟');
-      }
-    }
-  }
-
-  toggleCustomStudio(): void {
-    this.isCustomStudioOpen.update((v) => !v);
   }
 
   applyPresetCustomColor(preset: PresetCustomColor): void {
@@ -150,6 +103,10 @@ export class ProfileComponent {
     this.showSaveFeedback(`Custom glow "${name}" saved & applied to Mero! ✨`);
   }
 
+  resetToDefaultGlow(): void {
+    this.customization.resetToDefaultGlow();
+    this.showSaveFeedback('Reset to default warm glow 🌟');
+  }
 
   setThemeMode(mode: ThemeMode): void {
     this.themeService.setTheme(mode);

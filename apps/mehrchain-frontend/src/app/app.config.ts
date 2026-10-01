@@ -55,6 +55,8 @@ import {
   Info,
   Palette,
   Wand2,
+  RefreshCw,
+  WifiOff,
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -115,6 +117,8 @@ export const appConfig: ApplicationConfig = {
         Info,
         Palette,
         Wand2,
+        RefreshCw,
+        WifiOff,
       }),
     ),
   ],

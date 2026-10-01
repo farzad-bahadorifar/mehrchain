@@ -31,7 +31,38 @@
       <strong class="text-foreground block mt-1 font-semibold">{{ signUpEmail() }}</strong>
     </p>
 
-    @if (verificationError()) {
+    @if (isNetworkError()) {
+      <div class="p-3.5 mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-foreground text-xs animate-slide-up shadow-sm space-y-2.5">
+        <div class="flex items-start gap-2.5">
+          <lucide-icon name="wifi-off" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></lucide-icon>
+          <div class="space-y-0.5 flex-1">
+            <p class="font-bold text-foreground text-xs">Connection Interrupted</p>
+            <p class="text-muted-foreground text-[11px] leading-relaxed">
+              Unable to reach the server to verify. Please enable VPN (Germany/Europe) and retry, or use Demo Mode.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 pt-0.5">
+          <button
+            type="button"
+            (click)="verify.emit()"
+            [disabled]="isVerifying()"
+            class="flex-1 py-2 px-3 bg-primary text-primary-foreground font-bold text-xs rounded-xl hover:bg-accent transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+          >
+            <lucide-icon name="refresh-cw" class="w-3.5 h-3.5"></lucide-icon>
+            <span>Retry Verify</span>
+          </button>
+          <button
+            type="button"
+            (click)="useDemoMode.emit()"
+            class="flex-1 py-2 px-3 bg-muted hover:bg-muted/80 text-foreground font-semibold text-xs rounded-xl border border-border transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <lucide-icon name="zap" class="w-3.5 h-3.5 text-amber-500"></lucide-icon>
+            <span>Use Demo (123456)</span>
+          </button>
+        </div>
+      </div>
+    } @else if (verificationError()) {
       <div class="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium text-center animate-fade-in flex items-center justify-center gap-2">
         <lucide-icon name="alert-circle" class="w-4 h-4 shrink-0"></lucide-icon>
         <span>{{ verificationError() }}</span>
@@ -46,14 +77,25 @@
     }
 
     @if (previewCode()) {
-      <div class="mb-4 p-3.5 rounded-2xl bg-teal-500/10 border border-teal-500/25 shadow-sm animate-fade-in flex items-start gap-2.5">
-        <div class="w-6 h-6 rounded-lg bg-teal-500/20 text-teal-500 dark:text-teal-400 flex items-center justify-center shrink-0 mt-0.5">
-          <lucide-icon name="sparkles" class="w-3.5 h-3.5"></lucide-icon>
+      @if (isDemoMode()) {
+        <div class="mb-4 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 shadow-sm animate-fade-in flex items-start gap-2.5">
+          <div class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+            <lucide-icon name="zap" class="w-3.5 h-3.5"></lucide-icon>
+          </div>
+          <p class="text-xs text-amber-800 dark:text-amber-300 leading-relaxed text-left">
+            <strong>Demo Mode Active:</strong> Test verification code (123456) has been auto-filled for offline testing.
+          </p>
         </div>
-        <p class="text-xs text-teal-700 dark:text-teal-300 leading-relaxed text-left">
-          Your verification code has been auto-filled. In the future, this code will be sent to your email.
-        </p>
-      </div>
+      } @else {
+        <div class="mb-4 p-3.5 rounded-2xl bg-teal-500/10 border border-teal-500/25 shadow-sm animate-fade-in flex items-start gap-2.5">
+          <div class="w-6 h-6 rounded-lg bg-teal-500/20 text-teal-500 dark:text-teal-400 flex items-center justify-center shrink-0 mt-0.5">
+            <lucide-icon name="sparkles" class="w-3.5 h-3.5"></lucide-icon>
+          </div>
+          <p class="text-xs text-teal-700 dark:text-teal-300 leading-relaxed text-left">
+            Your verification code (<strong>{{ previewCode() }}</strong>) has been received and auto-filled from the server.
+          </p>
+        </div>
+      }
     }
 
     <div class="space-y-4 mb-5">

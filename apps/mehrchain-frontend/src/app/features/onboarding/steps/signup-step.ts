@@ -13,6 +13,7 @@ export class SignupStepComponent {
   readonly signUpPassword = input.required<string>();
   readonly signUpError = input.required<string>();
   readonly isDuplicateEmailError = input.required<boolean>();
+  readonly isNetworkError = input<boolean>(false);
   readonly showSignUpPassword = input.required<boolean>();
   readonly isSubmitting = input<boolean>(false);
 
@@ -21,6 +22,7 @@ export class SignupStepComponent {
   readonly passwordChange = output<string>();
   readonly togglePassword = output<void>();
   readonly signUp = output<void>();
+  readonly useDemoMode = output<void>();
   readonly switchToLogin = output<void>();
   readonly openLoginWithForgot = output<void>();
 }

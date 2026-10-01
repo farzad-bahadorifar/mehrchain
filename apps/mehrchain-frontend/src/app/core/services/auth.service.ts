@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -21,6 +21,7 @@ export interface RegisterResponse {
   username?: string;
   message: string;
   previewCode?: string;
+  isOfflineMode?: boolean;
 }
 
 export interface AuthResponse {
@@ -66,6 +67,22 @@ export class AuthService {
     const t = token !== undefined ? token : this.getToken();
     if (!t) return true;
     return t.startsWith('local_') || t.startsWith('mock_');
+  }
+
+  /**
+   * Helper to determine if an error was caused by a network connection / server reachability failure.
+   */
+  isNetworkError(err: any): boolean {
+    if (!err) return false;
+    if (err.status === 0 || err.status === undefined || err.status === null) return true;
+    const msg = (err.message || '').toLowerCase();
+    return (
+      msg.includes('network') ||
+      msg.includes('unable to connect') ||
+      msg.includes('connect to the server') ||
+      msg.includes('failed to fetch') ||
+      msg.includes('timeout')
+    );
   }
 
   private async loadPersistedSession(): Promise<void> {
@@ -119,7 +136,8 @@ export class AuthService {
   }
 
   /**
-   * Registers a new user account with backend API, or local dev fallback if server is offline.
+   * Registers a new user account with backend API.
+   * Throws network connection error if server cannot be reached so the UI can prompt for retry or demo mode.
    */
   async register(username: string, email: string, password?: string, name?: string): Promise<RegisterResponse> {
     const cleanUsername = username.trim().toLowerCase();
@@ -138,35 +156,45 @@ export class AuthService {
         this.http.post<RegisterResponse>(`${this.API_URL}/register`, payload)
       );
     } catch (err: any) {
-      // If backend is unreachable or connection refused -> provide seamless local dev fallback
-      if (err?.status === 0 || !err?.status) {
-        console.warn('[AuthService] Backend unreachable, utilizing local dev registration mode.');
-        const mockUser: UserProfile = {
-          id: `local_user_${cleanUsername}`,
-          username: cleanUsername,
-          name: cleanName,
-          email: cleanEmail,
-          isEmailVerified: true,
-          createdAt: new Date().toISOString(),
-        };
-        this.saveLocalRegisteredUser(mockUser);
-
-        return {
-          requiresVerification: true,
-          email: cleanEmail,
-          username: cleanUsername,
-          previewCode: '123456',
-          message: 'Verification code sent (use 123456 or any 6 digits in offline mode).',
-        };
+      if (this.isNetworkError(err)) {
+        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
       }
 
       const message =
         err?.error?.message ||
         (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
         err?.message ||
-        'Registration failed. Please check your network connection.';
+        'Registration failed. Please check your details.';
       throw new Error(message);
     }
+  }
+
+  /**
+   * Explicitly registers a mock profile in offline / demo mode.
+   */
+  registerOffline(username: string, email: string, name?: string): RegisterResponse {
+    const cleanUsername = username.trim().toLowerCase();
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanName = (name || username).trim();
+
+    const mockUser: UserProfile = {
+      id: `local_user_${cleanUsername}`,
+      username: cleanUsername,
+      name: cleanName,
+      email: cleanEmail,
+      isEmailVerified: true,
+      createdAt: new Date().toISOString(),
+    };
+    this.saveLocalRegisteredUser(mockUser);
+
+    return {
+      requiresVerification: true,
+      email: cleanEmail,
+      username: cleanUsername,
+      previewCode: '123456',
+      message: 'Demo Mode: Verification code 123456 auto-filled.',
+      isOfflineMode: true,
+    };
   }
 
   /**
@@ -175,6 +203,10 @@ export class AuthService {
   async verifyEmail(email: string, code: string): Promise<UserProfile> {
     const cleanEmail = email.trim().toLowerCase();
     const cleanCode = code.trim();
+
+    // Check if this was a locally registered demo user
+    const localUsers = this.getLocalRegisteredUsers();
+    const foundLocal = localUsers.find((u) => u.email === cleanEmail);
 
     try {
       const payload = {
@@ -194,28 +226,11 @@ export class AuthService {
       this.commitmentStore.syncWithBackend().catch(() => {});
       return res.user;
     } catch (err: any) {
-      // Offline / Local dev fallback only if registering in offline mode
-      if (err?.status === 0 || !err?.status) {
-        const localUsers = this.getLocalRegisteredUsers();
-        const found = localUsers.find((u) => u.email === cleanEmail);
-        if (found) {
-          const username = found.username || cleanEmail.split('@')[0];
-          const localProfile: UserProfile = {
-            id: found.id || `local_user_${username}`,
-            username,
-            name: found.name || username,
-            email: cleanEmail,
-            isEmailVerified: true,
-            createdAt: new Date().toISOString(),
-          };
-
-          localStorage.setItem(this.AUTH_KEY, JSON.stringify(localProfile));
-          localStorage.setItem(this.TOKEN_KEY, 'local_dev_token_' + Date.now());
-
-          this.currentUserSignal.set(localProfile);
-          this.commitmentStore.loadForUser(localProfile.id);
-          return localProfile;
+      if (this.isNetworkError(err)) {
+        if (foundLocal) {
+          return this.verifyEmailOffline(cleanEmail, cleanCode);
         }
+        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
       }
 
       const message =
@@ -227,9 +242,36 @@ export class AuthService {
     }
   }
 
+  /**
+   * Explicitly verifies offline / demo mode session.
+   */
+  verifyEmailOffline(email: string, _code?: string): UserProfile {
+    const cleanEmail = email.trim().toLowerCase();
+    const localUsers = this.getLocalRegisteredUsers();
+    const found = localUsers.find((u) => u.email === cleanEmail);
+    const username = found?.username || cleanEmail.split('@')[0];
+
+    const localProfile: UserProfile = {
+      id: found?.id || `local_user_${username}`,
+      username,
+      name: found?.name || username,
+      email: cleanEmail,
+      isEmailVerified: true,
+      createdAt: new Date().toISOString(),
+    };
+
+    localStorage.setItem(this.AUTH_KEY, JSON.stringify(localProfile));
+    localStorage.setItem(this.TOKEN_KEY, 'local_dev_token_' + Date.now());
+
+    this.currentUserSignal.set(localProfile);
+    this.commitmentStore.loadForUser(localProfile.id);
+    return localProfile;
+  }
+
   async resendVerificationCode(email: string): Promise<{ success: boolean; message: string; previewCode?: string }> {
+    const cleanEmail = email.trim().toLowerCase();
     try {
-      const payload = { email: email.trim().toLowerCase() };
+      const payload = { email: cleanEmail };
       return await firstValueFrom(
         this.http.post<{ success: boolean; message: string; previewCode?: string }>(
           `${this.API_URL}/resend-verification`,
@@ -237,8 +279,12 @@ export class AuthService {
         )
       );
     } catch (err: any) {
-      if (err?.status === 0 || !err?.status) {
-        return { success: true, message: 'Verification code simulated in offline mode.', previewCode: '123456' };
+      if (this.isNetworkError(err)) {
+        const localUsers = this.getLocalRegisteredUsers();
+        if (localUsers.find((u) => u.email === cleanEmail)) {
+          return { success: true, message: 'Demo Mode: Verification code 123456 auto-filled.', previewCode: '123456' };
+        }
+        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
       }
       const message =
         err?.error?.message ||
@@ -273,8 +319,8 @@ export class AuthService {
       this.commitmentStore.syncWithBackend().catch(() => {});
       return res.user;
     } catch (err: any) {
-      if (err?.status === 0 || !err?.status) {
-        throw new Error('Unable to connect to the server. Please check your internet connection and try again.');
+      if (this.isNetworkError(err)) {
+        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
       }
 
       const message =
@@ -284,6 +330,32 @@ export class AuthService {
         'Invalid email/username or password. Please try again.';
       throw new Error(message);
     }
+  }
+
+  /**
+   * Explicitly signs into demo / offline mode account.
+   */
+  loginOffline(identifier: string): UserProfile {
+    const cleanId = identifier.trim().toLowerCase();
+    const localUsers = this.getLocalRegisteredUsers();
+    const found = localUsers.find((u) => u.email === cleanId || u.username === cleanId);
+    const username = found?.username || cleanId.replace(/@.*$/, '').replace(/^@/, '');
+
+    const localProfile: UserProfile = {
+      id: found?.id || `local_user_${username}`,
+      username,
+      name: found?.name || username,
+      email: found?.email || `${username}@example.com`,
+      isEmailVerified: true,
+      createdAt: new Date().toISOString(),
+    };
+
+    localStorage.setItem(this.AUTH_KEY, JSON.stringify(localProfile));
+    localStorage.setItem(this.TOKEN_KEY, 'local_dev_token_' + Date.now());
+
+    this.currentUserSignal.set(localProfile);
+    this.commitmentStore.loadForUser(localProfile.id);
+    return localProfile;
   }
 
   logout(): void {

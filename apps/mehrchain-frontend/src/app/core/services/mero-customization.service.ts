@@ -73,101 +73,21 @@ export function generateCustomGlowGradients(hex: string) {
   };
 }
 
-export const MERO_GLOW_THEMES: MeroGlowTheme[] = [
-  {
-    id: 'golden',
-    name: 'Golden Warmth',
-    nameEn: 'Golden Warmth',
-    lightGradient:
-      'radial-gradient(circle, rgba(254, 240, 138, 0.85) 0%, rgba(245, 158, 11, 0.4) 45%, transparent 72%)',
-    darkGradient:
-      'radial-gradient(circle, rgba(254, 240, 138, 0.9) 0%, rgba(245, 158, 11, 0.5) 45%, transparent 72%)',
-    previewColor: '#f59e0b',
-    accentColor: '#d97706',
-    minStreak: 0,
-    description: 'Classic warmth and radiant sunshine',
-  },
-  {
-    id: 'ocean',
-    name: 'Calm Breeze',
-    nameEn: 'Calm Breeze',
-    lightGradient:
-      'radial-gradient(circle, rgba(186, 230, 253, 0.9) 0%, rgba(14, 165, 233, 0.45) 45%, transparent 72%)',
-    darkGradient:
-      'radial-gradient(circle, rgba(56, 189, 248, 0.95) 0%, rgba(2, 132, 199, 0.55) 45%, transparent 75%)',
-    previewColor: '#0ea5e9',
-    accentColor: '#0284c7',
-    minStreak: 0,
-    description: 'Crystal waves and serene tranquility',
-  },
-  {
-    id: 'nebula',
-    name: 'Cyber Nebula',
-    nameEn: 'Cyber Nebula',
-    lightGradient:
-      'radial-gradient(circle, rgba(245, 208, 254, 0.9) 0%, rgba(168, 85, 247, 0.45) 45%, transparent 72%)',
-    darkGradient:
-      'radial-gradient(circle, rgba(192, 132, 252, 0.95) 0%, rgba(147, 51, 234, 0.55) 45%, transparent 75%)',
-    previewColor: '#a855f7',
-    accentColor: '#9333ea',
-    minStreak: 0,
-    description: 'Cosmic shimmer and nocturnal magic',
-  },
-  {
-    id: 'emerald',
-    name: 'Emerald Spring',
-    nameEn: 'Emerald Spring',
-    lightGradient:
-      'radial-gradient(circle, rgba(187, 247, 208, 0.9) 0%, rgba(34, 197, 94, 0.45) 45%, transparent 72%)',
-    darkGradient:
-      'radial-gradient(circle, rgba(74, 222, 128, 0.95) 0%, rgba(22, 163, 74, 0.55) 45%, transparent 75%)',
-    previewColor: '#22c55e',
-    accentColor: '#16a34a',
-    minStreak: 0,
-    description: 'Vibrant growth and fresh nature energy',
-  },
-  {
-    id: 'sakura',
-    name: 'Sakura Dream',
-    nameEn: 'Sakura Dream',
-    lightGradient:
-      'radial-gradient(circle, rgba(254, 205, 211, 0.9) 0%, rgba(244, 63, 94, 0.45) 45%, transparent 72%)',
-    darkGradient:
-      'radial-gradient(circle, rgba(251, 113, 133, 0.95) 0%, rgba(225, 29, 72, 0.55) 45%, transparent 75%)',
-    previewColor: '#f43f5e',
-    accentColor: '#e11d48',
-    minStreak: 0,
-    description: 'Softness, kindness, and eternal love',
-  },
-  {
-    id: 'aurora',
-    name: 'Aurora Borealis',
-    nameEn: 'Aurora Borealis',
-    lightGradient:
-      'radial-gradient(circle, rgba(167, 243, 208, 0.9) 0%, rgba(45, 212, 191, 0.5) 35%, rgba(99, 102, 241, 0.3) 65%, transparent 75%)',
-    darkGradient:
-      'radial-gradient(circle, rgba(52, 211, 153, 0.95) 0%, rgba(20, 184, 166, 0.6) 35%, rgba(129, 140, 248, 0.45) 65%, transparent 78%)',
-    previewColor: '#14b8a6',
-    accentColor: '#0d9488',
-    minStreak: 3,
-    badge: '3-Day Streak',
-    description: 'Magical northern lights dancing across the sky',
-  },
-  {
-    id: 'cosmic_fire',
-    name: 'Cosmic Fire',
-    nameEn: 'Cosmic Fire',
-    lightGradient:
-      'radial-gradient(circle, rgba(254, 240, 138, 0.95) 0%, rgba(249, 115, 22, 0.55) 40%, rgba(239, 68, 68, 0.35) 65%, transparent 75%)',
-    darkGradient:
-      'radial-gradient(circle, rgba(253, 224, 71, 0.95) 0%, rgba(249, 115, 22, 0.65) 40%, rgba(220, 38, 38, 0.5) 65%, transparent 78%)',
-    previewColor: '#f97316',
-    accentColor: '#ea580c',
-    minStreak: 7,
-    badge: '7-Day Streak',
-    description: 'Fierce willpower and burning determination',
-  },
-];
+export const DEFAULT_GLOW_THEME: MeroGlowTheme = {
+  id: 'golden',
+  name: 'Golden Warmth',
+  nameEn: 'Golden Warmth',
+  lightGradient:
+    'radial-gradient(circle, rgba(254, 240, 138, 0.85) 0%, rgba(245, 158, 11, 0.4) 45%, transparent 72%)',
+  darkGradient:
+    'radial-gradient(circle, rgba(254, 240, 138, 0.9) 0%, rgba(245, 158, 11, 0.5) 45%, transparent 72%)',
+  previewColor: '#f59e0b',
+  accentColor: '#d97706',
+  minStreak: 0,
+  description: 'Classic warmth and radiant sunshine',
+};
+
+export const MERO_GLOW_THEMES: MeroGlowTheme[] = [DEFAULT_GLOW_THEME];
 
 export const PERSONALITY_OPTIONS: PersonalityOption[] = [
   {
@@ -310,6 +230,11 @@ export class MeroCustomizationService {
       const formatted = hexColor.startsWith('#') ? hexColor.trim() : `#${hexColor.trim()}`;
       this.customGlowColor.set(formatted);
     }
+    this.saveState();
+  }
+
+  resetToDefaultGlow(): void {
+    this.selectedThemeId.set('golden');
     this.saveState();
   }
 

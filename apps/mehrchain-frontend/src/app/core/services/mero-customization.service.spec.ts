@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import {
   MeroCustomizationService,
-  MERO_GLOW_THEMES,
+  DEFAULT_GLOW_THEME,
 } from './mero-customization.service';
 import { CommitmentService } from './commitment.service';
 import { ThemeService } from './theme.service';
@@ -52,37 +52,12 @@ describe('MeroCustomizationService', () => {
     expect(service.nickname()).toBe('Sparky');
   });
 
-  it('should switch glow theme if unlocked', () => {
-    // Ocean is unlocked by default (minStreak 0)
-    const success = service.setGlowTheme('ocean');
-    expect(success).toBe(true);
-    expect(service.selectedThemeId()).toBe('ocean');
-    expect(service.activeTheme().id).toBe('ocean');
-  });
-
-  it('should block locked themes if streak is insufficient', () => {
-    mockStreakSignal.set(0);
-    // Aurora requires streak 3
-    const success = service.setGlowTheme('aurora');
-    expect(success).toBe(false);
-    expect(service.selectedThemeId()).toBe('golden');
-
-    // Now raise streak to 3
-    mockStreakSignal.set(3);
-    const successAfterStreak = service.setGlowTheme('aurora');
-    expect(successAfterStreak).toBe(true);
-    expect(service.selectedThemeId()).toBe('aurora');
-  });
-
   it('should adapt effective gradient based on dark mode', () => {
-    service.setGlowTheme('ocean');
-    const oceanTheme = MERO_GLOW_THEMES.find((t) => t.id === 'ocean')!;
-
     mockIsDarkSignal.set(false);
-    expect(service.effectiveGlowGradient()).toBe(oceanTheme.lightGradient);
+    expect(service.effectiveGlowGradient()).toBe(DEFAULT_GLOW_THEME.lightGradient);
 
     mockIsDarkSignal.set(true);
-    expect(service.effectiveGlowGradient()).toBe(oceanTheme.darkGradient);
+    expect(service.effectiveGlowGradient()).toBe(DEFAULT_GLOW_THEME.darkGradient);
   });
 
   it('should update personality mode and generate matching greetings', () => {
@@ -107,5 +82,9 @@ describe('MeroCustomizationService', () => {
     expect(service.customGlowColor()).toBe('#06b6d4');
     expect(service.activeTheme().name).toBe('Mystic Nebula');
     expect(service.activeTheme().previewColor).toBe('#06b6d4');
+
+    // Reset back to default glow
+    service.resetToDefaultGlow();
+    expect(service.selectedThemeId()).toBe('golden');
   });
 });
