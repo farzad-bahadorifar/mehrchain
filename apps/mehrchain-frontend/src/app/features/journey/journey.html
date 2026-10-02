@@ -3,125 +3,129 @@
   <div class="flex items-center justify-between mb-6">
     <div>
       <h1 class="text-2xl font-bold text-foreground">My Journey</h1>
-      <p class="text-sm text-muted-foreground">Every small step shapes your destiny.</p>
+      <p class="text-sm text-muted-foreground">Track your consistency and milestones.</p>
     </div>
     <app-mero size="xs" [showGlow]="false" />
   </div>
 
-  <!-- Stats Grid -->
-  <div class="grid grid-cols-3 gap-3 mb-6">
-    <div class="bg-card p-4 rounded-2xl border border-border/50 text-center shadow-soft">
-      <p class="text-[10px] text-muted-foreground font-bold uppercase mb-1">Habits</p>
-      <p class="text-xl font-bold text-foreground">{{ activeCommitmentsCount() }}</p>
-    </div>
-    <div class="bg-card p-4 rounded-2xl border border-border/50 text-center shadow-soft">
-      <p class="text-[10px] text-muted-foreground font-bold uppercase mb-1">Streak</p>
-      <p class="text-xl font-bold text-primary">{{ longestStreak() }}d</p>
-    </div>
-    <div class="bg-card p-4 rounded-2xl border border-border/50 text-center shadow-soft">
-      <p class="text-[10px] text-muted-foreground font-bold uppercase mb-1">Sparks</p>
-      <p class="text-xl font-bold text-foreground">{{ totalActivities() }}</p>
-    </div>
-  </div>
-
-  <!-- Badges & Milestones Section -->
-  <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6">
-    <div class="flex items-center justify-between mb-4">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-lg bg-primary/15 border border-primary/25 flex items-center justify-center text-primary">
-          <lucide-icon name="trophy" class="w-4 h-4"></lucide-icon>
-        </div>
-        <h2 class="font-bold text-base text-foreground">Milestones & Badges</h2>
+  @if (commitmentService.isLoading() && activeCommitmentsCount() === 0) {
+    <app-journey-skeleton />
+  } @else {
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="bg-card p-4 rounded-2xl border border-border/50 text-center shadow-soft">
+        <p class="text-[10px] text-muted-foreground font-bold uppercase mb-1">Habits</p>
+        <p class="text-xl font-bold text-foreground">{{ activeCommitmentsCount() }}</p>
       </div>
-      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
-        {{ unlockedBadgesCount() }} / {{ badges().length }} Unlocked
-      </span>
+      <div class="bg-card p-4 rounded-2xl border border-border/50 text-center shadow-soft">
+        <p class="text-[10px] text-muted-foreground font-bold uppercase mb-1">Streak</p>
+        <p class="text-xl font-bold text-primary">{{ longestStreak() }}d</p>
+      </div>
+      <div class="bg-card p-4 rounded-2xl border border-border/50 text-center shadow-soft">
+        <p class="text-[10px] text-muted-foreground font-bold uppercase mb-1">Sparks</p>
+        <p class="text-xl font-bold text-foreground">{{ totalActivities() }}</p>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      @for (badge of badges(); track badge.id) {
-        <div
-          class="p-3 rounded-2xl border transition-all flex items-center gap-3"
-          [class]="
-            badge.isUnlocked
-              ? 'bg-card border-primary/30 shadow-xs ring-1 ring-primary/15'
-              : 'bg-muted/30 border-border/40 opacity-60'
-          "
-        >
+    <!-- Badges & Milestones Section -->
+    <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-primary/15 border border-primary/25 flex items-center justify-center text-primary">
+            <lucide-icon name="trophy" class="w-4 h-4"></lucide-icon>
+          </div>
+          <h2 class="font-bold text-base text-foreground">Milestones & Badges</h2>
+        </div>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+          {{ unlockedBadgesCount() }} / {{ badges().length }} Unlocked
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        @for (badge of badges(); track badge.id) {
           <div
-            class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-transform"
+            class="p-3 rounded-2xl border transition-all flex items-center gap-3"
             [class]="
               badge.isUnlocked
-                ? 'bg-primary/15 text-primary shadow-sm'
-                : 'bg-muted text-muted-foreground/60'
+                ? 'bg-card border-primary/30 shadow-xs ring-1 ring-primary/15'
+                : 'bg-muted/30 border-border/40 opacity-60'
             "
           >
-            <lucide-icon [name]="badge.icon" class="w-5 h-5"></lucide-icon>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between gap-1">
-              <h4 class="text-xs font-bold text-foreground truncate">{{ badge.name }}</h4>
-              @if (badge.isUnlocked) {
-                <span class="text-[9px] font-bold text-teal-600 dark:text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md">
-                  ✓
-                </span>
-              }
-            </div>
-            <p class="text-[10px] text-muted-foreground truncate">{{ badge.description }}</p>
-            <p class="text-[9px] font-medium mt-0.5" [class]="badge.isUnlocked ? 'text-primary' : 'text-muted-foreground'">
-              {{ badge.progressText }}
-            </p>
-          </div>
-        </div>
-      }
-    </div>
-  </div>
-
-  <!-- Activity Heatmap Calendar -->
-  <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6">
-    <div class="flex items-center gap-2 mb-4">
-      <div class="w-7 h-7 rounded-lg bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-orange-500 dark:text-orange-400">
-        <lucide-icon name="flame" class="w-4 h-4"></lucide-icon>
-      </div>
-      <h2 class="font-bold text-base text-foreground">Activity Log</h2>
-    </div>
-
-    <app-heatmap-calendar [completedDates]="allHistory()" />
-  </div>
-
-  <!-- Recent Activity -->
-  <div class="space-y-3 mb-8">
-    <h3 class="font-bold text-sm text-foreground px-1 uppercase tracking-wider text-muted-foreground">
-      Recent Consistency
-    </h3>
-
-    @if (recentActivities().length === 0) {
-      <div class="text-center py-8 text-muted-foreground text-sm bg-muted/30 rounded-2xl border border-border/40">
-        No completions yet. Light your first lamp today!
-      </div>
-    } @else {
-      @for (log of recentActivities(); track log.title + log.date) {
-        <div
-          class="bg-card p-4 rounded-2xl border border-border/50 flex items-center justify-between shadow-soft animate-fade-in"
-        >
-          <div class="flex items-center gap-3">
             <div
-              class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+              class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-transform"
+              [class]="
+                badge.isUnlocked
+                  ? 'bg-primary/15 text-primary shadow-sm'
+                  : 'bg-muted text-muted-foreground/60'
+              "
             >
-              <lucide-icon [name]="log.icon" class="w-4 h-4"></lucide-icon>
+              <lucide-icon [name]="badge.icon" class="w-5 h-5"></lucide-icon>
             </div>
-            <div>
-              <p class="text-sm font-bold text-foreground">{{ log.title }}</p>
-              <p class="text-[10px] text-muted-foreground">{{ log.date }}</p>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-1">
+                <h4 class="text-xs font-bold text-foreground truncate">{{ badge.name }}</h4>
+                @if (badge.isUnlocked) {
+                  <span class="text-[9px] font-bold text-teal-600 dark:text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md">
+                    ✓
+                  </span>
+                }
+              </div>
+              <p class="text-[10px] text-muted-foreground truncate">{{ badge.description }}</p>
+              <p class="text-[9px] font-medium mt-0.5" [class]="badge.isUnlocked ? 'text-primary' : 'text-muted-foreground'">
+                {{ badge.progressText }}
+              </p>
             </div>
           </div>
-          <div class="text-primary">
-            <lucide-icon name="check-circle-2" class="w-5 h-5"></lucide-icon>
-          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Activity Heatmap Calendar -->
+    <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-7 h-7 rounded-lg bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-orange-500 dark:text-orange-400">
+          <lucide-icon name="flame" class="w-4 h-4"></lucide-icon>
         </div>
+        <h2 class="font-bold text-base text-foreground">Activity Log</h2>
+      </div>
+
+      <app-heatmap-calendar [completedDates]="allHistory()" />
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="space-y-3 mb-8">
+      <h3 class="font-bold text-sm text-foreground px-1 uppercase tracking-wider text-muted-foreground">
+        Recent Consistency
+      </h3>
+
+      @if (recentActivities().length === 0) {
+        <div class="text-center py-8 text-muted-foreground text-sm bg-muted/30 rounded-2xl border border-border/40">
+          No sparks yet. Complete a habit to log your first spark.
+        </div>
+      } @else {
+        @for (log of recentActivities(); track log.title + log.date) {
+          <div
+            class="bg-card p-4 rounded-2xl border border-border/50 flex items-center justify-between shadow-soft animate-fade-in"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+              >
+                <lucide-icon [name]="log.icon" class="w-4 h-4"></lucide-icon>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-foreground">{{ log.title }}</p>
+                <p class="text-[10px] text-muted-foreground">{{ log.date }}</p>
+              </div>
+            </div>
+            <div class="text-primary">
+              <lucide-icon name="check-circle-2" class="w-5 h-5"></lucide-icon>
+            </div>
+          </div>
+        }
       }
-    }
-  </div>
+    </div>
+  }
 
   <!-- Archived Flames Section -->
   <mc-card variant="elevated" padding="md" class="mb-6 block">

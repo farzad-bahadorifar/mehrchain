@@ -20,15 +20,6 @@ export class MeroService {
   }
 
   getAvatar() {
-    switch (this.state()) {
-      case 'happy':
-        return '🥰';
-      case 'celebrating':
-        return '🤩';
-      case 'waiting':
-        return '👀';
-      default:
-        return '🙂';
-    }
+    return 'assets/mero.png';
   }
 }

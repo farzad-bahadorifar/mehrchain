@@ -23,6 +23,7 @@ export class InviteSectionComponent {
   readonly isDropdownOpen = signal<boolean>(false);
   readonly isQrModalOpen = signal<boolean>(false);
   readonly copied = signal<boolean>(false);
+  readonly isSharing = signal<boolean>(false);
 
   readonly selectedCommitment = computed(() => {
     const list = this.commitments();
@@ -57,11 +58,17 @@ export class InviteSectionComponent {
   }
 
   async shareInviteLink(): Promise<void> {
-    const habit = this.selectedCommitment();
-    const habitTitle = habit ? habit.title : 'My Daily Habit';
-    const shared = await this.chainService.shareInvite(habitTitle, habit ? habit.id : undefined);
-    if (shared) {
-      this.notifyToast.emit('Invite link shared / copied to clipboard!');
+    if (this.isSharing()) return;
+    this.isSharing.set(true);
+    try {
+      const habit = this.selectedCommitment();
+      const habitTitle = habit ? habit.title : 'My Daily Habit';
+      const shared = await this.chainService.shareInvite(habitTitle, habit ? habit.id : undefined);
+      if (shared) {
+        this.notifyToast.emit('Invite link shared / copied to clipboard!');
+      }
+    } finally {
+      this.isSharing.set(false);
     }
   }
 

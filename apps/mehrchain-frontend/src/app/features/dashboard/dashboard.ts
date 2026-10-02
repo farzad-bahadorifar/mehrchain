@@ -14,6 +14,7 @@ import { DeleteConfirmationModal } from '../../shared/components/delete-confirma
 import { EditCommitmentModal } from '../../shared/components/edit-commitment-modal/edit-commitment-modal';
 import { NewCommitmentModal } from '../../shared/components/new-commitment-modal/new-commitment-modal';
 import { MeroComponent } from '../../shared/components/mero/mero';
+import { HabitCardSkeletonComponent } from '../../shared/components/skeletons';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +27,7 @@ import { MeroComponent } from '../../shared/components/mero/mero';
     DeleteConfirmationModal,
     EditCommitmentModal,
     MeroComponent,
+    HabitCardSkeletonComponent,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',

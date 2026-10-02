@@ -15,7 +15,7 @@
 | 1 | 8 Mehr (Oct 1) | 🔴 Bug Fixes | [[#30]](https://github.com/farzad-bahadorifar/mehrchain/issues/30) OTP `previewCode` auto-fill (✅) • [[#31]](https://github.com/farzad-bahadorifar/mehrchain/issues/31) Account deletion fix (✅) • [[#32]](https://github.com/farzad-bahadorifar/mehrchain/issues/32) English email template (✅) | ✅ Done |
 | 2 | 9 Mehr (Oct 2) | 🟡 Profile Simplify | [[#33]](https://github.com/farzad-bahadorifar/mehrchain/issues/33) Remove color swatch grid & scroll-on-tap • Keep nickname + 21-day only | ✅ Done |
 | 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | [[#34]](https://github.com/farzad-bahadorifar/mehrchain/issues/34) Journey redesign & badges (✅) • [[#35]](https://github.com/farzad-bahadorifar/mehrchain/issues/35) "Endless Journey" + Custom duration (✅) • [[#36]](https://github.com/farzad-bahadorifar/mehrchain/issues/36) "I did it" → "Spark" + CSS animation (✅) | ✅ Done |
-| 4 | 11 Mehr (Oct 4) | 🟡 Loading UX | [[#37]](https://github.com/farzad-bahadorifar/mehrchain/issues/37) Skeleton loading • Cold start message • Shorten all UI text | ⏳ Backlog |
+| 4 | 11 Mehr (Oct 4) | 🟡 Loading UX | [[#37]](https://github.com/farzad-bahadorifar/mehrchain/issues/37) Skeleton loading • Cold start message • Shorten all UI text | ✅ Done |
 | 5 | 12 Mehr (Oct 5) | 🟢 New Features | [[#38]](https://github.com/farzad-bahadorifar/mehrchain/issues/38) Articles "Coming Soon" • [[#39]](https://github.com/farzad-bahadorifar/mehrchain/issues/39) What's New section & version dot | ⏳ Backlog |
 | 6 | 13 Mehr (Oct 6) | 🟢 Landing + Polish | [[#40]](https://github.com/farzad-bahadorifar/mehrchain/issues/40) Landing page CTA • Direct PWA/APK links • Final text review | ⏳ Backlog |
 | 7-8 | 14–15 Mehr (Oct 7-8) | 🧪 User Testing | 3-5 testers • Full flow: register → verify → habit → chain → spark | ⏳ Planned |
@@ -25,6 +25,7 @@
 
 | Issue | Task Title | Phase | Status | Date | Notes |
 |:-----:|------------|-------|:------:|:----:|-------|
+| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | Skeleton loading screens + cold start warmup notification + shorten UI text | v1.0 Launch Sprint | ✅ Done | Oct 3 | Skeletons for Dashboard/Chain/Journey, ColdStartService (>5s alert), Lucide icon cleanup & English text shortening |
 | [#34](https://github.com/farzad-bahadorifar/mehrchain/issues/34) | Journey page redesign & badge system foundations (5 initial badges with Lucide icons) | v1.0 Launch Sprint | ✅ Done | Oct 2 | Removed duplicate profile card, added 5-badge milestone system |
 | [#35](https://github.com/farzad-bahadorifar/mehrchain/issues/35) | Commitment duration — "Endless Journey" (-1) + Custom days | v1.0 Launch Sprint | ✅ Done | Oct 2 | Replaced presets with Endless Journey (-1) and Custom days across modals, onboarding, and backend |
 | [#36](https://github.com/farzad-bahadorifar/mehrchain/issues/36) | Spark button — rename from "I did it" with Lucide sparkles icon & CSS pulse animation | v1.0 Launch Sprint | ✅ Done | Oct 2 | Replaced completion button with animated Spark button and completed state |
@@ -102,9 +103,9 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 | Issue | Task | Priority | Details |
 |:-----:|------|:--------:|---------|
-| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Skeleton loading** | 🟡 P1 (Backlog) | Add skeleton screens for Dashboard, Chain, Journey initial loads |
-| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Cold start message** | 🟡 P1 (Backlog) | After 5s wait: *"Waking up Mero... Free servers need a moment."* |
-| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Text shortening** | 🟡 P1 (Backlog) | Review all UI text. Make everything shorter and minimal. |
+| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Skeleton loading** | 🟡 P1 (Done) | Add skeleton screens for Dashboard, Chain, Journey initial loads |
+| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Cold start message** | 🟡 P1 (Done) | After 5s wait: *"Waking up Mero... Free servers need a moment."* |
+| [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Text shortening** | 🟡 P1 (Done) | Review all UI text. Make everything shorter and minimal. |
 
 ### Day 5: New Features
 
@@ -209,9 +210,9 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 | Suite | Framework | Tests | Suites |
 |-------|-----------|:-----:|:------:|
-| Frontend | Vitest | 105 | 24 |
-| Backend | Jest | 80 | 10 |
-| **Total** | | **185** | **34** |
+| Frontend | Vitest | 135 | 30 |
+| Backend | Jest | 88 | 11 |
+| **Total** | | **223** | **41** |
 
 ---
 

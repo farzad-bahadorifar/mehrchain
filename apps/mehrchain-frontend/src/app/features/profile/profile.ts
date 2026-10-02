@@ -75,7 +75,7 @@ export class ProfileComponent {
     if (val.length > 0) {
       this.customization.setNickname(val);
       this.isEditingNickname.set(false);
-      this.showSaveFeedback('Companion name saved successfully ✨');
+      this.showSaveFeedback('Companion name saved successfully');
     }
   }
 
@@ -91,7 +91,7 @@ export class ProfileComponent {
 
   saveCustomGlow(): void {
     if (!this.isCustomThemeUnlocked()) {
-      this.showSaveFeedback('Custom Glow Studio unlocks at a 21-day streak 🔒');
+      this.showSaveFeedback('Custom Glow Studio unlocks at a 21-day streak');
       return;
     }
 
@@ -100,12 +100,12 @@ export class ProfileComponent {
 
     this.customization.setCustomGlow(name, color);
     this.customization.setGlowTheme('custom');
-    this.showSaveFeedback(`Custom glow "${name}" saved & applied to Mero! ✨`);
+    this.showSaveFeedback(`Custom glow "${name}" saved & applied to Mero!`);
   }
 
   resetToDefaultGlow(): void {
     this.customization.resetToDefaultGlow();
-    this.showSaveFeedback('Reset to default warm glow 🌟');
+    this.showSaveFeedback('Reset to default warm glow');
   }
 
   setThemeMode(mode: ThemeMode): void {

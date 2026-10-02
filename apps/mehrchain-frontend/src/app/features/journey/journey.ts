@@ -8,6 +8,7 @@ import { ActivityLog } from '@mehrchain/shared-data';
 
 import { McButtonComponent, McCardComponent } from '../../shared/ui';
 import { MeroComponent } from '../../shared/components/mero/mero';
+import { JourneySkeletonComponent } from '../../shared/components/skeletons';
 
 export interface JourneyBadge {
   id: string;
@@ -27,6 +28,7 @@ export interface JourneyBadge {
     McCardComponent,
     McButtonComponent,
     MeroComponent,
+    JourneySkeletonComponent,
   ],
   templateUrl: './journey.html',
   styleUrl: './journey.css',

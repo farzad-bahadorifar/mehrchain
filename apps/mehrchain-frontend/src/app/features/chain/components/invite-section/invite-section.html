@@ -76,10 +76,15 @@
         <button
           type="button"
           (click)="shareInviteLink()"
-          class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-primary text-white font-bold text-xs shadow-xs hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+          [disabled]="isSharing()"
+          class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-primary text-white font-bold text-xs shadow-xs hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
           title="Share Invite Link"
         >
-          <lucide-icon name="share-2" class="w-3.5 h-3.5"></lucide-icon>
+          @if (isSharing()) {
+            <div class="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+          } @else {
+            <lucide-icon name="share-2" class="w-3.5 h-3.5"></lucide-icon>
+          }
           <span>Share</span>
         </button>
 

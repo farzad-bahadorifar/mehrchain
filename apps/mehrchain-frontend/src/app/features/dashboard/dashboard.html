@@ -41,24 +41,26 @@
         </p>
       </div>
     </div>
-    <span class="text-2xl">🔥</span>
+    <lucide-icon name="flame" class="w-6 h-6 text-orange-500/30"></lucide-icon>
   </div>
 
   <!-- Commitments List -->
   <div class="space-y-4">
-    @if (commitmentService.commitments().length === 0) {
+    @if (commitmentService.isLoading() && commitmentService.commitments().length === 0) {
+      <app-habit-card-skeleton [count]="2" />
+    } @else if (commitmentService.commitments().length === 0) {
       <div class="text-center py-12 px-6 bg-card rounded-3xl border border-border/50 shadow-soft animate-fade-in">
         <div class="mx-auto mb-4 flex items-center justify-center">
           <app-mero size="md" [showGlow]="true" />
         </div>
         <h3 class="text-lg font-bold text-foreground mb-1.5">No Active Habits</h3>
         <p class="text-xs text-muted-foreground max-w-xs mx-auto mb-6 leading-relaxed">
-          Every great journey begins with a single spark. Ready to light your first lamp?
+          Every journey begins with a single spark. Ready to light your first flame?
         </p>
         <button
           type="button"
           (click)="openNewCommitment()"
-          class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-primary text-white font-bold text-sm shadow-md shadow-primary/30 hover:bg-accent active:scale-95 transition-all"
+          class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-primary text-white font-bold text-sm shadow-md shadow-primary/30 hover:bg-accent active:scale-95 transition-all cursor-pointer"
         >
           <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
           <span>Light a New Habit</span>

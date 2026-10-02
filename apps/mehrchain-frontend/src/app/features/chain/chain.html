@@ -111,15 +111,17 @@
       </h2>
     </div>
 
-    @if (sortedConnections().length === 0) {
+    @if (chainService.isLoading() && activeConnections().length === 0) {
+      <app-chain-card-skeleton [count]="2" />
+    } @else if (sortedConnections().length === 0) {
       <!-- Minimal Clean Empty State -->
       <div class="p-8 rounded-3xl bg-card border border-border/60 text-center shadow-soft my-3">
         <div class="mx-auto mb-3 flex items-center justify-center">
           <app-mero size="sm" [showGlow]="true" />
         </div>
-        <h4 class="text-sm font-bold text-foreground mb-1">No Friend Chains Connected Yet</h4>
+        <h4 class="text-sm font-bold text-foreground mb-1">No Chains Connected Yet</h4>
         <p class="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
-          Share your habit invite link with friends to build your mutual support chain.
+          Share your invite link with friends to start a mutual support chain.
         </p>
       </div>
     } @else {

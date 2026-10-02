@@ -10,6 +10,7 @@ import { MeroCustomizationService } from '../../core/services/mero-customization
 import { MeroComponent } from '../../shared/components/mero/mero';
 import { ChainCardComponent } from './components/chain-card/chain-card';
 import { InviteSectionComponent } from './components/invite-section/invite-section';
+import { ChainCardSkeletonComponent } from '../../shared/components/skeletons';
 
 @Component({
   selector: 'app-chain',
@@ -21,6 +22,7 @@ import { InviteSectionComponent } from './components/invite-section/invite-secti
     MeroComponent,
     ChainCardComponent,
     InviteSectionComponent,
+    ChainCardSkeletonComponent,
   ],
   templateUrl: './chain.html',
   styleUrls: ['./chain.css'],

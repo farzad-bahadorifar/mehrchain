@@ -3,10 +3,11 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { LucideAngularModule } from 'lucide-angular';
 import { filter } from 'rxjs';
 import { ChainService } from './core/services/chain.service';
+import { ColdStartBannerComponent } from './shared/components/cold-start-banner/cold-start-banner';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, LucideAngularModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, LucideAngularModule, ColdStartBannerComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

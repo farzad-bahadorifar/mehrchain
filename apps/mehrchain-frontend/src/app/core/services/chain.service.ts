@@ -4,6 +4,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { ChainConnection, ChainInvite } from '@mehrchain/shared-data';
 import { CommitmentService } from './commitment.service';
 import { AuthService } from './auth.service';
+import { ColdStartService } from './cold-start.service';
 import { environment } from '../../../environments/environment';
 
 export interface HabitChain {
@@ -52,6 +53,7 @@ export class ChainService {
   private http = inject(HttpClient);
   private commitmentService = inject(CommitmentService);
   private authService = inject(AuthService);
+  private coldStartService = inject(ColdStartService);
 
   private readonly _connections = signal<ChainConnection[]>([]);
   readonly connections = computed(() => this._connections());
@@ -172,6 +174,7 @@ export class ChainService {
     }
 
     this.isLoading.set(true);
+    this.coldStartService.startRequest();
     try {
       const res = await firstValueFrom(
         this.http.get<ChainConnection[]>(`${environment.apiUrl}/chain/connections`)
@@ -185,6 +188,7 @@ export class ChainService {
       return this._connections();
     } finally {
       this.isLoading.set(false);
+      this.coldStartService.finishRequest();
     }
   }
 
@@ -458,7 +462,7 @@ export class ChainService {
 
   async shareInvite(habitTitle: string, commitmentId?: string): Promise<boolean> {
     const url = this.getInviteUrl(commitmentId);
-    const text = `Join my habit chain on MehrChain: "${habitTitle}" 🌟`;
+    const text = `Join my habit chain on MehrChain: "${habitTitle}"`;
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({ title: 'MehrChain Invite', text, url });

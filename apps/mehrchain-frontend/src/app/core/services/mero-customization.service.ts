@@ -94,31 +94,31 @@ export const PERSONALITY_OPTIONS: PersonalityOption[] = [
     id: 'energetic',
     title: 'Energetic & Vibrant',
     subtitle: 'Motivational, thrilling, and eager',
-    emoji: '⚡',
+    emoji: '',
     icon: 'zap',
-    greeting: (name) => `${name} is bursting with energy and ready to conquer the day! 🔥`,
+    greeting: (name) => `${name} is bursting with energy and ready to conquer the day!`,
     streakPraise: (name, days) =>
-      `Incredible! ${days} amazing days in a row, nothing can stop you! 🚀`,
+      `Incredible! ${days} amazing days in a row, nothing can stop you!`,
   },
   {
     id: 'calm',
     title: 'Calm & Mindful',
     subtitle: 'Gentle companion, stress-free and steady',
-    emoji: '🧘',
+    emoji: '',
     icon: 'leaf',
-    greeting: (name) => `${name} is right by your side with peace and serenity. 🌸`,
+    greeting: (name) => `${name} is right by your side with peace and serenity.`,
     streakPraise: (name, days) =>
-      `Praise your patience and consistency, ${days} beautiful mindful steps. 🍃`,
+      `Praise your patience and consistency, ${days} beautiful mindful steps.`,
   },
   {
     id: 'focused',
     title: 'Driven & Focused',
     subtitle: 'Laser focus, disciplined and razor-sharp',
-    emoji: '🎯',
+    emoji: '',
     icon: 'sparkles',
-    greeting: (name) => `${name} is locked in and ready to crush today's goals. 🎯`,
+    greeting: (name) => `${name} is locked in and ready to crush today's goals.`,
     streakPraise: (name, days) =>
-      `Target locked! ${days} flawless consecutive days achieved. ⚔️`,
+      `Target locked! ${days} flawless consecutive days achieved.`,
   },
 ];
 

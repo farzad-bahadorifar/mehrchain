@@ -11,6 +11,7 @@ import {
 } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { ColdStartService } from '../services/cold-start.service';
 
 export interface CommitmentState {
   commitments: Commitment[];
@@ -81,6 +82,7 @@ export const CommitmentStore = signalStore(
   })),
   withMethods((store) => {
     const http = inject(HttpClient);
+    const coldStartService = inject(ColdStartService);
     const API_URL = `${environment.apiUrl}/commitments`;
 
     return {
@@ -104,6 +106,7 @@ export const CommitmentStore = signalStore(
         const token = localStorage.getItem('mehrchain_auth_token_v1');
         if (!isRemoteToken(token)) return;
 
+        coldStartService.startRequest();
         try {
           patchState(store, { isLoading: true });
           const remoteData = await firstValueFrom(http.get<Commitment[]>(API_URL));
@@ -116,6 +119,8 @@ export const CommitmentStore = signalStore(
         } catch (err) {
           console.warn('[CommitmentStore] Background sync failed, using cached data.', err);
           patchState(store, { isLoading: false });
+        } finally {
+          coldStartService.finishRequest();
         }
       },
 
@@ -287,17 +292,20 @@ export const CommitmentStore = signalStore(
        * Fetches archived commitments from backend API.
        */
       async fetchArchivedCommitments(): Promise<Commitment[]> {
-        try {
-          const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (isRemoteToken(token)) {
+        const token = localStorage.getItem('mehrchain_auth_token_v1');
+        if (isRemoteToken(token)) {
+          coldStartService.startRequest();
+          try {
             const list = await firstValueFrom(http.get<Commitment[]>(`${API_URL}/archived`));
             if (Array.isArray(list)) {
               patchState(store, { archivedCommitments: list });
               return list;
             }
+          } catch (err) {
+            console.warn('[CommitmentStore] Failed to fetch archived commitments:', err);
+          } finally {
+            coldStartService.finishRequest();
           }
-        } catch (err) {
-          console.warn('[CommitmentStore] Failed to fetch archived commitments:', err);
         }
         return store.archivedCommitments();
       },
