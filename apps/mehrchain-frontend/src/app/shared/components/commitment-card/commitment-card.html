@@ -122,20 +122,32 @@
   </div>
 
   <div class="flex items-center gap-2">
-    <mc-button
-      [variant]="commitment().isCompletedToday ? 'secondary' : 'primary'"
-      size="md"
-      [fullWidth]="true"
-      [disabled]="commitment().isCompletedToday"
-      (clicked)="onComplete.emit(commitment().id)"
-      class="w-full"
-    >
-      @if (commitment().isCompletedToday) {
+    @if (commitment().isCompletedToday) {
+      <mc-button
+        variant="secondary"
+        size="md"
+        [fullWidth]="true"
+        [disabled]="true"
+        class="w-full opacity-80"
+      >
+        <lucide-icon name="check" class="w-4 h-4 text-primary"></lucide-icon>
         <span>Completed ✓</span>
-      } @else {
-        <lucide-icon name="check" class="w-5 h-5"></lucide-icon>
-        <span>I did it today</span>
-      }
-    </mc-button>
+      </mc-button>
+    } @else {
+      <mc-button
+        variant="primary"
+        size="md"
+        [fullWidth]="true"
+        (clicked)="handleSpark()"
+        class="w-full spark-btn group"
+        [class.is-sparking]="isSparking()"
+      >
+        <lucide-icon
+          name="sparkles"
+          class="w-5 h-5 text-primary-foreground group-hover:scale-110 transition-transform duration-200"
+        ></lucide-icon>
+        <span class="font-bold tracking-wide">Spark</span>
+      </mc-button>
+    }
   </div>
 </mc-card>

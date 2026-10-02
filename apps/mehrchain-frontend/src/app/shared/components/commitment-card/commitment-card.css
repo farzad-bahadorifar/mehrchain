@@ -2,3 +2,36 @@
   display: block;
   margin-bottom: 1rem;
 }
+
+.spark-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.spark-btn:hover {
+  transform: translateY(-1px);
+}
+
+.spark-btn:active,
+.spark-btn.is-sparking {
+  animation: sparkPulse 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes sparkPulse {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(0.96);
+    box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.5);
+  }
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 8px rgba(13, 148, 136, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: none;
+  }
+}

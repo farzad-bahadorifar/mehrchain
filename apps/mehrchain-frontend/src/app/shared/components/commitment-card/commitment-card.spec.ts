@@ -65,4 +65,42 @@ describe('CommitmentCard', () => {
     component.onEdit.emit('comm-1');
     expect(editSpy).toHaveBeenCalledWith('comm-1');
   });
+
+  it('should render Spark button with sparkles icon when not completed today', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const sparkBtn = compiled.querySelector('.spark-btn');
+    expect(sparkBtn).toBeTruthy();
+    expect(sparkBtn?.textContent).toContain('Spark');
+    expect(compiled.querySelector('lucide-icon[name="sparkles"]')).toBeTruthy();
+  });
+
+  it('should trigger handleSpark and emit onComplete when Spark button is clicked', () => {
+    const completeSpy = vi.fn();
+    component.onComplete.subscribe(completeSpy);
+
+    component.handleSpark();
+
+    expect(completeSpy).toHaveBeenCalledWith('comm-1');
+    expect(component.isSparking()).toBe(true);
+  });
+
+  it('should render Completed state when isCompletedToday is true', () => {
+    fixture.componentRef.setInput('commitment', {
+      id: 'comm-1',
+      title: 'Morning Yoga',
+      category: 'health',
+      totalDays: 21,
+      currentDay: 1,
+      currentStreak: 1,
+      isCompletedToday: true,
+      startDate: new Date().toISOString(),
+      history: [],
+    });
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.spark-btn')).toBeFalsy();
+    expect(compiled.textContent).toContain('Completed ✓');
+    expect(compiled.querySelector('button[disabled]')).toBeTruthy();
+  });
 });

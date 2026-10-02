@@ -14,7 +14,7 @@
 |-----|------|-------|-----------------------|:------:|
 | 1 | 8 Mehr (Oct 1) | 🔴 Bug Fixes | [[#30]](https://github.com/farzad-bahadorifar/mehrchain/issues/30) OTP `previewCode` auto-fill (✅) • [[#31]](https://github.com/farzad-bahadorifar/mehrchain/issues/31) Account deletion fix (✅) • [[#32]](https://github.com/farzad-bahadorifar/mehrchain/issues/32) English email template (✅) | ✅ Done |
 | 2 | 9 Mehr (Oct 2) | 🟡 Profile Simplify | [[#33]](https://github.com/farzad-bahadorifar/mehrchain/issues/33) Remove color swatch grid & scroll-on-tap • Keep nickname + 21-day only | ✅ Done |
-| 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | [[#34]](https://github.com/farzad-bahadorifar/mehrchain/issues/34) Journey redesign & badges • [[#35]](https://github.com/farzad-bahadorifar/mehrchain/issues/35) "Endless Journey" + Custom duration • [[#36]](https://github.com/farzad-bahadorifar/mehrchain/issues/36) "I did it" → "Spark" + CSS animation | ⏳ Backlog |
+| 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | [[#34]](https://github.com/farzad-bahadorifar/mehrchain/issues/34) Journey redesign & badges • [[#35]](https://github.com/farzad-bahadorifar/mehrchain/issues/35) "Endless Journey" + Custom duration • [[#36]](https://github.com/farzad-bahadorifar/mehrchain/issues/36) "I did it" → "Spark" + CSS animation (✅) | 🔄 In Progress |
 | 4 | 11 Mehr (Oct 4) | 🟡 Loading UX | [[#37]](https://github.com/farzad-bahadorifar/mehrchain/issues/37) Skeleton loading • Cold start message • Shorten all UI text | ⏳ Backlog |
 | 5 | 12 Mehr (Oct 5) | 🟢 New Features | [[#38]](https://github.com/farzad-bahadorifar/mehrchain/issues/38) Articles "Coming Soon" • [[#39]](https://github.com/farzad-bahadorifar/mehrchain/issues/39) What's New section & version dot | ⏳ Backlog |
 | 6 | 13 Mehr (Oct 6) | 🟢 Landing + Polish | [[#40]](https://github.com/farzad-bahadorifar/mehrchain/issues/40) Landing page CTA • Direct PWA/APK links • Final text review | ⏳ Backlog |
@@ -25,6 +25,7 @@
 
 | Issue | Task Title | Phase | Status | Date | Notes |
 |:-----:|------------|-------|:------:|:----:|-------|
+| [#36](https://github.com/farzad-bahadorifar/mehrchain/issues/36) | Spark button — rename from "I did it" with Lucide sparkles icon & CSS pulse animation | v1.0 Launch Sprint | ✅ Done | Oct 2 | Replaced completion button with animated Spark button and completed state |
 | [#33](https://github.com/farzad-bahadorifar/mehrchain/issues/33) | Profile Simplification — remove swatches grid & scroll-on-tap, keep nickname & 21-day glow | v1.0 Launch Sprint | ✅ Done | Oct 1 | Removed color swatch grid & tap tooltip, preserved 21-day custom glow reward |
 | [#31](https://github.com/farzad-bahadorifar/mehrchain/issues/31) | Fix account deletion — only clear local state on backend success | v1.0 Launch Sprint | ✅ Done | Sep 30 | Fixed deleteAccount error handling & storage retention |
 | [#32](https://github.com/farzad-bahadorifar/mehrchain/issues/32) | Translate OTP email template to English | v1.0 Launch Sprint | ✅ Done | Sep 30 | English dark-themed HTML/text OTP email template |
@@ -93,7 +94,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 |:-----:|------|:--------:|---------|
 | [#34](https://github.com/farzad-bahadorifar/mehrchain/issues/34) | **Journey simplify & Badges** | 🟡 P1 (Backlog) | Remove User Profile Card (duplicate). Keep Stats + Heatmap + Archived. Add badge data model with 5 initial badges (First Spark, Chain Starter, 7-Day Streak, 21-Day Master, Kind Soul) using Lucide icons. |
 | [#35](https://github.com/farzad-bahadorifar/mehrchain/issues/35) | **Duration options** | 🟡 P1 (Backlog) | Replace 7d/14d/21d/30d/Custom with: **"Endless Journey"** (`totalDays = -1`) + **Custom** |
-| [#36](https://github.com/farzad-bahadorifar/mehrchain/issues/36) | **Spark button** | 🟡 P1 (Backlog) | Rename "I did it" → "Spark" with Lucide `sparkles` icon + CSS scale/glow animation |
+| [#36](https://github.com/farzad-bahadorifar/mehrchain/issues/36) | **Spark button** | 🟡 P1 (Done) | Rename "I did it" → "Spark" with Lucide `sparkles` icon + CSS scale/glow animation |
 
 ### Day 4: Loading UX
 

@@ -19,6 +19,7 @@ export class CommitmentCardComponent {
   onEdit = output<string>();
 
   isMenuOpen = signal(false);
+  isSparking = signal(false);
 
   toggleMenu(e: Event) {
     e.stopPropagation();
@@ -27,6 +28,14 @@ export class CommitmentCardComponent {
 
   closeMenu() {
     this.isMenuOpen.set(false);
+  }
+
+  handleSpark() {
+    this.isSparking.set(true);
+    this.onComplete.emit(this.commitment().id);
+    setTimeout(() => {
+      this.isSparking.set(false);
+    }, 600);
   }
 
   get progressPercent() {
