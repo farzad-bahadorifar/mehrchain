@@ -16,6 +16,7 @@ export class DetailsStepComponent {
   readonly isPublic = input.required<boolean>();
 
   readonly standardDurationSelected = output<number>();
+  readonly endlessDurationSelected = output<void>();
   readonly openCustom = output<void>();
   readonly customDurationChanged = output<string>();
   readonly whyTextChanged = output<string>();
@@ -24,6 +25,6 @@ export class DetailsStepComponent {
   readonly proceedToSignUp = output<void>();
 
   isDurationValid(): boolean {
-    return this.selectedDuration() > 0;
+    return this.selectedDuration() === -1 || this.selectedDuration() > 0;
   }
 }

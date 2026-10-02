@@ -103,4 +103,23 @@ describe('CommitmentCard', () => {
     expect(compiled.textContent).toContain('Completed ✓');
     expect(compiled.querySelector('button[disabled]')).toBeTruthy();
   });
+
+  it('should correctly format Endless Journey commitments (totalDays = -1)', () => {
+    fixture.componentRef.setInput('commitment', {
+      id: 'comm-endless',
+      title: 'Daily Meditation',
+      category: 'growth',
+      totalDays: -1,
+      currentDay: 12,
+      currentStreak: 12,
+      isCompletedToday: false,
+      startDate: new Date().toISOString(),
+      history: [],
+    });
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Day 12 • Endless Journey');
+    expect(component.progressPercent).toBe(100);
+  });
 });

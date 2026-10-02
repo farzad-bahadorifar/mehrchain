@@ -121,7 +121,10 @@ export class CommitmentsService {
       where: { id: commitment.id },
       data: {
         currentStreak: { increment: 1 },
-        currentDay: Math.min(commitment.currentDay + 1, commitment.totalDays),
+        currentDay:
+          commitment.totalDays === -1
+            ? commitment.currentDay + 1
+            : Math.min(commitment.currentDay + 1, commitment.totalDays),
         lastCompletedDate: today,
         history: { push: todayUtc },
       },

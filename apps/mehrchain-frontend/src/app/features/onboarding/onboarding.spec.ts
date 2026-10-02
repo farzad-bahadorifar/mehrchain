@@ -20,6 +20,25 @@ describe('OnboardingComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should default to Endless Journey (-1) and allow proceeding to signup', () => {
+    expect(component.selectedDuration()).toBe(-1);
+    expect(component.isCustomDuration()).toBe(false);
+
+    component.step.set(6);
+    component.proceedToSignUp();
+    expect(component.step()).toBe(7);
+  });
+
+  it('should switch between Endless Journey and custom duration', () => {
+    component.openCustomDuration();
+    expect(component.isCustomDuration()).toBe(true);
+    expect(component.selectedDuration()).toBe(30);
+
+    component.selectEndlessDuration();
+    expect(component.isCustomDuration()).toBe(false);
+    expect(component.selectedDuration()).toBe(-1);
+  });
+
   it('should prevent proceeding to signup if duration is 0', () => {
     component.step.set(6);
     component.openCustomDuration();

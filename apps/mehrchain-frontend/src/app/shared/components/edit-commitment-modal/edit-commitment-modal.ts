@@ -26,14 +26,14 @@ export class EditCommitmentModal {
 
   title = signal('');
   why = signal('');
-  duration = signal(21);
+  duration = signal(-1);
   category = signal('health');
   reminderTime = signal('08:30');
   isPublic = signal(false);
   isCustomDuration = signal(false);
   customDurationText = signal('');
 
-  isDurationValid = computed(() => this.duration() > 0);
+  isDurationValid = computed(() => this.duration() === -1 || this.duration() > 0);
   isValid = computed(() => this.title().trim().length >= 2 && this.isDurationValid());
 
   categories = [
@@ -53,7 +53,7 @@ export class EditCommitmentModal {
         this.category.set(c.category);
         this.reminderTime.set(c.reminderTime || '08:30');
         this.isPublic.set(c.isPublic || false);
-        if (![7, 14, 21].includes(c.totalDays)) {
+        if (c.totalDays > 0) {
           this.isCustomDuration.set(true);
           this.customDurationText.set(c.totalDays.toString());
         } else {
@@ -64,8 +64,8 @@ export class EditCommitmentModal {
     });
   }
 
-  setStandardDuration(days: number) {
-    this.duration.set(days);
+  setEndlessDuration() {
+    this.duration.set(-1);
     this.isCustomDuration.set(false);
     this.customDurationText.set('');
   }
@@ -73,11 +73,9 @@ export class EditCommitmentModal {
   toggleCustomDuration() {
     this.isCustomDuration.set(true);
     const cur = this.duration();
-    const initialText = cur > 0 && ![7, 14, 21].includes(cur) ? cur.toString() : '';
+    const initialText = cur > 0 ? cur.toString() : '30';
     this.customDurationText.set(initialText);
-    if (!initialText) {
-      this.duration.set(0);
-    }
+    this.duration.set(parseInt(initialText, 10));
   }
 
   onCustomDurationInput(val: string) {

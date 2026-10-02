@@ -89,31 +89,32 @@
 
     <!-- Duration -->
     <div class="mb-4">
-      <label class="block text-xs font-bold text-muted-foreground uppercase mb-2 ml-1">Duration</label>
+      <label class="block text-xs font-bold text-muted-foreground uppercase mb-2 ml-1">Journey Duration</label>
 
-      <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        @for (d of [7, 14, 21]; track d) {
-          <button
-            type="button"
-            (click)="setStandardDuration(d)"
-            class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2"
-            [class]="
-              !isCustomDuration() && duration() === d
-                ? 'border-primary bg-primary text-white shadow-md'
-                : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
-            "
-          >
-            {{ d }}
-          </button>
-        }
+      <div class="grid grid-cols-2 gap-2.5">
+        <!-- Endless Journey Option -->
+        <button
+          type="button"
+          (click)="setEndlessDuration()"
+          class="py-3 px-3 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 text-xs font-bold"
+          [class]="
+            duration() === -1 && !isCustomDuration()
+              ? 'border-primary bg-primary/10 text-primary shadow-sm ring-1 ring-primary/30'
+              : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
+          "
+        >
+          <lucide-icon name="sparkles" class="w-4 h-4 text-primary"></lucide-icon>
+          <span>Endless Journey</span>
+        </button>
 
+        <!-- Custom Duration Option -->
         @if (isCustomDuration()) {
           <div
-            class="flex-1 min-w-[50px] flex items-center justify-center p-0.5 rounded-xl border-2 transition-all animate-fade-in"
+            class="flex items-center px-3 py-1.5 rounded-2xl border-2 transition-all"
             [class]="
               !isDurationValid()
-                ? 'border-red-500 bg-red-500/10 text-red-500 ring-2 ring-red-500/20'
-                : 'border-primary bg-card'
+                ? 'border-red-500 bg-red-500/10 ring-2 ring-red-500/20 text-red-500'
+                : 'border-primary bg-card text-primary'
             "
           >
             <input
@@ -122,9 +123,9 @@
               min="1"
               max="365"
               [value]="customDurationText()"
-              class="w-full text-center font-bold text-sm outline-none bg-transparent h-full py-1 transition-colors"
+              class="w-full text-center font-bold text-xs outline-none bg-transparent h-full transition-colors"
               [class]="!isDurationValid() ? 'text-red-500 placeholder:text-red-400/50' : 'text-primary'"
-              placeholder="#"
+              placeholder="Days (e.g. 30)"
               (input)="onCustomDurationInput(durInput.value)"
               autoFocus
             />
@@ -133,15 +134,21 @@
           <button
             type="button"
             (click)="toggleCustomDuration()"
-            class="flex-1 min-w-[50px] py-2.5 rounded-xl text-sm font-bold transition-all border-2 border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-card flex items-center justify-center"
+            class="py-3 px-3 rounded-2xl border-2 transition-all flex items-center justify-center gap-1.5 text-xs font-bold"
+            [class]="
+              duration() > 0 && isCustomDuration()
+                ? 'border-primary bg-primary/10 text-primary shadow-sm'
+                : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
+            "
           >
-            <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+            <lucide-icon name="calendar" class="w-4 h-4"></lucide-icon>
+            <span>Custom Days</span>
           </button>
         }
       </div>
 
       @if (isCustomDuration() && !isDurationValid()) {
-        <p class="text-[11px] text-red-500 mt-1.5 font-medium animate-fade-in">
+        <p class="text-[11px] text-red-500 mt-1.5 font-medium animate-fade-in text-center">
           Duration must be at least 1 day
         </p>
       }

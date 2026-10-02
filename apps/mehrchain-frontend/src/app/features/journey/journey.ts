@@ -3,21 +3,37 @@ import { CommonModule } from '@angular/common';
 import { HeatmapCalendar } from '../../shared/components/heatmap-calendar/heatmap-calendar';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommitmentService } from '../../core/services/commitment.service';
-import { AuthService } from '../../core/services/auth.service';
+import { ChainService } from '../../core/services/chain.service';
 import { ActivityLog } from '@mehrchain/shared-data';
 
 import { McButtonComponent, McCardComponent } from '../../shared/ui';
 import { MeroComponent } from '../../shared/components/mero/mero';
 
+export interface JourneyBadge {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  isUnlocked: boolean;
+  progressText: string;
+}
+
 @Component({
   selector: 'app-journey',
-  imports: [CommonModule, HeatmapCalendar, LucideAngularModule, McCardComponent, McButtonComponent, MeroComponent],
+  imports: [
+    CommonModule,
+    HeatmapCalendar,
+    LucideAngularModule,
+    McCardComponent,
+    McButtonComponent,
+    MeroComponent,
+  ],
   templateUrl: './journey.html',
   styleUrl: './journey.css',
 })
 export class Journey implements OnInit {
   commitmentService = inject(CommitmentService);
-  authService = inject(AuthService);
+  chainService = inject(ChainService);
 
   showArchived = signal(false);
 
@@ -38,8 +54,6 @@ export class Journey implements OnInit {
       await this.commitmentService.permanentDeleteCommitment(id);
     }
   }
-
-  currentUser = this.authService.currentUser;
 
   activeCommitmentsCount = computed(() => this.commitmentService.commitments().length);
 
@@ -88,5 +102,62 @@ export class Journey implements OnInit {
 
   totalActivities = computed(() => this.allHistory().length);
   longestStreak = this.commitmentService.overallStreak;
+
+  // 5 Initial Badges (Lucide icons only)
+  badges = computed<JourneyBadge[]>(() => {
+    const totalSparks = this.totalActivities();
+    const streak = this.longestStreak();
+    const connections = this.chainService.connections();
+    const hasPublicOrChain =
+      connections.length > 0 || this.commitmentService.commitments().some((c) => c.isPublic);
+    const hasHeartReaction = connections.some(
+      (c) => c.heartSent === true || (c.lastPartnerActivityAt && c.status === 'ACTIVE')
+    );
+
+    return [
+      {
+        id: 'first-spark',
+        name: 'First Spark',
+        description: 'Complete your first habit ever',
+        icon: 'sparkles',
+        isUnlocked: totalSparks >= 1,
+        progressText: totalSparks >= 1 ? 'Unlocked' : `${totalSparks} / 1 spark`,
+      },
+      {
+        id: 'chain-starter',
+        name: 'Chain Starter',
+        description: 'Form your first chain connection',
+        icon: 'link',
+        isUnlocked: hasPublicOrChain,
+        progressText: hasPublicOrChain ? 'Unlocked' : 'Create public habit or invite',
+      },
+      {
+        id: '7-day-streak',
+        name: '7-Day Streak',
+        description: 'Keep a flame burning for 7 days',
+        icon: 'flame',
+        isUnlocked: streak >= 7,
+        progressText: streak >= 7 ? 'Unlocked' : `${streak} / 7 days`,
+      },
+      {
+        id: '21-day-master',
+        name: '21-Day Master',
+        description: '21 days streak (unlocks custom glow)',
+        icon: 'trophy',
+        isUnlocked: streak >= 21,
+        progressText: streak >= 21 ? 'Unlocked' : `${streak} / 21 days`,
+      },
+      {
+        id: 'kind-soul',
+        name: 'Kind Soul',
+        description: 'Support a friend along the chain',
+        icon: 'heart',
+        isUnlocked: hasHeartReaction || connections.length > 0,
+        progressText: hasHeartReaction || connections.length > 0 ? 'Unlocked' : 'Support partner',
+      },
+    ];
+  });
+
+  unlockedBadgesCount = computed(() => this.badges().filter((b) => b.isUnlocked).length);
 }
 

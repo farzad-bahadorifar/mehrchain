@@ -40,10 +40,11 @@ describe('EditCommitmentModal', () => {
     expect(component.reminderTime()).toBe('21:00');
   });
 
-  it('should allow selecting standard 14 days duration', () => {
-    component.setStandardDuration(14);
-    expect(component.duration()).toBe(14);
+  it('should allow selecting Endless Journey duration (-1)', () => {
+    component.setEndlessDuration();
+    expect(component.duration()).toBe(-1);
     expect(component.isCustomDuration()).toBe(false);
+    expect(component.isDurationValid()).toBe(true);
   });
 
   it('should emit save with updated data upon onSubmit', () => {

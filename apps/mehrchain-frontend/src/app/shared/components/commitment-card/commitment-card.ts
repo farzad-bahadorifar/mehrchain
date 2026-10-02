@@ -39,6 +39,9 @@ export class CommitmentCardComponent {
   }
 
   get progressPercent() {
+    if (this.commitment().totalDays === -1) {
+      return 100;
+    }
     return Math.round((this.commitment().currentDay / this.commitment().totalDays) * 100);
   }
 

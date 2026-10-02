@@ -17,12 +17,12 @@ export class NewCommitmentModal {
 
   title = signal('');
   why = signal('');
-  duration = signal(21);
+  duration = signal(-1);
   category = signal('health');
   isPublic = signal(false);
   reminderTime = signal('08:30');
 
-  isDurationValid = computed(() => this.duration() > 0);
+  isDurationValid = computed(() => this.duration() === -1 || this.duration() > 0);
   isValid = computed(() => this.title().trim().length >= 2 && this.isDurationValid());
 
   categories = [
@@ -52,8 +52,8 @@ export class NewCommitmentModal {
     this.title.set(text);
   }
 
-  setStandardDuration(days: number) {
-    this.duration.set(days);
+  setEndlessDuration() {
+    this.duration.set(-1);
     this.isCustomDuration.set(false);
     this.customDurationText.set('');
   }
@@ -61,11 +61,9 @@ export class NewCommitmentModal {
   toggleCustomDuration() {
     this.isCustomDuration.set(true);
     const cur = this.duration();
-    const initialText = cur > 0 && ![7, 14, 21].includes(cur) ? cur.toString() : '';
+    const initialText = cur > 0 ? cur.toString() : '30';
     this.customDurationText.set(initialText);
-    if (!initialText) {
-      this.duration.set(0);
-    }
+    this.duration.set(parseInt(initialText, 10));
   }
 
   onCustomDurationInput(value: string) {

@@ -68,7 +68,7 @@ export class OnboardingComponent implements OnInit {
   // Habit Form State
   selectedCategory = signal<string | null>(null);
   selectedHabit = signal<string | null>(null);
-  selectedDuration = signal<number>(21);
+  selectedDuration = signal<number>(-1);
   isCustomDuration = signal(false);
   customDurationText = signal<string>('');
   isCustomHabit = signal(false);
@@ -211,6 +211,12 @@ export class OnboardingComponent implements OnInit {
     this.nextStep();
   }
 
+  selectEndlessDuration() {
+    this.selectedDuration.set(-1);
+    this.isCustomDuration.set(false);
+    this.customDurationText.set('');
+  }
+
   selectStandardDuration(days: number) {
     this.selectedDuration.set(days);
     this.isCustomDuration.set(false);
@@ -220,11 +226,9 @@ export class OnboardingComponent implements OnInit {
   openCustomDuration() {
     this.isCustomDuration.set(true);
     const cur = this.selectedDuration();
-    const initialText = cur > 0 && ![7, 14, 21].includes(cur) ? cur.toString() : '';
+    const initialText = cur > 0 ? cur.toString() : '30';
     this.customDurationText.set(initialText);
-    if (!initialText) {
-      this.selectedDuration.set(0);
-    }
+    this.selectedDuration.set(parseInt(initialText, 10));
   }
 
   onCustomDurationChange(val: string) {
@@ -264,7 +268,7 @@ export class OnboardingComponent implements OnInit {
   }
 
   proceedToSignUp() {
-    if (this.selectedDuration() <= 0) return;
+    if (this.selectedDuration() !== -1 && this.selectedDuration() <= 0) return;
     this.step.set(7);
   }
 

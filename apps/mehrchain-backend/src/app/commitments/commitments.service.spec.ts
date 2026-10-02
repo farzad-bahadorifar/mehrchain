@@ -112,6 +112,38 @@ describe('CommitmentsService (Unit Tests)', () => {
       expect((result as any).isCompletedToday).toBe(true);
     });
 
+    it('should correctly increment currentDay beyond normal limit for Endless Journey (totalDays = -1)', async () => {
+      const yesterday = new Date(Date.now() - 86400000);
+      mockPrisma.commitment.findUnique.mockResolvedValue({
+        id: 'comm-endless',
+        userId: 'user-1',
+        currentStreak: 45,
+        currentDay: 45,
+        totalDays: -1,
+        lastCompletedDate: yesterday,
+      });
+
+      mockPrisma.commitmentLog.create.mockResolvedValue({ id: 'log-endless' });
+      mockPrisma.commitment.update.mockResolvedValue({
+        id: 'comm-endless',
+        userId: 'user-1',
+        currentStreak: 46,
+        currentDay: 46,
+        totalDays: -1,
+        lastCompletedDate: new Date(),
+      });
+
+      const result = await service.completeCommitment('user-1', 'comm-endless');
+      expect(mockPrisma.commitment.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            currentDay: 46,
+          }),
+        })
+      );
+      expect((result as any).isCompletedToday).toBe(true);
+    });
+
     it('should not double-increment streak if already completed today', async () => {
       const today = new Date();
       mockPrisma.commitment.findUnique.mockResolvedValue({

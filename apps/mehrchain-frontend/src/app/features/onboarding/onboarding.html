@@ -93,6 +93,7 @@
           [reminderTime]="reminderTime()"
           [isPublic]="isHabitPublic()"
           (standardDurationSelected)="selectStandardDuration($event)"
+          (endlessDurationSelected)="selectEndlessDuration()"
           (openCustom)="openCustomDuration()"
           (customDurationChanged)="onCustomDurationChange($event)"
           (whyTextChanged)="whyText.set($event)"

@@ -78,12 +78,41 @@ describe('NewCommitmentModal', () => {
     expect(component.duration()).toBe(100);
   });
 
+  it('should default to Endless Journey (-1) and submit successfully', () => {
+    const submitSpy = vi.fn();
+    component.submit.subscribe(submitSpy);
+
+    expect(component.duration()).toBe(-1);
+    expect(component.isDurationValid()).toBe(true);
+
+    component.title.set('Read philosophy');
+    expect(component.isValid()).toBe(true);
+
+    component.handleSubmit();
+    expect(submitSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: 'Read philosophy',
+        totalDays: -1,
+      })
+    );
+  });
+
+  it('should switch between Endless Journey and Custom duration', () => {
+    component.toggleCustomDuration();
+    expect(component.isCustomDuration()).toBe(true);
+    expect(component.duration()).toBe(30);
+
+    component.setEndlessDuration();
+    expect(component.isCustomDuration()).toBe(false);
+    expect(component.duration()).toBe(-1);
+  });
+
   it('should reject submission when title is too short regardless of duration', () => {
     const submitSpy = vi.fn();
     component.submit.subscribe(submitSpy);
 
     component.title.set('A');
-    component.setStandardDuration(21);
+    component.setEndlessDuration();
 
     expect(component.isValid()).toBe(false);
     component.handleSubmit();

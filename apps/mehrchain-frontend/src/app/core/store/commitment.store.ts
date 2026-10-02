@@ -190,7 +190,10 @@ export const CommitmentStore = signalStore(
               return {
                 ...c,
                 currentStreak: (c.currentStreak || 0) + 1,
-                currentDay: Math.min((c.currentDay || 0) + 1, c.totalDays),
+                currentDay:
+                  c.totalDays === -1
+                    ? (c.currentDay || 0) + 1
+                    : Math.min((c.currentDay || 0) + 1, c.totalDays),
                 isCompletedToday: true,
                 history: [...(c.history || []), today],
               };

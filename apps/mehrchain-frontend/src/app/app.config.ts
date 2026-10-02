@@ -57,6 +57,7 @@ import {
   Wand2,
   RefreshCw,
   WifiOff,
+  Trophy,
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -119,6 +120,7 @@ export const appConfig: ApplicationConfig = {
         Wand2,
         RefreshCw,
         WifiOff,
+        Trophy,
       }),
     ),
   ],

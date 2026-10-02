@@ -48,6 +48,7 @@ import {
   AlertCircle,
   RefreshCw,
   WifiOff,
+  Trophy,
 } from 'lucide-angular';
 
 export const commonTestProviders = [
@@ -100,6 +101,7 @@ export const commonTestProviders = [
       AlertCircle,
       RefreshCw,
       WifiOff,
+      Trophy,
     })
   ),
 ];

@@ -4,26 +4,26 @@
       Commit for how long?
     </h2>
 
-    <div class="grid grid-cols-4 gap-2 mb-2">
-      @for (days of [7, 14, 21]; track days) {
-        <button
-          type="button"
-          (click)="standardDurationSelected.emit(days)"
-          class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 transition-all duration-300"
-          [class]="
-            !isCustomDuration() && selectedDuration() === days
-              ? 'border-primary bg-primary text-white shadow-md'
-              : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
-          "
-        >
-          <span class="text-base font-bold">{{ days }}</span>
-          <span class="text-[10px] font-medium uppercase">Days</span>
-        </button>
-      }
+    <div class="grid grid-cols-2 gap-2.5 mb-2">
+      <!-- Endless Journey Option -->
+      <button
+        type="button"
+        (click)="endlessDurationSelected.emit()"
+        class="flex items-center justify-center gap-2 py-3 px-3 rounded-2xl border-2 transition-all duration-300 text-xs font-bold"
+        [class]="
+          !isCustomDuration() && selectedDuration() === -1
+            ? 'border-primary bg-primary/10 text-primary shadow-sm ring-1 ring-primary/30'
+            : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
+        "
+      >
+        <lucide-icon name="sparkles" class="w-4 h-4 text-primary"></lucide-icon>
+        <span>Endless Journey</span>
+      </button>
 
+      <!-- Custom Duration Option -->
       @if (isCustomDuration()) {
         <div
-          class="flex flex-col items-center justify-center p-1 rounded-xl border-2 transition-all animate-fade-in"
+          class="flex items-center justify-center p-1 rounded-2xl border-2 transition-all animate-fade-in"
           [class]="
             !isDurationValid()
               ? 'border-red-500 bg-red-500/10 ring-2 ring-red-500/20 text-red-500'
@@ -36,9 +36,9 @@
             min="1"
             max="365"
             [value]="customDurationText()"
-            class="w-full text-center font-bold text-base outline-none bg-transparent transition-colors"
+            class="w-full text-center font-bold text-xs outline-none bg-transparent transition-colors"
             [class]="!isDurationValid() ? 'text-red-500 placeholder:text-red-400/50' : 'text-primary'"
-            placeholder="#"
+            placeholder="Days (e.g. 30)"
             (input)="customDurationChanged.emit(durInput.value)"
             autoFocus
           />
@@ -47,10 +47,15 @@
         <button
           type="button"
           (click)="openCustom.emit()"
-          class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 border-border text-muted-foreground hover:border-primary/50 hover:text-primary transition-all"
+          class="flex items-center justify-center gap-1.5 py-3 px-3 rounded-2xl border-2 border-border text-muted-foreground hover:border-primary/50 hover:text-primary transition-all text-xs font-bold"
+          [class]="
+            selectedDuration() > 0 && isCustomDuration()
+              ? 'border-primary bg-primary/10 text-primary shadow-sm'
+              : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50'
+          "
         >
-          <lucide-icon name="plus" class="w-5 h-5 mb-0.5"></lucide-icon>
-          <span class="text-[10px] font-medium uppercase">Custom</span>
+          <lucide-icon name="calendar" class="w-4 h-4"></lucide-icon>
+          <span>Custom Days</span>
         </button>
       }
     </div>

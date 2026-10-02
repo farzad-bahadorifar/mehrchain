@@ -92,7 +92,11 @@
   }
 
   <div class="flex justify-between text-xs text-muted-foreground mb-3 font-medium">
-    <span>{{ commitment().currentDay }} / {{ commitment().totalDays }} Days</span>
+    @if (commitment().totalDays === -1) {
+      <span>Day {{ commitment().currentDay }} • Endless Journey</span>
+    } @else {
+      <span>{{ commitment().currentDay }} / {{ commitment().totalDays }} Days</span>
+    }
     <span class="flex items-center gap-1 text-primary font-semibold">
       <lucide-icon name="sparkles" class="w-3 h-3"></lucide-icon>
       {{ commitment().currentStreak }} day streak
