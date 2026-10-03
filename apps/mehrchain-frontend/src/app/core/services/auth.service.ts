@@ -296,6 +296,60 @@ export class AuthService {
   }
 
   /**
+   * Authenticates with Google ID token.
+   */
+  async googleLogin(idToken: string): Promise<UserProfile> {
+    try {
+      const res = await firstValueFrom(
+        this.http.post<AuthResponse>(`${this.API_URL}/google`, { idToken })
+      );
+
+      localStorage.setItem(this.AUTH_KEY, JSON.stringify(res.user));
+      localStorage.setItem(this.TOKEN_KEY, res.accessToken);
+
+      this.currentUserSignal.set(res.user);
+      this.commitmentStore.loadForUser(res.user.id);
+      this.commitmentStore.syncWithBackend().catch(() => {});
+      return res.user;
+    } catch (err: any) {
+      if (this.isNetworkError(err)) {
+        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
+      }
+
+      const message =
+        err?.error?.message ||
+        (Array.isArray(err?.error?.message) ? err.error.message[0] : null) ||
+        err?.message ||
+        'Google sign-in failed. Please try again.';
+      throw new Error(message);
+    }
+  }
+
+  /**
+   * Mock Google sign-in for offline testing.
+   */
+  googleLoginOffline(email = 'tester@gmail.com', name = 'Google Tester'): UserProfile {
+    const cleanEmail = email.trim().toLowerCase();
+    const username = cleanEmail.split('@')[0];
+
+    const localProfile: UserProfile = {
+      id: `local_google_${username}`,
+      username,
+      name,
+      email: cleanEmail,
+      isEmailVerified: true,
+      createdAt: new Date().toISOString(),
+    };
+
+    localStorage.setItem(this.AUTH_KEY, JSON.stringify(localProfile));
+    localStorage.setItem(this.TOKEN_KEY, 'local_dev_token_' + Date.now());
+
+    this.currentUserSignal.set(localProfile);
+    this.commitmentStore.loadForUser(localProfile.id);
+    return localProfile;
+  }
+
+  /**
    * Authenticates user credentials with email or username.
    */
   async login(identifier: string, password?: string): Promise<UserProfile> {

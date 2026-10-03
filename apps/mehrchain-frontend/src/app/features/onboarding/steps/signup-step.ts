@@ -22,6 +22,7 @@ export class SignupStepComponent {
   readonly passwordChange = output<string>();
   readonly togglePassword = output<void>();
   readonly signUp = output<void>();
+  readonly googleSignIn = output<void>();
   readonly useDemoMode = output<void>();
   readonly switchToLogin = output<void>();
   readonly openLoginWithForgot = output<void>();

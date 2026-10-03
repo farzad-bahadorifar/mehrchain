@@ -282,42 +282,59 @@
     }
   </div>
 
-  <!-- 3. Companion Stats -->
+  <!-- 3. Milestones & Badges -->
   <div class="mb-8">
-    <div class="flex items-center gap-2 mb-3 px-1">
-      <div class="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
-        <lucide-icon name="flame" class="w-4 h-4"></lucide-icon>
+    <div class="flex items-center justify-between mb-3 px-1">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+          <lucide-icon name="trophy" class="w-4 h-4"></lucide-icon>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-foreground">Milestones & Badges</h3>
+          <p class="text-[11px] text-muted-foreground">Your achievements and companion badges</p>
+        </div>
       </div>
-      <div>
-        <h3 class="text-base font-bold text-foreground">Companion Milestones</h3>
-        <p class="text-[11px] text-muted-foreground">Your consistency and streak stats with Mero</p>
-      </div>
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+        {{ unlockedBadgesCount() }} / {{ badges().length }} Unlocked
+      </span>
     </div>
 
-    <div class="grid grid-cols-2 gap-3">
-      <!-- Streak Card -->
-      <div class="bg-card border border-border/60 rounded-2xl p-4 flex flex-col justify-between shadow-xs">
-        <div class="flex items-center justify-between text-muted-foreground mb-2">
-          <span class="text-xs font-bold">Active Streak</span>
-          <lucide-icon name="flame" class="w-4 h-4 text-orange-500"></lucide-icon>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      @for (badge of badges(); track badge.id) {
+        <div
+          class="p-3.5 rounded-2xl border transition-all flex items-center gap-3"
+          [class]="
+            badge.isUnlocked
+              ? 'bg-card border-primary/30 shadow-xs ring-1 ring-primary/15'
+              : 'bg-muted/30 border-border/40 opacity-60'
+          "
+        >
+          <div
+            class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-transform"
+            [class]="
+              badge.isUnlocked
+                ? 'bg-primary/15 text-primary shadow-sm'
+                : 'bg-muted text-muted-foreground/60'
+            "
+          >
+            <lucide-icon [name]="badge.icon" class="w-5 h-5"></lucide-icon>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-1">
+              <h4 class="text-xs font-bold text-foreground truncate">{{ badge.name }}</h4>
+              @if (badge.isUnlocked) {
+                <span class="text-[9px] font-bold text-teal-600 dark:text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md">
+                  ✓
+                </span>
+              }
+            </div>
+            <p class="text-[10px] text-muted-foreground truncate">{{ badge.description }}</p>
+            <p class="text-[9px] font-medium mt-0.5" [class]="badge.isUnlocked ? 'text-primary' : 'text-muted-foreground'">
+              {{ badge.progressText }}
+            </p>
+          </div>
         </div>
-        <div>
-          <span class="text-2xl font-black text-foreground">{{ currentStreak() }}</span>
-          <span class="text-xs text-muted-foreground ml-1">Days</span>
-        </div>
-      </div>
-
-      <!-- Active Habits Card -->
-      <div class="bg-card border border-border/60 rounded-2xl p-4 flex flex-col justify-between shadow-xs">
-        <div class="flex items-center justify-between text-muted-foreground mb-2">
-          <span class="text-xs font-bold">Active Habits</span>
-          <lucide-icon name="sparkles" class="w-4 h-4 text-amber-500"></lucide-icon>
-        </div>
-        <div>
-          <span class="text-2xl font-black text-foreground">{{ activeHabitsCount() }}</span>
-          <span class="text-xs text-muted-foreground ml-1">Habits</span>
-        </div>
-      </div>
+      }
     </div>
   </div>
 

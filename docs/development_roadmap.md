@@ -16,8 +16,8 @@
 | 2 | 9 Mehr (Oct 2) | 🟡 Profile Simplify | [[#33]](https://github.com/farzad-bahadorifar/mehrchain/issues/33) Remove color swatch grid & scroll-on-tap • Keep nickname + 21-day only | ✅ Done |
 | 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | [[#34]](https://github.com/farzad-bahadorifar/mehrchain/issues/34) Journey redesign & badges (✅) • [[#35]](https://github.com/farzad-bahadorifar/mehrchain/issues/35) "Endless Journey" + Custom duration (✅) • [[#36]](https://github.com/farzad-bahadorifar/mehrchain/issues/36) "I did it" → "Spark" + CSS animation (✅) | ✅ Done |
 | 4 | 11 Mehr (Oct 4) | 🟡 Loading UX | [[#37]](https://github.com/farzad-bahadorifar/mehrchain/issues/37) Skeleton loading • Cold start message • Shorten all UI text | ✅ Done |
-| 5 | 12 Mehr (Oct 5) | 🟢 New Features | [[#38]](https://github.com/farzad-bahadorifar/mehrchain/issues/38) Articles "Coming Soon" • [[#39]](https://github.com/farzad-bahadorifar/mehrchain/issues/39) What's New section & version dot | ⏳ Backlog |
-| 6 | 13 Mehr (Oct 6) | 🟢 Landing + Polish | [[#40]](https://github.com/farzad-bahadorifar/mehrchain/issues/40) Landing page CTA • Direct PWA/APK links • Final text review | ⏳ Backlog |
+| 5 | 12 Mehr (Oct 5) | 🟢 Connectivity & Auth | [[#41]](https://github.com/farzad-bahadorifar/mehrchain/issues/41) Cloudflare API Proxy (/api/*) (✅) • [[#43]](https://github.com/farzad-bahadorifar/mehrchain/issues/43) Google Sign-In (✅) | ✅ Done |
+| 6 | 13 Mehr (Oct 6) | 🟢 Features & Landing | [[#38]](https://github.com/farzad-bahadorifar/mehrchain/issues/38) Articles • [[#39]](https://github.com/farzad-bahadorifar/mehrchain/issues/39) What's New • [[#40]](https://github.com/farzad-bahadorifar/mehrchain/issues/40) Landing CTA & polish | ⏳ Backlog |
 | 7-8 | 14–15 Mehr (Oct 7-8) | 🧪 User Testing | 3-5 testers • Full flow: register → verify → habit → chain → spark | ⏳ Planned |
 | 9 | 16 Mehr (Oct 8) | 📦 Launch | Tag v1.0.0 • Final deployment audit • Public release | ⏳ Planned |
 
@@ -25,6 +25,8 @@
 
 | Issue | Task Title | Phase | Status | Date | Notes |
 |:-----:|------------|-------|:------:|:----:|-------|
+| [#41](https://github.com/farzad-bahadorifar/mehrchain/issues/41) | Setup Cloudflare API Proxy for backend requests (/api/*) | v1.0 Launch Sprint | ✅ Done | Oct 3 | Cloudflare Pages Functions & `_redirects` proxying `/api/*` to Render, bypassing ISP blocks in Iran |
+| [#43](https://github.com/farzad-bahadorifar/mehrchain/issues/43) | Implement Google Sign-In authentication (OAuth / One-Tap) | v1.0 Launch Sprint | ✅ Done | Oct 3 | 1-click Google OAuth / ID token login with backend verification & GoogleAuthService |
 | [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | Skeleton loading screens + cold start warmup notification + shorten UI text | v1.0 Launch Sprint | ✅ Done | Oct 3 | Skeletons for Dashboard/Chain/Journey, ColdStartService (>5s alert), Lucide icon cleanup & English text shortening |
 | [#34](https://github.com/farzad-bahadorifar/mehrchain/issues/34) | Journey page redesign & badge system foundations (5 initial badges with Lucide icons) | v1.0 Launch Sprint | ✅ Done | Oct 2 | Removed duplicate profile card, added 5-badge milestone system |
 | [#35](https://github.com/farzad-bahadorifar/mehrchain/issues/35) | Commitment duration — "Endless Journey" (-1) + Custom days | v1.0 Launch Sprint | ✅ Done | Oct 2 | Replaced presets with Endless Journey (-1) and Custom days across modals, onboarding, and backend |
@@ -107,10 +109,12 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 | [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Cold start message** | 🟡 P1 (Done) | After 5s wait: *"Waking up Mero... Free servers need a moment."* |
 | [#37](https://github.com/farzad-bahadorifar/mehrchain/issues/37) | **Text shortening** | 🟡 P1 (Done) | Review all UI text. Make everything shorter and minimal. |
 
-### Day 5: New Features
+### Day 5: Connectivity & Authentication
 
 | Issue | Task | Priority | Details |
 |:-----:|------|:--------:|---------|
+| [#41](https://github.com/farzad-bahadorifar/mehrchain/issues/41) | **Cloudflare API Proxy** | 🔴 P0 (Done) | Route `/api/*` requests via Cloudflare Pages Function & `_redirects` proxy to bypass Iranian ISP blocking on `*.onrender.com` |
+| [#43](https://github.com/farzad-bahadorifar/mehrchain/issues/43) | **Google Sign-In** | 🟡 P1 (Done) | 1-click Google OAuth / ID token login on frontend and backend verification for instant tester access |
 | [#38](https://github.com/farzad-bahadorifar/mehrchain/issues/38) | **Articles placeholder** | 🟢 P2 (Backlog) | Add "Articles — Coming Soon" card in Chain page |
 | [#39](https://github.com/farzad-bahadorifar/mehrchain/issues/39) | **What's New** | 🟢 P2 (Backlog) | Add changelog section in Profile + blue dot on Profile tab for new version |
 
@@ -210,9 +214,9 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 | Suite | Framework | Tests | Suites |
 |-------|-----------|:-----:|:------:|
-| Frontend | Vitest | 135 | 30 |
-| Backend | Jest | 88 | 11 |
-| **Total** | | **223** | **41** |
+| Frontend | Vitest | 136 | 30 |
+| Backend | Jest | 90 | 11 |
+| **Total** | | **226** | **41** |
 
 ---
 

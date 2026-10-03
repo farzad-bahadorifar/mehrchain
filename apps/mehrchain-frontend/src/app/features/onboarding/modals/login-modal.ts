@@ -25,6 +25,7 @@ export class LoginModalComponent {
   readonly passwordChange = output<string>();
   readonly togglePassword = output<void>();
   readonly login = output<void>();
+  readonly googleLogin = output<void>();
   readonly switchToSignUp = output<void>();
   readonly toggleForgotPassword = output<boolean>();
   readonly forgotEmailChange = output<string>();

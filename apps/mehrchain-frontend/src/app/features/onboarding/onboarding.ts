@@ -10,6 +10,7 @@ import {
   Users,
 } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
+import { GoogleAuthService } from '../../core/services/google-auth.service';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { MeroService } from '../../core/services/mero.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -51,6 +52,7 @@ import { VerificationModalComponent } from './modals/verification-modal';
 export class OnboardingComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private googleAuthService = inject(GoogleAuthService);
   private commitmentService = inject(CommitmentService);
   public meroService = inject(MeroService);
   private notificationService = inject(NotificationService);
@@ -226,9 +228,12 @@ export class OnboardingComponent implements OnInit {
   openCustomDuration() {
     this.isCustomDuration.set(true);
     const cur = this.selectedDuration();
-    const initialText = cur > 0 ? cur.toString() : '30';
-    this.customDurationText.set(initialText);
-    this.selectedDuration.set(parseInt(initialText, 10));
+    if (cur > 0) {
+      this.customDurationText.set(cur.toString());
+    } else {
+      this.customDurationText.set('');
+      this.selectedDuration.set(0);
+    }
   }
 
   onCustomDurationChange(val: string) {
@@ -619,6 +624,50 @@ export class OnboardingComponent implements OnInit {
       } else {
         this.loginError.set(msg);
       }
+    } finally {
+      this.isLoggingIn.set(false);
+    }
+  }
+
+  async handleGoogleSignIn() {
+    this.signUpError.set('');
+    this.isSigningUp.set(true);
+    try {
+      const user = await this.googleAuthService.signInWithGoogle();
+      if (user) {
+        // Save habit commitment if selected
+        if (this.selectedHabit() && this.selectedCategory()) {
+          await this.commitmentService.addCommitment({
+            title: this.selectedHabit()!,
+            category: this.selectedCategory() as any,
+            totalDays: this.selectedDuration(),
+            why: this.whyText(),
+            reminderTime: this.reminderTime(),
+            isPublic: this.isHabitPublic(),
+          });
+        }
+        this.meroService.setState('celebrating');
+        this.router.navigate(['/dashboard']);
+      }
+    } catch (err: any) {
+      this.signUpError.set(err?.message || 'Google sign-in failed.');
+    } finally {
+      this.isSigningUp.set(false);
+    }
+  }
+
+  async handleGoogleLogin() {
+    this.loginError.set('');
+    this.isLoggingIn.set(true);
+    try {
+      const user = await this.googleAuthService.signInWithGoogle();
+      if (user) {
+        this.isLoginModalOpen.set(false);
+        this.meroService.setState('celebrating');
+        this.router.navigate(['/dashboard']);
+      }
+    } catch (err: any) {
+      this.loginError.set(err?.message || 'Google sign-in failed.');
     } finally {
       this.isLoggingIn.set(false);
     }

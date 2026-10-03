@@ -61,9 +61,12 @@ export class NewCommitmentModal {
   toggleCustomDuration() {
     this.isCustomDuration.set(true);
     const cur = this.duration();
-    const initialText = cur > 0 ? cur.toString() : '30';
-    this.customDurationText.set(initialText);
-    this.duration.set(parseInt(initialText, 10));
+    if (cur > 0) {
+      this.customDurationText.set(cur.toString());
+    } else {
+      this.customDurationText.set('');
+      this.duration.set(0);
+    }
   }
 
   onCustomDurationInput(value: string) {

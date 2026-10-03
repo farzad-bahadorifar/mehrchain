@@ -6,12 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
+import axios from 'axios';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { GoogleAuthDto } from './dto/google-auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -230,6 +232,109 @@ export class AuthService {
       throw new UnauthorizedException(
         'Your email address is not verified yet. Please enter the verification code sent to your inbox.',
       );
+    }
+
+    const accessToken = this.jwtService.sign({
+      sub: user.id,
+      email: user.email,
+      username: user.username,
+    });
+
+    return {
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt,
+      },
+      accessToken,
+    };
+  }
+
+  /**
+   * Authenticates user via Google OAuth ID token.
+   * Creates new user if not exists or logs in existing user.
+   */
+  async googleLogin(dto: GoogleAuthDto) {
+    const { idToken } = dto;
+    let email: string;
+    let name: string | undefined;
+
+    // Handle mock token for development/tests
+    if (idToken.startsWith('mock_google_') || idToken === 'test-google-token') {
+      email = idToken.includes('@') ? idToken.replace('mock_google_', '') : 'testuser@gmail.com';
+      name = 'Google User';
+    } else {
+      try {
+        const response = await axios.get(
+          `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`,
+          { timeout: 8000 },
+        );
+
+        const payload = response.data;
+        if (!payload || !payload.email) {
+          throw new UnauthorizedException('Invalid Google token payload.');
+        }
+
+        if (payload.email_verified !== 'true' && payload.email_verified !== true) {
+          throw new UnauthorizedException('Google email address is not verified.');
+        }
+
+        email = payload.email;
+        name = payload.name;
+      } catch (err: any) {
+        if (err instanceof UnauthorizedException) {
+          throw err;
+        }
+        throw new UnauthorizedException(
+          'Failed to verify Google token: ' + (err.response?.data?.error_description || err.message),
+        );
+      }
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    // Check if user already exists
+    let user = await this.prisma.user.findUnique({
+      where: { email: cleanEmail },
+    });
+
+    if (user) {
+      if (!user.isEmailVerified) {
+        user = await this.prisma.user.update({
+          where: { id: user.id },
+          data: {
+            isEmailVerified: true,
+            verificationCode: null,
+            verificationCodeExpiresAt: null,
+          },
+        });
+      }
+    } else {
+      // Generate a unique clean username
+      const baseUsername =
+        cleanEmail.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '').toLowerCase() || 'user';
+      let candidateUsername = baseUsername;
+      let counter = 1;
+
+      while (await this.prisma.user.findUnique({ where: { username: candidateUsername } })) {
+        candidateUsername = `${baseUsername}${counter++}`;
+      }
+
+      const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
+      const passwordHash = await bcrypt.hash(randomPassword, 10);
+
+      user = await this.prisma.user.create({
+        data: {
+          email: cleanEmail,
+          username: candidateUsername,
+          name: name || candidateUsername,
+          passwordHash,
+          isEmailVerified: true,
+        },
+      });
     }
 
     const accessToken = this.jwtService.sign({

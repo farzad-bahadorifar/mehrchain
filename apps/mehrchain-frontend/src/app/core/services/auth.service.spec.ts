@@ -206,4 +206,28 @@ describe('AuthService (Frontend)', () => {
     expect(service.isLocalToken(null)).toBe(true);
     expect(service.isLocalToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...')).toBe(false);
   });
+
+  it('should call googleLogin endpoint with idToken and save session', async () => {
+    const mockUser = {
+      id: 'google-user-1',
+      name: 'Google User',
+      email: 'tester@gmail.com',
+      createdAt: new Date().toISOString(),
+    };
+
+    const googlePromise = service.googleLogin('sample_google_id_token');
+
+    const req = httpMock.expectOne('http://localhost:3000/api/auth/google');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ idToken: 'sample_google_id_token' });
+    req.flush({
+      user: mockUser,
+      accessToken: 'google_jwt_token_xyz',
+    });
+
+    const user = await googlePromise;
+    expect(user.email).toBe('tester@gmail.com');
+    expect(service.isAuthenticated()).toBe(true);
+    expect(service.getToken()).toBe('google_jwt_token_xyz');
+  });
 });

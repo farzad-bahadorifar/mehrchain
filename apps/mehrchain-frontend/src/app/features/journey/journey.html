@@ -27,58 +27,6 @@
       </div>
     </div>
 
-    <!-- Badges & Milestones Section -->
-    <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6">
-      <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-lg bg-primary/15 border border-primary/25 flex items-center justify-center text-primary">
-            <lucide-icon name="trophy" class="w-4 h-4"></lucide-icon>
-          </div>
-          <h2 class="font-bold text-base text-foreground">Milestones & Badges</h2>
-        </div>
-        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
-          {{ unlockedBadgesCount() }} / {{ badges().length }} Unlocked
-        </span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        @for (badge of badges(); track badge.id) {
-          <div
-            class="p-3 rounded-2xl border transition-all flex items-center gap-3"
-            [class]="
-              badge.isUnlocked
-                ? 'bg-card border-primary/30 shadow-xs ring-1 ring-primary/15'
-                : 'bg-muted/30 border-border/40 opacity-60'
-            "
-          >
-            <div
-              class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-transform"
-              [class]="
-                badge.isUnlocked
-                  ? 'bg-primary/15 text-primary shadow-sm'
-                  : 'bg-muted text-muted-foreground/60'
-              "
-            >
-              <lucide-icon [name]="badge.icon" class="w-5 h-5"></lucide-icon>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between gap-1">
-                <h4 class="text-xs font-bold text-foreground truncate">{{ badge.name }}</h4>
-                @if (badge.isUnlocked) {
-                  <span class="text-[9px] font-bold text-teal-600 dark:text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md">
-                    ✓
-                  </span>
-                }
-              </div>
-              <p class="text-[10px] text-muted-foreground truncate">{{ badge.description }}</p>
-              <p class="text-[9px] font-medium mt-0.5" [class]="badge.isUnlocked ? 'text-primary' : 'text-muted-foreground'">
-                {{ badge.progressText }}
-              </p>
-            </div>
-          </div>
-        }
-      </div>
-    </div>
 
     <!-- Activity Heatmap Calendar -->
     <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6">

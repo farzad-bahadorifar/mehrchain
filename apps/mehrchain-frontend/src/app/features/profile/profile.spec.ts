@@ -74,4 +74,32 @@ describe('ProfileComponent', () => {
     expect(customizationService.selectedThemeId()).toBe('golden');
     expect(component.saveFeedbackMessage()).toContain('Reset to default');
   });
+
+  it('should compute 5 initial badges with correct metadata and Lucide icons in Profile', () => {
+    const badges = component.badges();
+    expect(badges.length).toBe(5);
+
+    const badgeIds = badges.map((b) => b.id);
+    expect(badgeIds).toEqual([
+      'first-spark',
+      'chain-starter',
+      '7-day-streak',
+      '21-day-master',
+      'kind-soul',
+    ]);
+
+    const badgeIcons = badges.map((b) => b.icon);
+    expect(badgeIcons).toEqual(['sparkles', 'link', 'flame', 'trophy', 'heart']);
+  });
+
+  it('should unlock streak badges in Profile when streak reaches 7 and 21', () => {
+    streakSignal.set(21);
+    fixture.detectChanges();
+
+    const streak7 = component.badges().find((b) => b.id === '7-day-streak');
+    const streak21 = component.badges().find((b) => b.id === '21-day-master');
+
+    expect(streak7?.isUnlocked).toBe(true);
+    expect(streak21?.isUnlocked).toBe(true);
+  });
 });

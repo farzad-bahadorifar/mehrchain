@@ -1,0 +1,5 @@
+# Cloudflare Pages Edge API Proxy
+# Routes all /api/* requests directly through Cloudflare's global edge network to the Render backend,
+# eliminating ISP domain blocking and DNS leaks for users in restricted regions without requiring VPN.
+
+/api/*  https://mehrchain-api.onrender.com/api/:splat  200

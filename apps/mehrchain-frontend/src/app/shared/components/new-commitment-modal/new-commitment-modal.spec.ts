@@ -100,7 +100,11 @@ describe('NewCommitmentModal', () => {
   it('should switch between Endless Journey and Custom duration', () => {
     component.toggleCustomDuration();
     expect(component.isCustomDuration()).toBe(true);
-    expect(component.duration()).toBe(30);
+    expect(component.duration()).toBe(0);
+    expect(component.customDurationText()).toBe('');
+
+    component.onCustomDurationInput('21');
+    expect(component.duration()).toBe(21);
 
     component.setEndlessDuration();
     expect(component.isCustomDuration()).toBe(false);

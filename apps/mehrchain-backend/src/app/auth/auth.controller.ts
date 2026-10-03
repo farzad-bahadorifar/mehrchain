@@ -7,6 +7,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { GoogleAuthDto } from './dto/google-auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @ApiTags('Authentication')
@@ -51,6 +52,16 @@ export class AuthController {
   @ApiResponse({ status: 429, description: 'Too many requests — rate limit exceeded' })
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
+  }
+
+  @Post('google')
+  @Throttle({ auth: { ttl: 60000, limit: 10 } })
+  @ApiOperation({ summary: 'Authenticate or register user via Google OAuth ID token' })
+  @ApiResponse({ status: 200, description: 'User successfully authenticated with JWT accessToken' })
+  @ApiResponse({ status: 401, description: 'Invalid or unverified Google ID token' })
+  @ApiResponse({ status: 429, description: 'Too many requests — rate limit exceeded' })
+  googleLogin(@Body() dto: GoogleAuthDto) {
+    return this.authService.googleLogin(dto);
   }
 
   @Get('me')

@@ -32,7 +32,11 @@ describe('OnboardingComponent', () => {
   it('should switch between Endless Journey and custom duration', () => {
     component.openCustomDuration();
     expect(component.isCustomDuration()).toBe(true);
-    expect(component.selectedDuration()).toBe(30);
+    expect(component.selectedDuration()).toBe(0);
+    expect(component.customDurationText()).toBe('');
+
+    component.onCustomDurationChange('21');
+    expect(component.selectedDuration()).toBe(21);
 
     component.selectEndlessDuration();
     expect(component.isCustomDuration()).toBe(false);

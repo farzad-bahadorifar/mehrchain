@@ -8,11 +8,21 @@ import {
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService, ThemeMode } from '../../core/services/theme.service';
 import { CommitmentService } from '../../core/services/commitment.service';
+import { ChainService } from '../../core/services/chain.service';
 import { MeroComponent } from '../../shared/components/mero/mero';
 
 export interface PresetCustomColor {
   name: string;
   hex: string;
+}
+
+export interface ProfileBadge {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  isUnlocked: boolean;
+  progressText: string;
 }
 
 @Component({
@@ -31,6 +41,7 @@ export class ProfileComponent {
   authService = inject(AuthService);
   themeService = inject(ThemeService);
   commitmentService = inject(CommitmentService);
+  chainService = inject(ChainService);
 
   // Nickname Editing State
   nicknameInput = signal<string>(this.customization.nickname());
@@ -58,6 +69,71 @@ export class ProfileComponent {
   currentUser = this.authService.currentUser;
   currentStreak = this.commitmentService.overallStreak;
   activeHabitsCount = computed(() => this.commitmentService.commitments().length);
+
+  totalSparks = computed(() => {
+    let count = 0;
+    this.commitmentService.commitments().forEach((c) => {
+      if (c.history) count += c.history.length;
+    });
+    return count;
+  });
+
+  // 5 Initial Badges (Lucide icons only)
+  badges = computed<ProfileBadge[]>(() => {
+    const totalSparks = this.totalSparks();
+    const streak = this.currentStreak();
+    const connections = this.chainService.connections();
+    const hasPublicOrChain =
+      connections.length > 0 || this.commitmentService.commitments().some((c) => c.isPublic);
+    const hasHeartReaction = connections.some(
+      (c) => c.heartSent === true || (c.lastPartnerActivityAt && c.status === 'ACTIVE')
+    );
+
+    return [
+      {
+        id: 'first-spark',
+        name: 'First Spark',
+        description: 'Complete your first habit ever',
+        icon: 'sparkles',
+        isUnlocked: totalSparks >= 1,
+        progressText: totalSparks >= 1 ? 'Unlocked' : `${totalSparks} / 1 spark`,
+      },
+      {
+        id: 'chain-starter',
+        name: 'Chain Starter',
+        description: 'Form your first chain connection',
+        icon: 'link',
+        isUnlocked: hasPublicOrChain,
+        progressText: hasPublicOrChain ? 'Unlocked' : 'Create public habit or invite',
+      },
+      {
+        id: '7-day-streak',
+        name: '7-Day Streak',
+        description: 'Keep a flame burning for 7 days',
+        icon: 'flame',
+        isUnlocked: streak >= 7,
+        progressText: streak >= 7 ? 'Unlocked' : `${streak} / 7 days`,
+      },
+      {
+        id: '21-day-master',
+        name: '21-Day Master',
+        description: '21 days streak (unlocks custom glow)',
+        icon: 'trophy',
+        isUnlocked: streak >= 21,
+        progressText: streak >= 21 ? 'Unlocked' : `${streak} / 21 days`,
+      },
+      {
+        id: 'kind-soul',
+        name: 'Kind Soul',
+        description: 'Support a friend along the chain',
+        icon: 'heart',
+        isUnlocked: hasHeartReaction || connections.length > 0,
+        progressText: hasHeartReaction || connections.length > 0 ? 'Unlocked' : 'Support partner',
+      },
+    ];
+  });
+
+  unlockedBadgesCount = computed(() => this.badges().filter((b) => b.isUnlocked).length);
 
   // 21-day Streak progress
   isCustomThemeUnlocked = computed(() => this.currentStreak() >= 21);

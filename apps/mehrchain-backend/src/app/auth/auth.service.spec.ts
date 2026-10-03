@@ -262,6 +262,44 @@ describe('AuthService (Unit Tests)', () => {
     });
   });
 
+  describe('googleLogin', () => {
+    it('should log in existing user with mock token', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue({
+        id: 'google-user-1',
+        name: 'Google User',
+        email: 'tester@gmail.com',
+        username: 'tester',
+        isEmailVerified: true,
+        role: 'USER',
+        createdAt: new Date(),
+      });
+
+      const result = await service.googleLogin({ idToken: 'mock_google_tester@gmail.com' });
+      expect(result.user.email).toBe('tester@gmail.com');
+      expect(result.accessToken).toBe('mocked_jwt_token_123');
+    });
+
+    it('should create new verified user for first-time Google login', async () => {
+      mockPrisma.user.findUnique
+        .mockResolvedValueOnce(null) // user by email
+        .mockResolvedValueOnce(null); // username check
+
+      mockPrisma.user.create.mockResolvedValue({
+        id: 'new-google-user-id',
+        name: 'Google User',
+        email: 'newuser@gmail.com',
+        username: 'newuser',
+        isEmailVerified: true,
+        role: 'USER',
+        createdAt: new Date(),
+      });
+
+      const result = await service.googleLogin({ idToken: 'mock_google_newuser@gmail.com' });
+      expect(result.user.email).toBe('newuser@gmail.com');
+      expect(mockPrisma.user.create).toHaveBeenCalled();
+    });
+  });
+
   describe('getMe', () => {
     it('should return user profile if found', async () => {
       const mockUser = {
