@@ -102,4 +102,16 @@ describe('ProfileComponent', () => {
     expect(streak7?.isUnlocked).toBe(true);
     expect(streak21?.isUnlocked).toBe(true);
   });
+
+  it('should render and toggle the Whats New section', () => {
+    expect(component.isWhatsNewExpanded()).toBe(false);
+    component.toggleWhatsNew();
+    expect(component.isWhatsNewExpanded()).toBe(true);
+
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('What\'s New');
+    expect(compiled.textContent).toContain('v1.0.0');
+    expect(compiled.textContent).toContain('Spark Button');
+  });
 });

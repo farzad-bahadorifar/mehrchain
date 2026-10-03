@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { LucideAngularModule } from 'lucide-angular';
 import { filter } from 'rxjs';
 import { ChainService } from './core/services/chain.service';
+import { VersionService } from './core/services/version.service';
 import { ColdStartBannerComponent } from './shared/components/cold-start-banner/cold-start-banner';
 
 @Component({
@@ -14,6 +15,7 @@ import { ColdStartBannerComponent } from './shared/components/cold-start-banner/
 export class App {
   private router = inject(Router);
   public chainService = inject(ChainService);
+  public versionService = inject(VersionService);
   showNavbar = signal(false);
 
   constructor() {

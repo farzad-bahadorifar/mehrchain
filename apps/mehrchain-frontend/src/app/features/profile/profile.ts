@@ -9,6 +9,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ThemeService, ThemeMode } from '../../core/services/theme.service';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { ChainService } from '../../core/services/chain.service';
+import { VersionService } from '../../core/services/version.service';
 import { MeroComponent } from '../../shared/components/mero/mero';
 
 export interface PresetCustomColor {
@@ -42,6 +43,10 @@ export class ProfileComponent {
   themeService = inject(ThemeService);
   commitmentService = inject(CommitmentService);
   chainService = inject(ChainService);
+  versionService = inject(VersionService);
+
+  // What's New Collapsible State
+  isWhatsNewExpanded = signal<boolean>(false);
 
   // Nickname Editing State
   nicknameInput = signal<string>(this.customization.nickname());
@@ -140,6 +145,15 @@ export class ProfileComponent {
   customStreakProgress = computed(() =>
     Math.min(100, Math.round((this.currentStreak() / 21) * 100))
   );
+
+  constructor() {
+    // Clear version notification dot when opening profile
+    this.versionService.markVersionAsSeen();
+  }
+
+  toggleWhatsNew(): void {
+    this.isWhatsNewExpanded.update((v) => !v);
+  }
 
   startEditingNickname(): void {
     this.nicknameInput.set(this.customization.nickname());
