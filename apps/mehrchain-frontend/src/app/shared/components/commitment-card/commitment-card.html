@@ -125,33 +125,33 @@
     }
   </div>
 
-  <div class="flex items-center gap-2">
-    @if (commitment().isCompletedToday) {
-      <mc-button
-        variant="secondary"
-        size="md"
-        [fullWidth]="true"
-        [disabled]="true"
-        class="w-full opacity-80"
+  <div class="flex items-center gap-2 relative">
+    @if (commitment().isCompletedToday && !isSparking()) {
+      <button
+        type="button"
+        disabled
+        class="w-full py-2.5 px-4 rounded-xl bg-muted/80 text-foreground border border-border/50 text-sm font-bold flex items-center justify-center gap-2 opacity-85 select-none cursor-default animate-fade-in"
       >
-        <lucide-icon name="check" class="w-4 h-4 text-primary"></lucide-icon>
+        <lucide-icon name="check" class="w-4 h-4 text-primary animate-scale-in"></lucide-icon>
         <span>Completed ✓</span>
-      </mc-button>
+      </button>
     } @else {
-      <mc-button
-        variant="primary"
-        size="md"
-        [fullWidth]="true"
-        (clicked)="handleSpark()"
-        class="w-full spark-btn group"
+      <button
+        type="button"
+        (click)="handleSpark()"
+        [disabled]="isSparking()"
+        class="w-full py-2.5 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow-soft hover:shadow-float flex items-center justify-center gap-2 select-none active:scale-95 transition-all duration-200 cursor-pointer spark-btn group"
         [class.is-sparking]="isSparking()"
       >
         <lucide-icon
           name="sparkles"
-          class="w-5 h-5 text-primary-foreground group-hover:scale-110 transition-transform duration-200"
+          class="w-5 h-5 text-primary-foreground group-hover:scale-110 transition-transform duration-200 spark-icon"
+          [class.spark-rotate]="isSparking()"
         ></lucide-icon>
-        <span class="font-bold tracking-wide">Spark</span>
-      </mc-button>
+        <span class="font-bold tracking-wide">
+          {{ isSparking() ? 'Sparking...' : 'Spark' }}
+        </span>
+      </button>
     }
   </div>
 </mc-card>

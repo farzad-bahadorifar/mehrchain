@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, input, output, signal } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { Commitment } from '@mehrchain/shared-data';
-import { McBadgeComponent, McButtonComponent, McCardComponent } from '../../ui';
+import { McBadgeComponent, McCardComponent } from '../../ui';
 
 @Component({
   selector: 'app-commitment-card',
-  imports: [CommonModule, LucideAngularModule, McCardComponent, McButtonComponent, McBadgeComponent],
+  imports: [CommonModule, LucideAngularModule, McCardComponent, McBadgeComponent],
   templateUrl: './commitment-card.html',
   styleUrl: './commitment-card.css',
 })
@@ -31,11 +31,14 @@ export class CommitmentCardComponent {
   }
 
   handleSpark() {
+    if (this.isSparking()) return;
     this.isSparking.set(true);
-    this.onComplete.emit(this.commitment().id);
+
+    // Allow CSS scale, glow pulse, and icon spin animation to play out
     setTimeout(() => {
+      this.onComplete.emit(this.commitment().id);
       this.isSparking.set(false);
-    }, 600);
+    }, 400);
   }
 
   get progressPercent() {

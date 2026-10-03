@@ -74,14 +74,18 @@ describe('CommitmentCard', () => {
     expect(compiled.querySelector('lucide-icon[name="sparkles"]')).toBeTruthy();
   });
 
-  it('should trigger handleSpark and emit onComplete when Spark button is clicked', () => {
+  it('should trigger handleSpark and emit onComplete after animation delay', () => {
+    vi.useFakeTimers();
     const completeSpy = vi.fn();
     component.onComplete.subscribe(completeSpy);
 
     component.handleSpark();
-
-    expect(completeSpy).toHaveBeenCalledWith('comm-1');
     expect(component.isSparking()).toBe(true);
+
+    vi.advanceTimersByTime(400);
+    expect(completeSpy).toHaveBeenCalledWith('comm-1');
+    expect(component.isSparking()).toBe(false);
+    vi.useRealTimers();
   });
 
   it('should render Completed state when isCompletedToday is true', () => {
