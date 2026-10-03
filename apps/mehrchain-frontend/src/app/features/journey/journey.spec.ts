@@ -51,7 +51,8 @@ describe('Journey', () => {
   it('should not render duplicate user profile card in Journey page', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.truncate')?.textContent || '').not.toContain('Signed In');
+    const text = compiled.querySelector('.truncate')?.textContent ?? '';
+    expect(text).not.toContain('Signed In');
   });
 
   it('should toggle archived flames section', () => {
