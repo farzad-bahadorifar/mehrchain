@@ -49,6 +49,7 @@ import {
   RefreshCw,
   WifiOff,
   Trophy,
+  BookOpen,
 } from 'lucide-angular';
 
 export const commonTestProviders = [
@@ -102,6 +103,7 @@ export const commonTestProviders = [
       RefreshCw,
       WifiOff,
       Trophy,
+      BookOpen,
     })
   ),
 ];

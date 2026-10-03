@@ -17,7 +17,7 @@
 | 3 | 10 Mehr (Oct 3) | 🟡 Journey + Spark | [[#34]](https://github.com/farzad-bahadorifar/mehrchain/issues/34) Journey redesign & badges (✅) • [[#35]](https://github.com/farzad-bahadorifar/mehrchain/issues/35) "Endless Journey" + Custom duration (✅) • [[#36]](https://github.com/farzad-bahadorifar/mehrchain/issues/36) "I did it" → "Spark" + CSS animation (✅) | ✅ Done |
 | 4 | 11 Mehr (Oct 4) | 🟡 Loading UX & Badges Polish | [[#37]](https://github.com/farzad-bahadorifar/mehrchain/issues/37) Skeleton loading • Cold start message • Shorten all UI text (✅) • [[#42]](https://github.com/farzad-bahadorifar/mehrchain/issues/42) Move Badges to Profile • Streak card cleanup • Custom duration placeholder (✅) | ✅ Done |
 | 5 | 12 Mehr (Oct 5) | 🟢 Connectivity & Auth | [[#41]](https://github.com/farzad-bahadorifar/mehrchain/issues/41) Cloudflare API Proxy (/api/*) (✅) • [[#43]](https://github.com/farzad-bahadorifar/mehrchain/issues/43) Google Sign-In (✅) | ✅ Done |
-| 6 | 13 Mehr (Oct 6) | 🟢 Features & Landing | [[#38]](https://github.com/farzad-bahadorifar/mehrchain/issues/38) Articles • [[#39]](https://github.com/farzad-bahadorifar/mehrchain/issues/39) What's New • [[#40]](https://github.com/farzad-bahadorifar/mehrchain/issues/40) Landing CTA & polish | ⏳ Backlog |
+| 6 | 13 Mehr (Oct 6) | 🟢 Features & Landing | [[#38]](https://github.com/farzad-bahadorifar/mehrchain/issues/38) Articles (✅) • [[#39]](https://github.com/farzad-bahadorifar/mehrchain/issues/39) What's New • [[#40]](https://github.com/farzad-bahadorifar/mehrchain/issues/40) Landing CTA & polish | ⏳ Backlog |
 | 7-8 | 14–15 Mehr (Oct 7-8) | 🧪 User Testing | 3-5 testers • Full flow: register → verify → habit → chain → spark | ⏳ Planned |
 | 9 | 16 Mehr (Oct 8) | 📦 Launch | Tag v1.0.0 • Final deployment audit • Public release | ⏳ Planned |
 
@@ -25,6 +25,7 @@
 
 | Issue | Task Title | Phase | Status | Date | Notes |
 |:-----:|------------|-------|:------:|:----:|-------|
+| [#38](https://github.com/farzad-bahadorifar/mehrchain/issues/38) | Articles "Coming Soon" placeholder card in Chain page | v1.0 Launch Sprint | ✅ Done | Oct 3 | Added minimal Mindful Reads / Articles Coming Soon card with Lucide book-open icon at bottom of Chain |
 | [#42](https://github.com/farzad-bahadorifar/mehrchain/issues/42) | Move Badges to Profile + clean dashboard streak card + custom duration placeholder | v1.0 Launch Sprint | ✅ Done | Oct 3 | Moved Milestones & Badges to Profile, cleaned redundant flame icon from streak card, set custom duration placeholder to 'e.g. 21' |
 | [#41](https://github.com/farzad-bahadorifar/mehrchain/issues/41) | Setup Cloudflare API Proxy for backend requests (/api/*) | v1.0 Launch Sprint | ✅ Done | Oct 3 | Cloudflare Pages Functions & `_redirects` proxying `/api/*` to Render, bypassing ISP blocks in Iran |
 | [#43](https://github.com/farzad-bahadorifar/mehrchain/issues/43) | Implement Google Sign-In authentication (OAuth / One-Tap) | v1.0 Launch Sprint | ✅ Done | Oct 3 | 1-click Google OAuth / ID token login with backend verification & GoogleAuthService |
@@ -116,7 +117,7 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 |:-----:|------|:--------:|---------|
 | [#41](https://github.com/farzad-bahadorifar/mehrchain/issues/41) | **Cloudflare API Proxy** | 🔴 P0 (Done) | Route `/api/*` requests via Cloudflare Pages Function & `_redirects` proxy to bypass Iranian ISP blocking on `*.onrender.com` |
 | [#43](https://github.com/farzad-bahadorifar/mehrchain/issues/43) | **Google Sign-In** | 🟡 P1 (Done) | 1-click Google OAuth / ID token login on frontend and backend verification for instant tester access |
-| [#38](https://github.com/farzad-bahadorifar/mehrchain/issues/38) | **Articles placeholder** | 🟢 P2 (Backlog) | Add "Articles — Coming Soon" card in Chain page |
+| [#38](https://github.com/farzad-bahadorifar/mehrchain/issues/38) | **Articles placeholder** | 🟢 P2 (Done) | Add "Articles — Coming Soon" card in Chain page |
 | [#39](https://github.com/farzad-bahadorifar/mehrchain/issues/39) | **What's New** | 🟢 P2 (Backlog) | Add changelog section in Profile + blue dot on Profile tab for new version |
 
 ### Day 6: Landing & Polish
@@ -215,9 +216,9 @@ All deployment infrastructure is set up on **free-tier** services, sufficient fo
 
 | Suite | Framework | Tests | Suites |
 |-------|-----------|:-----:|:------:|
-| Frontend | Vitest | 136 | 30 |
+| Frontend | Vitest | 137 | 30 |
 | Backend | Jest | 90 | 11 |
-| **Total** | | **226** | **41** |
+| **Total** | | **227** | **41** |
 
 ---
 

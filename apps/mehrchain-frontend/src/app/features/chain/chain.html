@@ -139,6 +139,26 @@
     }
   </div>
 
+  <!-- ARTICLES PLACEHOLDER (Issue #38) -->
+  <div class="mt-6 p-4 rounded-2xl bg-card border border-border/60 shadow-xs relative overflow-hidden">
+    <div class="flex items-start gap-3.5">
+      <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+        <lucide-icon name="book-open" class="w-5 h-5"></lucide-icon>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 mb-1">
+          <h3 class="text-xs font-extrabold text-foreground tracking-tight">Articles</h3>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+            Coming Soon
+          </span>
+        </div>
+        <p class="text-xs text-muted-foreground leading-relaxed">
+          Short reads about kindness, habit chaining, and human connection.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   @if (toastMessage()) {
     <div class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-2 z-50 animate-fade-in">

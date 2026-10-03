@@ -70,4 +70,11 @@ describe('ChainComponent', () => {
     component.showToast('Test Toast Notification');
     expect(component.toastMessage()).toBe('Test Toast Notification');
   });
+
+  it('should render the Articles Coming Soon placeholder card', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Articles');
+    expect(compiled.textContent).toContain('Coming Soon');
+    expect(compiled.textContent).toContain('Short reads about kindness, habit chaining, and human connection.');
+  });
 });
