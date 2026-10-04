@@ -13,15 +13,17 @@
 
 The target is a **private field test with 5–10 friends and family this week**, preceded by a two-account internal smoke test. October 8 remains a **conditional** v1.0 target, not an automatic release date. A visible habit or chain in local storage does not count as a passed database test.
 
-| Target | Gate | Required evidence | Decision |
-|--------|------|-------------------|----------|
-| Oct 4 | Establish production truth | Identify deployed backend revision, Render database target, actual tables/schema, and migration state without changing data | If unknown, do not treat production as ready |
-| Oct 4–5 | Restore production foundation | Safe database migration and current backend deployment; public API routes answer with expected status codes | If blocked, move the field test |
-| Oct 5–6 | Complete real account and solo habit path | Real authentication, database-backed habit creation, Spark, sign-out/sign-in, and second-browser reload | If any action only survives in local storage, stop |
-| Oct 6–7 | Complete two-user chain path | Server-issued invite code, acceptance by another account, connections visible after reload for both users | If the chain is local-only, stop |
-| Oct 7 | Internal smoke test | Two accounts on separate browsers/devices pass the full flow; deletion and failure paths checked | Invite external testers only after pass |
-| Oct 7–8 | Private field test | 5–10 testers; record completion rate, blockers, and data persistence evidence | Fix blocking defects before release |
-| Oct 8 | Conditional public launch | All release gates pass on deployed frontend, backend, and database | Otherwise postpone the tag and announcement |
+| Target | Assignment & Issue | Gate | Required evidence | Decision | Status |
+|--------|-------------------|------|-------------------|----------|:------:|
+| Oct 4 | [[#46]](https://github.com/farzad-bahadorifar/mehrchain/issues/46) R0 | Establish production truth | Identify deployed backend revision, Render database target, actual tables/schema, and migration state without changing data | If unknown, do not treat production as ready | 🔄 In Progress |
+| Oct 4–5 | [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47) R1 | Restore production foundation | Safe database migration and current backend deployment; public API routes answer with expected status codes | If blocked, move the field test | ⏳ Ready |
+| Oct 5–6 | [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48) R2 & [[#49]](https://github.com/farzad-bahadorifar/mehrchain/issues/49) R3 | Complete real account & auth | Real authentication, Google web client ID, no mock fallback, database-backed user identity | If any auth path relies on mock tokens or disclosed OTP, stop | ⏳ Ready |
+| Oct 5–6 | [[#50]](https://github.com/farzad-bahadorifar/mehrchain/issues/50) R4 | Complete solo habit path | Database-backed habit creation (`isPublic`), Spark, sign-out/sign-in, and second-browser reload | If any action only survives in local storage, stop | ⏳ Ready |
+| Oct 6–7 | [[#51]](https://github.com/farzad-bahadorifar/mehrchain/issues/51) R5 | Complete two-user chain path | Server-issued invite code, acceptance by another account, connections visible after reload for both users | If the chain is local-only, stop | ⏳ Ready |
+| Oct 7 | [[#52]](https://github.com/farzad-bahadorifar/mehrchain/issues/52) R6 | Heart & deletion isolation | Verified Heart reaction persistence, account deletion cascading cleanup and user cache isolation | If data leaks across accounts or deletion fails, stop | ⏳ Ready |
+| Oct 7 | [[#53]](https://github.com/farzad-bahadorifar/mehrchain/issues/53) R7 | Internal smoke test | Two accounts on separate browsers/devices pass the full flow; deletion and failure paths checked | Invite external testers only after pass | ⏳ Ready |
+| Oct 7–8 | [[#54]](https://github.com/farzad-bahadorifar/mehrchain/issues/54) R8 | Private field test | 5–10 testers; record completion rate, blockers, and data persistence evidence | Fix blocking defects before release | ⏳ Ready (Decision Gate) |
+| Oct 8 | Launch Gate | Conditional public launch | All release gates pass on deployed frontend, backend, and database | Otherwise postpone the tag and announcement | ⏳ Conditional |
 
 **Minimum field-test journey:** real sign-up or Google sign-in → create a public or private habit → Spark → sign out and sign back in → see the same account and habit → create a server-issued chain invite → second real account accepts with its own habit → both accounts see the connection after refresh → send a heart → delete a test account and confirm cleanup. A solo user must be able to complete the account and habit journey without creating a chain.
 
@@ -115,7 +117,19 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Priority:** P0 blocks the private field test. P1 should be fixed before public launch, or the related feature must be explicitly excluded from the test. P2 remains post-launch. Each assignment below is narrow enough to run and review separately.
 
-### R0 — Establish production truth (P0, read-only, Oct 4)
+| Assignment | GitHub Issue | Priority | Target Date | Depends on | Status |
+|:----------:|:------------:|:--------:|:-----------:|:----------:|:------:|
+| **R0** | [#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46) | 🔴 P0 | Oct 4 | None | 🔄 In Progress |
+| **R1** | [#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47) | 🔴 P0 | Oct 4–5 | R0 ([#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46)) | ⏳ Ready |
+| **R2** | [#48](https://github.com/farzad-bahadorifar/mehrchain/issues/48) | 🔴 P0 | Oct 5 | R1 ([#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47)) | ⏳ Ready |
+| **R3** | [#49](https://github.com/farzad-bahadorifar/mehrchain/issues/49) | 🔴 P0 | Oct 5–6 | R2 ([#48](https://github.com/farzad-bahadorifar/mehrchain/issues/48)) | ⏳ Ready |
+| **R4** | [#50](https://github.com/farzad-bahadorifar/mehrchain/issues/50) | 🔴 P0 | Oct 5–6 | R1, R2, R3 | ⏳ Ready |
+| **R5** | [#51](https://github.com/farzad-bahadorifar/mehrchain/issues/51) | 🔴 P0 | Oct 6–7 | R4 ([#50](https://github.com/farzad-bahadorifar/mehrchain/issues/50)) | ⏳ Ready |
+| **R6** | [#52](https://github.com/farzad-bahadorifar/mehrchain/issues/52) | 🔴 P0 | Oct 7 | R5 ([#51](https://github.com/farzad-bahadorifar/mehrchain/issues/51)) | ⏳ Ready |
+| **R7** | [#53](https://github.com/farzad-bahadorifar/mehrchain/issues/53) | 🔴 P0 | Oct 7 | R0–R6 | ⏳ Ready |
+| **R8** | [#54](https://github.com/farzad-bahadorifar/mehrchain/issues/54) | 🔴 P0 | Oct 7–8 | R7 ([#53](https://github.com/farzad-bahadorifar/mehrchain/issues/53)) | ⏳ Ready (Decision Gate) |
+
+### R0 — Establish production truth (P0, read-only, Oct 4) • [[#46]](https://github.com/farzad-bahadorifar/mehrchain/issues/46)
 
 **Scope:** `render.yaml`, Cloudflare Pages configuration, the deployed Render service/revision, and the exact Neon database used by Render. No schema changes or account creation.
 
@@ -123,7 +137,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** A reviewer can identify the active backend revision, Render's database target, and actual schema state. `404` on `POST /api/auth/google` is resolved to a deployment/routing cause before any auth debugging continues. If database access is unavailable, record **unverified**, not **missing**.
 
-### R1 — Make schema deployment safe and repeatable (P0, depends on R0, Oct 4–5)
+### R1 — Make schema deployment safe and repeatable (P0, depends on R0, Oct 4–5) • [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47)
 
 **Scope:** `apps/mehrchain-backend/prisma/schema.prisma`, its migration directory, deployment documentation/configuration, and any existing initialization scripts. Preserve existing user data.
 
@@ -131,7 +145,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** `users`, `commitments`, logs, chains, and invites have the required schema; deployment has no destructive automatic schema push; a second deployment does not damage or duplicate data. Record the migration version and rollback/restore procedure. A historical migration directory without current chain schema is not sufficient proof.
 
-### R2 — Secure and deploy real authentication (P0, depends on R1, Oct 5)
+### R2 — Secure and deploy real authentication (P0, depends on R1, Oct 5) • [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48)
 
 **Scope:** backend auth controller/service, auth DTOs, mail behavior, auth-focused tests, and Render configuration; keep unrelated endpoints untouched.
 
@@ -139,7 +153,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** Mock/invalid tokens cannot create sessions in production; a real valid token maps repeated logins to the same database user ID; OTP responses do not disclose the code in production; an arbitrary code cannot mint a token. The deployed public route matches the current source.
 
-### R3 — Configure the frontend's real sign-in path (P0, depends on R2, Oct 5–6)
+### R3 — Configure the frontend's real sign-in path (P0, depends on R2, Oct 5–6) • [[#49]](https://github.com/farzad-bahadorifar/mehrchain/issues/49)
 
 **Scope:** frontend production environment/build configuration, Google sign-in service, sign-up/login screens, and focused tests.
 
@@ -149,7 +163,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Authentication fallback for the deadline:** If Google Cloud setup cannot be completed in time, use email/password only after real OTP delivery to each tester works. An auto-filled `previewCode` or demo account is not an acceptable substitute for a real account test. If neither real route works, defer external testing.
 
-### R4 — Persist the solo habit journey and make failures honest (P0, depends on R1–R3, Oct 5–6)
+### R4 — Persist the solo habit journey and make failures honest (P0, depends on R1–R3, Oct 5–6) • [[#50]](https://github.com/farzad-bahadorifar/mehrchain/issues/50)
 
 **Scope:** backend commitment create/update DTO and service, frontend commitment store and onboarding/dashboard error handling, focused tests.
 
@@ -157,7 +171,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** A public habit is actually stored with `isPublic=true`; a private habit remains private. Its server ID, Spark count/date, and history survive sign-out/sign-in and a different browser. A failed API write cannot show an unqualified success or generate a chain invite for a local-only ID. A solo account can use the product without a partner.
 
-### R5 — Use server-issued invites for the entire chain flow (P0, depends on R4, Oct 6–7)
+### R5 — Use server-issued invites for the entire chain flow (P0, depends on R4, Oct 6–7) • [[#51]](https://github.com/farzad-bahadorifar/mehrchain/issues/51)
 
 **Scope:** frontend ChainService, ChainComponent, InviteSection and QR/share UI, plus only the backend chain behavior required for the flow.
 
@@ -165,7 +179,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** Two real users in separate browsers each see the same new chain after refresh; the invite is a server record and its code is distinct from the sender's habit ID; expired/invalid/self-invite attempts fail visibly. Share, Copy, and QR contain the same valid URL. The backend refuses a non-public sender habit.
 
-### R6 — Verify heart, deletion, and user data isolation (P0, Oct 7)
+### R6 — Verify heart, deletion, and user data isolation (P0, Oct 7) • [[#52]](https://github.com/farzad-bahadorifar/mehrchain/issues/52)
 
 **Scope:** chain reaction persistence, account deletion endpoint, Prisma relationships, frontend auth/chain/customization cache cleanup, and focused tests.
 
@@ -173,7 +187,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** Deletion succeeds only after a successful backend response, removes the account's related data according to the documented policy, invalidates its access, and leaves no deleted user's content visible on reload or account switch. Heart behavior persists across reload for the intended users.
 
-### R7 — Deploy and run a two-account release smoke test (P0, depends on R0–R6, Oct 7)
+### R7 — Deploy and run a two-account release smoke test (P0, depends on R0–R6, Oct 7) • [[#53]](https://github.com/farzad-bahadorifar/mehrchain/issues/53)
 
 **Scope:** current frontend/backend releases and an API-level or browser-level regression script limited to the release journey.
 
@@ -181,7 +195,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** Every critical action passes on deployed services and survives a reload; no `Tester Google`, mock token, local-only habit, or local-only chain appears in the test. Record failures with reproduction steps. Unit-test totals alone do not satisfy this gate.
 
-### R8 — Run the private field test and decide on launch (P0 decision gate, Oct 7–8)
+### R8 — Run the private field test and decide on launch (P0 decision gate, Oct 7–8) • [[#54]](https://github.com/farzad-bahadorifar/mehrchain/issues/54)
 
 **Scope:** 5–10 invited friends/family; no new feature work during the test except blocker fixes.
 
