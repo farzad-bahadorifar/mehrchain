@@ -10,8 +10,7 @@ import { ThemeService, ThemeMode } from '../../core/services/theme.service';
 import { CommitmentService } from '../../core/services/commitment.service';
 import { ChainService } from '../../core/services/chain.service';
 import { VersionService } from '../../core/services/version.service';
-import { ProfileMeroComponent } from './profile-mero/profile-mero';
-import { MeroMoodService } from '../../core/services/mero-mood.service';
+import { MeroComponent } from '../../shared/components/mero/mero';
 
 export interface PresetCustomColor {
   name: string;
@@ -33,7 +32,7 @@ export interface ProfileBadge {
     CommonModule,
     FormsModule,
     LucideAngularModule,
-    ProfileMeroComponent,
+    MeroComponent,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
@@ -45,7 +44,6 @@ export class ProfileComponent {
   commitmentService = inject(CommitmentService);
   chainService = inject(ChainService);
   versionService = inject(VersionService);
-  meroMood = inject(MeroMoodService);
 
   // What's New Collapsible State
   isWhatsNewExpanded = signal<boolean>(false);
