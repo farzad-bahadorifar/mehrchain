@@ -44,12 +44,6 @@
   opacity: 0.85;
 }
 
-/* Physical Squish & Spring Touch */
-.mero-squished {
-  transform: scale(1.18, 0.82) translateY(5px) !important;
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-}
-
 /* Keyframes (Only for Triggered Events) */
 @keyframes mero-glow-celebrate {
   0%, 100% {

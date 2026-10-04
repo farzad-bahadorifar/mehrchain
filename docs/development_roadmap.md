@@ -25,6 +25,7 @@
 
 | Issue | Task Title | Phase | Status | Date | Notes |
 |:-----:|------------|-------|:------:|:----:|-------|
+| [#45](https://github.com/farzad-bahadorifar/mehrchain/issues/45) | Profile Mero Mood System — Remove squish, add Three.js mood particles | v1.0 Launch Sprint | ✅ Done | Oct 4 | Removed Mero squish-on-click globally. Added MeroMoodService (sad/happy/kind) + ProfileMeroComponent with Three.js WebGL particles on Profile page only. Mood driven by daily sparks + chain heart support |
 | [#40](https://github.com/farzad-bahadorifar/mehrchain/issues/40) | Update landing page + final English text review + root README | v1.0 Launch Sprint | ✅ Done | Oct 3 | Updated GitHub Pages landing page (v1.0.0, Mero hero, philosophy), verified 100% English text across monorepo, updated root README.md |
 | [#39](https://github.com/farzad-bahadorifar/mehrchain/issues/39) | "What's New" section in Profile + version dot indicator | v1.0 Launch Sprint | ✅ Done | Oct 3 | Added collapsible What's New changelog to Profile and blue notification dot on navbar Profile tab with VersionService |
 | [#38](https://github.com/farzad-bahadorifar/mehrchain/issues/38) | Articles "Coming Soon" placeholder card in Chain page | v1.0 Launch Sprint | ✅ Done | Oct 3 | Added minimal Mindful Reads / Articles Coming Soon card with Lucide book-open icon at bottom of Chain |

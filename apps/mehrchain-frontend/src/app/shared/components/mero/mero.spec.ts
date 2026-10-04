@@ -31,7 +31,7 @@ describe('MeroComponent', () => {
     expect(component.sizeClasses()).toBe('w-10 h-10');
   });
 
-  it('should trigger squish effect on click when interactive', () => {
+  it('should emit tap on click when interactive', () => {
     let tapEmitted = false;
     component.onTap.subscribe(() => {
       tapEmitted = true;
@@ -40,11 +40,10 @@ describe('MeroComponent', () => {
     const event = new MouseEvent('click');
     component.handleClick(event);
 
-    expect(component.isSquished()).toBe(true);
     expect(tapEmitted).toBe(true);
   });
 
-  it('should not squish or emit tap when interactive is false', () => {
+  it('should not emit tap when interactive is false', () => {
     fixture.componentRef.setInput('interactive', false);
     fixture.detectChanges();
 
@@ -56,7 +55,6 @@ describe('MeroComponent', () => {
     const event = new MouseEvent('click');
     component.handleClick(event);
 
-    expect(component.isSquished()).toBe(false);
     expect(tapEmitted).toBe(false);
   });
 

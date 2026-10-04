@@ -6,7 +6,6 @@ import {
   input,
   OnInit,
   output,
-  signal,
 } from '@angular/core';
 import { MeroService, MeroState } from '../../../core/services/mero.service';
 import { MeroCustomizationService } from '../../../core/services/mero-customization.service';
@@ -33,9 +32,6 @@ export class MeroComponent implements OnInit {
 
   // Outputs
   onTap = output<void>();
-
-  // Internal reactive states
-  isSquished = signal<boolean>(false);
 
   // Computed state (uses explicit state input or falls back to MeroService)
   effectiveState = computed<MeroState>(() => {
@@ -76,16 +72,11 @@ export class MeroComponent implements OnInit {
   }
 
   /**
-   * Handle user tap / click with physical squish & bounce feedback
+   * Handle user tap / click
    */
   handleClick(e: MouseEvent): void {
     if (!this.interactive()) return;
     e.stopPropagation();
-
-    // Playful squish effect
-    this.isSquished.set(true);
-    setTimeout(() => this.isSquished.set(false), 260);
-
     this.onTap.emit();
   }
 }

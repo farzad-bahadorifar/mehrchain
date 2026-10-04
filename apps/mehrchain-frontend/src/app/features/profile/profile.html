@@ -47,12 +47,7 @@
     <div class="relative z-10 flex flex-col items-center text-center">
       <!-- Live Mero Mascot -->
       <div class="relative mb-3">
-        <app-mero
-          size="hero"
-          [showGlow]="true"
-          [floating]="true"
-          [interactive]="true"
-        />
+        <app-profile-mero [mood]="meroMood.mood()" />
       </div>
 
       <!-- Companion Nickname Editor -->
