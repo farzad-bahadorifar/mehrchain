@@ -15,9 +15,9 @@ The target is a **private field test with 5–10 friends and family this week**,
 
 | Target | Assignment & Issue | Gate | Required evidence | Decision | Status |
 |--------|-------------------|------|-------------------|----------|:------:|
-| Oct 4 | [[#46]](https://github.com/farzad-bahadorifar/mehrchain/issues/46) R0 | Establish production truth | Identify deployed backend revision, Render database target, actual tables/schema, and migration state without changing data | If unknown, do not treat production as ready | 🔄 In Progress |
-| Oct 4–5 | [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47) R1 | Restore production foundation | Safe database migration and current backend deployment; public API routes answer with expected status codes | If blocked, move the field test | ⏳ Ready |
-| Oct 5–6 | [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48) R2 & [[#49]](https://github.com/farzad-bahadorifar/mehrchain/issues/49) R3 | Complete real account & auth | Real authentication, Google web client ID, no mock fallback, database-backed user identity | If any auth path relies on mock tokens or disclosed OTP, stop | ⏳ Ready |
+| Oct 4 | [[#46]](https://github.com/farzad-bahadorifar/mehrchain/issues/46) R0 | Establish production truth | Identify deployed backend revision, Render database target, actual tables/schema, and migration state without changing data | If unknown, do not treat production as ready | ✅ Done |
+| Oct 4–5 | [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47) R1 | Restore production foundation | Safe database migration and current backend deployment; public API routes answer with expected status codes | If blocked, move the field test | ✅ Done |
+| Oct 5–6 | [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48) R2 & [[#49]](https://github.com/farzad-bahadorifar/mehrchain/issues/49) R3 | Complete real account & auth | Real authentication, Google web client ID, no mock fallback, database-backed user identity | If any auth path relies on mock tokens or disclosed OTP, stop | 🔄 In Progress |
 | Oct 5–6 | [[#50]](https://github.com/farzad-bahadorifar/mehrchain/issues/50) R4 | Complete solo habit path | Database-backed habit creation (`isPublic`), Spark, sign-out/sign-in, and second-browser reload | If any action only survives in local storage, stop | ⏳ Ready |
 | Oct 6–7 | [[#51]](https://github.com/farzad-bahadorifar/mehrchain/issues/51) R5 | Complete two-user chain path | Server-issued invite code, acceptance by another account, connections visible after reload for both users | If the chain is local-only, stop | ⏳ Ready |
 | Oct 7 | [[#52]](https://github.com/farzad-bahadorifar/mehrchain/issues/52) R6 | Heart & deletion isolation | Verified Heart reaction persistence, account deletion cascading cleanup and user cache isolation | If data leaks across accounts or deletion fails, stop | ⏳ Ready |
@@ -119,9 +119,9 @@ The following is an audit snapshot, not a claim that all production services wor
 
 | Assignment | GitHub Issue | Priority | Target Date | Depends on | Status |
 |:----------:|:------------:|:--------:|:-----------:|:----------:|:------:|
-| **R0** | [#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46) | 🔴 P0 | Oct 4 | None | 🔄 In Progress |
-| **R1** | [#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47) | 🔴 P0 | Oct 4–5 | R0 ([#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46)) | ⏳ Ready |
-| **R2** | [#48](https://github.com/farzad-bahadorifar/mehrchain/issues/48) | 🔴 P0 | Oct 5 | R1 ([#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47)) | ⏳ Ready |
+| **R0** | [#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46) | 🔴 P0 | Oct 4 | None | ✅ Done |
+| **R1** | [#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47) | 🔴 P0 | Oct 4–5 | R0 ([#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46)) | ✅ Done |
+| **R2** | [#48](https://github.com/farzad-bahadorifar/mehrchain/issues/48) | 🔴 P0 | Oct 5 | R1 ([#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47)) | 🔄 In Progress |
 | **R3** | [#49](https://github.com/farzad-bahadorifar/mehrchain/issues/49) | 🔴 P0 | Oct 5–6 | R2 ([#48](https://github.com/farzad-bahadorifar/mehrchain/issues/48)) | ⏳ Ready |
 | **R4** | [#50](https://github.com/farzad-bahadorifar/mehrchain/issues/50) | 🔴 P0 | Oct 5–6 | R1, R2, R3 | ⏳ Ready |
 | **R5** | [#51](https://github.com/farzad-bahadorifar/mehrchain/issues/51) | 🔴 P0 | Oct 6–7 | R4 ([#50](https://github.com/farzad-bahadorifar/mehrchain/issues/50)) | ⏳ Ready |
@@ -129,7 +129,7 @@ The following is an audit snapshot, not a claim that all production services wor
 | **R7** | [#53](https://github.com/farzad-bahadorifar/mehrchain/issues/53) | 🔴 P0 | Oct 7 | R0–R6 | ⏳ Ready |
 | **R8** | [#54](https://github.com/farzad-bahadorifar/mehrchain/issues/54) | 🔴 P0 | Oct 7–8 | R7 ([#53](https://github.com/farzad-bahadorifar/mehrchain/issues/53)) | ⏳ Ready (Decision Gate) |
 
-### R0 — Establish production truth (P0, read-only, Oct 4) • [[#46]](https://github.com/farzad-bahadorifar/mehrchain/issues/46)
+### R0 — Establish production truth (P0, read-only, Oct 4) • [[#46]](https://github.com/farzad-bahadorifar/mehrchain/issues/46) ✅ Done
 
 **Scope:** `render.yaml`, Cloudflare Pages configuration, the deployed Render service/revision, and the exact Neon database used by Render. No schema changes or account creation.
 
@@ -137,7 +137,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** A reviewer can identify the active backend revision, Render's database target, and actual schema state. `404` on `POST /api/auth/google` is resolved to a deployment/routing cause before any auth debugging continues. If database access is unavailable, record **unverified**, not **missing**.
 
-### R1 — Make schema deployment safe and repeatable (P0, depends on R0, Oct 4–5) • [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47)
+### R1 — Make schema deployment safe and repeatable (P0, depends on R0, Oct 4–5) • [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47) ✅ Done
 
 **Scope:** `apps/mehrchain-backend/prisma/schema.prisma`, its migration directory, deployment documentation/configuration, and any existing initialization scripts. Preserve existing user data.
 
@@ -145,7 +145,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** `users`, `commitments`, logs, chains, and invites have the required schema; deployment has no destructive automatic schema push; a second deployment does not damage or duplicate data. Record the migration version and rollback/restore procedure. A historical migration directory without current chain schema is not sufficient proof.
 
-### R2 — Secure and deploy real authentication (P0, depends on R1, Oct 5) • [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48)
+### R2 — Secure and deploy real authentication (P0, depends on R1, Oct 5) • [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48) 🔄 In Progress
 
 **Scope:** backend auth controller/service, auth DTOs, mail behavior, auth-focused tests, and Render configuration; keep unrelated endpoints untouched.
 
