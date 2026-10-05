@@ -1,28 +1,61 @@
 # MehrChain — Development Roadmap
 
 > From v0.9.0-preview to production-ready v1.0 and beyond.
-> Updated: 2026-10-04
+> Updated: 2026-10-06 (Asia/Tehran)
 > Target Audience: English-speaking users
-> Release status: **Recovery work in progress.** Code-complete items below are not evidence of a working production flow.
+> Release status: **Backend and PWA deployed; internal acceptance pending. APK build succeeded; Android authentication unverified.** Final v1.0.0 is not yet approved.
+
+---
+
+## Current checkpoint — October 6, 2026
+
+This checkpoint supersedes the dated implementation/audit notes below. Tomorrow means **October 7** in Tehran. The PWA is ready for an internal acceptance attempt; the 5–10-person wave starts only after two real independent accounts pass. APK packaging is already successful and does not require a new version tag.
+
+**Resume here:** [Detailed test and release handoff](v1_test_and_release_handoff.md), including completed work, exact revisions, private-file locations, owners, steps, failure branches and pass criteria. [Execution evidence](v1_launch_execution_plan.md) and [field protocol](field_test_protocol.md) provide supporting detail.
+
+| Area | Verified as of October 6 | Still required |
+| --- | --- | --- |
+| Backend / Render | Live revision `483f6c4dce26b87154fb8ea0dcc50cb05b512dd6`; direct GET /api=200; invalid Google idToken=401 | Real authenticated HTTP habit/chain journey |
+| PWA / Pages | Production `742177338d9d9035e78c626dfff191dfa420a21d`; difference from backend is docs only; proxy GET /api=200; automatic deployments restored to Enabled | Clean Chrome profiles, stable account persistence, mobile acceptance |
+| Database | Verified actual Render target initially empty; fresh backup, baseline + daily-heart migration, repeat deploy and zero schema drift | Future data-bearing restore rehearsal; take fresh backups before further mutations |
+| Google | Same public Web Client ID in Render and Pages; official GIS panel renders with it | Owner rotates disclosed Client Secret; two valid real-account logins (not yet observed) |
+| Email | Resend has no verified sending domain | Not an available route for arbitrary testers; use Google/PWA for this wave |
+| Habit / Chain / Heart | 3-account real-service test on rehearsal passed shared link, simultaneous Spark deduplication, received hearts, daily expiry, ownership, invite cancellation and isolated disconnect | Two-browser production flow, account switching/deletion and network failure paths |
+| Automated checks | Backend 102 tests/12 files; frontend 151 tests/31 files; both production builds passed | These do not close R7 or R8 |
+| Android APK | [Run 37374644940](https://github.com/farzad-bahadorifar/mehrchain/actions/runs/37374644940) succeeded on `7421773`; artifact `mehrchain-apk-builds` exists | Download/install on real Android, confirm auth; select debug APK for internal tests if no signed release exists |
+| Security | Runtime dependency audit: 19 advisories, 14 High, zero Critical | Assess exposure and disposition; no security clearance inferred from the counts |
+
+**Core behavior now implemented:** chain requires both users' public habits; one unexpired shared invite can connect multiple distinct partners; completion is visible to supporters; hearts are received per reciprocal connection for the UTC day. Disconnecting one pair leaves others. Reads derive calendar state after Render sleep; Chain polls about every 15 seconds while open. Full implementation notes and limits are in the handoff.
+
+### October 7 plan and release decision
+
+1. Owner rotates the disclosed Google secret and records completion without sending its value. No new Client Secret is needed in this frontend/backend sign-in flow.
+2. Two clean Chrome profiles/devices: valid Google login, solo habit/Spark, sign-out/in and cross-browser persistence, public reciprocal chain, received hearts, cache isolation, failure paths and disposable-account deletion. Close/reopen all PWA windows to pick up the new bundle.
+3. In parallel, download the existing successful APK artifact and test on a real phone. If embedded Google sign-in fails, implement a reviewed native/system-browser auth path or declare this test PWA-only. Client ID/CORS alone do not resolve WebView restrictions.
+4. Review runtime advisories and recovery gaps. Fix any exposed P0 before expanding. Record every untested item and accepted release limitation.
+5. After R7 passes, run 2–3 people first, then expand to 5–10 under the field protocol. Record VPN/network stage, free Render cold start, mobile and solo/paired results; collect aliases, not secrets.
+6. Tag `v1.0.0` only after the accepted deployment, release scope, version/signing and R7/R8 evidence are reviewed. If a gate fails, move the final release date; the October 8 target remains conditional.
+
+**APK/tag caution:** main pushes and `workflow_dispatch` with `publish_release=false` already build artifacts. A pushed `v*` tag publishes a GitHub Release. The current workflow mistakenly treats `v1.0.0-rc.*` as non-prerelease because it checks only the `v1.` prefix; correct that before publishing an RC. Android `versionCode=1` / `versionName="1.0"` are not automatically updated by a Git tag. No final tag or official release was created in this session.
 
 ---
 
 ## 📅 Master Schedule & Timeline
 
-### Revised release gates (as of October 4, 2026)
+### Revised release gates (updated October 6, 2026)
 
 The target is a **private field test with 5–10 friends and family this week**, preceded by a two-account internal smoke test. October 8 remains a **conditional** v1.0 target, not an automatic release date. A visible habit or chain in local storage does not count as a passed database test.
 
 | Target  | Assignment & Issue                                                                                                                            | Gate                          | Required evidence                                                                                                           | Decision                                                      |                              Status                              |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | :--------------------------------------------------------------: |
-| Oct 4   | [[#46]](https://github.com/farzad-bahadorifar/mehrchain/issues/46) R0                                                                         | Establish production truth    | Identify deployed backend revision, Render database target, actual tables/schema, and migration state without changing data | If unknown, do not treat production as ready                  |                             ✅ Done                              |
-| Oct 4–5 | [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47) R1                                                                         | Restore production foundation | Safe database migration and current backend deployment; public API routes answer with expected status codes                 | If blocked, move the field test                               |    Local migration tooling ready; production upgrade pending     |
-| Oct 5–6 | [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48) R2 & [[#49]](https://github.com/farzad-bahadorifar/mehrchain/issues/49) R3 | Complete real account & auth  | Real authentication, Google web client ID, no mock fallback, database-backed user identity                                  | If any auth path relies on mock tokens or disclosed OTP, stop | Local implementation verified; provider setup/deployment pending |
-| Oct 5–6 | [[#50]](https://github.com/farzad-bahadorifar/mehrchain/issues/50) R4                                                                         | Complete solo habit path      | Database-backed habit creation (`isPublic`), Spark, sign-out/sign-in, and second-browser reload                             | If any action only survives in local storage, stop            |    Local implementation verified; production evidence pending    |
-| Oct 6–7 | [[#51]](https://github.com/farzad-bahadorifar/mehrchain/issues/51) R5                                                                         | Complete two-user chain path  | Server-issued invite code, acceptance by another account, connections visible after reload for both users                   | If the chain is local-only, stop                              |    Local implementation verified; production evidence pending    |
-| Oct 7   | [[#52]](https://github.com/farzad-bahadorifar/mehrchain/issues/52) R6                                                                         | Heart & deletion isolation    | Verified Heart reaction persistence, account deletion cascading cleanup and user cache isolation                            | If data leaks across accounts or deletion fails, stop         |    Local implementation verified; production evidence pending    |
-| Oct 7   | [[#53]](https://github.com/farzad-bahadorifar/mehrchain/issues/53) R7                                                                         | Internal smoke test           | Two accounts on separate browsers/devices pass the full flow; deletion and failure paths checked                            | Invite external testers only after pass                       |          Smoke script ready; deployed execution pending          |
-| Oct 7–8 | [[#54]](https://github.com/farzad-bahadorifar/mehrchain/issues/54) R8                                                                         | Private field test            | 5–10 testers; record completion rate, blockers, and data persistence evidence                                               | Fix blocking defects before release                           |                Protocol ready; human test pending                |
+| Oct 4   | [[#46]](https://github.com/farzad-bahadorifar/mehrchain/issues/46) R0                                                                         | Establish production truth    | Identify deployed backend revision, Render database target, actual tables/schema, and migration state without changing data | If unknown, do not treat production as ready                  | Verified actual target and live deployment |
+| Oct 4–5 | [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47) R1                                                                         | Restore production foundation | Safe database migration and current backend deployment; public API routes answer with expected status codes                 | If blocked, move the field test                               | Production migrated and live; empty recovery drill passed; populated restore pending |
+| Oct 5–6 | [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48) R2 & [[#49]](https://github.com/farzad-bahadorifar/mehrchain/issues/49) R3 | Complete real account & auth  | Real authentication, Google web client ID, no mock fallback, database-backed user identity                                  | If any auth path relies on mock tokens or disclosed OTP, stop | Google configured/deployed; real account acceptance pending |
+| Oct 5–6 | [[#50]](https://github.com/farzad-bahadorifar/mehrchain/issues/50) R4                                                                         | Complete solo habit path      | Database-backed habit creation (`isPublic`), Spark, sign-out/sign-in, and second-browser reload                             | If any action only survives in local storage, stop            | Deployed + rehearsal concurrency passed; production browser acceptance pending |
+| Oct 6–7 | [[#51]](https://github.com/farzad-bahadorifar/mehrchain/issues/51) R5                                                                         | Complete two-user chain path  | Server-issued invite code, acceptance by another account, connections visible after reload for both users                   | If the chain is local-only, stop                              | Deployed shared invite + 3-account rehearsal passed; production acceptance pending |
+| Oct 7   | [[#52]](https://github.com/farzad-bahadorifar/mehrchain/issues/52) R6                                                                         | Heart & deletion isolation    | Verified Heart reaction persistence, account deletion cascading cleanup and user cache isolation                            | If data leaks across accounts or deletion fails, stop         | Received daily hearts + disconnect rehearsal passed; production deletion/isolation pending |
+| Oct 7   | [[#53]](https://github.com/farzad-bahadorifar/mehrchain/issues/53) R7                                                                         | Internal smoke test           | Two accounts on separate browsers/devices pass the full flow; deletion and failure paths checked                            | Invite external testers only after pass                       | Real two-account production acceptance not yet executed |
+| Oct 7–8 | [[#54]](https://github.com/farzad-bahadorifar/mehrchain/issues/54) R8                                                                         | Private field test            | 5–10 testers; record completion rate, blockers, and data persistence evidence                                               | Fix blocking defects before release                           | Human results pending; start only after R7 passes |
 | Oct 8   | Launch Gate                                                                                                                                   | Conditional public launch     | All release gates pass on deployed frontend, backend, and database                                                          | Otherwise postpone the tag and announcement                   |                          ⏳ Conditional                          |
 
 **Minimum field-test journey:** real sign-up or Google sign-in → create a public or private habit → Spark → sign out and sign back in → see the same account and habit → create a server-issued chain invite → second real account accepts with its own habit → both accounts see the connection after refresh → send a heart → delete a test account and confirm cleanup. A solo user must be able to complete the account and habit journey without creating a chain.
@@ -85,9 +118,9 @@ The statuses in this historical table describe repository work recorded at the t
 
 ---
 
-## Production readiness snapshot (October 4, 2026)
+## Historical production audit (October 4, 2026; superseded by October 6 checkpoint)
 
-The following is an audit snapshot, not a claim that all production services work. Recheck it after each deployment. The previous claim that the infrastructure was complete and sized for hundreds of users was not validated by an end-to-end production test.
+The following records the October 4 baseline, not current deployment state. Use the October 6 checkpoint and detailed handoff for continuation. The previous claim that the infrastructure was complete and sized for hundreds of users was not validated by an end-to-end production test.
 
 | Component                   | What is known                                                                                                                                                                            | What must still be proved                                                                                                                                                                                                                     |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -119,15 +152,15 @@ The following is an audit snapshot, not a claim that all production services wor
 
 | Assignment |                           GitHub Issue                           | Priority | Target Date |                              Depends on                               |                             Status                             |
 | :--------: | :--------------------------------------------------------------: | :------: | :---------: | :-------------------------------------------------------------------: | :------------------------------------------------------------: |
-|   **R0**   | [#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46) |  🔴 P0   |    Oct 4    |                                 None                                  |                            ✅ Done                             |
-|   **R1**   | [#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47) |  🔴 P0   |   Oct 4–5   | R0 ([#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46)) |   Local migration tooling ready; production upgrade pending    |
-|   **R2**   | [#48](https://github.com/farzad-bahadorifar/mehrchain/issues/48) |  🔴 P0   |    Oct 5    | R1 ([#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47)) |                         🔄 In Progress                         |
-|   **R3**   | [#49](https://github.com/farzad-bahadorifar/mehrchain/issues/49) |  🔴 P0   |   Oct 5–6   | R2 ([#48](https://github.com/farzad-bahadorifar/mehrchain/issues/48)) |                            ⏳ Ready                            |
-|   **R4**   | [#50](https://github.com/farzad-bahadorifar/mehrchain/issues/50) |  🔴 P0   |   Oct 5–6   |                              R1, R2, R3                               |   Local implementation verified; production evidence pending   |
-|   **R5**   | [#51](https://github.com/farzad-bahadorifar/mehrchain/issues/51) |  🔴 P0   |   Oct 6–7   | R4 ([#50](https://github.com/farzad-bahadorifar/mehrchain/issues/50)) |   Local implementation verified; production evidence pending   |
-|   **R6**   | [#52](https://github.com/farzad-bahadorifar/mehrchain/issues/52) |  🔴 P0   |    Oct 7    | R5 ([#51](https://github.com/farzad-bahadorifar/mehrchain/issues/51)) |   Local implementation verified; production evidence pending   |
-|   **R7**   | [#53](https://github.com/farzad-bahadorifar/mehrchain/issues/53) |  🔴 P0   |    Oct 7    |                                 R0–R6                                 |         Smoke script ready; deployed execution pending         |
-|   **R8**   | [#54](https://github.com/farzad-bahadorifar/mehrchain/issues/54) |  🔴 P0   |   Oct 7–8   | R7 ([#53](https://github.com/farzad-bahadorifar/mehrchain/issues/53)) | Smoke script ready; deployed execution pending (Decision Gate) |
+|   **R0**   | [#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46) |  🔴 P0   |    Oct 4    |                                 None                                  | Verified actual target and live deployment |
+|   **R1**   | [#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47) |  🔴 P0   |   Oct 4–5   | R0 ([#46](https://github.com/farzad-bahadorifar/mehrchain/issues/46)) | Production migrated and live; empty recovery drill passed; populated restore pending |
+|   **R2**   | [#48](https://github.com/farzad-bahadorifar/mehrchain/issues/48) |  🔴 P0   |    Oct 5    | R1 ([#47](https://github.com/farzad-bahadorifar/mehrchain/issues/47)) | Provider configured/deployed; invalid token rejected; real login pending |
+|   **R3**   | [#49](https://github.com/farzad-bahadorifar/mehrchain/issues/49) |  🔴 P0   |   Oct 5–6   | R2 ([#48](https://github.com/farzad-bahadorifar/mehrchain/issues/48)) | Pages Client ID deployed; real Chrome sign-in pending |
+|   **R4**   | [#50](https://github.com/farzad-bahadorifar/mehrchain/issues/50) |  🔴 P0   |   Oct 5–6   |                              R1, R2, R3                               | Deployed + rehearsal concurrency passed; production browser acceptance pending |
+|   **R5**   | [#51](https://github.com/farzad-bahadorifar/mehrchain/issues/51) |  🔴 P0   |   Oct 6–7   | R4 ([#50](https://github.com/farzad-bahadorifar/mehrchain/issues/50)) | Deployed shared invite + 3-account rehearsal passed; production acceptance pending |
+|   **R6**   | [#52](https://github.com/farzad-bahadorifar/mehrchain/issues/52) |  🔴 P0   |    Oct 7    | R5 ([#51](https://github.com/farzad-bahadorifar/mehrchain/issues/51)) | Received daily hearts + disconnect rehearsal passed; production deletion/isolation pending |
+|   **R7**   | [#53](https://github.com/farzad-bahadorifar/mehrchain/issues/53) |  🔴 P0   |    Oct 7    |                                 R0–R6                                 | Real two-account production acceptance not yet executed |
+|   **R8**   | [#54](https://github.com/farzad-bahadorifar/mehrchain/issues/54) |  🔴 P0   |   Oct 7–8   | R7 ([#53](https://github.com/farzad-bahadorifar/mehrchain/issues/53)) | Human results pending; start only after R7 passes |
 
 ### R0 — Establish production truth (P0, read-only, Oct 4) • [[#46]](https://github.com/farzad-bahadorifar/mehrchain/issues/46) ✅ Done
 
@@ -137,7 +170,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **Acceptance:** A reviewer can identify the active backend revision, Render's database target, and actual schema state. `404` on `POST /api/auth/google` is resolved to a deployment/routing cause before any auth debugging continues. If database access is unavailable, record **unverified**, not **missing**.
 
-### R1 — Make schema deployment safe and repeatable (P0, depends on R0, Oct 4–5) • [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47) Local migration tooling ready; production upgrade pending
+### R1 — Make schema deployment safe and repeatable (P0, depends on R0, Oct 4–5) • [[#47]](https://github.com/farzad-bahadorifar/mehrchain/issues/47) Production initialization deployed; populated recovery pending
 
 **Scope:** `apps/mehrchain-backend/prisma/schema.prisma`, its migration directory, deployment documentation/configuration, and any existing initialization scripts. Preserve existing user data.
 
@@ -147,7 +180,7 @@ The following is an audit snapshot, not a claim that all production services wor
 
 **October 5 review:** Reopened the Done claim. Read-only inspection of the local configured Neon target found all tables (4 users, 8 habits, 13 logs), two missing acceptance foreign keys, `users.name` nullability drift, and an incorrect legacy baseline checksum. Prepared an isolated release baseline, an additive SQL patch and a backup-only script. Follow [database migration procedure](database_migration_procedure.md); no production DDL, reset, history rewrite, or deployment was performed. Fresh-branch replay, existing-branch upgrade and recovery rehearsal remain acceptance gates.
 
-### R2 — Secure and deploy real authentication (P0, depends on R1, Oct 5) • [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48) Local implementation verified; provider setup/deployment pending
+### R2 — Secure and deploy real authentication (P0, depends on R1, Oct 5) • [[#48]](https://github.com/farzad-bahadorifar/mehrchain/issues/48) Deployed; real Google account acceptance pending
 
 **Scope:** backend auth controller/service, auth DTOs, mail behavior, auth-focused tests, and Render configuration; keep unrelated endpoints untouched.
 
@@ -245,9 +278,9 @@ The owner has no Google Web Client ID or production OTP provider configuration y
 - Before inviting anyone October 7: run R7 script and two-browser manual checks; record actual revisions and evidence. All critical failures must be fixed and rerun.
 - October 7–8: conduct R8 in two waves. If provider setup or R7 remains blocked, move the external test date; do not convert a local test pass into a production readiness claim.
 
-### Remaining work: executable handoff sequence
+### Original executable handoff sequence — updated progress notes
 
-All items below are still pending. Run one assignment at a time; record evidence before moving forward. The existing code changes have local tests, but no production deployment or human test has been completed. References are repository-relative.
+The original M1–M8 instructions below are retained for context. Current progress: M1 done; M2 Google configuration deployed, real login pending and email unavailable; M3 fresh-branch replay and empty recovery drill done, populated recovery pending; M4 production initialization done; M5 backend then frontend deployed; M6/M7 real browser/human acceptance pending; M8 no final release decision. Follow the October 6 checkpoint and detailed handoff instead of repeating completed initialization. References are repository-relative.
 
 #### M1 — Review and save the local implementation (#47–#54)
 
@@ -314,7 +347,7 @@ Related roadmap issues: #47–#54.
 
 **Owner action:** Push the reviewed commit when ready, select it in the deployment providers, and verify connected repository/branch settings. Deploy Render first; deploy Pages after the backend is healthy. If pushes trigger automatic releases, temporarily use manual deployment control for this sequence.
 
-**Handoff:** "Use render.yaml's build/start configuration and Node 22. Confirm runtime variables and the active database target; schema migration must already be complete. Record the deployed backend SHA and inspect startup logs without exposing secrets. Probe GET /api and deliberately invalid POST /api/auth/google; invalid auth should reject with an auth/validation status rather than a missing-route 404. In Pages set the chosen production build variables and build with npx nx build mehrchain-frontend --configuration=production --skip-nx-cache; set the publish directory to dist/mehrchain-frontend/browser (confirmed from the local production build). Preserve existing Pages Function/proxy packaging. Verify the app calls https://mehrchain.pages.dev/api and the proxy reaches the current backend. Record the frontend revision."
+**Handoff:** "Reconcile render.yaml and the actual dashboard build/start configuration. The observed live runtime is Node 20.20.2; local/CI use Node 22. Do not assume a version change has been deployed. Confirm runtime variables and the active database target; schema migration must already be complete. Record the deployed backend SHA and inspect startup logs without exposing secrets. Probe GET /api and deliberately invalid POST /api/auth/google; invalid auth should reject with an auth/validation status rather than a missing-route 404. In Pages set the chosen production build variables and build with npx nx build mehrchain-frontend --configuration=production --skip-nx-cache; set the publish directory to dist/mehrchain-frontend/browser (confirmed from the local production build). Preserve existing Pages Function/proxy packaging. Verify the app calls https://mehrchain.pages.dev/api and the proxy reaches the current backend. Record the frontend revision."
 
 **Pass evidence:** Actual public route responses and both deployment revisions. If requests time out, inspect Render health/cold start and Pages proxy configuration, then reproduce from the owner's browser/network. A timeout does not prove a route is missing. A rebuild is required after changing the Google build variable; an old cached bundle is not evidence of the new ID.
 
@@ -491,15 +524,15 @@ These entries describe completed implementation work and are superseded by the R
 
 ---
 
-## Historical test suite status
+## Test suite status — October 6 checkpoint
 
-The counts below were recorded in the earlier roadmap. Re-run the suites and record current counts during R7; passing unit tests do not prove the deployed database journey.
+Current local verification: both production builds passed; the suites below passed. Successful Android CI run is linked in the current checkpoint. Passing unit tests do not prove the real-account production journey.
 
 | Suite     | Framework |  Tests  | Suites |
 | --------- | --------- | :-----: | :----: |
-| Frontend  | Vitest    |   143   |   31   |
-| Backend   | Jest      |   90    |   11   |
-| **Total** |           | **233** | **42** |
+| Frontend  | Vitest    |   151   |   31   |
+| Backend   | Jest      |   102   |   12   |
+| **Total** |           | **253** | **43** |
 
 ---
 
