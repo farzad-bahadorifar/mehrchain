@@ -191,10 +191,12 @@ export class ChainService {
   async sendNudge(userId: string, connectionId: string) {
     const connection = await this.prisma.chainConnection.findUnique({
       where: { id: connectionId, userId },
+      include: { partnerCommitment: true },
     });
 
     if (!connection) throw new NotFoundException('Connection not found');
-    if (connection.status !== ChainStatus.FADING && connection.status !== ChainStatus.COMPLETED) {
+    const status = chainState(connection)?.status ?? connection.status;
+    if (status !== ChainStatus.FADING && status !== ChainStatus.COMPLETED) {
       throw new BadRequestException('Can only nudge when partner is fading or completed');
     }
 

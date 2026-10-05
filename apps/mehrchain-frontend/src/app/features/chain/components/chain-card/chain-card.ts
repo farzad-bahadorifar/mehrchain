@@ -8,6 +8,7 @@ export type ChainCardVisualState =
   | 'WAITING'
   | 'RESTING'
   | 'FADING'
+  | 'DORMANT'
   | 'JOURNEY_COMPLETED';
 
 @Component({
@@ -69,6 +70,11 @@ export class ChainCardComponent {
       new Date(lastCompleted).toISOString().slice(0, 10) === new Date().toISOString().slice(0, 10)
     ) {
       return 'COMPLETED_TODAY';
+    }
+    if (
+      conn.status === 'DORMANT' || (conn.consecutiveMissedDays ?? 0) >= 3
+    ) {
+      return 'DORMANT';
     }
     if (
       conn.status === 'FADING' ||

@@ -355,6 +355,8 @@ describe('ChainService (Unit Tests)', () => {
         id: 'conn-1',
         userId: 'user-1',
         status: ChainStatus.ACTIVE,
+        createdAt: new Date(),
+        partnerCommitment: { lastCompletedDate: null },
       });
 
       await expect(service.sendNudge('user-1', 'conn-1')).rejects.toThrow(BadRequestException);
@@ -366,6 +368,8 @@ describe('ChainService (Unit Tests)', () => {
         id: 'conn-1',
         userId: 'user-1',
         status: ChainStatus.FADING,
+        createdAt: new Date(Date.now() - 2 * 86400000),
+        partnerCommitment: { lastCompletedDate: null },
         lastNudgeSentAt: recentNudge,
       });
 
@@ -377,6 +381,8 @@ describe('ChainService (Unit Tests)', () => {
         id: 'conn-1',
         userId: 'user-1',
         status: ChainStatus.FADING,
+        createdAt: new Date(Date.now() - 2 * 86400000),
+        partnerCommitment: { lastCompletedDate: null },
         lastNudgeSentAt: null,
       });
       mockPrisma.chainConnection.update.mockResolvedValue({
@@ -391,6 +397,16 @@ describe('ChainService (Unit Tests)', () => {
         data: { lastNudgeSentAt: expect.any(Date) },
       });
       expect(result).toBeDefined();
+    });
+
+    it('allows a fading reminder after the server missed cron', async () => {
+      mockPrisma.chainConnection.findUnique.mockResolvedValue({
+        id: 'conn-1', userId: 'user-1', status: ChainStatus.ACTIVE,
+        createdAt: new Date(Date.now() - 2 * 86400000),
+        partnerCommitment: { lastCompletedDate: null }, lastNudgeSentAt: null,
+      });
+      await service.sendNudge('user-1', 'conn-1');
+      expect(mockPrisma.chainConnection.update).toHaveBeenCalled();
     });
 
     it('should send nudge if connection is COMPLETED and previous nudge was sent >24h ago', async () => {

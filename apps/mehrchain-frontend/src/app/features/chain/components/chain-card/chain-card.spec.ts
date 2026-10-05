@@ -226,4 +226,14 @@ describe('ChainCardComponent', () => {
     expect(disconnectedId).toBe('conn-123');
     expect(component.isMenuOpen()).toBe(false);
   });
+
+  it('does not offer an unavailable reminder for dormant connections', () => {
+    fixture.componentRef.setInput('connection', {
+      ...baseConnection, status: 'DORMANT', consecutiveMissedDays: 3,
+    });
+    fixture.detectChanges();
+    expect(component.visualState()).toBe('DORMANT');
+    expect(fixture.nativeElement.textContent).toContain('Taking a break');
+    expect(fixture.nativeElement.textContent).not.toContain('Send Gentle Reminder');
+  });
 });

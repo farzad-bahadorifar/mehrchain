@@ -137,6 +137,13 @@
       </button>
     }
 
+    @if (visualState() === 'DORMANT') {
+      <div class="flex items-center gap-2 text-muted-foreground">
+        <span class="w-2 h-2 rounded-full bg-muted-foreground/60 shrink-0"></span>
+        <span>Taking a break</span>
+      </div>
+    }
+
     <!-- State 5: Journey Completed -->
     @if (visualState() === 'JOURNEY_COMPLETED') {
       <div class="flex items-center gap-1.5 text-primary font-medium">

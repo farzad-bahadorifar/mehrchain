@@ -197,3 +197,13 @@ Three.js و تصویر badge، مقالات، طراحی جدید، چندزبا
 - Render free service lifecycle: https://render.com/docs/free
 - Capacitor server configuration: https://capacitorjs.com/docs/config
 - Neon branching concepts: https://neon.com/blog/instant-branches-schema-only-or-with-data-the-choice-is-yours
+
+### Executed deployment, 6 October 2026
+
+- Core changes pushed as a511100649569899fac7f9f1d7842f9da5b10fac. Render deployed this revision successfully; GET /api returned 200.
+- Confirmed production was initially empty. Fresh backup, both release migrations, repeat deploy and schema diff all passed. Recovery drill reproduced the empty pre-change snapshot; populated data recovery is not proven.
+- Rehearsal service integration passed with three disposable accounts: shared invite, concurrent Spark deduplication, received hearts, daily expiry, ownership, invite cancellation and isolated disconnect. This is not a two-account Google browser test.
+- Reminder follow-up uses the same calendar state as the read API; dormant cards hide unavailable reminders.
+- APK workflow now receives the public Google Client ID. Google authentication in the APK remains unverified.
+- Pages automatic deployments were temporarily paused for backend-first order. Restore after the final backend revision is live, then trigger a fresh frontend build.
+- Remaining acceptance: two independent real Google browser accounts, followed by the initial human test wave. Credential rotation must be completed by the owner; no new secret is needed in the project.
