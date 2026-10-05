@@ -17,395 +17,270 @@ export interface CommitmentState {
   commitments: Commitment[];
   archivedCommitments: Commitment[];
   isLoading: boolean;
+  syncError: string | null;
   activeUserId: string | null;
 }
-
 const initialState: CommitmentState = {
   commitments: [],
   archivedCommitments: [],
   isLoading: false,
+  syncError: null,
   activeUserId: null,
 };
-
 export function getUserStorageKey(userId: string): string {
   return `mehrchain_commitments_${userId}`;
 }
-
 export function getUserArchivedStorageKey(userId: string): string {
   return `mehrchain_archived_commitments_${userId}`;
 }
-
 export function isRemoteToken(token: string | null): boolean {
-  if (!token) return false;
-  return !token.startsWith('local_') && !token.startsWith('mock_');
+  return !!token && !token.startsWith('local_') && !token.startsWith('mock_');
 }
-
-function loadCommitmentsFromStorage(userId: string): Commitment[] {
+function readCache(key: string): Commitment[] {
   try {
-    const raw = localStorage.getItem(getUserStorageKey(userId));
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) {
-        return parsed;
-      }
-    }
-  } catch (e) {
-    console.error('[CommitmentStore] Failed to load local cache for user', userId, e);
+    const value = JSON.parse(localStorage.getItem(key) || '[]');
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
   }
-  return [];
 }
-
-function loadArchivedCommitmentsFromStorage(userId: string): Commitment[] {
-  try {
-    const raw = localStorage.getItem(getUserArchivedStorageKey(userId));
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) {
-        return parsed;
-      }
-    }
-  } catch (e) {
-    console.error('[CommitmentStore] Failed to load local archived cache for user', userId, e);
-  }
-  return [];
-}
-
 export const CommitmentStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed((store) => ({
     hasAnyCommitment: computed(() => store.commitments().length > 0),
-    overallStreak: computed(() => {
-      const list = store.commitments();
-      return list.length > 0 ? Math.max(...list.map((c) => c.currentStreak || 0)) : 0;
-    }),
+    overallStreak: computed(() =>
+      Math.max(0, ...store.commitments().map((c) => c.currentStreak || 0)),
+    ),
   })),
   withMethods((store) => {
     const http = inject(HttpClient);
-    const coldStartService = inject(ColdStartService);
-    const API_URL = `${environment.apiUrl}/commitments`;
-
+    const coldStart = inject(ColdStartService);
+    const API = `${environment.apiUrl}/commitments`;
+    const remote = () => {
+      const token = localStorage.getItem('mehrchain_auth_token_v1');
+      if (environment.production && !isRemoteToken(token))
+        throw new Error('Please sign in to save your habit.');
+      return isRemoteToken(token);
+    };
+    // Apply writes only after server confirmation, and reject replies from an earlier session.
+    async function confirmed<T>(request: () => Promise<T>): Promise<T> {
+      const user = store.activeUserId();
+      const token = localStorage.getItem('mehrchain_auth_token_v1');
+      coldStart.startRequest();
+      try {
+        const result = await request();
+        if (
+          store.activeUserId() !== user ||
+          localStorage.getItem('mehrchain_auth_token_v1') !== token
+        )
+          throw new Error('Your session changed. Please reload.');
+        return result;
+      } finally {
+        coldStart.finishRequest();
+      }
+    }
+    function record(value: Commitment): Commitment {
+      if (!value?.id)
+        throw new Error(
+          'The server did not confirm the saved habit. Please reload before retrying.',
+        );
+      return value;
+    }
+    let mutationVersion = 0;
+    const completionRequests = new Map<string, Promise<void>>();
     return {
-      /**
-       * Initializes store for a specific authenticated user from isolated local cache.
-       */
       loadForUser(userId: string): void {
-        const cached = loadCommitmentsFromStorage(userId);
-        const cachedArchived = loadArchivedCommitmentsFromStorage(userId);
         patchState(store, {
           activeUserId: userId,
-          commitments: cached,
-          archivedCommitments: cachedArchived,
+          syncError: null,
+          commitments: readCache(getUserStorageKey(userId)),
+          archivedCommitments: readCache(getUserArchivedStorageKey(userId)),
         });
       },
-
-      /**
-       * Fetches latest user commitments from backend API if authenticated with remote token.
-       */
       async syncWithBackend(): Promise<void> {
-        const token = localStorage.getItem('mehrchain_auth_token_v1');
-        if (!isRemoteToken(token)) return;
-
-        coldStartService.startRequest();
+        if (!remote()) return;
+        patchState(store, { isLoading: true, syncError: null });
+        const user = store.activeUserId();
+        const version = mutationVersion;
         try {
-          patchState(store, { isLoading: true });
-          const remoteData = await firstValueFrom(http.get<Commitment[]>(API_URL));
-
-          if (Array.isArray(remoteData)) {
-            patchState(store, { commitments: remoteData, isLoading: false });
-          } else {
-            patchState(store, { isLoading: false });
-          }
-        } catch (err) {
-          console.warn('[CommitmentStore] Background sync failed, using cached data.', err);
-          patchState(store, { isLoading: false });
+          const data = await confirmed(() => firstValueFrom(http.get<Commitment[]>(API)));
+          if (!Array.isArray(data)) throw new Error('Unable to load habits.');
+          if (version === mutationVersion) patchState(store, { commitments: data });
+        } catch {
+          if (store.activeUserId() === user)
+            patchState(store, { syncError: 'Could not refresh habits. Showing saved cache.' });
         } finally {
-          coldStartService.finishRequest();
+          if (store.activeUserId() === user) patchState(store, { isLoading: false });
         }
       },
-
-      /**
-       * Creates a new commitment via backend API and caches locally.
-       */
       async addCommitment(data: Partial<Commitment>): Promise<Commitment> {
-        const localCommitment: Commitment = {
-          id: crypto.randomUUID(),
-          title: data.title!,
-          totalDays: data.totalDays || 21,
-          currentDay: 0,
-          currentStreak: 0,
-          isCompletedToday: false,
-          category: data.category as any,
+        const payload = {
+          title: data.title,
+          category: data.category,
           why: data.why,
-          rippleEffects: data.rippleEffects,
-          startDate: new Date().toISOString(),
+          totalDays: data.totalDays ?? 21,
           reminderTime: data.reminderTime,
-          isPublic: data.isPublic !== undefined ? data.isPublic : false,
-          history: [],
+          isPublic: data.isPublic ?? false,
         };
-
-        // Optimistic state update
-        patchState(store, {
-          commitments: [localCommitment, ...store.commitments()],
-        });
-
-        // Send to backend if authenticated with remote token
-        try {
-          const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (isRemoteToken(token)) {
-            const payload = {
-              title: localCommitment.title,
-              category: localCommitment.category,
-              why: localCommitment.why,
-              totalDays: localCommitment.totalDays,
-              reminderTime: localCommitment.reminderTime,
-              isPublic: localCommitment.isPublic,
-            };
-
-            const serverRecord = await firstValueFrom(
-              http.post<Commitment>(API_URL, payload)
-            );
-
-            if (serverRecord && serverRecord.id) {
-              patchState(store, {
-                commitments: store
-                  .commitments()
-                  .map((c) => (c.id === localCommitment.id ? serverRecord : c)),
-              });
-              return serverRecord;
-            }
-          }
-        } catch (err) {
-          console.warn('[CommitmentStore] Failed to persist to backend, retained locally.', err);
-        }
-
-        return localCommitment;
+        const saved = remote()
+          ? record(await confirmed(() => firstValueFrom(http.post<Commitment>(API, payload))))
+          : ({
+              ...payload,
+              id: crypto.randomUUID(),
+              currentDay: 0,
+              currentStreak: 0,
+              isCompletedToday: false,
+              startDate: new Date().toISOString(),
+              history: [],
+            } as Commitment);
+        mutationVersion++;
+        patchState(store, { commitments: [saved, ...store.commitments()] });
+        return saved;
       },
-
-      /**
-       * Marks a commitment completed today via backend API.
-       */
-      async completeCommitment(id: string, note?: string): Promise<void> {
-        const today = new Date().toISOString();
-
-        // Optimistic local update
-        patchState(store, {
-          commitments: store.commitments().map((c) => {
-            if (c.id === id && !c.isCompletedToday) {
-              return {
-                ...c,
-                currentStreak: (c.currentStreak || 0) + 1,
-                currentDay:
-                  c.totalDays === -1
-                    ? (c.currentDay || 0) + 1
-                    : Math.min((c.currentDay || 0) + 1, c.totalDays),
-                isCompletedToday: true,
-                history: [...(c.history || []), today],
-              };
-            }
-            return c;
-          }),
-        });
-
-        // Sync with backend API if remote token is present
-        try {
-          const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (isRemoteToken(token)) {
-            const updated = await firstValueFrom(
-              http.patch<Commitment>(`${API_URL}/${id}/complete`, { note })
-            );
-
-            if (updated) {
-              patchState(store, {
-                commitments: store
-                  .commitments()
-                  .map((c) => (c.id === id ? { ...c, ...updated, isCompletedToday: true } : c)),
-              });
-            }
-          }
-        } catch (err) {
-          console.warn('[CommitmentStore] Failed to complete on backend.', err);
-        }
+      completeCommitment(id: string, note?: string): Promise<void> {
+        const existing = completionRequests.get(id);
+        if (existing) return existing;
+        const request = (async () => {
+          const target = store.commitments().find((c) => c.id === id);
+          if (!target) throw new Error('Habit not found. Please reload.');
+          const updated = remote()
+            ? record(
+                await confirmed(() =>
+                  firstValueFrom(http.patch<Commitment>(`${API}/${id}/complete`, { note })),
+                ),
+              )
+            : target.isCompletedToday
+              ? target
+              : {
+                  ...target,
+                  currentStreak: target.currentStreak + 1,
+                  currentDay:
+                    target.totalDays === -1
+                      ? target.currentDay + 1
+                      : Math.min(target.currentDay + 1, target.totalDays),
+                  isCompletedToday: true,
+                  history: [...(target.history || []), new Date().toISOString()],
+                };
+          mutationVersion++;
+          patchState(store, {
+            commitments: store
+              .commitments()
+              .map((c) => (c.id === id ? { ...updated, isCompletedToday: true } : c)),
+          });
+        })().finally(() => completionRequests.delete(id));
+        completionRequests.set(id, request);
+        return request;
       },
-
-      /**
-       * Updates an existing commitment.
-       */
       async updateCommitment(id: string, updates: Partial<Commitment>): Promise<Commitment> {
-        let updatedItem: Commitment | undefined;
-
+        const target = store.commitments().find((c) => c.id === id);
+        if (!target) throw new Error('Habit not found.');
+        const { title, category, why, totalDays, reminderTime, isPublic } = updates;
+        const updated = remote()
+          ? record(
+              await confirmed(() =>
+                firstValueFrom(
+                  http.patch<Commitment>(`${API}/${id}`, {
+                    title,
+                    category,
+                    why,
+                    totalDays,
+                    reminderTime,
+                    isPublic,
+                  }),
+                ),
+              ),
+            )
+          : { ...target, ...updates };
+        mutationVersion++;
         patchState(store, {
-          commitments: store.commitments().map((c) => {
-            if (c.id === id) {
-              updatedItem = { ...c, ...updates };
-              return updatedItem;
-            }
-            return c;
-          }),
+          commitments: store.commitments().map((c) => (c.id === id ? updated : c)),
         });
-
-        try {
-          const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (isRemoteToken(token)) {
-            const backendUpdated = await firstValueFrom(
-              http.patch<Commitment>(`${API_URL}/${id}`, updates)
-            );
-            if (backendUpdated) {
-              patchState(store, {
-                commitments: store
-                  .commitments()
-                  .map((c) => (c.id === id ? { ...c, ...backendUpdated } : c)),
-              });
-              return backendUpdated;
-            }
-          }
-        } catch (err) {
-          console.warn('[CommitmentStore] Failed to update commitment on backend.', err);
-        }
-
-        return updatedItem!;
+        return updated;
       },
-
-      /**
-       * Archives or removes a commitment.
-       */
       async removeCommitment(id: string): Promise<void> {
         const target = store.commitments().find((c) => c.id === id);
+        if (remote()) await confirmed(() => firstValueFrom(http.delete(`${API}/${id}`)));
+        mutationVersion++;
         patchState(store, {
           commitments: store.commitments().filter((c) => c.id !== id),
           archivedCommitments: target
-            ? [{ ...target, isArchived: true }, ...store.archivedCommitments()]
+            ? [
+                { ...target, isArchived: true },
+                ...store.archivedCommitments().filter((c) => c.id !== id),
+              ]
             : store.archivedCommitments(),
         });
-
-        try {
-          const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (isRemoteToken(token)) {
-            await firstValueFrom(http.delete(`${API_URL}/${id}`));
-          }
-        } catch (err) {
-          console.warn('[CommitmentStore] Failed to archive on backend.', err);
-        }
       },
-
-      /**
-       * Fetches archived commitments from backend API.
-       */
       async fetchArchivedCommitments(): Promise<Commitment[]> {
-        const token = localStorage.getItem('mehrchain_auth_token_v1');
-        if (isRemoteToken(token)) {
-          coldStartService.startRequest();
-          try {
-            const list = await firstValueFrom(http.get<Commitment[]>(`${API_URL}/archived`));
-            if (Array.isArray(list)) {
-              patchState(store, { archivedCommitments: list });
-              return list;
-            }
-          } catch (err) {
-            console.warn('[CommitmentStore] Failed to fetch archived commitments:', err);
-          } finally {
-            coldStartService.finishRequest();
-          }
-        }
-        return store.archivedCommitments();
+        if (!remote()) return store.archivedCommitments();
+        const version = mutationVersion;
+        const data = await confirmed(() =>
+          firstValueFrom(http.get<Commitment[]>(`${API}/archived`)),
+        );
+        if (!Array.isArray(data)) throw new Error('Unable to load archived habits.');
+        if (version === mutationVersion) patchState(store, { archivedCommitments: data });
+        return data;
       },
-
-      /**
-       * Restores an archived commitment.
-       */
       async restoreCommitment(id: string): Promise<void> {
         const target = store.archivedCommitments().find((c) => c.id === id);
-
+        const saved = remote()
+          ? record(
+              await confirmed(() =>
+                firstValueFrom(http.patch<Commitment>(`${API}/${id}/restore`, {})),
+              ),
+            )
+          : target;
+        mutationVersion++;
         patchState(store, {
           archivedCommitments: store.archivedCommitments().filter((c) => c.id !== id),
-          commitments: target
-            ? [{ ...target, isArchived: false }, ...store.commitments()]
+          commitments: saved
+            ? [{ ...saved, isArchived: false }, ...store.commitments().filter((c) => c.id !== id)]
             : store.commitments(),
         });
-
-        try {
-          const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (isRemoteToken(token)) {
-            await firstValueFrom(http.patch(`${API_URL}/${id}/restore`, {}));
-          }
-        } catch (err) {
-          console.warn('[CommitmentStore] Failed to restore commitment on backend:', err);
-        }
       },
-
-      /**
-       * Permanently deletes a commitment from both local state and backend database.
-       */
       async permanentDeleteCommitment(id: string): Promise<void> {
+        if (remote()) await confirmed(() => firstValueFrom(http.delete(`${API}/${id}/permanent`)));
+        mutationVersion++;
         patchState(store, {
           commitments: store.commitments().filter((c) => c.id !== id),
           archivedCommitments: store.archivedCommitments().filter((c) => c.id !== id),
         });
-
-        try {
-          const token = localStorage.getItem('mehrchain_auth_token_v1');
-          if (isRemoteToken(token)) {
-            await firstValueFrom(http.delete(`${API_URL}/${id}/permanent`));
-          }
-        } catch (err) {
-          console.warn('[CommitmentStore] Failed to permanently delete commitment on backend:', err);
-        }
       },
-
-      /**
-       * Purges all in-memory commitments and resets active session state.
-       * Does NOT erase user's offline cache key.
-       */
       resetState(): void {
-        patchState(store, {
-          commitments: [],
-          archivedCommitments: [],
-          activeUserId: null,
-          isLoading: false,
-        });
+        patchState(store, initialState);
       },
-
-      /**
-       * Completely erases the local cache keys for a specific user.
-       */
       clearUserStorage(userId: string): void {
-        try {
-          localStorage.removeItem(getUserStorageKey(userId));
-          localStorage.removeItem(getUserArchivedStorageKey(userId));
-        } catch (e) {
-          console.error('[CommitmentStore] Failed to clear user storage', e);
-        }
+        localStorage.removeItem(getUserStorageKey(userId));
+        localStorage.removeItem(getUserArchivedStorageKey(userId));
       },
     };
   }),
   withHooks({
     onInit(store) {
-      // Automatically keep local cache updated for the active user only
       effect(() => {
-        const userId = store.activeUserId();
-        const commitments = store.commitments();
-        if (userId) {
+        const id = store.activeUserId();
+        const data = store.commitments();
+        if (id) {
           try {
-            localStorage.setItem(getUserStorageKey(userId), JSON.stringify(commitments));
-          } catch (e) {
-            console.error('[CommitmentStore] Failed to save local cache', e);
+            localStorage.setItem(getUserStorageKey(id), JSON.stringify(data));
+          } catch {
+            /* Cache is optional; the server retains saved data. */
           }
         }
       });
-
       effect(() => {
-        const userId = store.activeUserId();
-        const archived = store.archivedCommitments();
-        if (userId) {
+        const id = store.activeUserId();
+        const data = store.archivedCommitments();
+        if (id) {
           try {
-            localStorage.setItem(getUserArchivedStorageKey(userId), JSON.stringify(archived));
-          } catch (e) {
-            console.error('[CommitmentStore] Failed to save local archived cache', e);
+            localStorage.setItem(getUserArchivedStorageKey(id), JSON.stringify(data));
+          } catch {
+            /* Cache is optional. */
           }
         }
       });
     },
-  })
+  }),
 );
-
 export type CommitmentStore = InstanceType<typeof CommitmentStore>;

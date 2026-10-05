@@ -1,14 +1,9 @@
+import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  Heart,
-  Leaf,
-  LucideAngularModule,
-  TrendingUp,
-  Users,
-} from 'lucide-angular';
+import { Heart, Leaf, LucideAngularModule, TrendingUp, Users } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
 import { GoogleAuthService } from '../../core/services/google-auth.service';
 import { CommitmentService } from '../../core/services/commitment.service';
@@ -65,6 +60,8 @@ export class OnboardingComponent implements OnInit {
   // 4: Pick Habit Spark
   // 5: Duration, Why & Reminder
   // 6: Create Profile & Sign Up
+  readonly sessionError = this.authService.sessionError;
+  readonly allowDemoMode = !environment.production;
   step = signal<number>(0);
 
   // Habit Form State
@@ -164,10 +161,11 @@ export class OnboardingComponent implements OnInit {
     growth: ['Read 10 pages', 'Write daily journal', 'Learn one new word'],
   };
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.authService.ready;
     // Returning authenticated user check
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/dashboard']);
+      this.authService.navigateAfterLogin();
     }
   }
 
@@ -328,7 +326,7 @@ export class OnboardingComponent implements OnInit {
     try {
       const res = await this.authService.register(username, email, password);
       if (res.requiresVerification) {
-        const previewCode = res.previewCode || '';
+        const previewCode = this.allowDemoMode ? res.previewCode || '' : '';
         this.previewOtpCode.set(previewCode);
         this.verificationCode.set(previewCode);
         this.verificationError.set('');
@@ -341,7 +339,9 @@ export class OnboardingComponent implements OnInit {
     } catch (err: any) {
       if (this.authService.isNetworkError(err)) {
         this.isNetworkSignUpError.set(true);
-        this.signUpError.set('Unable to connect to the server. Please check your network connection or VPN.');
+        this.signUpError.set(
+          'Unable to connect to the server. Please check your network connection or VPN.',
+        );
         return;
       }
 
@@ -405,6 +405,7 @@ export class OnboardingComponent implements OnInit {
   }
 
   async handleVerifyEmail() {
+    if (this.isVerifying()) return;
     this.verificationError.set('');
     this.verificationSuccess.set('');
     this.isNetworkVerifyError.set(false);
@@ -417,13 +418,11 @@ export class OnboardingComponent implements OnInit {
 
     this.isVerifying.set(true);
     try {
-      if (this.isDemoModeActive()) {
-        this.authService.verifyEmailOffline(this.signUpEmail(), code);
-      } else {
-        await this.authService.verifyEmail(this.signUpEmail(), code);
+      if (!this.authService.isAuthenticated()) {
+        if (this.isDemoModeActive()) this.authService.verifyEmailOffline(this.signUpEmail(), code);
+        else await this.authService.verifyEmail(this.signUpEmail(), code);
       }
       this.verificationSuccess.set('Account verified successfully!');
-      this.isVerificationModalOpen.set(false);
 
       // Save habit commitment
       if (this.selectedHabit() && this.selectedCategory()) {
@@ -442,23 +441,28 @@ export class OnboardingComponent implements OnInit {
           const hour = parseInt(hourStr, 10) || 8;
           const minute = parseInt(minuteStr, 10) || 30;
 
-          await this.notificationService.scheduleDailyHabitReminder({
-            id: 1001,
-            title: 'MehrChain Reminder ✨',
-            body: `Time to light your lamp: ${this.selectedHabit()}`,
-            hour,
-            minute,
-            commitmentId: newCommitment.id,
-          });
+          await this.notificationService
+            .scheduleDailyHabitReminder({
+              id: 1001,
+              title: 'MehrChain Reminder ✨',
+              body: `Time to light your lamp: ${this.selectedHabit()}`,
+              hour,
+              minute,
+              commitmentId: newCommitment.id,
+            })
+            .catch(() => {
+              /* A notification failure must not invalidate the saved habit. */
+            });
         }
       }
 
       this.meroService.setState('celebrating');
-      this.router.navigate(['/dashboard']);
+      this.isVerificationModalOpen.set(false);
+      this.authService.navigateAfterLogin();
     } catch (err: any) {
       if (this.authService.isNetworkError(err)) {
         this.isNetworkVerifyError.set(true);
-        this.verificationError.set('Connection lost. Please retry or continue in Demo Mode.');
+        this.verificationError.set('Connection lost. Please retry.');
       } else {
         this.verificationError.set(err?.message || 'Invalid or expired verification code.');
       }
@@ -474,7 +478,7 @@ export class OnboardingComponent implements OnInit {
     this.previewOtpCode.set('123456');
     this.authService.registerOffline(
       this.signUpUsername() || 'demo_user',
-      this.signUpEmail() || 'demo@example.com'
+      this.signUpEmail() || 'demo@example.com',
     );
     await this.handleVerifyEmail();
   }
@@ -609,7 +613,7 @@ export class OnboardingComponent implements OnInit {
     try {
       await this.authService.login(email, password);
       this.isLoginModalOpen.set(false);
-      this.router.navigate(['/dashboard']);
+      this.authService.navigateAfterLogin();
     } catch (err: any) {
       const msg = err?.message || 'Invalid email or password. Please try again.';
       const lowerMsg = msg.toLowerCase();
@@ -647,7 +651,7 @@ export class OnboardingComponent implements OnInit {
           });
         }
         this.meroService.setState('celebrating');
-        this.router.navigate(['/dashboard']);
+        this.authService.navigateAfterLogin();
       }
     } catch (err: any) {
       this.signUpError.set(err?.message || 'Google sign-in failed.');
@@ -664,7 +668,7 @@ export class OnboardingComponent implements OnInit {
       if (user) {
         this.isLoginModalOpen.set(false);
         this.meroService.setState('celebrating');
-        this.router.navigate(['/dashboard']);
+        this.authService.navigateAfterLogin();
       }
     } catch (err: any) {
       this.loginError.set(err?.message || 'Google sign-in failed.');

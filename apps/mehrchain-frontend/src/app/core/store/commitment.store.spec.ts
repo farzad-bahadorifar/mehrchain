@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -11,11 +12,7 @@ describe('CommitmentStore (@ngrx/signals)', () => {
   beforeEach(() => {
     localStorage.clear();
     TestBed.configureTestingModule({
-      providers: [
-        CommitmentStore,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [CommitmentStore, provideHttpClient(), provideHttpClientTesting()],
     });
 
     store = TestBed.inject(CommitmentStore);
@@ -176,5 +173,58 @@ describe('CommitmentStore (@ngrx/signals)', () => {
     await store.removeCommitment(added.id);
     expect(store.commitments().some((c) => c.id === added.id)).toBe(false);
     expect(store.archivedCommitments().some((c) => c.id === added.id)).toBe(true);
+  });
+
+  it('does not fabricate a saved habit when the API fails', async () => {
+    store.loadForUser('user-a');
+    localStorage.setItem('mehrchain_auth_token_v1', 'remote_jwt');
+    const pending = store.addCommitment({ title: 'API habit', category: 'health', isPublic: true });
+    const rejected = expect(pending).rejects.toBeTruthy();
+    expect(store.commitments()).toEqual([]);
+    const req = httpMock.expectOne('http://localhost:3000/api/commitments');
+    expect(req.request.body.isPublic).toBe(true);
+    req.flush({}, { status: 500, statusText: 'Failure' });
+    await rejected;
+    expect(store.commitments()).toEqual([]);
+  });
+  it('rejects a late save response after switching accounts', async () => {
+    store.loadForUser('user-a');
+    localStorage.setItem('mehrchain_auth_token_v1', 'remote_jwt_a');
+    const pending = store.addCommitment({ title: 'User A habit', category: 'health' });
+    const rejected = expect(pending).rejects.toThrow('session changed');
+    const req = httpMock.expectOne('http://localhost:3000/api/commitments');
+    store.loadForUser('user-b');
+    localStorage.setItem('mehrchain_auth_token_v1', 'remote_jwt_b');
+    req.flush({ id: 'habit-a', title: 'User A habit' });
+    await rejected;
+    expect(store.commitments()).toEqual([]);
+  });
+  it('production refuses local tokens for writes', async () => {
+    const previous = environment.production;
+    environment.production = true;
+    try {
+      localStorage.setItem('mehrchain_auth_token_v1', 'local_demo');
+      await expect(store.addCommitment({ title: 'Fake', category: 'health' })).rejects.toThrow(
+        'sign in',
+      );
+      expect(store.commitments()).toEqual([]);
+    } finally {
+      environment.production = previous;
+    }
+  });
+
+  it('does not overwrite a confirmed new habit with an older refresh response', async () => {
+    store.loadForUser('user-a');
+    localStorage.setItem('mehrchain_auth_token_v1', 'remote_jwt');
+    const refresh = store.syncWithBackend();
+    const read = httpMock.expectOne('http://localhost:3000/api/commitments');
+    const create = store.addCommitment({ title: 'New habit', category: 'health' });
+    httpMock
+      .expectOne('http://localhost:3000/api/commitments')
+      .flush({ id: 'saved-id', title: 'New habit' });
+    await create;
+    read.flush([]);
+    await refresh;
+    expect(store.commitments().map((c) => c.id)).toEqual(['saved-id']);
   });
 });

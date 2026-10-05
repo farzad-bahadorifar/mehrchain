@@ -1,4 +1,4 @@
-import { Component, computed, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
@@ -79,11 +79,11 @@ export class NewCommitmentModal {
     }
   }
 
-  isSubmitting = signal(false);
+  isSubmitting = input(false);
+  errorMessage = input<string | null>(null);
 
   handleSubmit() {
     if (this.isSubmitting() || !this.isValid()) return;
-    this.isSubmitting.set(true);
 
     this.submit.emit({
       title: this.title().trim(),
@@ -93,7 +93,5 @@ export class NewCommitmentModal {
       reminderTime: this.reminderTime(),
       isPublic: this.isPublic(),
     });
-
-    this.close.emit();
   }
 }

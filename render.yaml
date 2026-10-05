@@ -4,13 +4,15 @@ services:
     env: node
     plan: free
     region: frankfurt
-    buildCommand: npm ci && npx prisma generate --schema=apps/mehrchain-backend/prisma/schema.prisma && NX_DAEMON=false npx nx build mehrchain-backend
+    buildCommand: npm ci --legacy-peer-deps && npx prisma generate --schema=apps/mehrchain-backend/prisma/schema.prisma && NX_DAEMON=false npx nx build mehrchain-backend
     startCommand: node dist/apps/mehrchain-backend/main.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: NODE_VERSION
-        value: 20
+        value: 22
+      - key: GOOGLE_CLIENT_ID
+        sync: false
       - key: DATABASE_URL
         sync: false
       - key: JWT_SECRET
@@ -18,4 +20,4 @@ services:
       - key: RESEND_API_KEY
         sync: false
       - key: MAIL_FROM
-        value: MehrChain <onboarding@resend.dev>
+        sync: false

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CommitmentStore } from '../store/commitment.store';
 
@@ -48,8 +48,10 @@ export class AuthService {
   readonly currentUser = this.currentUserSignal.asReadonly();
   readonly isAuthenticated = computed(() => this.currentUserSignal() !== null);
 
+  readonly ready: Promise<void>;
+  readonly sessionError = signal<string | null>(null);
   constructor() {
-    this.loadPersistedSession();
+    this.ready = this.loadPersistedSession();
   }
 
   getToken(): string | null {
@@ -74,7 +76,7 @@ export class AuthService {
    */
   isNetworkError(err: any): boolean {
     if (!err) return false;
-    if (err.status === 0 || err.status === undefined || err.status === null) return true;
+    if (err.status === 0) return true;
     const msg = (err.message || '').toLowerCase();
     return (
       msg.includes('network') ||
@@ -89,38 +91,55 @@ export class AuthService {
     try {
       const stored = localStorage.getItem(this.AUTH_KEY);
       const token = this.getToken();
-
-      if (stored && token) {
-        const user = JSON.parse(stored) as UserProfile;
+      if (!stored || !token) return;
+      const cached = JSON.parse(stored) as UserProfile;
+      if (this.isLocalToken(token)) {
+        if (environment.production) {
+          this.logout();
+          return;
+        }
+        this.currentUserSignal.set(cached);
+        this.commitmentStore.loadForUser(cached.id);
+        return;
+      }
+      // Let dependency injection finish before the auth interceptor requests this service.
+      await Promise.resolve();
+      try {
+        const user = await firstValueFrom(
+          this.http.get<UserProfile>(`${this.API_URL}/me`).pipe(timeout(60000)),
+        );
+        if (this.getToken() !== token) return;
+        localStorage.setItem(this.AUTH_KEY, JSON.stringify(user));
         this.currentUserSignal.set(user);
         this.commitmentStore.loadForUser(user.id);
-
-        if (!this.isLocalToken(token)) {
-          this.commitmentStore.syncWithBackend().catch(() => {});
-
-          // Verify session silently in background if using remote backend token
-          try {
-            const freshUser = await firstValueFrom(
-              this.http.get<UserProfile>(`${this.API_URL}/me`)
-            );
-            if (freshUser) {
-              this.currentUserSignal.set(freshUser);
-              localStorage.setItem(this.AUTH_KEY, JSON.stringify(freshUser));
-            }
-          } catch (err) {
-            console.warn('[AuthService] Silent session refresh skipped or offline:', err);
-          }
-        }
+        await this.commitmentStore.syncWithBackend();
+      } catch (err: any) {
+        if (this.getToken() !== token) return;
+        if (err.status === 401 || err.status === 403) this.logout();
+        else this.sessionError.set('Could not verify your session. Please retry sign-in.');
       }
-    } catch (err) {
-      console.error('[AuthService] Failed to load stored user session:', err);
+    } catch {
+      this.logout();
     }
+  }
+
+  private requireDemoEnvironment(): void {
+    if (environment.production) throw new Error('Demo accounts are unavailable in production.');
+  }
+
+  navigateAfterLogin(): void {
+    const target = this.router.parseUrl(this.router.url).queryParams['returnUrl'];
+    if (typeof target === 'string' && target.startsWith('/chain?'))
+      this.router.navigateByUrl(target);
+    else this.router.navigate(['/dashboard']);
   }
 
   private saveLocalRegisteredUser(user: UserProfile): void {
     try {
       const existing = this.getLocalRegisteredUsers();
-      const filtered = existing.filter((u) => u.email !== user.email && u.username !== user.username);
+      const filtered = existing.filter(
+        (u) => u.email !== user.email && u.username !== user.username,
+      );
       localStorage.setItem(this.USERS_CACHE_KEY, JSON.stringify([...filtered, user]));
     } catch (e) {
       console.warn('Failed to save to local registered cache', e);
@@ -139,7 +158,12 @@ export class AuthService {
    * Registers a new user account with backend API.
    * Throws network connection error if server cannot be reached so the UI can prompt for retry or demo mode.
    */
-  async register(username: string, email: string, password?: string, name?: string): Promise<RegisterResponse> {
+  async register(
+    username: string,
+    email: string,
+    password?: string,
+    name?: string,
+  ): Promise<RegisterResponse> {
     const cleanUsername = username.trim().toLowerCase();
     const cleanEmail = email.trim().toLowerCase();
     const cleanName = (name || username).trim();
@@ -149,15 +173,17 @@ export class AuthService {
         username: cleanUsername,
         name: cleanName,
         email: cleanEmail,
-        password: password || 'defaultPass123',
+        password: password || '',
       };
 
       return await firstValueFrom(
-        this.http.post<RegisterResponse>(`${this.API_URL}/register`, payload)
+        this.http.post<RegisterResponse>(`${this.API_URL}/register`, payload),
       );
     } catch (err: any) {
       if (this.isNetworkError(err)) {
-        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
+        throw new Error(
+          'Unable to connect to the server. Please check your network connection or VPN.',
+        );
       }
 
       const message =
@@ -173,6 +199,7 @@ export class AuthService {
    * Explicitly registers a mock profile in offline / demo mode.
    */
   registerOffline(username: string, email: string, name?: string): RegisterResponse {
+    this.requireDemoEnvironment();
     const cleanUsername = username.trim().toLowerCase();
     const cleanEmail = email.trim().toLowerCase();
     const cleanName = (name || username).trim();
@@ -215,7 +242,7 @@ export class AuthService {
       };
 
       const res = await firstValueFrom(
-        this.http.post<AuthResponse>(`${this.API_URL}/verify-email`, payload)
+        this.http.post<AuthResponse>(`${this.API_URL}/verify-email`, payload),
       );
 
       localStorage.setItem(this.AUTH_KEY, JSON.stringify(res.user));
@@ -223,14 +250,16 @@ export class AuthService {
 
       this.currentUserSignal.set(res.user);
       this.commitmentStore.loadForUser(res.user.id);
-      this.commitmentStore.syncWithBackend().catch(() => {});
+      await this.commitmentStore.syncWithBackend();
       return res.user;
     } catch (err: any) {
       if (this.isNetworkError(err)) {
         if (foundLocal) {
           return this.verifyEmailOffline(cleanEmail, cleanCode);
         }
-        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
+        throw new Error(
+          'Unable to connect to the server. Please check your network connection or VPN.',
+        );
       }
 
       const message =
@@ -246,6 +275,7 @@ export class AuthService {
    * Explicitly verifies offline / demo mode session.
    */
   verifyEmailOffline(email: string, _code?: string): UserProfile {
+    this.requireDemoEnvironment();
     const cleanEmail = email.trim().toLowerCase();
     const localUsers = this.getLocalRegisteredUsers();
     const found = localUsers.find((u) => u.email === cleanEmail);
@@ -268,23 +298,31 @@ export class AuthService {
     return localProfile;
   }
 
-  async resendVerificationCode(email: string): Promise<{ success: boolean; message: string; previewCode?: string }> {
+  async resendVerificationCode(
+    email: string,
+  ): Promise<{ success: boolean; message: string; previewCode?: string }> {
     const cleanEmail = email.trim().toLowerCase();
     try {
       const payload = { email: cleanEmail };
       return await firstValueFrom(
         this.http.post<{ success: boolean; message: string; previewCode?: string }>(
           `${this.API_URL}/resend-verification`,
-          payload
-        )
+          payload,
+        ),
       );
     } catch (err: any) {
       if (this.isNetworkError(err)) {
         const localUsers = this.getLocalRegisteredUsers();
         if (localUsers.find((u) => u.email === cleanEmail)) {
-          return { success: true, message: 'Demo Mode: Verification code 123456 auto-filled.', previewCode: '123456' };
+          return {
+            success: true,
+            message: 'Demo Mode: Verification code 123456 auto-filled.',
+            previewCode: '123456',
+          };
         }
-        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
+        throw new Error(
+          'Unable to connect to the server. Please check your network connection or VPN.',
+        );
       }
       const message =
         err?.error?.message ||
@@ -301,7 +339,7 @@ export class AuthService {
   async googleLogin(idToken: string): Promise<UserProfile> {
     try {
       const res = await firstValueFrom(
-        this.http.post<AuthResponse>(`${this.API_URL}/google`, { idToken })
+        this.http.post<AuthResponse>(`${this.API_URL}/google`, { idToken }),
       );
 
       localStorage.setItem(this.AUTH_KEY, JSON.stringify(res.user));
@@ -309,11 +347,13 @@ export class AuthService {
 
       this.currentUserSignal.set(res.user);
       this.commitmentStore.loadForUser(res.user.id);
-      this.commitmentStore.syncWithBackend().catch(() => {});
+      await this.commitmentStore.syncWithBackend();
       return res.user;
     } catch (err: any) {
       if (this.isNetworkError(err)) {
-        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
+        throw new Error(
+          'Unable to connect to the server. Please check your network connection or VPN.',
+        );
       }
 
       const message =
@@ -329,6 +369,7 @@ export class AuthService {
    * Mock Google sign-in for offline testing.
    */
   googleLoginOffline(email = 'tester@gmail.com', name = 'Google Tester'): UserProfile {
+    this.requireDemoEnvironment();
     const cleanEmail = email.trim().toLowerCase();
     const username = cleanEmail.split('@')[0];
 
@@ -362,7 +403,7 @@ export class AuthService {
       };
 
       const res = await firstValueFrom(
-        this.http.post<AuthResponse>(`${this.API_URL}/login`, payload)
+        this.http.post<AuthResponse>(`${this.API_URL}/login`, payload),
       );
 
       localStorage.setItem(this.AUTH_KEY, JSON.stringify(res.user));
@@ -370,11 +411,13 @@ export class AuthService {
 
       this.currentUserSignal.set(res.user);
       this.commitmentStore.loadForUser(res.user.id);
-      this.commitmentStore.syncWithBackend().catch(() => {});
+      await this.commitmentStore.syncWithBackend();
       return res.user;
     } catch (err: any) {
       if (this.isNetworkError(err)) {
-        throw new Error('Unable to connect to the server. Please check your network connection or VPN.');
+        throw new Error(
+          'Unable to connect to the server. Please check your network connection or VPN.',
+        );
       }
 
       const message =
@@ -390,6 +433,7 @@ export class AuthService {
    * Explicitly signs into demo / offline mode account.
    */
   loginOffline(identifier: string): UserProfile {
+    this.requireDemoEnvironment();
     const cleanId = identifier.trim().toLowerCase();
     const localUsers = this.getLocalRegisteredUsers();
     const found = localUsers.find((u) => u.email === cleanId || u.username === cleanId);
@@ -425,6 +469,8 @@ export class AuthService {
     const user = this.currentUserSignal();
     const token = this.getToken();
 
+    if (environment.production && (!user || this.isLocalToken(token)))
+      throw new Error('Please sign in before deleting your account.');
     if (token && !this.isLocalToken(token)) {
       try {
         await firstValueFrom(this.http.delete(`${this.API_URL}/account`));
@@ -436,11 +482,22 @@ export class AuthService {
 
     if (user) {
       this.commitmentStore.clearUserStorage(user.id);
+      for (const key of [
+        `mehrchain_chain_connections_${user.id}`,
+        `mehrchain_chain_last_visit_${user.id}`,
+        `mehrchain_mero_customization_v1_${user.id}`,
+      ])
+        localStorage.removeItem(key);
+      localStorage.setItem(
+        this.USERS_CACHE_KEY,
+        JSON.stringify(this.getLocalRegisteredUsers().filter((u) => u.id !== user.id)),
+      );
+      localStorage.removeItem('mehrchain_mero_customization_v1');
     }
     this.commitmentStore.resetState();
     localStorage.removeItem(this.AUTH_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USERS_CACHE_KEY);
+    // Other users' caches remain isolated.
     localStorage.removeItem('mehrchain_data_v1');
     this.currentUserSignal.set(null);
     this.router.navigate(['/']);

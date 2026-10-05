@@ -52,6 +52,7 @@ model User {
   userChains    ChainConnection[] @relation("UserChains")
   partnerChains ChainConnection[] @relation("PartnerChains")
   chainInvites  ChainInvite[]     @relation("SenderInvites")
+  acceptedInvites ChainInvite[]   @relation("AcceptedInvites")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -87,6 +88,7 @@ model Commitment {
   userChains    ChainConnection[] @relation("UserChainCommitment")
   partnerChains ChainConnection[] @relation("PartnerChainCommitment")
   chainInvites  ChainInvite[]     @relation("SenderCommitmentInvites")
+  acceptedInvites ChainInvite[]   @relation("AcceptedCommitmentInvites")
 
   metadata Json? // Extensible metadata for future modules
 
@@ -157,6 +159,8 @@ model ChainInvite {
 
   sender           User       @relation("SenderInvites", fields: [senderId], references: [id], onDelete: Cascade)
   senderCommitment Commitment @relation("SenderCommitmentInvites", fields: [senderCommitmentId], references: [id], onDelete: Cascade)
+  acceptedBy User? @relation("AcceptedInvites", fields: [acceptedById], references: [id], onDelete: Cascade)
+  acceptedCommitment Commitment? @relation("AcceptedCommitmentInvites", fields: [acceptedCommitmentId], references: [id], onDelete: Cascade)
 
   @@map("chain_invites")
 }

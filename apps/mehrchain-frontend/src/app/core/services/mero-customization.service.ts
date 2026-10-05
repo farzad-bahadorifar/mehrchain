@@ -1,4 +1,5 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { AuthService } from './auth.service';
 import { CommitmentService } from './commitment.service';
 import { ThemeService } from './theme.service';
 
@@ -117,8 +118,7 @@ export const PERSONALITY_OPTIONS: PersonalityOption[] = [
     emoji: '',
     icon: 'sparkles',
     greeting: (name) => `${name} is locked in and ready to crush today's goals.`,
-    streakPraise: (name, days) =>
-      `Target locked! ${days} flawless consecutive days achieved.`,
+    streakPraise: (name, days) => `Target locked! ${days} flawless consecutive days achieved.`,
   },
 ];
 
@@ -126,7 +126,11 @@ export const PERSONALITY_OPTIONS: PersonalityOption[] = [
   providedIn: 'root',
 })
 export class MeroCustomizationService {
-  private readonly STORAGE_KEY = 'mehrchain_mero_customization_v1';
+  private readonly auth = inject(AuthService);
+  private get STORAGE_KEY(): string {
+    const id = this.auth.currentUser()?.id;
+    return id ? `mehrchain_mero_customization_v1_${id}` : 'mehrchain_mero_customization_v1';
+  }
   private themeService = inject(ThemeService);
   private commitmentService = inject(CommitmentService);
 
@@ -201,6 +205,15 @@ export class MeroCustomizationService {
 
   constructor() {
     this.loadState();
+    effect(() => {
+      const user = this.auth.currentUser();
+      this.nickname.set('Mero');
+      this.selectedThemeId.set('golden');
+      this.personality.set('calm');
+      this.customGlowColor.set('#8b5cf6');
+      this.customGlowName.set('Custom Aura');
+      if (user) this.loadState();
+    });
   }
 
   setNickname(newName: string): void {
@@ -299,4 +312,3 @@ export class MeroCustomizationService {
     }
   }
 }
-

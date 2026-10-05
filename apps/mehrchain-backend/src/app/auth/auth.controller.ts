@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
-import { Throttle } from '@nestjs/throttler';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user.decorator';
@@ -11,6 +11,7 @@ import { GoogleAuthDto } from './dto/google-auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @ApiTags('Authentication')
+@UseGuards(ThrottlerGuard)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -18,7 +19,10 @@ export class AuthController {
   @Post('register')
   @Throttle({ auth: { ttl: 60000, limit: 3 } })
   @ApiOperation({ summary: 'Register a new user account and send verification email' })
-  @ApiResponse({ status: 201, description: 'User created; 6-digit OTP verification code sent to email' })
+  @ApiResponse({
+    status: 201,
+    description: 'User created; 6-digit OTP verification code sent to email',
+  })
   @ApiResponse({ status: 409, description: 'Email already registered' })
   @ApiResponse({ status: 429, description: 'Too many requests — rate limit exceeded' })
   register(@Body() dto: RegisterDto) {

@@ -5,7 +5,9 @@ import { CommitmentsService } from './commitments.service';
 describe('CommitmentsService (Unit Tests)', () => {
   let service: CommitmentsService;
 
-  const mockPrisma = {
+  const mockPrisma: any = {
+    $queryRaw: jest.fn().mockResolvedValue([]),
+    $transaction: jest.fn(),
     commitment: {
       findMany: jest.fn(),
       findUnique: jest.fn(),
@@ -25,6 +27,7 @@ describe('CommitmentsService (Unit Tests)', () => {
   beforeEach(() => {
     service = new CommitmentsService(mockPrisma as any, mockChainNotification as any);
     jest.clearAllMocks();
+    mockPrisma.$transaction.mockImplementation((fn: any) => fn(mockPrisma));
   });
 
   describe('createCommitment', () => {
@@ -139,7 +142,7 @@ describe('CommitmentsService (Unit Tests)', () => {
           data: expect.objectContaining({
             currentDay: 46,
           }),
-        })
+        }),
       );
       expect((result as any).isCompletedToday).toBe(true);
     });
@@ -208,17 +211,17 @@ describe('CommitmentsService (Unit Tests)', () => {
         userId: 'different-user',
       });
 
-      await expect(
-        service.completeCommitment('user-1', 'comm-1'),
-      ).rejects.toThrow(ForbiddenException);
+      await expect(service.completeCommitment('user-1', 'comm-1')).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
     it('should throw NotFoundException if commitment does not exist', async () => {
       mockPrisma.commitment.findUnique.mockResolvedValue(null);
 
-      await expect(
-        service.completeCommitment('user-1', 'nonexistent-id'),
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.completeCommitment('user-1', 'nonexistent-id')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -317,18 +320,17 @@ describe('CommitmentsService (Unit Tests)', () => {
         userId: 'other-user',
       });
 
-      await expect(
-        service.hardDeleteCommitment('user-1', 'comm-1'),
-      ).rejects.toThrow(ForbiddenException);
+      await expect(service.hardDeleteCommitment('user-1', 'comm-1')).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
     it('should throw NotFoundException if commitment not found', async () => {
       mockPrisma.commitment.findUnique.mockResolvedValue(null);
 
-      await expect(
-        service.hardDeleteCommitment('user-1', 'nonexistent-id'),
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.hardDeleteCommitment('user-1', 'nonexistent-id')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });
-

@@ -1,3 +1,6 @@
+@if (commitmentService.syncError()) {
+  <p role="alert" class="text-red-500">{{ commitmentService.syncError() }}</p>
+}
 <div class="min-h-[100dvh] bg-background pb-24 px-5 safe-top font-sans">
   <!-- Header with Mero avatar and Quick Theme Toggle -->
   <div class="flex justify-between items-center mb-6">
@@ -12,7 +15,10 @@
         class="w-9 h-9 rounded-full bg-card border border-border/70 flex items-center justify-center text-foreground hover:border-primary/50 shadow-sm transition-all active:scale-95"
         [title]="themeService.isDark() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
       >
-        <lucide-icon [name]="themeService.isDark() ? 'sun' : 'moon'" class="w-4 h-4 text-primary"></lucide-icon>
+        <lucide-icon
+          [name]="themeService.isDark() ? 'sun' : 'moon'"
+          class="w-4 h-4 text-primary"
+        ></lucide-icon>
       </button>
       <a
         routerLink="/profile"
@@ -48,7 +54,9 @@
     @if (commitmentService.isLoading() && commitmentService.commitments().length === 0) {
       <app-habit-card-skeleton [count]="2" />
     } @else if (commitmentService.commitments().length === 0) {
-      <div class="text-center py-12 px-6 bg-card rounded-3xl border border-border/50 shadow-soft animate-fade-in">
+      <div
+        class="text-center py-12 px-6 bg-card rounded-3xl border border-border/50 shadow-soft animate-fade-in"
+      >
         <div class="mx-auto mb-4 flex items-center justify-center">
           <app-mero size="md" [showGlow]="true" />
         </div>
@@ -82,7 +90,9 @@
 
   <!-- Toast Notification -->
   @if (toastMessage()) {
-    <div class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-2 z-50 animate-fade-in">
+    <div
+      class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-2 z-50 animate-fade-in"
+    >
       <lucide-icon name="sparkles" class="w-4 h-4 text-amber-400"></lucide-icon>
       <span>{{ toastMessage() }}</span>
     </div>
@@ -109,6 +119,8 @@
   <!-- Edit Commitment Modal -->
   @if (editingCommitment()) {
     <app-edit-commitment-modal
+      [isSubmitting]="saving()"
+      [errorMessage]="saveError()"
       [commitment]="editingCommitment()!"
       (close)="closeEdit()"
       (save)="handleUpdateCommitment($event)"
@@ -117,6 +129,8 @@
 
   @if (isModalOpen()) {
     <app-new-commitment-modal
+      [isSubmitting]="saving()"
+      [errorMessage]="saveError()"
       (close)="isModalOpen.set(false)"
       (submit)="handleNewCommitment($event)"
     >

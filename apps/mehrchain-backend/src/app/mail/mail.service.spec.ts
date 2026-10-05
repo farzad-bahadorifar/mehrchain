@@ -76,4 +76,13 @@ describe('MailService (Unit Tests)', () => {
       expect(mockedAxios.post).toHaveBeenCalled();
     });
   });
+
+  it('fails closed in production when email delivery is unavailable', async () => {
+    process.env['NODE_ENV'] = 'production';
+    const log = jest.spyOn((service as any).logger, 'log');
+    await expect(
+      service.sendVerificationEmail('user@example.com', 'User', '123456'),
+    ).rejects.toThrow('Verification email could not be sent');
+    expect(log).not.toHaveBeenCalled();
+  });
 });

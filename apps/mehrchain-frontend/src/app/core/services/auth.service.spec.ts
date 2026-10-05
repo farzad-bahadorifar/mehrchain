@@ -147,7 +147,10 @@ describe('AuthService (Frontend)', () => {
     const verifyPromise = service.verifyEmail('farzad@example.com', '999999');
 
     const req = httpMock.expectOne('http://localhost:3000/api/auth/verify-email');
-    req.flush({ message: 'Invalid or expired verification code' }, { status: 400, statusText: 'Bad Request' });
+    req.flush(
+      { message: 'Invalid or expired verification code' },
+      { status: 400, statusText: 'Bad Request' },
+    );
 
     await expect(verifyPromise).rejects.toThrow('Invalid or expired verification code');
     expect(service.isAuthenticated()).toBe(false);
@@ -163,10 +166,17 @@ describe('AuthService (Frontend)', () => {
     expect(service.isAuthenticated()).toBe(false);
   });
 
-  it('should clear USERS_CACHE_KEY on deleteAccount', async () => {
+  it('should clear only the deleted user cache on deleteAccount', async () => {
     localStorage.setItem('mehrchain_auth_user_v1', JSON.stringify({ id: 'user-1' }));
     localStorage.setItem('mehrchain_auth_token_v1', 'remote_token_123');
-    localStorage.setItem('mehrchain_registered_users_cache_v1', JSON.stringify([{ email: 'farzad@example.com' }]));
+    localStorage.setItem(
+      'mehrchain_registered_users_cache_v1',
+      JSON.stringify([
+        { id: 'user-1', email: 'farzad@example.com' },
+        { id: 'user-2', email: 'other@example.com' },
+      ]),
+    );
+    (service as any).currentUserSignal.set({ id: 'user-1', email: 'farzad@example.com' });
 
     const deletePromise = service.deleteAccount();
 
@@ -176,7 +186,9 @@ describe('AuthService (Frontend)', () => {
 
     await deletePromise;
 
-    expect(localStorage.getItem('mehrchain_registered_users_cache_v1')).toBeNull();
+    expect(JSON.parse(localStorage.getItem('mehrchain_registered_users_cache_v1')!)).toEqual([
+      { id: 'user-2', email: 'other@example.com' },
+    ]);
     expect(localStorage.getItem('mehrchain_auth_user_v1')).toBeNull();
     expect(service.currentUser()).toBeNull();
   });
@@ -184,7 +196,10 @@ describe('AuthService (Frontend)', () => {
   it('should not clear local state and should throw error when backend account deletion fails', async () => {
     localStorage.setItem('mehrchain_auth_user_v1', JSON.stringify({ id: 'user-1' }));
     localStorage.setItem('mehrchain_auth_token_v1', 'remote_token_123');
-    localStorage.setItem('mehrchain_registered_users_cache_v1', JSON.stringify([{ email: 'farzad@example.com' }]));
+    localStorage.setItem(
+      'mehrchain_registered_users_cache_v1',
+      JSON.stringify([{ email: 'farzad@example.com' }]),
+    );
 
     const deletePromise = service.deleteAccount();
 
@@ -229,5 +244,20 @@ describe('AuthService (Frontend)', () => {
     expect(user.email).toBe('tester@gmail.com');
     expect(service.isAuthenticated()).toBe(true);
     expect(service.getToken()).toBe('google_jwt_token_xyz');
+  });
+
+  it('rejects a cached remote identity when server session validation returns 401', async () => {
+    localStorage.setItem('mehrchain_auth_user_v1', JSON.stringify({ id: 'cached-user' }));
+    localStorage.setItem('mehrchain_auth_token_v1', 'expired_remote_token');
+    const resume = (service as any).loadPersistedSession();
+    expect(service.isAuthenticated()).toBe(false);
+    await Promise.resolve();
+    httpMock
+      .expectOne('http://localhost:3000/api/auth/me')
+      .flush({}, { status: 401, statusText: 'Unauthorized' });
+    await resume;
+    expect(service.isAuthenticated()).toBe(false);
+    expect(service.getToken()).toBeNull();
+    expect(mockCommitmentStore.loadForUser).not.toHaveBeenCalled();
   });
 });

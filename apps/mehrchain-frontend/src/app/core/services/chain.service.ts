@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
+import { Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ChainConnection, ChainInvite } from '@mehrchain/shared-data';
 import { CommitmentService } from './commitment.service';
 import { AuthService } from './auth.service';
@@ -60,18 +60,19 @@ export class ChainService {
   readonly hasUnread = signal<boolean>(false);
   readonly lastVisitAt = signal<string | null>(null);
   readonly isLoading = signal<boolean>(false);
+  readonly loadError = signal<string | null>(null);
 
   // Active commitment selection for invite in UI
   readonly selectedCommitmentId = signal<string>('');
 
   // Only public commitments are eligible to be chained
   readonly publicCommitments = computed(() =>
-    this.commitmentService.commitments().filter((c) => c.isPublic === true)
+    this.commitmentService.commitments().filter((c) => c.isPublic === true),
   );
 
   // Active connections (excluding disconnected)
   readonly activeConnections = computed(() =>
-    this._connections().filter((c) => c.status !== 'DISCONNECTED')
+    this._connections().filter((c) => c.status !== 'DISCONNECTED'),
   );
 
   // Backwards compatibility for components still referencing friendChains
@@ -123,11 +124,16 @@ export class ChainService {
     effect(() => {
       const user = this.authService.currentUser();
       if (user) {
-        this.loadLocalCache();
-        this.loadConnections();
+        untracked(() => {
+          this._connections.set([]);
+          this.loadLocalCache();
+          void this.loadConnections();
+        });
       } else {
         this._connections.set([]);
         this.hasUnread.set(false);
+        this.lastVisitAt.set(null);
+        this.selectedCommitmentId.set('');
       }
     });
 
@@ -168,23 +174,28 @@ export class ChainService {
 
   async loadConnections(): Promise<ChainConnection[]> {
     const token = this.authService.getToken();
+    const userId = this.authService.currentUser()?.id;
     if (!isRemoteToken(token)) {
       this.checkUnread();
       return this._connections();
     }
 
     this.isLoading.set(true);
+    this.loadError.set(null);
     this.coldStartService.startRequest();
     try {
       const res = await firstValueFrom(
-        this.http.get<ChainConnection[]>(`${environment.apiUrl}/chain/connections`)
+        this.http.get<ChainConnection[]>(`${environment.apiUrl}/chain/connections`),
       );
+      if (this.authService.currentUser()?.id !== userId || this.authService.getToken() !== token)
+        return [];
       this._connections.set(res || []);
       this.saveLocalCache(res || []);
       this.checkUnread();
       return res || [];
     } catch (error) {
-      console.warn('[ChainService] Failed to fetch remote connections, using cache', error);
+      if (this.authService.currentUser()?.id === userId)
+        this.loadError.set('Could not refresh your chain. Please retry.');
       return this._connections();
     } finally {
       this.isLoading.set(false);
@@ -192,99 +203,63 @@ export class ChainService {
     }
   }
 
-  async sendHeart(connectionId: string): Promise<ChainConnection | null> {
-    // Optimistic update
-    const current = this._connections();
-    let toggledState = false;
-    const updated = current.map((c) => {
-      if (c.id === connectionId) {
-        toggledState = !c.heartSent;
-        return { ...c, heartSent: toggledState };
-      }
-      return c;
-    });
+  private async writeConnection(
+    connectionId: string,
+    action: 'heart' | 'nudge' | 'disconnect',
+  ): Promise<ChainConnection | null> {
+    const token = this.authService.getToken();
+    const userId = this.authService.currentUser()?.id;
+    if (isRemoteToken(token)) {
+      const url = `${environment.apiUrl}/chain/connections/${connectionId}`;
+      const response = await firstValueFrom(
+        action === 'disconnect'
+          ? this.http.delete<ChainConnection>(url)
+          : this.http.post<ChainConnection>(`${url}/${action}`, {}),
+      );
+      if (this.authService.currentUser()?.id !== userId || this.authService.getToken() !== token)
+        throw new Error('Your session changed. Please reload.');
+      const updated = this._connections().map((c) =>
+        c.id === connectionId ? { ...c, ...response } : c,
+      );
+      this._connections.set(updated);
+      this.saveLocalCache(updated);
+      return response;
+    }
+    if (environment.production) throw new Error('Please sign in to use your chain.');
+    const updated = this._connections().map((c) =>
+      c.id !== connectionId
+        ? c
+        : action === 'heart'
+          ? { ...c, heartSent: !c.heartSent }
+          : action === 'nudge'
+            ? { ...c, lastNudgeSentAt: new Date().toISOString() }
+            : { ...c, status: 'DISCONNECTED' as const },
+    );
     this._connections.set(updated);
     this.saveLocalCache(updated);
-
-    const token = this.authService.getToken();
-    if (isRemoteToken(token)) {
-      try {
-        const res = await firstValueFrom(
-          this.http.post<ChainConnection>(
-            `${environment.apiUrl}/chain/connections/${connectionId}/heart`,
-            {}
-          )
-        );
-        return res;
-      } catch (error) {
-        console.error('[ChainService] Failed to sync heart to backend', error);
-      }
-    }
     return updated.find((c) => c.id === connectionId) || null;
   }
 
-  async sendNudge(connectionId: string): Promise<ChainConnection | null> {
-    const now = new Date().toISOString();
-    const current = this._connections();
-    const updated = current.map((c) => {
-      if (c.id === connectionId) {
-        return { ...c, lastNudgeSentAt: now };
-      }
-      return c;
-    });
-    this._connections.set(updated);
-    this.saveLocalCache(updated);
-
-    const token = this.authService.getToken();
-    if (isRemoteToken(token)) {
-      try {
-        const res = await firstValueFrom(
-          this.http.post<ChainConnection>(
-            `${environment.apiUrl}/chain/connections/${connectionId}/nudge`,
-            {}
-          )
-        );
-        return res;
-      } catch (error) {
-        console.error('[ChainService] Failed to sync nudge to backend', error);
-        throw error;
-      }
-    }
-    return updated.find((c) => c.id === connectionId) || null;
+  sendHeart(id: string): Promise<ChainConnection | null> {
+    return this.writeConnection(id, 'heart');
   }
-
-  async disconnect(connectionId: string): Promise<void> {
-    const current = this._connections();
-    const updated = current.map((c) => {
-      if (c.id === connectionId) {
-        return { ...c, status: 'DISCONNECTED' as const };
-      }
-      return c;
-    });
-    this._connections.set(updated);
-    this.saveLocalCache(updated);
-
-    const token = this.authService.getToken();
-    if (isRemoteToken(token)) {
-      try {
-        await firstValueFrom(
-          this.http.delete(`${environment.apiUrl}/chain/connections/${connectionId}`)
-        );
-      } catch (error) {
-        console.error('[ChainService] Failed to delete connection on backend', error);
-      }
-    }
+  sendNudge(id: string): Promise<ChainConnection | null> {
+    return this.writeConnection(id, 'nudge');
+  }
+  async disconnect(id: string): Promise<void> {
+    await this.writeConnection(id, 'disconnect');
   }
 
   async createInvite(commitmentId: string): Promise<ChainInvite> {
     const token = this.authService.getToken();
     if (isRemoteToken(token)) {
       return firstValueFrom(
-        this.http.post<ChainInvite>(`${environment.apiUrl}/chain/invite`, { commitmentId })
+        this.http.post<ChainInvite>(`${environment.apiUrl}/chain/invite`, { commitmentId }),
       );
     }
 
-    // Local / Offline fallback mock
+    if (environment.production) throw new Error('Please sign in to create an invite.');
+    // Development demo only
     const user = this.authService.currentUser();
     const commitment = this.commitmentService.commitments().find((c) => c.id === commitmentId);
     const expiresAt = new Date();
@@ -307,54 +282,51 @@ export class ChainService {
   }
 
   async getInvite(code: string): Promise<ChainInvite> {
-    const token = this.authService.getToken();
-    if (isRemoteToken(token)) {
-      return firstValueFrom(
-        this.http.get<ChainInvite>(`${environment.apiUrl}/chain/invite/${code}`)
-      );
-    }
-
-    // Local fallback
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7);
-    return {
-      id: `local_inv_${code}`,
-      senderId: 'mock_sender',
-      senderCommitmentId: 'mock_comm',
-      inviteCode: code,
-      status: 'PENDING',
-      createdAt: new Date().toISOString(),
-      expiresAt: expiresAt.toISOString(),
-      sender: { username: 'partner', name: 'Partner' },
-      senderCommitment: { title: 'Reading Habit', category: 'growth' },
-    };
+    if (!code) throw new Error('Invalid invite link.');
+    // Invite lookup is a public route, including before a user signs in.
+    return firstValueFrom(
+      this.http.get<ChainInvite>(`${environment.apiUrl}/chain/invite/${encodeURIComponent(code)}`),
+    );
   }
 
   async acceptInvite(
     inviteOrCode: string | Partial<ChainInvitePayload> | any,
-    commitmentIdParam?: string
+    commitmentIdParam?: string,
   ): Promise<any> {
-    let code = typeof inviteOrCode === 'string' ? inviteOrCode : inviteOrCode?.inviteCode || 'code';
+    let code = typeof inviteOrCode === 'string' ? inviteOrCode : inviteOrCode?.inviteCode || '';
     let commitmentId =
-      commitmentIdParam || (typeof inviteOrCode === 'object' ? inviteOrCode?.myCommitmentId || inviteOrCode?.commitmentId : '') || '';
+      commitmentIdParam ||
+      (typeof inviteOrCode === 'object'
+        ? inviteOrCode?.myCommitmentId || inviteOrCode?.commitmentId
+        : '') ||
+      '';
 
     const token = this.authService.getToken();
     if (isRemoteToken(token) && code && commitmentId) {
       const res = await firstValueFrom(
-        this.http.post(`${environment.apiUrl}/chain/invite/${code}/accept`, { commitmentId })
+        this.http.post(`${environment.apiUrl}/chain/invite/${code}/accept`, { commitmentId }),
       );
       await this.loadConnections();
       return res;
     }
 
-    // Local fallback connection creation
+    if (isRemoteToken(token) || environment.production)
+      throw new Error('A valid invite code and saved habit are required.');
+    // Development demo only
     const user = this.authService.currentUser();
-    const inviterName = typeof inviteOrCode === 'object' ? inviteOrCode.inviterName || 'Friend' : 'Friend';
-    const habitTitle = typeof inviteOrCode === 'object' ? inviteOrCode.inviterHabitTitle || inviteOrCode.habitTitle || 'Partner Habit' : 'Partner Habit';
-    const category = typeof inviteOrCode === 'object' ? inviteOrCode.inviterCategory || inviteOrCode.category || 'growth' : 'growth';
+    const inviterName =
+      typeof inviteOrCode === 'object' ? inviteOrCode.inviterName || 'Friend' : 'Friend';
+    const habitTitle =
+      typeof inviteOrCode === 'object'
+        ? inviteOrCode.inviterHabitTitle || inviteOrCode.habitTitle || 'Partner Habit'
+        : 'Partner Habit';
+    const category =
+      typeof inviteOrCode === 'object'
+        ? inviteOrCode.inviterCategory || inviteOrCode.category || 'growth'
+        : 'growth';
 
     const newConn: ChainConnection = {
-      id: `local_conn_${Date.now()}`,
+      id: `local_conn_${crypto.randomUUID()}`,
       userId: user ? user.id : 'user_local',
       partnerId: `partner_${Date.now()}`,
       userCommitmentId: commitmentId,
@@ -428,25 +400,9 @@ export class ChainService {
     return (environment as any).appUrl || 'https://mehrchain.pages.dev';
   }
 
-  getInviteUrl(commitmentId?: string): string {
-    const baseUrl = this.getBaseAppUrl();
-    const activeCommitmentId = commitmentId || this.selectedCommitmentId();
-    const commitment = this.commitmentService.commitments().find((c) => c.id === activeCommitmentId);
-    const user = this.authService.currentUser();
-
-    const params = new URLSearchParams();
-    params.set('invite', activeCommitmentId || 'general');
-    if (user?.name || user?.username) {
-      params.set('inviter', user.name || user.username || '');
-    }
-    if (commitment?.title) {
-      params.set('habit', commitment.title);
-    }
-    if (commitment?.category) {
-      params.set('category', commitment.category);
-    }
-
-    return `${baseUrl}/chain?${params.toString()}`;
+  getInviteUrl(inviteCode: string): string {
+    if (!inviteCode) throw new Error('Create an invite before sharing it.');
+    return `${this.getBaseAppUrl()}/chain?invite=${encodeURIComponent(inviteCode)}`;
   }
 
   parseInviteParams(params: any): ChainInvitePayload | null {
@@ -461,7 +417,9 @@ export class ChainService {
   }
 
   async shareInvite(habitTitle: string, commitmentId?: string): Promise<boolean> {
-    const url = this.getInviteUrl(commitmentId);
+    if (!commitmentId) throw new Error('Select a public habit first.');
+    const invite = await this.createInvite(commitmentId);
+    const url = this.getInviteUrl(invite.inviteCode);
     const text = `Join my habit chain on MehrChain: "${habitTitle}"`;
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {

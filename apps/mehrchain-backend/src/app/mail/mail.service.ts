@@ -1,5 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import axios from 'axios';
+import { randomInt } from 'node:crypto';
 
 @Injectable()
 export class MailService {
@@ -9,7 +10,7 @@ export class MailService {
    * Generates a random 6-digit numeric verification code.
    */
   generateOtpCode(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    return randomInt(100000, 1000000).toString();
   }
 
   /**
@@ -98,13 +99,22 @@ export class MailService {
           },
         );
 
-        this.logger.log(`Email dispatched successfully via Resend. ID: ${response.data?.id || 'ok'}`);
+        this.logger.log(
+          `Email dispatched successfully via Resend. ID: ${response.data?.id || 'ok'}`,
+        );
         return true;
       } catch (err: any) {
-        const errorDetail = err?.response?.data || err?.message || err;
-        this.logger.error(`Failed to send email via Resend API: ${JSON.stringify(errorDetail)}`);
+        this.logger.error(
+          `Verification email delivery failed (status ${err?.response?.status || 'unavailable'}).`,
+        );
         // Fallback to console logging below so user is not completely blocked
       }
+    }
+
+    if (process.env['NODE_ENV'] === 'production') {
+      throw new ServiceUnavailableException(
+        'Verification email could not be sent. Please retry later.',
+      );
     }
 
     // 2. Structured console logging (Fallback for local dev, tests, or missing API key)

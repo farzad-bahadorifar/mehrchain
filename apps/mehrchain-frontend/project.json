@@ -6,7 +6,13 @@
   "prefix": "app",
   "generators": {},
   "targets": {
+    "configure": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": { "command": "node scripts/configure-frontend.cjs" }
+    },
     "build": {
+      "dependsOn": ["configure"],
       "executor": "@angular/build:application",
       "options": {
         "browser": "apps/mehrchain-frontend/src/main.ts",
@@ -82,6 +88,7 @@
       "defaultConfiguration": "development"
     },
     "test": {
+      "dependsOn": ["configure"],
       "executor": "@angular/build:unit-test"
     }
   }

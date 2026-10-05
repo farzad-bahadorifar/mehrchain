@@ -1,4 +1,9 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateInviteDto } from './dto/create-invite.dto';
 import { AcceptInviteDto } from './dto/accept-invite.dto';
@@ -14,7 +19,9 @@ export class ChainService {
     });
 
     if (!commitment) throw new NotFoundException('Commitment not found');
-    if (!commitment.isPublic) throw new BadRequestException('Commitment must be public to create an invite');
+    if (commitment.isArchived) throw new BadRequestException('Archived habits cannot be chained');
+    if (!commitment.isPublic)
+      throw new BadRequestException('Commitment must be public to create an invite');
 
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
@@ -33,20 +40,28 @@ export class ChainService {
       where: { inviteCode },
       include: {
         sender: { select: { username: true, name: true } },
-        senderCommitment: { select: { title: true, category: true } },
+        senderCommitment: {
+          select: { title: true, category: true, isPublic: true, isArchived: true },
+        },
       },
     });
 
     if (!invite) throw new NotFoundException('Invite not found');
-    if (invite.status !== ChainInviteStatus.PENDING) throw new BadRequestException('Invite is not pending');
+    if (invite.status !== ChainInviteStatus.PENDING)
+      throw new BadRequestException('Invite is not pending');
     if (invite.expiresAt < new Date()) throw new BadRequestException('Invite has expired');
+    if (
+      invite.senderCommitment &&
+      (!invite.senderCommitment.isPublic || invite.senderCommitment.isArchived)
+    )
+      throw new BadRequestException('This habit is no longer available for chaining');
 
     return invite;
   }
 
   async acceptInvite(userId: string, inviteCode: string, dto: AcceptInviteDto) {
     const invite = await this.getInvite(inviteCode);
-    
+
     if (invite.senderId === userId) {
       throw new BadRequestException('You cannot accept your own invite');
     }
@@ -56,18 +71,22 @@ export class ChainService {
     });
 
     if (!receiverCommitment) throw new NotFoundException('Your commitment not found');
+    if (receiverCommitment.isArchived || !receiverCommitment.isPublic)
+      throw new BadRequestException('Choose an active public habit');
 
     // Start a transaction to accept invite and create two-way connection
     return this.prisma.$transaction(async (prisma) => {
       // 1. Update invite status
-      await prisma.chainInvite.update({
-        where: { id: invite.id },
+      const claimed = await prisma.chainInvite.updateMany({
+        where: { id: invite.id, status: ChainInviteStatus.PENDING, expiresAt: { gt: new Date() } },
         data: {
           status: ChainInviteStatus.ACCEPTED,
           acceptedById: userId,
           acceptedCommitmentId: dto.commitmentId,
         },
       });
+      if (claimed.count !== 1)
+        throw new BadRequestException('Invite was already accepted or has expired');
 
       // 2. Create ChainConnection (from Sender's perspective)
       const senderConnection = await prisma.chainConnection.create({
@@ -95,10 +114,17 @@ export class ChainService {
 
   async getConnections(userId: string) {
     return this.prisma.chainConnection.findMany({
-      where: { userId },
+      where: { userId, status: { not: ChainStatus.DISCONNECTED } },
       include: {
         partner: { select: { username: true, name: true } },
-        partnerCommitment: { select: { title: true, category: true, consecutiveMissedDays: true } },
+        partnerCommitment: {
+          select: {
+            title: true,
+            category: true,
+            consecutiveMissedDays: true,
+            lastCompletedDate: true,
+          },
+        },
       },
       orderBy: { lastPartnerActivityAt: 'desc' },
     });
@@ -108,9 +134,9 @@ export class ChainService {
     const connection = await this.prisma.chainConnection.findUnique({
       where: { id: connectionId, userId },
     });
-    
+
     if (!connection) throw new NotFoundException('Connection not found');
-    
+
     return this.prisma.chainConnection.update({
       where: { id: connectionId },
       data: { heartSent: !connection.heartSent }, // toggle
@@ -121,7 +147,7 @@ export class ChainService {
     const connection = await this.prisma.chainConnection.findUnique({
       where: { id: connectionId, userId },
     });
-    
+
     if (!connection) throw new NotFoundException('Connection not found');
     if (connection.status !== ChainStatus.FADING && connection.status !== ChainStatus.COMPLETED) {
       throw new BadRequestException('Can only nudge when partner is fading or completed');
@@ -129,7 +155,8 @@ export class ChainService {
 
     // Rate limit: 1 nudge per 24 hours
     if (connection.lastNudgeSentAt) {
-      const hoursSinceNudge = (new Date().getTime() - connection.lastNudgeSentAt.getTime()) / (1000 * 60 * 60);
+      const hoursSinceNudge =
+        (new Date().getTime() - connection.lastNudgeSentAt.getTime()) / (1000 * 60 * 60);
       if (hoursSinceNudge < 24) {
         throw new BadRequestException('You can only send a nudge once every 24 hours');
       }
@@ -145,7 +172,7 @@ export class ChainService {
     const connection = await this.prisma.chainConnection.findUnique({
       where: { id: connectionId, userId },
     });
-    
+
     if (!connection) throw new NotFoundException('Connection not found');
 
     return this.prisma.$transaction(async (prisma) => {
@@ -160,6 +187,8 @@ export class ChainService {
         where: {
           userId: connection.partnerId,
           partnerId: userId,
+          userCommitmentId: connection.partnerCommitmentId,
+          partnerCommitmentId: connection.userCommitmentId,
         },
       });
 
@@ -169,6 +198,7 @@ export class ChainService {
           data: { status: ChainStatus.DISCONNECTED },
         });
       }
+      return { ...connection, status: ChainStatus.DISCONNECTED };
     });
   }
 }

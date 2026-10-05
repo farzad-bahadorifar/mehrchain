@@ -2,106 +2,112 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { AuthService, UserProfile } from './auth.service';
 
-declare const google: any;
+interface GoogleIdentity {
+  initialize(options: {
+    client_id: string;
+    callback: (response: { credential?: string }) => void;
+  }): void;
+  renderButton(element: HTMLElement, options: { type: string; theme: string; size: string }): void;
+}
+function identity(): GoogleIdentity | undefined {
+  return (globalThis as typeof globalThis & { google?: { accounts?: { id?: GoogleIdentity } } })
+    .google?.accounts?.id;
+}
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class GoogleAuthService {
-  private authService = inject(AuthService);
-  private scriptLoaded = false;
-  private scriptLoadingPromise: Promise<void> | null = null;
+  private readonly authService = inject(AuthService);
+  private loading: Promise<void> | null = null;
+  private active: Promise<UserProfile> | null = null;
 
-  /**
-   * Loads Google Identity Services (GSI) SDK dynamically.
-   */
   loadGoogleScript(): Promise<void> {
-    if (this.scriptLoaded || typeof google !== 'undefined') {
-      this.scriptLoaded = true;
-      return Promise.resolve();
-    }
-
-    if (this.scriptLoadingPromise) {
-      return this.scriptLoadingPromise;
-    }
-
-    this.scriptLoadingPromise = new Promise((resolve) => {
+    if (identity()) return Promise.resolve();
+    if (this.loading) return this.loading;
+    this.loading = new Promise<void>((resolve, reject) => {
       const script = document.createElement('script');
+      const timer = setTimeout(() => {
+        script.remove();
+        reject(new Error('Google sign-in timed out. Please retry.'));
+      }, 10000);
       script.src = 'https://accounts.google.com/gsi/client';
       script.async = true;
-      script.defer = true;
       script.onload = () => {
-        this.scriptLoaded = true;
-        resolve();
+        clearTimeout(timer);
+        identity() ? resolve() : reject(new Error('Google sign-in is unavailable.'));
       };
       script.onerror = () => {
-        console.warn('[GoogleAuthService] Failed to load Google Identity Services SDK script.');
-        resolve(); // resolve so fallback can operate smoothly
+        clearTimeout(timer);
+        script.remove();
+        reject(new Error('Could not load Google sign-in. Check your connection.'));
       };
       document.head.appendChild(script);
+    }).catch((error) => {
+      this.loading = null;
+      throw error;
     });
-
-    return this.scriptLoadingPromise;
+    return this.loading;
   }
 
-  /**
-   * Triggers Google Sign-In flow.
-   * If Google GIS is available, displays Google One-Tap or button popup.
-   * If in local/demo environment or Google script fails to load, gracefully falls back.
-   */
-  async signInWithGoogle(): Promise<UserProfile> {
-    await this.loadGoogleScript();
-
-    return new Promise(async (resolve, reject) => {
-      // Check if Google GIS is available
-      if (typeof google !== 'undefined' && google.accounts?.id && environment.googleClientId) {
-        try {
-          google.accounts.id.initialize({
-            client_id: environment.googleClientId,
-            callback: async (response: { credential?: string }) => {
-              if (response.credential) {
-                try {
-                  const user = await this.authService.googleLogin(response.credential);
-                  resolve(user);
-                } catch (err) {
-                  reject(err);
-                }
-              } else {
-                reject(new Error('Google sign-in was cancelled or returned no credential.'));
-              }
-            },
-            auto_select: false,
-            cancel_on_tap_outside: true,
-          });
-
-          google.accounts.id.prompt((notification: any) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-              // If One-Tap is not displayed (e.g. 3rd party cookies disabled or popup blocked),
-              // fall back to mock/tester Google token to ensure smooth tester onboarding
-              this.fallbackGoogleLogin().then(resolve).catch(reject);
-            }
-          });
-          return;
-        } catch (e) {
-          console.warn('[GoogleAuthService] Google prompt error, using fallback:', e);
-        }
-      }
-
-      // Fallback for demo/dev/testing
-      this.fallbackGoogleLogin().then(resolve).catch(reject);
+  signInWithGoogle(): Promise<UserProfile> {
+    if (this.active) return this.active;
+    this.active = this.openSignIn().finally(() => {
+      this.active = null;
     });
+    return this.active;
   }
 
-  private async fallbackGoogleLogin(): Promise<UserProfile> {
-    // Generate mock Google token for quick 1-click testing
-    const mockEmail = `tester_${Math.random().toString(36).substring(2, 7)}@gmail.com`;
-    const mockToken = `mock_google_${mockEmail}`;
-
-    try {
-      return await this.authService.googleLogin(mockToken);
-    } catch {
-      // If backend is unreachable, fallback to local storage Google profile
-      return this.authService.googleLoginOffline(mockEmail, 'Tester Google');
+  private async openSignIn(): Promise<UserProfile> {
+    if (!environment.googleClientId || environment.googleClientId.includes('-mock.')) {
+      throw new Error('Google sign-in is not configured yet. Please use email sign-in.');
     }
+    await this.loadGoogleScript();
+    // An official button remains available even when One Tap is suppressed by the browser.
+    return new Promise<UserProfile>((resolve, reject) => {
+      const dialog = document.createElement('dialog');
+      dialog.setAttribute('aria-label', 'Google sign-in');
+      dialog.style.cssText = 'padding:24px;border-radius:16px;border:0;max-width:90vw';
+      const title = document.createElement('p');
+      title.textContent = 'Continue with your Google account';
+      const button = document.createElement('div');
+      const cancel = document.createElement('button');
+      cancel.textContent = 'Cancel';
+      cancel.style.cssText = 'display:block;margin-top:16px;padding:8px 16px';
+      dialog.append(title, button, cancel);
+      let submitted = false;
+      const close = () => dialog.remove();
+      const abort = () => {
+        if (!submitted) {
+          close();
+          reject(new Error('Google sign-in cancelled.'));
+        }
+      };
+      cancel.onclick = abort;
+      dialog.addEventListener('cancel', (event) => {
+        event.preventDefault();
+        abort();
+      });
+      document.body.appendChild(dialog);
+      try {
+        identity()!.initialize({
+          client_id: environment.googleClientId,
+          callback: (response) => {
+            if (submitted) return;
+            if (!response.credential) {
+              close();
+              reject(new Error('Google returned no credential.'));
+              return;
+            }
+            submitted = true;
+            cancel.disabled = true;
+            this.authService.googleLogin(response.credential).then(resolve, reject).finally(close);
+          },
+        });
+        identity()!.renderButton(button, { type: 'standard', theme: 'outline', size: 'large' });
+        dialog.showModal();
+      } catch {
+        close();
+        reject(new Error('Could not open Google sign-in. Please retry.'));
+      }
+    });
   }
 }

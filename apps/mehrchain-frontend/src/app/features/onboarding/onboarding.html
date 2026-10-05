@@ -1,3 +1,6 @@
+@if (sessionError()) {
+  <p role="alert" class="text-red-500 p-3">{{ sessionError() }}</p>
+}
 <div
   appSwipe
   (swipeLeft)="onSwipeLeft()"
@@ -30,7 +33,9 @@
 
     @if (step() === 0) {
       <div class="text-center animate-fade-in space-y-2 sm:space-y-4 mt-2">
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
+        <h1
+          class="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight leading-tight"
+        >
           Small Acts.<br />
           <span class="text-primary">Big Change.</span>
         </h1>
@@ -47,31 +52,19 @@
   >
     @switch (step()) {
       @case (0) {
-        <app-welcome-step
-          (next)="nextStep()"
-          (openLogin)="openLoginModal()"
-        />
+        <app-welcome-step (next)="nextStep()" (openLogin)="openLoginModal()" />
       }
       @case (1) {
-        <app-why-choose-step
-          (next)="nextStep()"
-        />
+        <app-why-choose-step (next)="nextStep()" />
       }
       @case (2) {
-        <app-meaning-step
-          (next)="nextStep()"
-        />
+        <app-meaning-step (next)="nextStep()" />
       }
       @case (3) {
-        <app-chains-step
-          (next)="nextStep()"
-        />
+        <app-chains-step (next)="nextStep()" />
       }
       @case (4) {
-        <app-category-step
-          [categories]="categories"
-          (categorySelected)="selectCategory($event)"
-        />
+        <app-category-step [categories]="categories" (categorySelected)="selectCategory($event)" />
       }
       @case (5) {
         <app-habit-step
@@ -109,7 +102,7 @@
           [signUpPassword]="signUpPassword()"
           [signUpError]="signUpError()"
           [isDuplicateEmailError]="isDuplicateEmailError()"
-          [isNetworkError]="isNetworkSignUpError()"
+          [isNetworkError]="isNetworkSignUpError() && allowDemoMode"
           [showSignUpPassword]="showSignUpPassword()"
           [isSubmitting]="isSigningUp()"
           (usernameChange)="onSignUpUsernameChange($event)"
@@ -172,7 +165,7 @@
       [verificationCode]="verificationCode()"
       [verificationError]="verificationError()"
       [verificationSuccess]="verificationSuccess()"
-      [isNetworkError]="isNetworkVerifyError()"
+      [isNetworkError]="isNetworkVerifyError() && allowDemoMode"
       [isDemoMode]="isDemoModeActive()"
       [isVerifying]="isVerifying()"
       [isResending]="isResending()"

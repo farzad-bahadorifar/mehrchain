@@ -1,9 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Category } from '@prisma/client';
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { IsValidDuration } from '../validators/is-valid-duration.decorator';
 
 export class CreateCommitmentDto {
+  @ApiPropertyOptional({ default: false })
+  @IsBoolean()
+  @IsOptional()
+  isPublic?: boolean;
+
   @ApiProperty({ example: 'Drink water after waking up', description: 'Habit title' })
   @IsString()
   @IsNotEmpty()
@@ -13,7 +18,10 @@ export class CreateCommitmentDto {
   @IsEnum(Category)
   category!: Category;
 
-  @ApiPropertyOptional({ example: 'To start every day hydrated and energized', description: 'Personal why' })
+  @ApiPropertyOptional({
+    example: 'To start every day hydrated and energized',
+    description: 'Personal why',
+  })
   @IsString()
   @IsOptional()
   why?: string;

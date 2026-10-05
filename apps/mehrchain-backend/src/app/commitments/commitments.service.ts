@@ -67,6 +67,8 @@ export class CommitmentsService {
         currentDay: 0,
         currentStreak: 0,
         reminderTime: dto.reminderTime,
+        isPublic: dto.isPublic ?? false,
+        rippleEffects: [],
         history: [],
       },
     });
@@ -84,61 +86,67 @@ export class CommitmentsService {
    * @throws {ForbiddenException} If the commitment belongs to another user.
    */
   async completeCommitment(userId: string, commitmentId: string, note?: string) {
-    const commitment = await this.prisma.commitment.findUnique({
-      where: { id: commitmentId },
+    let newlyCompleted = false;
+    const result = await this.prisma.$transaction(async (tx) => {
+      // Serialize competing completions before reading today's state.
+      await tx.$queryRaw`SELECT "id" FROM "commitments" WHERE "id" = ${commitmentId} FOR UPDATE`;
+      const commitment = await tx.commitment.findUnique({
+        where: { id: commitmentId },
+      });
+
+      if (!commitment) {
+        throw new NotFoundException('Commitment not found.');
+      }
+
+      if (commitment.isArchived)
+        throw new ForbiddenException('Restore this habit before completing it.');
+      if (commitment.userId !== userId) {
+        throw new ForbiddenException('Access denied to this commitment.');
+      }
+
+      const today = new Date();
+      const todayUtc = today.toISOString().slice(0, 10); // 'YYYY-MM-DD'
+
+      const alreadyDone = commitment.lastCompletedDate
+        ? new Date(commitment.lastCompletedDate).toISOString().slice(0, 10) === todayUtc
+        : false;
+
+      if (alreadyDone) {
+        return { ...commitment, isCompletedToday: true };
+      }
+
+      // Create persistent activity log
+      await tx.commitmentLog.create({
+        data: {
+          commitmentId: commitment.id,
+          completedAt: today,
+          note: note?.trim(),
+        },
+      });
+
+      // Update streak and current day
+      const updated = await tx.commitment.update({
+        where: { id: commitment.id },
+        data: {
+          currentStreak: { increment: 1 },
+          currentDay:
+            commitment.totalDays === -1
+              ? commitment.currentDay + 1
+              : Math.min(commitment.currentDay + 1, commitment.totalDays),
+          lastCompletedDate: today,
+          history: { push: todayUtc },
+        },
+      });
+
+      newlyCompleted = true;
+
+      return {
+        ...updated,
+        isCompletedToday: true,
+      };
     });
-
-    if (!commitment) {
-      throw new NotFoundException('Commitment not found.');
-    }
-
-    if (commitment.userId !== userId) {
-      throw new ForbiddenException('Access denied to this commitment.');
-    }
-
-    const today = new Date();
-    const todayUtc = today.toISOString().slice(0, 10); // 'YYYY-MM-DD'
-
-    const alreadyDone = commitment.lastCompletedDate
-      ? new Date(commitment.lastCompletedDate).toISOString().slice(0, 10) === todayUtc
-      : false;
-
-    if (alreadyDone) {
-      return commitment;
-    }
-
-    // Create persistent activity log
-    await this.prisma.commitmentLog.create({
-      data: {
-        commitmentId: commitment.id,
-        completedAt: today,
-        note: note?.trim(),
-      },
-    });
-
-    // Update streak and current day
-    const updated = await this.prisma.commitment.update({
-      where: { id: commitment.id },
-      data: {
-        currentStreak: { increment: 1 },
-        currentDay:
-          commitment.totalDays === -1
-            ? commitment.currentDay + 1
-            : Math.min(commitment.currentDay + 1, commitment.totalDays),
-        lastCompletedDate: today,
-        history: { push: todayUtc },
-      },
-    });
-
-    // Auto-notify: update lastPartnerActivityAt on all linked ChainConnections
-    // so the partner's feed reflects the new activity immediately.
-    // Fire-and-forget — error handling is inside ChainNotificationService.
-    void this.chainNotification.notifyChainPartners(commitment.id);
-
-    return {
-      ...updated,
-      isCompletedToday: true,
-    };
+    if (newlyCompleted) void this.chainNotification.notifyChainPartners(commitmentId);
+    return result;
   }
 
   /**
@@ -172,6 +180,7 @@ export class CommitmentsService {
         ...(dto.why !== undefined && { why: dto.why?.trim() }),
         ...(dto.totalDays !== undefined && { totalDays: dto.totalDays }),
         ...(dto.reminderTime !== undefined && { reminderTime: dto.reminderTime }),
+        ...(dto.isPublic !== undefined && { isPublic: dto.isPublic }),
       },
     });
   }
@@ -288,4 +297,3 @@ export class CommitmentsService {
     };
   }
 }
-

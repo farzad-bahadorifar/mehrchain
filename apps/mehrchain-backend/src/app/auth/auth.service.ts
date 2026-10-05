@@ -7,6 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import axios from 'axios';
+import { randomBytes } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { LoginDto } from './dto/login.dto';
@@ -36,7 +37,7 @@ export class AuthService {
       where: { username: cleanUsername },
     });
 
-    if (existingUsername && existingUsername.isEmailVerified) {
+    if (existingUsername && existingUsername.email !== cleanEmail) {
       throw new ConflictException('This username is already taken. Please choose another one.');
     }
 
@@ -54,7 +55,7 @@ export class AuthService {
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
-    const targetUser = existingEmail || existingUsername;
+    const targetUser = existingEmail;
 
     if (targetUser && !targetUser.isEmailVerified) {
       // Refresh unverified record
@@ -92,7 +93,7 @@ export class AuthService {
       email: cleanEmail,
       username: cleanUsername,
       message: 'Verification code sent to your email address.',
-      previewCode: otpCode,
+      ...(process.env['NODE_ENV'] !== 'production' ? { previewCode: otpCode } : {}),
     };
   }
 
@@ -112,23 +113,7 @@ export class AuthService {
     }
 
     if (user.isEmailVerified) {
-      const accessToken = this.jwtService.sign({
-        sub: user.id,
-        email: user.email,
-        username: user.username,
-      });
-
-      return {
-        user: {
-          id: user.id,
-          username: user.username,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          createdAt: user.createdAt,
-        },
-        accessToken,
-      };
+      throw new BadRequestException('Email already verified. Please sign in.');
     }
 
     if (!user.verificationCode || user.verificationCode !== code) {
@@ -203,7 +188,7 @@ export class AuthService {
     return {
       success: true,
       message: 'A new verification code has been sent to your email.',
-      previewCode: otpCode,
+      ...(process.env['NODE_ENV'] !== 'production' ? { previewCode: otpCode } : {}),
     };
   }
 
@@ -220,7 +205,9 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('No account found with this email or username. Please sign up.');
+      throw new UnauthorizedException(
+        'No account found with this email or username. Please sign up.',
+      );
     }
 
     const isMatch = await bcrypt.compare(dto.password, user.passwordHash);
@@ -264,6 +251,9 @@ export class AuthService {
 
     // Handle mock token for development/tests
     if (idToken.startsWith('mock_google_') || idToken === 'test-google-token') {
+      if (process.env['NODE_ENV'] === 'production') {
+        throw new UnauthorizedException('Invalid Google token.');
+      }
       email = idToken.includes('@') ? idToken.replace('mock_google_', '') : 'testuser@gmail.com';
       name = 'Google User';
     } else {
@@ -282,15 +272,25 @@ export class AuthService {
           throw new UnauthorizedException('Google email address is not verified.');
         }
 
+        const clientId = process.env['GOOGLE_CLIENT_ID'];
+        if (
+          !clientId ||
+          payload.aud !== clientId ||
+          !['accounts.google.com', 'https://accounts.google.com'].includes(payload.iss) ||
+          !Number.isFinite(Number(payload.exp)) ||
+          Number(payload.exp) <= Date.now() / 1000 ||
+          !payload.sub
+        ) {
+          throw new UnauthorizedException('Invalid Google token claims.');
+        }
+
         email = payload.email;
         name = payload.name;
       } catch (err: any) {
         if (err instanceof UnauthorizedException) {
           throw err;
         }
-        throw new UnauthorizedException(
-          'Failed to verify Google token: ' + (err.response?.data?.error_description || err.message),
-        );
+        throw new UnauthorizedException('Unable to verify Google sign-in. Please try again.');
       }
     }
 
@@ -315,7 +315,10 @@ export class AuthService {
     } else {
       // Generate a unique clean username
       const baseUsername =
-        cleanEmail.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '').toLowerCase() || 'user';
+        cleanEmail
+          .split('@')[0]
+          .replace(/[^a-zA-Z0-9_]/g, '')
+          .toLowerCase() || 'user';
       let candidateUsername = baseUsername;
       let counter = 1;
 
@@ -323,7 +326,7 @@ export class AuthService {
         candidateUsername = `${baseUsername}${counter++}`;
       }
 
-      const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
+      const randomPassword = randomBytes(32).toString('hex');
       const passwordHash = await bcrypt.hash(randomPassword, 10);
 
       user = await this.prisma.user.create({

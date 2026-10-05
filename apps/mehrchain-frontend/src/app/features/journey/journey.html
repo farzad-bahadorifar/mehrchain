@@ -1,3 +1,6 @@
+@if (errorMessage()) {
+  <p role="alert" class="text-red-500">{{ errorMessage() }}</p>
+}
 <div class="min-h-[100dvh] bg-background pb-28 px-5 safe-top font-sans">
   <!-- Header with Mero mascot avatar -->
   <div class="flex items-center justify-between mb-6">
@@ -27,11 +30,12 @@
       </div>
     </div>
 
-
     <!-- Activity Heatmap Calendar -->
     <div class="bg-card rounded-3xl p-5 shadow-soft border border-border/50 mb-6">
       <div class="flex items-center gap-2 mb-4">
-        <div class="w-7 h-7 rounded-lg bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-orange-500 dark:text-orange-400">
+        <div
+          class="w-7 h-7 rounded-lg bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-orange-500 dark:text-orange-400"
+        >
           <lucide-icon name="flame" class="w-4 h-4"></lucide-icon>
         </div>
         <h2 class="font-bold text-base text-foreground">Activity Log</h2>
@@ -42,12 +46,16 @@
 
     <!-- Recent Activity -->
     <div class="space-y-3 mb-8">
-      <h3 class="font-bold text-sm text-foreground px-1 uppercase tracking-wider text-muted-foreground">
+      <h3
+        class="font-bold text-sm text-foreground px-1 uppercase tracking-wider text-muted-foreground"
+      >
         Recent Consistency
       </h3>
 
       @if (recentActivities().length === 0) {
-        <div class="text-center py-8 text-muted-foreground text-sm bg-muted/30 rounded-2xl border border-border/40">
+        <div
+          class="text-center py-8 text-muted-foreground text-sm bg-muted/30 rounded-2xl border border-border/40"
+        >
           No sparks yet. Complete a habit to log your first spark.
         </div>
       } @else {
@@ -82,7 +90,9 @@
       (click)="toggleArchived()"
     >
       <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl bg-muted flex items-center justify-center text-muted-foreground">
+        <div
+          class="w-8 h-8 rounded-xl bg-muted flex items-center justify-center text-muted-foreground"
+        >
           <lucide-icon name="archive" class="w-4 h-4"></lucide-icon>
         </div>
         <div>
@@ -124,11 +134,7 @@
               </div>
 
               <div class="flex items-center gap-2">
-                <mc-button
-                  variant="outline"
-                  size="sm"
-                  (clicked)="restoreHabit(habit.id)"
-                >
+                <mc-button variant="outline" size="sm" (clicked)="restoreHabit(habit.id)">
                   <lucide-icon name="rotate-ccw" class="w-3.5 h-3.5 text-primary"></lucide-icon>
                   <span>Restore</span>
                 </mc-button>

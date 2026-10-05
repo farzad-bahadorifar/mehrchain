@@ -75,7 +75,7 @@ describe('ChainService (Frontend Hybrid)', () => {
     expect(service.connections()).toEqual(mockConnections);
   });
 
-  it('should optimistically toggle heartSent and sync to API', async () => {
+  it('should confirm before toggling heartSent and sync to API', async () => {
     vi.spyOn(authService, 'getToken').mockReturnValue('jwt_valid_remote_token');
     vi.spyOn(authService, 'currentUser').mockReturnValue({
       id: 'user-1',
@@ -101,16 +101,17 @@ describe('ChainService (Frontend Hybrid)', () => {
     const heartPromise = service.sendHeart('conn-1');
 
     // State updated immediately (optimistic)
-    expect(service.connections()[0].heartSent).toBe(true);
+    expect(service.connections()[0].heartSent).toBe(false);
 
     const req = httpMock.expectOne(`${environment.apiUrl}/chain/connections/conn-1/heart`);
     expect(req.request.method).toBe('POST');
     req.flush({ ...mockConnection, heartSent: true });
 
     await heartPromise;
+    expect(service.connections()[0].heartSent).toBe(true);
   });
 
-  it('should optimistically update lastNudgeSentAt and sync to API', async () => {
+  it('should confirm before updating lastNudgeSentAt and sync to API', async () => {
     vi.spyOn(authService, 'getToken').mockReturnValue('jwt_valid_remote_token');
     vi.spyOn(authService, 'currentUser').mockReturnValue({
       id: 'user-1',
@@ -137,16 +138,17 @@ describe('ChainService (Frontend Hybrid)', () => {
     const nudgePromise = service.sendNudge('conn-1');
 
     // State updated immediately
-    expect(service.connections()[0].lastNudgeSentAt).toBeTruthy();
+    expect(service.connections()[0].lastNudgeSentAt).toBeNull();
 
     const req = httpMock.expectOne(`${environment.apiUrl}/chain/connections/conn-1/nudge`);
     expect(req.request.method).toBe('POST');
     req.flush({ ...mockConnection, lastNudgeSentAt: new Date().toISOString() });
 
     await nudgePromise;
+    expect(service.connections()[0].lastNudgeSentAt).toBeTruthy();
   });
 
-  it('should disconnect connection optimistically and call API', async () => {
+  it('should disconnect connection after confirmation and call API', async () => {
     vi.spyOn(authService, 'getToken').mockReturnValue('jwt_valid_remote_token');
     vi.spyOn(authService, 'currentUser').mockReturnValue({
       id: 'user-1',
@@ -171,14 +173,15 @@ describe('ChainService (Frontend Hybrid)', () => {
 
     const disconnectPromise = service.disconnect('conn-1');
 
-    expect(service.connections()[0].status).toBe('DISCONNECTED');
-    expect(service.activeConnections().length).toBe(0);
+    expect(service.connections()[0].status).toBe('ACTIVE');
+    expect(service.activeConnections().length).toBe(1);
 
     const req = httpMock.expectOne(`${environment.apiUrl}/chain/connections/conn-1`);
     expect(req.request.method).toBe('DELETE');
-    req.flush({});
+    req.flush({ ...mockConnection, status: 'DISCONNECTED' });
 
     await disconnectPromise;
+    expect(service.activeConnections().length).toBe(0);
   });
 
   it('should correctly evaluate unread partner activity and clear on markAsRead', () => {
@@ -241,9 +244,8 @@ describe('ChainService (Frontend Hybrid)', () => {
     const url = service.getInviteUrl('comm-123');
     expect(url).toContain('https://mehrchain.pages.dev/chain?');
     expect(url).toContain('invite=comm-123');
-    expect(url).toContain('inviter=Farzad');
-    expect(url).toContain('habit=Morning+Yoga');
-    expect(url).toContain('category=health');
+    expect(url).not.toContain('inviter=');
+    expect(url).not.toContain('habit=');
   });
 
   it('should parse invite parameters correctly', () => {

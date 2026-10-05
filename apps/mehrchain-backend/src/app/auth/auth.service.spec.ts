@@ -1,8 +1,5 @@
-import {
-  BadRequestException,
-  ConflictException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import axios from 'axios';
+import { BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { AuthService } from './auth.service';
 
@@ -77,7 +74,11 @@ describe('AuthService (Unit Tests)', () => {
     });
 
     it('should refresh OTP and update existing unverified user', async () => {
-      mockPrisma.user.findUnique.mockResolvedValue({ id: 'existing-id', isEmailVerified: false });
+      mockPrisma.user.findUnique.mockResolvedValue({
+        id: 'existing-id',
+        email: 'unverified@example.com',
+        isEmailVerified: false,
+      });
       mockPrisma.user.update.mockResolvedValue({});
 
       const result = await service.register({
@@ -186,9 +187,9 @@ describe('AuthService (Unit Tests)', () => {
         isEmailVerified: true,
       });
 
-      await expect(
-        service.resendVerificationCode({ email: 'farzad@example.com' }),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.resendVerificationCode({ email: 'farzad@example.com' })).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -337,5 +338,122 @@ describe('AuthService (Unit Tests)', () => {
 
       await expect(service.deleteAccount('nonexistent-id')).rejects.toThrow(UnauthorizedException);
     });
+  });
+
+  describe('production authentication regressions', () => {
+    let originalNodeEnv: string | undefined;
+    beforeEach(() => {
+      originalNodeEnv = process.env['NODE_ENV'];
+      process.env['NODE_ENV'] = 'production';
+    });
+    afterEach(() => {
+      if (originalNodeEnv === undefined) delete process.env['NODE_ENV'];
+      else process.env['NODE_ENV'] = originalNodeEnv;
+    });
+    it('rejects mock Google tokens before touching the database', async () => {
+      await expect(
+        service.googleLogin({ idToken: 'mock_google_victim@gmail.com' }),
+      ).rejects.toThrow(UnauthorizedException);
+      expect(mockPrisma.user.findUnique).not.toHaveBeenCalled();
+      expect(mockJwt.sign).not.toHaveBeenCalled();
+    });
+    it('never authenticates a verified user with an arbitrary OTP', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue({ id: 'victim', isEmailVerified: true });
+      await expect(
+        service.verifyEmail({ email: 'victim@example.com', code: '000000' }),
+      ).rejects.toThrow(BadRequestException);
+      expect(mockJwt.sign).not.toHaveBeenCalled();
+    });
+    it('does not disclose the registration OTP', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue(null);
+      mockPrisma.user.create.mockResolvedValue({ id: 'new' });
+      const result = await service.register({
+        username: 'new_user',
+        email: 'new@example.com',
+        password: 'password123',
+      });
+      expect(result).not.toHaveProperty('previewCode');
+    });
+    it('does not overwrite an unverified username owned by another email', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue({
+        id: 'other',
+        email: 'other@example.com',
+        isEmailVerified: false,
+      });
+      await expect(
+        service.register({
+          username: 'taken',
+          email: 'attacker@example.com',
+          password: 'password123',
+        }),
+      ).rejects.toThrow(ConflictException);
+      expect(mockPrisma.user.update).not.toHaveBeenCalled();
+    });
+  });
+
+  it.each([
+    { aud: 'different-client' },
+    { iss: 'https://attacker.example' },
+    { exp: '1' },
+    { email_verified: 'false' },
+  ])('rejects invalid Google claims %j without creating a user', async (invalid) => {
+    const previous = process.env['GOOGLE_CLIENT_ID'];
+    process.env['GOOGLE_CLIENT_ID'] = 'real-web-client';
+    const spy = jest
+      .spyOn(axios, 'get')
+      .mockResolvedValue({
+        data: {
+          email: 'real@example.com',
+          email_verified: 'true',
+          aud: 'real-web-client',
+          iss: 'https://accounts.google.com',
+          sub: 'google-id',
+          exp: String(Math.floor(Date.now() / 1000) + 300),
+          ...invalid,
+        },
+      });
+    try {
+      await expect(service.googleLogin({ idToken: 'real-signed-token' })).rejects.toThrow(
+        UnauthorizedException,
+      );
+      expect(mockPrisma.user.create).not.toHaveBeenCalled();
+      expect(mockJwt.sign).not.toHaveBeenCalled();
+    } finally {
+      spy.mockRestore();
+      if (previous === undefined) delete process.env['GOOGLE_CLIENT_ID'];
+      else process.env['GOOGLE_CLIENT_ID'] = previous;
+    }
+  });
+  it('keeps the same database identity for repeated verified Google sign-ins', async () => {
+    const previous = process.env['GOOGLE_CLIENT_ID'];
+    process.env['GOOGLE_CLIENT_ID'] = 'real-web-client';
+    const spy = jest
+      .spyOn(axios, 'get')
+      .mockResolvedValue({
+        data: {
+          email: 'real@example.com',
+          email_verified: 'true',
+          aud: 'real-web-client',
+          iss: 'https://accounts.google.com',
+          sub: 'google-id',
+          exp: String(Math.floor(Date.now() / 1000) + 300),
+        },
+      });
+    mockPrisma.user.findUnique.mockResolvedValue({
+      id: 'stable-id',
+      email: 'real@example.com',
+      username: 'real',
+      isEmailVerified: true,
+    });
+    try {
+      const first = await service.googleLogin({ idToken: 'signed-token' });
+      const second = await service.googleLogin({ idToken: 'signed-token' });
+      expect(first.user.id).toBe(second.user.id);
+      expect(mockPrisma.user.create).not.toHaveBeenCalled();
+    } finally {
+      spy.mockRestore();
+      if (previous === undefined) delete process.env['GOOGLE_CLIENT_ID'];
+      else process.env['GOOGLE_CLIENT_ID'] = previous;
+    }
   });
 });

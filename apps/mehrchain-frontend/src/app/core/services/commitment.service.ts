@@ -19,6 +19,7 @@ export class CommitmentService {
   readonly overallStreak = this.store.overallStreak;
   readonly archivedCommitments = this.store.archivedCommitments;
   readonly isLoading = this.store.isLoading;
+  readonly syncError = this.store.syncError;
 
   // Actions
   loadForUser(userId: string): void {
@@ -60,7 +61,6 @@ export class CommitmentService {
   resetData(): void {
     this.store.resetState();
   }
-
 
   clearUserStorage(userId: string): void {
     this.store.clearUserStorage(userId);

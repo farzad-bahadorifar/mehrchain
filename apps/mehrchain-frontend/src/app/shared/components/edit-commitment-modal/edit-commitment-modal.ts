@@ -91,11 +91,11 @@ export class EditCommitmentModal {
     }
   }
 
-  isSubmitting = signal(false);
+  isSubmitting = input(false);
+  errorMessage = input<string | null>(null);
 
   onSubmit() {
     if (this.isSubmitting() || !this.isValid()) return;
-    this.isSubmitting.set(true);
 
     this.save.emit({
       id: this.commitment().id,

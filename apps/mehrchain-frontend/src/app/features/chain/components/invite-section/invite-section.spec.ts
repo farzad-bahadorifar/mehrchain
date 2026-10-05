@@ -44,6 +44,10 @@ describe('InviteSectionComponent', () => {
     fixture = TestBed.createComponent(InviteSectionComponent);
     component = fixture.componentInstance;
     chainService = TestBed.inject(ChainService);
+    vi.spyOn(chainService, 'createInvite').mockResolvedValue({
+      inviteCode: 'server-code',
+      expiresAt: new Date(Date.now() + 60000).toISOString(),
+    } as any);
   });
 
   afterEach(() => {
@@ -76,19 +80,19 @@ describe('InviteSectionComponent', () => {
     expect(component.isDropdownOpen()).toBe(false);
   });
 
-  it('should toggle QR modal', () => {
+  it('should toggle QR modal after creating server invite', async () => {
     fixture.componentRef.setInput('commitments', mockCommitments);
     fixture.detectChanges();
 
     expect(component.isQrModalOpen()).toBe(false);
-    component.toggleQrModal(true);
+    await component.toggleQrModal(true);
     expect(component.isQrModalOpen()).toBe(true);
     component.toggleQrModal(false);
     expect(component.isQrModalOpen()).toBe(false);
   });
 
   it('should call shareInvite and copyLinkOnly on user actions', async () => {
-    const shareSpy = vi.spyOn(chainService, 'shareInvite').mockResolvedValue(true);
+    const shareSpy = vi.spyOn(chainService, 'createInvite');
     const copySpy = vi.spyOn(chainService, 'copyInviteToClipboard').mockResolvedValue(true);
     let emittedToast = '';
     component.notifyToast.subscribe((msg) => (emittedToast = msg));
@@ -98,10 +102,12 @@ describe('InviteSectionComponent', () => {
 
     await component.shareInviteLink();
     expect(shareSpy).toHaveBeenCalled();
-    expect(emittedToast).toContain('Invite link shared');
+    expect(emittedToast).toContain('Invite');
 
     await component.copyLinkOnly();
     expect(copySpy).toHaveBeenCalled();
     expect(component.copied()).toBe(true);
+    expect(shareSpy).toHaveBeenCalledTimes(1);
+    expect(copySpy).toHaveBeenLastCalledWith(expect.stringContaining('invite=server-code'));
   });
 });

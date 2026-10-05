@@ -13,6 +13,7 @@ describe('ChainService (Unit Tests)', () => {
       create: jest.fn(),
       findUnique: jest.fn(),
       update: jest.fn(),
+      updateMany: jest.fn().mockResolvedValue({ count: 1 }),
     },
     chainConnection: {
       create: jest.fn(),
@@ -33,9 +34,9 @@ describe('ChainService (Unit Tests)', () => {
     it('should throw NotFoundException if commitment does not exist', async () => {
       mockPrisma.commitment.findUnique.mockResolvedValue(null);
 
-      await expect(
-        service.createInvite('user-1', { commitmentId: 'comm-1' })
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.createInvite('user-1', { commitmentId: 'comm-1' })).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw BadRequestException if commitment is not public', async () => {
@@ -45,9 +46,9 @@ describe('ChainService (Unit Tests)', () => {
         isPublic: false,
       });
 
-      await expect(
-        service.createInvite('user-1', { commitmentId: 'comm-1' })
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.createInvite('user-1', { commitmentId: 'comm-1' })).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should create invite with 7-day expiration when commitment is public', async () => {
@@ -121,7 +122,7 @@ describe('ChainService (Unit Tests)', () => {
         status: ChainInviteStatus.PENDING,
         expiresAt: futureDate,
         sender: { username: 'alice', name: 'Alice' },
-        senderCommitment: { title: 'Study', category: 'career' },
+        senderCommitment: { title: 'Study', category: 'growth', isPublic: true },
       };
       mockPrisma.chainInvite.findUnique.mockResolvedValue(mockInvite);
 
@@ -132,7 +133,9 @@ describe('ChainService (Unit Tests)', () => {
         where: { inviteCode: 'code-1' },
         include: {
           sender: { select: { username: true, name: true } },
-          senderCommitment: { select: { title: true, category: true } },
+          senderCommitment: {
+            select: { title: true, category: true, isPublic: true, isArchived: true },
+          },
         },
       });
     });
@@ -150,7 +153,7 @@ describe('ChainService (Unit Tests)', () => {
       });
 
       await expect(
-        service.acceptInvite('user-1', 'code-1', { commitmentId: 'comm-2' })
+        service.acceptInvite('user-1', 'code-1', { commitmentId: 'comm-2' }),
       ).rejects.toThrow(BadRequestException);
     });
 
@@ -167,7 +170,7 @@ describe('ChainService (Unit Tests)', () => {
       mockPrisma.commitment.findUnique.mockResolvedValue(null);
 
       await expect(
-        service.acceptInvite('user-2', 'code-1', { commitmentId: 'comm-2' })
+        service.acceptInvite('user-2', 'code-1', { commitmentId: 'comm-2' }),
       ).rejects.toThrow(NotFoundException);
     });
 
@@ -184,6 +187,7 @@ describe('ChainService (Unit Tests)', () => {
       mockPrisma.commitment.findUnique.mockResolvedValue({
         id: 'comm-2',
         userId: 'user-2',
+        isPublic: true,
       });
 
       const mockSenderConnection = {
@@ -202,7 +206,7 @@ describe('ChainService (Unit Tests)', () => {
       };
 
       const mockTx = {
-        chainInvite: { update: jest.fn().mockResolvedValue({}) },
+        chainInvite: { updateMany: jest.fn().mockResolvedValue({ count: 1 }) },
         chainConnection: {
           create: jest
             .fn()
@@ -217,8 +221,12 @@ describe('ChainService (Unit Tests)', () => {
 
       const result = await service.acceptInvite('user-2', 'code-1', { commitmentId: 'comm-2' });
 
-      expect(mockTx.chainInvite.update).toHaveBeenCalledWith({
-        where: { id: 'inv-1' },
+      expect(mockTx.chainInvite.updateMany).toHaveBeenCalledWith({
+        where: {
+          id: 'inv-1',
+          status: ChainInviteStatus.PENDING,
+          expiresAt: { gt: expect.any(Date) },
+        },
         data: {
           status: ChainInviteStatus.ACCEPTED,
           acceptedById: 'user-2',
@@ -265,11 +273,16 @@ describe('ChainService (Unit Tests)', () => {
       const result = await service.getConnections('user-1');
 
       expect(mockPrisma.chainConnection.findMany).toHaveBeenCalledWith({
-        where: { userId: 'user-1' },
+        where: { userId: 'user-1', status: { not: ChainStatus.DISCONNECTED } },
         include: {
           partner: { select: { username: true, name: true } },
           partnerCommitment: {
-            select: { title: true, category: true, consecutiveMissedDays: true },
+            select: {
+              title: true,
+              category: true,
+              consecutiveMissedDays: true,
+              lastCompletedDate: true,
+            },
           },
         },
         orderBy: { lastPartnerActivityAt: 'desc' },

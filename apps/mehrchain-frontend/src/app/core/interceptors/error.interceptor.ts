@@ -7,9 +7,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       let normalizedMessage = 'An unexpected error occurred. Please try again.';
 
       if (error.status === 0) {
-        normalizedMessage = 'Unable to connect to the server. Please check your internet connection.';
+        normalizedMessage =
+          'Unable to connect to the server. Please check your internet connection.';
       } else if (error.status === 401) {
-        const isAuthEndpoint = req.url.includes('/auth/login') ||
+        const isAuthEndpoint =
+          req.url.includes('/auth/login') ||
           req.url.includes('/auth/register') ||
           req.url.includes('/auth/verify-email') ||
           req.url.includes('/auth/resend-verification');
@@ -47,7 +49,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       console.warn(`[HTTP Error ${error.status}] ${req.method} ${req.url}:`, normalizedMessage);
 
-      return throwError(() => new Error(normalizedMessage));
-    })
+      return throwError(() =>
+        Object.assign(new Error(normalizedMessage), {
+          status: error.status,
+          error: error.error,
+        }),
+      );
+    }),
   );
 };

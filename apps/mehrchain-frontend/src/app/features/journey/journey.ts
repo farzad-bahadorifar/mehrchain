@@ -26,10 +26,13 @@ import { JourneySkeletonComponent } from '../../shared/components/skeletons';
 export class Journey implements OnInit {
   commitmentService = inject(CommitmentService);
 
+  errorMessage = signal<string | null>(null);
   showArchived = signal(false);
 
   ngOnInit(): void {
-    this.commitmentService.fetchArchivedCommitments();
+    void this.commitmentService
+      .fetchArchivedCommitments()
+      .catch((error) => this.errorMessage.set(error.message));
   }
 
   toggleArchived(): void {
@@ -37,12 +40,22 @@ export class Journey implements OnInit {
   }
 
   async restoreHabit(id: string): Promise<void> {
-    await this.commitmentService.restoreCommitment(id);
+    try {
+      await this.commitmentService.restoreCommitment(id);
+      this.errorMessage.set(null);
+    } catch (error) {
+      this.errorMessage.set(error instanceof Error ? error.message : 'Could not restore habit.');
+    }
   }
 
   async permanentDeleteHabit(id: string): Promise<void> {
     if (confirm('Are you sure you want to permanently delete this habit and all its history?')) {
-      await this.commitmentService.permanentDeleteCommitment(id);
+      try {
+        await this.commitmentService.permanentDeleteCommitment(id);
+        this.errorMessage.set(null);
+      } catch (error) {
+        this.errorMessage.set(error instanceof Error ? error.message : 'Could not delete habit.');
+      }
     }
   }
 
@@ -94,4 +107,3 @@ export class Journey implements OnInit {
   totalActivities = computed(() => this.allHistory().length);
   longestStreak = this.commitmentService.overallStreak;
 }
-

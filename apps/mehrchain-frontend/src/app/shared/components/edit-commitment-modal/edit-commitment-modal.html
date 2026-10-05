@@ -6,6 +6,9 @@
   <div
     class="bg-card w-full max-w-md rounded-3xl p-6 shadow-2xl z-10 border border-border/50 max-h-[90vh] overflow-y-auto animate-scale-in"
   >
+    @if (errorMessage()) {
+      <p role="alert" class="text-red-500 mb-3">{{ errorMessage() }}</p>
+    }
     <div class="flex justify-between items-center mb-5">
       <div class="flex items-center gap-2.5">
         <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
@@ -43,7 +46,9 @@
     <form (ngSubmit)="onSubmit()" class="space-y-4">
       <!-- Habit Title -->
       <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+        <label
+          class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5"
+        >
           Habit Name
         </label>
         <input
@@ -58,7 +63,9 @@
 
       <!-- Why (Personal Motivation) -->
       <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1.5">
+        <label
+          class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1.5"
+        >
           <span>Why this matters to you</span>
           <span class="text-[10px] text-primary lowercase">(your spark)</span>
         </label>
@@ -74,7 +81,9 @@
 
       <!-- Target Duration -->
       <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+        <label
+          class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5"
+        >
           Target Duration
         </label>
         <div class="grid grid-cols-2 gap-2.5">
@@ -110,7 +119,9 @@
                 [value]="customDurationText()"
                 (input)="onCustomDurationInput($any($event.target).value)"
                 class="w-full text-center font-bold text-xs outline-none bg-transparent h-full transition-colors"
-                [class]="!isDurationValid() ? 'text-red-500 placeholder:text-red-400/50' : 'text-primary'"
+                [class]="
+                  !isDurationValid() ? 'text-red-500 placeholder:text-red-400/50' : 'text-primary'
+                "
                 placeholder="e.g. 21"
                 autoFocus
               />
@@ -141,7 +152,9 @@
 
       <!-- Daily Reminder Time -->
       <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1.5">
+        <label
+          class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1.5"
+        >
           <lucide-icon name="bell" class="w-3.5 h-3.5 text-primary"></lucide-icon>
           <span>Daily Reminder Time</span>
         </label>
@@ -156,7 +169,9 @@
 
       <!-- Category Selector -->
       <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+        <label
+          class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5"
+        >
           Category
         </label>
         <div class="grid grid-cols-2 gap-2">

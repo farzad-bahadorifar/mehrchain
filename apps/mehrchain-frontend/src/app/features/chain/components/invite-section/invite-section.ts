@@ -32,12 +32,33 @@ export class InviteSectionComponent {
     return list.find((c) => c.id === currentId) || list[0];
   });
 
-  readonly currentInviteUrl = computed(() => {
-    const commitment = this.selectedCommitment();
-    return this.chainService.getInviteUrl(commitment ? commitment.id : undefined);
-  });
+  readonly currentInviteUrl = signal('');
+  private inviteHabitId = '';
+  private inviteExpiresAt = 0;
+
+  private async prepareInvite(): Promise<string> {
+    const habit = this.selectedCommitment();
+    if (!habit) throw new Error('Select a public habit.');
+    if (
+      this.inviteHabitId === habit.id &&
+      this.inviteExpiresAt > Date.now() &&
+      this.currentInviteUrl()
+    )
+      return this.currentInviteUrl();
+    const invite = await this.chainService.createInvite(habit.id);
+    if (this.selectedCommitment()?.id !== habit.id)
+      throw new Error('Habit selection changed. Please retry.');
+    this.inviteHabitId = habit.id;
+    this.inviteExpiresAt = new Date(invite.expiresAt).getTime();
+    const url = this.chainService.getInviteUrl(invite.inviteCode);
+    this.currentInviteUrl.set(url);
+    return url;
+  }
 
   selectCommitment(id: string): void {
+    this.currentInviteUrl.set('');
+    this.isQrModalOpen.set(false);
+    this.copied.set(false);
     this.selectedCommitmentId.set(id);
     this.isDropdownOpen.set(false);
   }
@@ -61,27 +82,51 @@ export class InviteSectionComponent {
     if (this.isSharing()) return;
     this.isSharing.set(true);
     try {
-      const habit = this.selectedCommitment();
-      const habitTitle = habit ? habit.title : 'My Daily Habit';
-      const shared = await this.chainService.shareInvite(habitTitle, habit ? habit.id : undefined);
-      if (shared) {
-        this.notifyToast.emit('Invite link shared / copied to clipboard!');
+      const url = await this.prepareInvite();
+      if (typeof navigator.share === 'function') {
+        await navigator.share({ title: 'MehrChain Invite', text: 'Join my habit chain', url });
+        this.notifyToast.emit('Invite shared.');
+      } else {
+        const copied = await this.chainService.copyInviteToClipboard(url);
+        this.notifyToast.emit(copied ? 'Invite copied.' : 'Could not copy. Please retry.');
       }
+    } catch {
+      this.notifyToast.emit('Could not share the invite. Please retry.');
     } finally {
       this.isSharing.set(false);
     }
   }
 
   async copyLinkOnly(): Promise<void> {
-    const success = await this.chainService.copyInviteToClipboard(this.currentInviteUrl());
-    if (success) {
+    if (this.isSharing()) return;
+    this.isSharing.set(true);
+    try {
+      const copied = await this.chainService.copyInviteToClipboard(await this.prepareInvite());
+      if (!copied) throw new Error('Clipboard unavailable.');
       this.copied.set(true);
-      this.notifyToast.emit('Invite link copied to clipboard!');
+      this.notifyToast.emit('Invite copied.');
       setTimeout(() => this.copied.set(false), 2500);
+    } catch {
+      this.notifyToast.emit('Could not copy the invite. Please retry.');
+    } finally {
+      this.isSharing.set(false);
     }
   }
 
-  toggleQrModal(open?: boolean): void {
-    this.isQrModalOpen.set(open !== undefined ? open : !this.isQrModalOpen());
+  async toggleQrModal(open?: boolean): Promise<void> {
+    if (open === false || (open === undefined && this.isQrModalOpen())) {
+      this.isQrModalOpen.set(false);
+      return;
+    }
+    if (this.isSharing()) return;
+    this.isSharing.set(true);
+    try {
+      await this.prepareInvite();
+      this.isQrModalOpen.set(true);
+    } catch {
+      this.notifyToast.emit('Could not create a QR invite. Please retry.');
+    } finally {
+      this.isSharing.set(false);
+    }
   }
 }
