@@ -48,6 +48,13 @@ export class ChainController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @Delete('invite/:id')
+  cancelInvite(@CurrentUser() user: { id: string }, @Param('id') id: string) {
+    return this.chainService.cancelInvite(user.id, id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Send heart (toggle)' })
   @Post('connections/:id/heart')
   sendHeart(@CurrentUser() user: { id: string }, @Param('id') id: string) {

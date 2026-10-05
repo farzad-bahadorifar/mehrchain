@@ -23,13 +23,15 @@ describe('ChainNotificationService (Unit Tests)', () => {
 
       expect(mockPrisma.chainConnection.updateMany).toHaveBeenCalledWith({
         where: {
-          userCommitmentId: 'comm-1',
+          partnerCommitmentId: 'comm-1',
           status: {
             in: [ChainStatus.ACTIVE, ChainStatus.RESTING, ChainStatus.FADING],
           },
         },
         data: {
           lastPartnerActivityAt: expect.any(Date),
+          status: ChainStatus.ACTIVE,
+          consecutiveMissedDays: 0,
         },
       });
     });

@@ -88,6 +88,23 @@ describe('CommitmentsService (Unit Tests)', () => {
   });
 
   describe('completeCommitment', () => {
+    it('restarts the streak after a missed UTC day while preserving total progress', async () => {
+      mockPrisma.commitment.findUnique.mockResolvedValue({
+        id: 'comm-gap',
+        userId: 'user-1',
+        currentStreak: 8,
+        currentDay: 12,
+        totalDays: 21,
+        lastCompletedDate: new Date(Date.now() - 3 * 86400000),
+      });
+      mockPrisma.commitment.update.mockResolvedValue({ id: 'comm-gap' });
+      await service.completeCommitment('user-1', 'comm-gap');
+      expect(mockPrisma.commitment.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ currentStreak: 1, currentDay: 13 }),
+        }),
+      );
+    });
     it('should record a log and increment streak on first completion today', async () => {
       const yesterday = new Date(Date.now() - 86400000);
       mockPrisma.commitment.findUnique.mockResolvedValue({

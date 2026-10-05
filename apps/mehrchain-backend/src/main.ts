@@ -19,6 +19,8 @@ async function bootstrap() {
     'https://mehrchain.pages.dev',
     // Mobile: Capacitor WebView (Android & iOS)
     'capacitor://localhost',
+    'https://localhost',
+    'http://localhost',
     'ionic://localhost',
     // Local development
     'http://localhost:4200',

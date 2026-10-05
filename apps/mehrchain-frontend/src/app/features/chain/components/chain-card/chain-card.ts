@@ -63,20 +63,21 @@ export class ChainCardComponent {
     if (conn.status === 'COMPLETED') {
       return 'JOURNEY_COMPLETED';
     }
-    if (conn.status === 'FADING' || (conn.consecutiveMissedDays && conn.consecutiveMissedDays >= 2)) {
+    const lastCompleted = conn.partnerCommitment?.lastCompletedDate;
+    if (
+      lastCompleted &&
+      new Date(lastCompleted).toISOString().slice(0, 10) === new Date().toISOString().slice(0, 10)
+    ) {
+      return 'COMPLETED_TODAY';
+    }
+    if (
+      conn.status === 'FADING' ||
+      (conn.consecutiveMissedDays && conn.consecutiveMissedDays >= 2)
+    ) {
       return 'FADING';
     }
     if (conn.status === 'RESTING' || conn.consecutiveMissedDays === 1) {
       return 'RESTING';
-    }
-
-    const lastCompleted = conn.partnerCommitment?.lastCompletedDate;
-    if (lastCompleted) {
-      const compDate = new Date(lastCompleted).toISOString().split('T')[0];
-      const todayStr = new Date().toISOString().split('T')[0];
-      if (compDate === todayStr) {
-        return 'COMPLETED_TODAY';
-      }
     }
 
     return 'WAITING';

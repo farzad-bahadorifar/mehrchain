@@ -16,7 +16,7 @@ export class ChainNotificationService {
 
   /**
    * Updates `lastPartnerActivityAt` for all active chain connections where the
-   * given commitment is the user's linked habit. Called automatically when a
+   * given commitment is the partner's linked habit. Called automatically when a
    * user completes their habit.
    *
    * Only notifies ACTIVE, RESTING, and FADING connections.
@@ -28,13 +28,15 @@ export class ChainNotificationService {
     try {
       const result = await this.prisma.chainConnection.updateMany({
         where: {
-          userCommitmentId: commitmentId,
+          partnerCommitmentId: commitmentId,
           status: {
             in: [ChainStatus.ACTIVE, ChainStatus.RESTING, ChainStatus.FADING],
           },
         },
         data: {
           lastPartnerActivityAt: new Date(),
+          status: ChainStatus.ACTIVE,
+          consecutiveMissedDays: 0,
         },
       });
 

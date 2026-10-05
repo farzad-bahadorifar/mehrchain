@@ -228,9 +228,7 @@ describe('ChainService (Unit Tests)', () => {
           expiresAt: { gt: expect.any(Date) },
         },
         data: {
-          status: ChainInviteStatus.ACCEPTED,
-          acceptedById: 'user-2',
-          acceptedCommitmentId: 'comm-2',
+          status: ChainInviteStatus.PENDING,
         },
       });
       expect(mockTx.chainConnection.create).toHaveBeenNthCalledWith(1, {
@@ -264,6 +262,9 @@ describe('ChainService (Unit Tests)', () => {
           userId: 'user-1',
           partnerId: 'user-2',
           lastPartnerActivityAt: new Date(),
+          createdAt: new Date(),
+          status: ChainStatus.ACTIVE,
+          consecutiveMissedDays: 0,
           partner: { username: 'bob', name: 'Bob' },
           partnerCommitment: { title: 'Exercise', category: 'health', consecutiveMissedDays: 0 },
         },
@@ -287,7 +288,9 @@ describe('ChainService (Unit Tests)', () => {
         },
         orderBy: { lastPartnerActivityAt: 'desc' },
       });
-      expect(result).toEqual(mockConnections);
+      expect(result).toEqual(
+        mockConnections.map((c) => ({ ...c, heartSent: false, heartReceived: false })),
+      );
     });
   });
 
@@ -313,7 +316,7 @@ describe('ChainService (Unit Tests)', () => {
 
       expect(mockPrisma.chainConnection.update).toHaveBeenCalledWith({
         where: { id: 'conn-1' },
-        data: { heartSent: true },
+        data: { heartSent: true, heartSentAt: expect.any(Date) },
       });
       expect(result.heartSent).toBe(true);
     });
@@ -323,6 +326,7 @@ describe('ChainService (Unit Tests)', () => {
         id: 'conn-1',
         userId: 'user-1',
         heartSent: true,
+        heartSentAt: new Date(),
       });
       mockPrisma.chainConnection.update.mockResolvedValue({
         id: 'conn-1',
@@ -333,7 +337,7 @@ describe('ChainService (Unit Tests)', () => {
 
       expect(mockPrisma.chainConnection.update).toHaveBeenCalledWith({
         where: { id: 'conn-1' },
-        data: { heartSent: false },
+        data: { heartSent: false, heartSentAt: null },
       });
       expect(result.heartSent).toBe(false);
     });

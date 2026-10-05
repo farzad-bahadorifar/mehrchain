@@ -44,6 +44,31 @@ describe('ChainCardComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('shows received support separately from a heart sent to the partner', () => {
+    fixture.componentRef.setInput('connection', {
+      ...baseConnection,
+      heartSent: false,
+      heartReceived: true,
+    });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Sara Smith supported your habit today');
+    expect(component.isHeartSent()).toBe(false);
+  });
+
+  it("shows today's completion immediately even when the cached status is fading", () => {
+    fixture.componentRef.setInput('connection', {
+      ...baseConnection,
+      status: 'FADING',
+      consecutiveMissedDays: 2,
+      partnerCommitment: {
+        ...baseConnection.partnerCommitment,
+        lastCompletedDate: new Date().toISOString(),
+      },
+    });
+    fixture.detectChanges();
+    expect(component.visualState()).toBe('COMPLETED_TODAY');
+  });
+
   it('should display partner username, display initial and habit title', () => {
     fixture.componentRef.setInput('connection', baseConnection);
     fixture.detectChanges();
@@ -162,7 +187,9 @@ describe('ChainCardComponent', () => {
     fixture.componentRef.setInput('connection', baseConnection);
     fixture.detectChanges();
 
-    const heartBtn = fixture.nativeElement.querySelector('button[aria-label="Send silent heart"]') as HTMLButtonElement;
+    const heartBtn = fixture.nativeElement.querySelector(
+      'button[aria-label="Send silent heart"]',
+    ) as HTMLButtonElement;
     expect(heartBtn).toBeTruthy();
     heartBtn.click();
 
@@ -180,7 +207,9 @@ describe('ChainCardComponent', () => {
     expect(component.isMenuOpen()).toBe(false);
 
     // Click 3-dot options
-    const optionsBtn = fixture.nativeElement.querySelector('button[aria-label="Card options"]') as HTMLButtonElement;
+    const optionsBtn = fixture.nativeElement.querySelector(
+      'button[aria-label="Card options"]',
+    ) as HTMLButtonElement;
     optionsBtn.click();
     fixture.detectChanges();
 

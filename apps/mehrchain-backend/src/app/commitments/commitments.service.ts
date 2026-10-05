@@ -128,7 +128,13 @@ export class CommitmentsService {
       const updated = await tx.commitment.update({
         where: { id: commitment.id },
         data: {
-          currentStreak: { increment: 1 },
+          currentStreak:
+            commitment.lastCompletedDate &&
+            Date.parse(todayUtc) -
+              Date.parse(new Date(commitment.lastCompletedDate).toISOString().slice(0, 10)) ===
+              86400000
+              ? commitment.currentStreak + 1
+              : 1,
           currentDay:
             commitment.totalDays === -1
               ? commitment.currentDay + 1
@@ -145,7 +151,7 @@ export class CommitmentsService {
         isCompletedToday: true,
       };
     });
-    if (newlyCompleted) void this.chainNotification.notifyChainPartners(commitmentId);
+    if (newlyCompleted) await this.chainNotification.notifyChainPartners(commitmentId);
     return result;
   }
 

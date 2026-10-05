@@ -128,6 +128,7 @@ model ChainConnection {
   lastPartnerActivityAt DateTime?
   lastNudgeSentAt       DateTime?
   heartSent             Boolean     @default(false)
+  heartSentAt           DateTime?
 
   createdAt  DateTime  @default(now())
   archivedAt DateTime?

@@ -29,6 +29,8 @@ jobs:
   build-apk:
     name: 📱 Build & Package Android APK
     runs-on: ubuntu-latest
+    env:
+      GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID || '367374125567-qp8ooa1rrak6o49qs9sn8l9doiefrq76.apps.googleusercontent.com' }}
 
     steps:
       - name: 🛎️ Checkout Repository

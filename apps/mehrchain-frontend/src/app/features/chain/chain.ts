@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { timer } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
@@ -58,6 +59,11 @@ export class ChainComponent {
   readonly inviteSelectedCommitmentId = signal<string>('');
 
   constructor() {
+    timer(0, 15000)
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        if (!this.chainService.isLoading()) void this.chainService.loadConnections();
+      });
     const list = this.publicCommitments();
     if (list.length > 0) {
       this.inviteSelectedCommitmentId.set(list[0].id);

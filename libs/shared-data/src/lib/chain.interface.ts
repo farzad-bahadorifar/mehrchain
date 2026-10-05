@@ -31,6 +31,8 @@ export interface ChainConnection {
   lastPartnerActivityAt?: string | Date | null;
   lastNudgeSentAt?: string | Date | null;
   heartSent: boolean;
+  heartSentAt?: string | Date | null;
+  heartReceived?: boolean;
   createdAt: string | Date;
   archivedAt?: string | Date | null;
   partner?: ChainPartner;

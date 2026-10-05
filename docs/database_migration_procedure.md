@@ -2,6 +2,12 @@
 
 Updated October 5, 2026 for #47 and #52. No production schema was changed in this work session.
 
+## October 6 release execution
+
+The actual Render target was privately matched to `mehrchain-db` production in Neon. It was empty (no public tables), unlike the older local `.env` target described below. A pre-change Neon snapshot and a private JSON backup were captured. The empty-database baseline and the new `20261006000000_daily_chain_hearts` migration were rehearsed on a disposable branch, including a second deploy and zero-drift verification. Production was then initialized with this chain; repeat deploy and schema diff both succeeded. The snapshot remains unchanged; a temporary child was connected and verified to reproduce the original empty state. This is an empty-database recovery exercise, not evidence of restoring a populated database or switching a live backend during an outage.
+
+For a **populated legacy target**, the October 5 procedure below must also account for the new nullable `chain_connections.heartSentAt` column. Before its zero-drift/baseline checks, execute the reviewed daily-hearts SQL as an additive patch. After resolving the release baseline, explicitly record `20261006000000_daily_chain_hearts` as applied with Prisma against the prepared `.release-prisma/schema.prisma`, using its real checksum, before deploy. Do not replay an already applied ADD COLUMN or edit either applied migration file. Rehearse this expanded legacy procedure against a populated disposable copy first; it was not used for the empty Render target.
+
 ## Verified state (read-only)
 
 The database referenced by the local `.env` contains users (4), commitments (8), commitment_logs (13), chain_connections (0), chain_invites (0), and `_prisma_migrations`. All eight existing ownership foreign keys cascade. This confirms this connection's schema, not that Render currently uses the same database.

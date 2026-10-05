@@ -7,7 +7,8 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateInviteDto } from './dto/create-invite.dto';
 import { AcceptInviteDto } from './dto/accept-invite.dto';
-import { ChainStatus, ChainInviteStatus } from '@prisma/client';
+import { ChainStatus, ChainInviteStatus, Prisma } from '@prisma/client';
+import { chainState } from './chain-state';
 
 @Injectable()
 export class ChainService {
@@ -75,45 +76,53 @@ export class ChainService {
       throw new BadRequestException('Choose an active public habit');
 
     // Start a transaction to accept invite and create two-way connection
-    return this.prisma.$transaction(async (prisma) => {
-      // 1. Update invite status
-      const claimed = await prisma.chainInvite.updateMany({
-        where: { id: invite.id, status: ChainInviteStatus.PENDING, expiresAt: { gt: new Date() } },
-        data: {
-          status: ChainInviteStatus.ACCEPTED,
-          acceptedById: userId,
-          acceptedCommitmentId: dto.commitmentId,
-        },
-      });
-      if (claimed.count !== 1)
-        throw new BadRequestException('Invite was already accepted or has expired');
+    return this.prisma
+      .$transaction(async (prisma) => {
+        // Lock and revalidate the shared invite without consuming it.
+        const claimed = await prisma.chainInvite.updateMany({
+          where: {
+            id: invite.id,
+            status: ChainInviteStatus.PENDING,
+            expiresAt: { gt: new Date() },
+          },
+          data: {
+            status: ChainInviteStatus.PENDING,
+          },
+        });
+        if (claimed.count !== 1)
+          throw new BadRequestException('Invite has been cancelled or has expired');
 
-      // 2. Create ChainConnection (from Sender's perspective)
-      const senderConnection = await prisma.chainConnection.create({
-        data: {
-          userId: invite.senderId,
-          partnerId: userId,
-          userCommitmentId: invite.senderCommitmentId,
-          partnerCommitmentId: dto.commitmentId,
-        },
-      });
+        // 2. Create ChainConnection (from Sender's perspective)
+        const senderConnection = await prisma.chainConnection.create({
+          data: {
+            userId: invite.senderId,
+            partnerId: userId,
+            userCommitmentId: invite.senderCommitmentId,
+            partnerCommitmentId: dto.commitmentId,
+          },
+        });
 
-      // 3. Create ChainConnection (from Receiver's perspective)
-      const receiverConnection = await prisma.chainConnection.create({
-        data: {
-          userId: userId,
-          partnerId: invite.senderId,
-          userCommitmentId: dto.commitmentId,
-          partnerCommitmentId: invite.senderCommitmentId,
-        },
-      });
+        // 3. Create ChainConnection (from Receiver's perspective)
+        const receiverConnection = await prisma.chainConnection.create({
+          data: {
+            userId: userId,
+            partnerId: invite.senderId,
+            userCommitmentId: dto.commitmentId,
+            partnerCommitmentId: invite.senderCommitmentId,
+          },
+        });
 
-      return { senderConnection, receiverConnection };
-    });
+        return { senderConnection, receiverConnection };
+      })
+      .catch((error: unknown) => {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002')
+          throw new BadRequestException('These habits are already chained');
+        throw error;
+      });
   }
 
   async getConnections(userId: string) {
-    return this.prisma.chainConnection.findMany({
+    const connections = await this.prisma.chainConnection.findMany({
       where: { userId, status: { not: ChainStatus.DISCONNECTED } },
       include: {
         partner: { select: { username: true, name: true } },
@@ -128,6 +137,35 @@ export class ChainService {
       },
       orderBy: { lastPartnerActivityAt: 'desc' },
     });
+    const incoming = await this.prisma.chainConnection.findMany({
+      where: { partnerId: userId, status: { not: ChainStatus.DISCONNECTED }, heartSent: true },
+    });
+    const today = new Date().toISOString().slice(0, 10);
+    const sentToday = (c: { heartSent: boolean; heartSentAt: Date | null }) =>
+      c.heartSent && c.heartSentAt?.toISOString().slice(0, 10) === today;
+    return connections.map((c) => ({
+      ...c,
+      ...(chainState(c) || {}),
+      heartSent: !!sentToday(c),
+      heartReceived: incoming.some(
+        (p) =>
+          p.userId === c.partnerId &&
+          p.userCommitmentId === c.partnerCommitmentId &&
+          p.partnerCommitmentId === c.userCommitmentId &&
+          sentToday(p),
+      ),
+    }));
+  }
+
+  async cancelInvite(userId: string, inviteId: string) {
+    const invite = await this.prisma.chainInvite.findUnique({
+      where: { id: inviteId, senderId: userId },
+    });
+    if (!invite) throw new NotFoundException('Invite not found');
+    return this.prisma.chainInvite.update({
+      where: { id: invite.id },
+      data: { status: ChainInviteStatus.CANCELLED },
+    });
   }
 
   async sendHeart(userId: string, connectionId: string) {
@@ -136,10 +174,17 @@ export class ChainService {
     });
 
     if (!connection) throw new NotFoundException('Connection not found');
+    if (connection.status === ChainStatus.DISCONNECTED)
+      throw new BadRequestException('This chain has been disconnected');
+
+    const today = new Date();
+    const sentToday =
+      connection.heartSent &&
+      connection.heartSentAt?.toISOString().slice(0, 10) === today.toISOString().slice(0, 10);
 
     return this.prisma.chainConnection.update({
       where: { id: connectionId },
-      data: { heartSent: !connection.heartSent }, // toggle
+      data: { heartSent: !sentToday, heartSentAt: sentToday ? null : today },
     });
   }
 
