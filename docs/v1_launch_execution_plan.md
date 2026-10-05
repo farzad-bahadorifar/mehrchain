@@ -207,3 +207,7 @@ Three.js و تصویر badge، مقالات، طراحی جدید، چندزبا
 - APK workflow now receives the public Google Client ID. Google authentication in the APK remains unverified.
 - Pages automatic deployments were temporarily paused for backend-first order. Restore after the final backend revision is live, then trigger a fresh frontend build.
 - Remaining acceptance: two independent real Google browser accounts, followed by the initial human test wave. Credential rotation must be completed by the owner; no new secret is needed in the project.
+
+- Final application revision: 483f6c4dce26b87154fb8ea0dcc50cb05b512dd6. Render Live confirmed, GET /api=200; invalid idToken returns 401. Both production builds passed; backend 102 tests and frontend 151 tests passed.
+- Pages automatic deployments restored to Enabled after backend health confirmation. A fresh frontend build is being triggered; browser acceptance remains pending.
+- npm audit --omit=dev reports 19 advisories (1 low, 4 moderate, 14 high, 0 critical); exploitability is not yet assessed. Do not infer production security clearance from passing tests.
