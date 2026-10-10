@@ -31,10 +31,41 @@ describe('NewCommitmentModal', () => {
 
     expect(component.duration()).toBe(0);
     expect(component.isDurationValid()).toBe(false);
+    expect(component.durationErrorMessage()).toBe('Duration cannot start with 0');
     expect(component.isValid()).toBe(false);
 
     component.handleSubmit();
     expect(submitSpy).not.toHaveBeenCalled();
+  });
+
+  it('should reject leading zero numbers like 0111 and special characters', () => {
+    const submitSpy = vi.fn();
+    component.submit.subscribe(submitSpy);
+
+    component.title.set('Morning Jog');
+    component.toggleCustomDuration();
+
+    // Leading zeros: '0111'
+    component.onCustomDurationInput('0111');
+    expect(component.duration()).toBe(0);
+    expect(component.isDurationValid()).toBe(false);
+    expect(component.durationErrorMessage()).toBe('Duration cannot start with 0');
+    expect(component.isValid()).toBe(false);
+
+    component.handleSubmit();
+    expect(submitSpy).not.toHaveBeenCalled();
+
+    // Special characters: '-5'
+    component.onCustomDurationInput('-5');
+    expect(component.duration()).toBe(0);
+    expect(component.isDurationValid()).toBe(false);
+    expect(component.durationErrorMessage()).toBe('Duration must contain digits only');
+
+    // Numbers greater than 365
+    component.onCustomDurationInput('366');
+    expect(component.duration()).toBe(0);
+    expect(component.isDurationValid()).toBe(false);
+    expect(component.durationErrorMessage()).toBe('Maximum duration is 365 days');
   });
 
   it('should allow submit when custom duration is valid (> 0)', () => {

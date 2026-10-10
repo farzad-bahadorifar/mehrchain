@@ -12,12 +12,12 @@ export class IsValidDurationConstraint implements ValidatorConstraintInterface {
     if (typeof value !== 'number' || !Number.isInteger(value)) {
       return false;
     }
-    // Must be -1 (Endless Journey) or at least 1 day
-    return value === -1 || value >= 1;
+    // Must be -1 (Endless Journey) or between 1 and 365 days
+    return value === -1 || (value >= 1 && value <= 365);
   }
 
   defaultMessage(args?: ValidationArguments): string {
-    return 'totalDays must be -1 (Endless Journey) or an integer greater than or equal to 1';
+    return 'totalDays must be -1 (Endless Journey) or an integer between 1 and 365';
   }
 }
 

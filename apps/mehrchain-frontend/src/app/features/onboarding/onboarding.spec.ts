@@ -53,6 +53,35 @@ describe('OnboardingComponent', () => {
     expect(component.step()).toBe(6); // Did not advance
   });
 
+  it('should prevent proceeding to signup if duration has leading zeros like 0111 or special characters', () => {
+    component.step.set(6);
+    component.openCustomDuration();
+
+    // Leading zeros: '0111'
+    component.onCustomDurationChange('0111');
+    expect(component.selectedDuration()).toBe(0);
+    expect(component.isDetailsDurationValid()).toBe(false);
+    expect(component.durationErrorMessage()).toBe('Duration cannot start with 0');
+    component.proceedToSignUp();
+    expect(component.step()).toBe(6); // Did not advance
+
+    // Special characters: '-5'
+    component.onCustomDurationChange('-5');
+    expect(component.selectedDuration()).toBe(0);
+    expect(component.isDetailsDurationValid()).toBe(false);
+    expect(component.durationErrorMessage()).toBe('Duration must contain digits only');
+    component.proceedToSignUp();
+    expect(component.step()).toBe(6);
+
+    // Number exceeding 365
+    component.onCustomDurationChange('366');
+    expect(component.selectedDuration()).toBe(0);
+    expect(component.isDetailsDurationValid()).toBe(false);
+    expect(component.durationErrorMessage()).toBe('Maximum duration is 365 days');
+    component.proceedToSignUp();
+    expect(component.step()).toBe(6);
+  });
+
   it('should allow proceeding when custom duration is positive', () => {
     component.step.set(6);
     component.openCustomDuration();

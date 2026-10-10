@@ -4,6 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Commitment } from '@mehrchain/shared-data';
 import { McButtonComponent } from '../../ui';
+import {
+  validateCustomDuration,
+  handleDurationKeydown,
+} from '../../../core/utils/duration-validator';
 
 @Component({
   selector: 'app-edit-commitment-modal',
@@ -33,7 +37,16 @@ export class EditCommitmentModal {
   isCustomDuration = signal(false);
   customDurationText = signal('');
 
-  isDurationValid = computed(() => this.duration() === -1 || this.duration() > 0);
+  isDurationValid = computed(() => {
+    if (!this.isCustomDuration()) {
+      return this.duration() === -1;
+    }
+    return validateCustomDuration(this.customDurationText()).isValid;
+  });
+  durationErrorMessage = computed(() => {
+    if (!this.isCustomDuration()) return null;
+    return validateCustomDuration(this.customDurationText()).errorMessage;
+  });
   isValid = computed(() => this.title().trim().length >= 2 && this.isDurationValid());
 
   categories = [
@@ -83,12 +96,12 @@ export class EditCommitmentModal {
 
   onCustomDurationInput(val: string) {
     this.customDurationText.set(val);
-    const num = parseInt(val.trim(), 10);
-    if (!isNaN(num) && num > 0) {
-      this.duration.set(num);
-    } else {
-      this.duration.set(0);
-    }
+    const result = validateCustomDuration(val);
+    this.duration.set(result.duration);
+  }
+
+  onCustomDurationKeydown(event: KeyboardEvent) {
+    handleDurationKeydown(event, this.customDurationText());
   }
 
   isSubmitting = input(false);

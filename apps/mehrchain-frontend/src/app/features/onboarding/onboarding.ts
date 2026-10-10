@@ -1,9 +1,10 @@
 import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Heart, Leaf, LucideAngularModule, TrendingUp, Users } from 'lucide-angular';
+import { validateCustomDuration } from '../../core/utils/duration-validator';
 import { AuthService } from '../../core/services/auth.service';
 import { GoogleAuthService } from '../../core/services/google-auth.service';
 import { CommitmentService } from '../../core/services/commitment.service';
@@ -74,6 +75,17 @@ export class OnboardingComponent implements OnInit {
   whyText = signal('To prove to myself that small steps matter.');
   reminderTime = signal('08:30');
   isHabitPublic = signal(true);
+
+  isDetailsDurationValid = computed(() => {
+    if (!this.isCustomDuration()) {
+      return this.selectedDuration() === -1 || this.selectedDuration() > 0;
+    }
+    return validateCustomDuration(this.customDurationText()).isValid;
+  });
+  durationErrorMessage = computed(() => {
+    if (!this.isCustomDuration()) return null;
+    return validateCustomDuration(this.customDurationText()).errorMessage;
+  });
 
   // Sign Up Form State (Step 6/7)
   signUpUsername = signal('');
@@ -236,12 +248,8 @@ export class OnboardingComponent implements OnInit {
 
   onCustomDurationChange(val: string) {
     this.customDurationText.set(val);
-    const num = parseInt(val.trim(), 10);
-    if (!isNaN(num) && num > 0) {
-      this.selectedDuration.set(num);
-    } else {
-      this.selectedDuration.set(0);
-    }
+    const result = validateCustomDuration(val);
+    this.selectedDuration.set(result.duration);
   }
 
   enableCustomHabit() {
@@ -271,7 +279,8 @@ export class OnboardingComponent implements OnInit {
   }
 
   proceedToSignUp() {
-    if (this.selectedDuration() !== -1 && this.selectedDuration() <= 0) return;
+    if (this.isCustomDuration() && !this.isDetailsDurationValid()) return;
+    if (!this.isCustomDuration() && this.selectedDuration() !== -1 && this.selectedDuration() <= 0) return;
     this.step.set(7);
   }
 

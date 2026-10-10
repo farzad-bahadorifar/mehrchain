@@ -11,11 +11,17 @@ describe('IsValidDurationConstraint', () => {
     expect(validator.validate(-1)).toBe(true);
   });
 
-  it('should accept positive integers', () => {
+  it('should accept positive integers up to 365', () => {
     expect(validator.validate(1)).toBe(true);
     expect(validator.validate(7)).toBe(true);
     expect(validator.validate(21)).toBe(true);
     expect(validator.validate(100)).toBe(true);
+    expect(validator.validate(365)).toBe(true);
+  });
+
+  it('should reject numbers greater than 365', () => {
+    expect(validator.validate(366)).toBe(false);
+    expect(validator.validate(1000)).toBe(false);
   });
 
   it('should reject 0', () => {
@@ -40,6 +46,6 @@ describe('IsValidDurationConstraint', () => {
   });
 
   it('should provide informative default message', () => {
-    expect(validator.defaultMessage()).toContain('-1 (Endless Journey)');
+    expect(validator.defaultMessage()).toContain('between 1 and 365');
   });
 });

@@ -2,6 +2,10 @@ import { Component, computed, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
+import {
+  validateCustomDuration,
+  handleDurationKeydown,
+} from '../../../core/utils/duration-validator';
 
 @Component({
   selector: 'app-new-commitment-modal',
@@ -22,7 +26,16 @@ export class NewCommitmentModal {
   isPublic = signal(false);
   reminderTime = signal('08:30');
 
-  isDurationValid = computed(() => this.duration() === -1 || this.duration() > 0);
+  isDurationValid = computed(() => {
+    if (!this.isCustomDuration()) {
+      return this.duration() === -1;
+    }
+    return validateCustomDuration(this.customDurationText()).isValid;
+  });
+  durationErrorMessage = computed(() => {
+    if (!this.isCustomDuration()) return null;
+    return validateCustomDuration(this.customDurationText()).errorMessage;
+  });
   isValid = computed(() => this.title().trim().length >= 2 && this.isDurationValid());
 
   categories = [
@@ -71,12 +84,12 @@ export class NewCommitmentModal {
 
   onCustomDurationInput(value: string) {
     this.customDurationText.set(value);
-    const num = parseInt(value.trim(), 10);
-    if (!isNaN(num) && num > 0) {
-      this.duration.set(num);
-    } else {
-      this.duration.set(0);
-    }
+    const result = validateCustomDuration(value);
+    this.duration.set(result.duration);
+  }
+
+  onCustomDurationKeydown(event: KeyboardEvent) {
+    handleDurationKeydown(event, this.customDurationText());
   }
 
   isSubmitting = input(false);

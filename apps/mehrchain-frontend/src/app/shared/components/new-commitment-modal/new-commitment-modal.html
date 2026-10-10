@@ -126,15 +126,16 @@
           >
             <input
               #durInput
-              type="number"
-              min="1"
-              max="365"
+              type="text"
+              inputmode="numeric"
+              pattern="[1-9][0-9]*"
               [value]="customDurationText()"
               class="w-full text-center font-bold text-xs outline-none bg-transparent h-full transition-colors"
               [class]="
                 !isDurationValid() ? 'text-red-500 placeholder:text-red-400/50' : 'text-primary'
               "
               placeholder="e.g. 21"
+              (keydown)="onCustomDurationKeydown($event)"
               (input)="onCustomDurationInput(durInput.value)"
               autoFocus
             />
@@ -158,7 +159,7 @@
 
       @if (isCustomDuration() && !isDurationValid()) {
         <p class="text-[11px] text-red-500 mt-1.5 font-medium animate-fade-in text-center">
-          Duration must be at least 1 day
+          {{ durationErrorMessage() }}
         </p>
       }
     </div>
