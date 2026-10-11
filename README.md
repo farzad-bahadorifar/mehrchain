@@ -3,8 +3,8 @@
 **"You, light your own lamp." — Rumi**
 
 تو مگو همه بِجَنگند و زِ صُلح من چه آید؟		تو یکی نه‌‌ای هزاری تو چراغِ خود بَراَفْروز
-۶	که یکی چراغِ روشن زِ هزار مُرده بهتر		که بِهْ است یک قَدِ خوش زِ هزارْ قامَتِ 
 
+که یکی چراغِ روشن زِ هزار مُرده بهتر		که بِهْ است یک قَدِ خوش زِ هزارْ قامَتِ کوز
 
 MehrChain is a mindful companion designed to help you commit to positive goals, track your progress, and build empowering habits through small, consistent actions.
 
