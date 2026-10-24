@@ -19,9 +19,8 @@
 }
 
 .onboarding-shell {
-  --app-shell-width: 37rem;
-  max-width: none;
-  border-inline: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-navigation {

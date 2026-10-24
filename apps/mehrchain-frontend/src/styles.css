@@ -307,42 +307,7 @@ select {
   }
 }
 
-/* Existing arbitrary pixel text utilities must follow the user's root text size. */
-[class~='text-[9px]'] {
-  font-size: 0.5625rem;
-}
-[class~='text-[10px]'] {
-  font-size: 0.625rem;
-}
-[class~='text-[11px]'] {
-  font-size: 0.6875rem;
-}
-
-.text-size-control {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
-  font-size: 0.875rem;
-}
-
-.text-size-control select {
-  min-height: 2.75rem;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  color: var(--color-foreground);
-  background: var(--color-card);
-}
-
-/* The toolbar participates in layout; keep T16's bottom-aligned introduction. */
-.onboarding-shell {
-  display: flex;
-  flex-direction: column;
-}
+/* Routed onboarding fills the shared compact shell, including desktop PWA. */
 .onboarding-shell > app-onboarding {
   display: flex;
   flex: 1;
@@ -359,12 +324,31 @@ select {
   max-width: 100%;
 }
 .onboarding-welcome app-mero > div {
+  width: min(14rem, 28svh);
   max-width: 100%;
   height: auto;
   aspect-ratio: 1;
 }
 
-/* Enlarged labels must wrap rather than overlap fixed navigation or controls. */
+/* Landscape/short windows need less decoration, not smaller form controls. */
+@media (max-height: 28rem) {
+  .onboarding-welcome {
+    gap: 0.375rem;
+  }
+  .onboarding-welcome app-mero > div {
+    width: min(7rem, 20svh);
+  }
+  .onboarding-welcome h1 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+  .onboarding-welcome p {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+}
+
+/* Long labels must wrap rather than overlap navigation or controls. */
 button,
 label,
 nav a {

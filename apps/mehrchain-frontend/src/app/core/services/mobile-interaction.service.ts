@@ -1,14 +1,18 @@
 import { DOCUMENT } from '@angular/common';
-import { DestroyRef, Injectable, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class MobileInteractionService {
   private document = inject(DOCUMENT);
-  readonly textSize = signal(100);
 
   constructor() {
     try {
-      this.setTextSize(Number(localStorage.getItem('mehrchain_text_size')) || 100);
+      // Retire the unrequested text-size preference from the earlier T19 build.
+      // Leave the root font browser-controlled so device text settings still apply.
+      if (localStorage.getItem('mehrchain_text_size') !== null) {
+        this.document.documentElement.style.removeProperty('font-size');
+        localStorage.removeItem('mehrchain_text_size');
+      }
     } catch {}
     const view = this.document.defaultView;
     if (!view?.matchMedia) return;
@@ -41,14 +45,5 @@ export class MobileInteractionService {
       this.document.removeEventListener('gesturestart', gesture);
       this.document.removeEventListener('gesturechange', gesture);
     });
-  }
-
-  setTextSize(size: number): void {
-    if (![100, 125, 150, 175, 200].includes(size)) return;
-    this.textSize.set(size);
-    this.document.documentElement.style.fontSize = `${size}%`;
-    try {
-      localStorage.setItem('mehrchain_text_size', String(size));
-    } catch {}
   }
 }

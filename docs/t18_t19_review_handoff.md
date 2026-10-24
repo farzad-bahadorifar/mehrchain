@@ -75,7 +75,7 @@ The authenticated account has pull-only access to the canonical repository
 were not inspected or changed. Android SDK/Java are unavailable locally; APK
 compilation/signing verification belongs to CI and the controlled release run.
 
-## T19: mobile interaction and readable text
+## T19: mobile interaction and responsive fit (owner correction, October 24)
 
 - Only primary coarse-pointer/no-hover environments receive viewport scale
   restrictions; desktop viewport settings stay intact. Device width, safe areas
@@ -84,13 +84,15 @@ compilation/signing verification belongs to CI and the controlled release run.
   Safari gesture cancellation is limited to `gesturestart`/`gesturechange` inside
   the app on those environments. No blanket touch cancellation, forced scale
   reset, keyboard interception or global `touch-action: none` is introduced.
-- All mobile input/select/textarea controls use at least 16 CSS px and scale with
-  the selected text size, including account, OTP, password, username, Why,
-  duration and habit dialogs.
-- Text size offers persistent 100/125/150/175/200% settings before sign-in and
-  inside each `appDialog` focus boundary. Rem-based layout/text and existing
-  9/10/11px text utilities resize together. The onboarding flex layout retains its
-  bottom alignment; the hero mascot is constrained to the available width.
+- All mobile input/select/textarea controls use at least 16 CSS px, including
+  account, OTP, password, username, Why, duration and habit dialogs.
+- The owner rejected the Text size feature on October 24. Its toolbar, dialog
+  injection, font setter and saved preference are removed. Existing saved values
+  are retired without overriding browser/device font settings.
+- Onboarding shares the centered mobile-width shell on desktop/PWA. The full-width
+  exception and desktop-only minimum card height are removed. The hero and spacing
+  adapt to viewport height; long content and keyboard-constrained forms remain
+  scrollable. No content is hidden just to remove a scrollbar.
 - Multi-touch, cancelled gestures, control interactions and mostly vertical moves
   cannot trigger onboarding swipe navigation; coordinate zero remains valid.
 - The current Mero canvas already has `pointer-events: none`; the shared policy
@@ -101,8 +103,8 @@ compilation/signing verification belongs to CI and the controlled release run.
 - Automated tests cover version comparison, wrong/older/prerelease metadata,
   signing-identity mismatch/debug exclusion, update consent, manual retry,
   deduplication, deferred notices/restart, listener teardown, gesture isolation,
-  mobile viewport switching and persistent text sizing.
-- Desktop Chromium preview: welcome at 390 CSS px and 200% text exposed an
+  mobile viewport switching and retirement of the unrequested text-size preference.
+- Historical October 23 preview (superseded text-size scope): welcome at 390 CSS px and 200% text exposed an
   intrinsic mascot overflow; the corrected fresh build was checked at 320 CSS px,
   200% text (`innerWidth=320`, document width `305` with a scrollbar), and at 390 px.
   This is a responsive desktop check, not phone/keyboard or mobile-gesture evidence.
@@ -116,20 +118,21 @@ compilation/signing verification belongs to CI and the controlled release run.
 
 ### Physical-device matrix — all pending
 
-| Target                       | Required evidence                                                                    |
-| ---------------------------- | ------------------------------------------------------------------------------------ |
-| Android Chrome tab           | Pinch, double-tap, each form's focus/blur and keyboard; first visit and refresh      |
-| Android installed PWA        | Same triggers, existing install after SW update, fresh install and offline/resume    |
-| iPhone Safari tab            | Same triggers, Safari gesture policy and browser/accessibility overrides             |
-| iPhone standalone PWA        | Same triggers, safe areas, keyboard and browser-policy exceptions                    |
-| Android signed Capacitor APK | Native identity, external download/installer, same-key higher-code upgrade           |
-| Desktop touch/trackpad       | Browser zoom/keyboard shortcuts, text resizing, resize/maximize and modal navigation |
+| Target                       | Required evidence                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------------- |
+| Android Chrome tab           | Pinch, double-tap, each form's focus/blur and keyboard; first visit and refresh     |
+| Android installed PWA        | Same triggers, existing install after SW update, fresh install and offline/resume   |
+| iPhone Safari tab            | Same triggers, Safari gesture policy and browser/accessibility overrides            |
+| iPhone standalone PWA        | Same triggers, safe areas, keyboard and browser-policy exceptions                   |
+| Android signed Capacitor APK | Native identity, external download/installer, same-key higher-code upgrade          |
+| Desktop touch/trackpad       | Compact mobile-width shell, browser shortcuts, resize/maximize and modal navigation |
 
 For each row, record exact revision, device/OS/browser versions, display mode,
 portrait/landscape, both themes, 320/390 CSS-pixel layouts, scale before/after each
 gesture, scrolling/nested scrolling, text selection/copy/paste, autofill/OTP/password
 manager, sliders, onboarding swipes/back, all routes/overlays, draft retention,
-safe areas, background/resume and browser toolbar changes. Include 200% text reflow
+safe areas, background/resume and browser toolbar changes. Check no Text size UI,
+no horizontal overflow/avoidable welcome scrolling, the compact desktop shell,
 and main actions reachable with the keyboard open. Link results into T09.
 
 Browser policy and user accessibility settings may override scale restrictions;
@@ -137,7 +140,23 @@ any such outcome is an unresolved acceptance/release decision until reproduced o
 the target configuration. The historic WebKit article is not current iOS PWA test
 evidence. No absolute zoom-lock or accessibility-conformance claim is made.
 
-## Automated validation on the implementation branch
+## October 24 correction validation
+
+- Frontend: all 263 tests in 45 files passed after removing the text-size feature.
+- Production build passed, with only the pre-existing compiler/unused-import/CommonJS warnings.
+- Chromium welcome-page checks: 320x480, 320x568, 360x640, 390x844 and
+  430x932 fit both actions with document height equal to viewport height and no
+  horizontal overflow. Landscape 844x390 also fits after reducing decorative
+  hero/title spacing. Desktop 1440x900 keeps a centered 544px shell.
+- The 320x568 sign-in dialog has no text-size controls or horizontal overflow;
+  content scrolls inside the dialog when necessary. Introductory pages with more
+  text remain scrollable on short screens; no overflow-hidden clipping was added.
+- Existing mobile zoom-policy/listener-cleanup tests pass; physical-phone
+  pinch/double-tap/keyboard and installed-PWA acceptance remain unrecorded.
+- This correction changes frontend/layout documentation only; T18 release
+  discovery, Android signing and backend/database behavior are unchanged.
+
+## Historical automated validation for PR #73
 
 - Frontend: 45 files, 263 tests passed (`nx test mehrchain-frontend --watch=false --skip-nx-cache`).
 - Backend: 20 suites, 173 tests passed after successful Prisma generation.

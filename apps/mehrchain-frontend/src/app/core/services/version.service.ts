@@ -57,7 +57,7 @@ export const APP_CHANGELOG: ReleaseNote[] = [
     isLatest: true,
     highlights: [
       'Optional Android release downloads and web update notices',
-      'Mobile touch improvements and adjustable text size',
+      'Mobile touch improvements and responsive app layout',
       'Daily habits, private support and permanent earned colors',
     ],
   },

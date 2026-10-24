@@ -12,8 +12,10 @@
   cannot consume a pending upgrade. Consent precedes reloading or opening Android's
   browser/installer. Later is durable and scoped to the offered release.
 - Mobile touch handling uses capability media queries and CSS scroll-axis policy,
-  plus scoped Safari gesture events. Text can independently grow to 200%, including
-  inside modal focus boundaries. No single-finger touch cancellation is needed.
+  plus scoped Safari gesture events. The app has no text-size toolbar or persisted
+  font override. Onboarding uses the same compact shell as authenticated routes,
+  with viewport-sized hero spacing and natural scrolling only for taller content.
+  No single-finger touch cancellation is needed.
 
 ## Risks and rollout
 

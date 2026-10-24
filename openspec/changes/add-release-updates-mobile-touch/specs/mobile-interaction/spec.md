@@ -13,11 +13,13 @@ focus zoom. Desktop browser zoom and OS accessibility controls SHALL remain usab
   or cancelled gestures cannot navigate or submit
 - **AND** viewport safe areas and keyboard resizing are preserved
 
-#### Scenario: Readable text
+#### Scenario: Responsive mobile layout and desktop PWA
 
-- **WHEN** the user selects a text size through 200%
-- **THEN** text and controls resize persistently with responsive reflow
-- **AND** the control remains reachable during onboarding and in dialogs
+- **WHEN** a mobile viewport changes size or the desktop PWA is maximized
+- **THEN** content fits the available width inside a centered mobile-width shell
+- **AND** onboarding adds no avoidable overflow from toolbars or duplicate viewport heights
+- **AND** no Text size control or persisted app-specific font override is present
+- **AND** long content and keyboard-constrained forms remain reachable by scrolling
 
 #### Scenario: Browser override
 

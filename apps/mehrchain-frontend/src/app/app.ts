@@ -6,7 +6,7 @@ import { ChainService } from './core/services/chain.service';
 import { VersionService } from './core/services/version.service';
 import { CommitmentService } from './core/services/commitment.service';
 import { ColdStartBannerComponent } from './shared/components/cold-start-banner/cold-start-banner';
-import { TextSizeComponent } from './shared/components/text-size/text-size';
+import { MobileInteractionService } from './core/services/mobile-interaction.service';
 
 @Component({
   selector: 'app-root',
@@ -16,12 +16,12 @@ import { TextSizeComponent } from './shared/components/text-size/text-size';
     RouterLinkActive,
     LucideAngularModule,
     ColdStartBannerComponent,
-    TextSizeComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
+  private readonly mobileInteraction = inject(MobileInteractionService);
   private router = inject(Router);
   public chainService = inject(ChainService);
   public versionService = inject(VersionService);

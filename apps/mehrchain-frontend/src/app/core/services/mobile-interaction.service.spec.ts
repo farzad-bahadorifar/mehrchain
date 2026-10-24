@@ -54,15 +54,13 @@ describe('mobile interaction policy', () => {
     TestBed.resetTestingModule();
     expect(remove).toHaveBeenCalledOnce();
   });
-  it('restores saved text sizing up to 200% and ignores invalid sizes', () => {
+  it('retires the old text-size preference without applying it to the page', () => {
     localStorage.setItem('mehrchain_text_size', '200');
-    const service = TestBed.inject(MobileInteractionService);
-    expect(service.textSize()).toBe(200);
-    expect(document.documentElement.style.fontSize).toBe('200%');
-    service.setTextSize(1);
-    expect(service.textSize()).toBe(200);
-    service.setTextSize(125);
-    expect(localStorage.getItem('mehrchain_text_size')).toBe('125');
+    document.documentElement.style.fontSize = '200%';
+    TestBed.inject(MobileInteractionService);
+    expect(document.documentElement.style.fontSize).toBe('');
+    expect(localStorage.getItem('mehrchain_text_size')).toBeNull();
+    expect(viewport.content).toContain('maximum-scale=1');
   });
   it('limits Safari gesture cancellation to mobile app surfaces and cleans up', () => {
     TestBed.inject(MobileInteractionService);

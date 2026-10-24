@@ -24,23 +24,16 @@ describe('OnboardingComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('keeps persistent text resizing inside the sign-in dialog without clearing drafts', async () => {
+  it('opens the sign-in dialog without adding text-size controls or changing its draft', () => {
     component.loginEmail.set('draft@example.com');
     component.openLoginModal('draft@example.com');
     fixture.detectChanges();
     const dialog = fixture.nativeElement.querySelector('[role="dialog"]') as HTMLElement;
-    const size = dialog.querySelector('select[aria-label="Text size"]') as HTMLSelectElement;
-    expect(size).toBeTruthy();
-    size.value = '200';
-    size.dispatchEvent(new Event('change', { bubbles: true }));
-    fixture.detectChanges();
-    expect(document.documentElement.style.fontSize).toBe('200%');
+    expect(dialog.querySelector('app-text-size, [aria-label="Text size"]')).toBeNull();
     expect(component.loginEmail()).toBe('draft@example.com');
     component.closeLoginModal();
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('[role="dialog"]')).toBeNull();
-    document.documentElement.style.fontSize = '';
-    localStorage.removeItem('mehrchain_text_size');
   });
 
   it('should default to Endless Journey (-1) and allow proceeding to signup', () => {
