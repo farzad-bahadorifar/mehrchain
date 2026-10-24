@@ -150,6 +150,23 @@ npm run dev
 * 🔌 **Backend API:** `http://localhost:3000/api`
 * 📖 **Swagger Docs:** `http://localhost:3000/api/docs`
 
+Both development logs appear in the same terminal, prefixed by project name.
+Press `Ctrl+C` to stop both services before building on Windows: a running backend
+locks Prisma's `query_engine-windows.dll.node`, causing `prisma generate` to fail
+with `EPERM` when replacing it.
+
+To build production outputs from the repository root:
+
+```bash
+npm run build
+# Or build one application:
+npm run build:frontend
+npm run build:backend
+```
+
+Outputs: `dist/mehrchain-frontend/browser` and `dist/mehrchain-backend`.
+Run `npm run dev` again after the build to resume local development.
+
 ### 5. Run Automated Tests
 ```bash
 # Run all 233 tests across frontend and backend

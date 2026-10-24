@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "emitDecoratorMetadata": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,

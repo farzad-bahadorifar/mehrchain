@@ -1,7 +1,6 @@
 import { DialogAccessibilityDirective } from '../../../../shared/directives/dialog-accessibility.directive';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { Commitment } from '@mehrchain/shared-data';
 import { ChainService } from '../../../../core/services/chain.service';
@@ -13,7 +12,6 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code';
   imports: [
     DialogAccessibilityDirective,
     CommonModule,
-    RouterLink,
     LucideAngularModule,
     QrCodeComponent,
   ],
