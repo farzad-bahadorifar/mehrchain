@@ -6,7 +6,7 @@
 > **Codebase State:** T00–T08, T10 and T11 have historical committed implementations; T09 is field acceptance. The later October 21 session repaired the T12 production backend/schema gate and prepared local T13/T15/T16/T17 corrections. Local implementation does not establish final release acceptance; T14 delivery, new T17 production schema, current automated/PWA/device checks and Android gates remain open. Historical task commits remain recorded below.
 > **Release Blocker Repaired (T10):** Webpack shared-module resolution failure on Render was resolved by adding `baseUrl: "../.."` to `apps/mehrchain-backend/tsconfig.app.json` (committed in `9c981d1`).
 > **New Stabilization Tasks Created:** T12 (#68) for pending migration deployment & release verification; T13 (#69) for backend Jest ESM CI fix; T14 (#71) for production Resend email configuration; T15 (#72) for cold-start latency & proxy timeout mitigation.
-> **October 21 Owner Additions:** T16's minimal UI/visible Why/direct delete and T17's optional username/password-access corrections are implemented locally. T18's opt-in GitHub release discovery was subsequently implemented in merged PR #73; signing/deployment acceptance remains open. GitHub issues/Project items for these additions remain unsynchronized. The current handoffs distinguish implementation from operational/field acceptance.
+> **October 21 Owner Additions:** T16's minimal UI/visible Why/direct delete and T17's optional username/password-access corrections are implemented locally. T18's opt-in GitHub release discovery was subsequently implemented in merged PR #73; signing/deployment acceptance remains open. GitHub issues [#75](https://github.com/farzad-bahadorifar/mehrchain/issues/75)–[#84](https://github.com/farzad-bahadorifar/mehrchain/issues/84) are synchronized for T16–T25. The current handoffs distinguish implementation from operational/field acceptance.
 > **October 24 Owner Correction:** T19 must fit mobile viewport sizes, keep a centered mobile-width shell in desktop PWA, and prevent mobile page zoom where supported. The owner rejected the Text size feature: remove its toolbar and saved font overrides. Implementation exists; real-device acceptance remains open.
 > **October 23 UI/UX discovery:** T20–T25 add design-system/palette review, username diagnosis, Profile redesign, a dedicated Badge page, color-collection redesign and an exploratory Mero belly interaction. These require analysis, wireframes and visible HTML prototypes reviewed by the owner before product implementation. See [discovery brief](ui_ux_discovery_plan.md); no prototype or redesign has been implemented by this roadmap update.
 > **Android Evidence (October 21):** [APK workflow run 39544902232](https://github.com/farzad-bahadorifar/mehrchain/actions/runs/39544902232), for `752e199`, failed at backend tests; frontend tests, Capacitor sync, APK build and artifact upload were skipped. The local Android web bundle is dated August 30 (`main-SVIVLEG6.js`), whereas the local web build is dated October 20 (`main-6I3XOFP2.js`). Current native assets are not synchronized with the latest web changes. No fresh APK or native acceptance is claimed.
@@ -36,7 +36,7 @@ Implemented in T05 (`ed38dd6`): an explicit manual reason, Cancel, private previ
 
 ## Implementation order
 
-`FE` = `apps/mehrchain-frontend/src/app`; `BE` = `apps/mehrchain-backend/src/app`. T00–T15 map to GitHub issues [#55](https://github.com/farzad-bahadorifar/mehrchain/issues/55)–[#72](https://github.com/farzad-bahadorifar/mehrchain/issues/72). T16–T25 are local roadmap tasks with issue/Project synchronization pending. Task IDs are stable references, not execution order; use the release sequence below.
+`FE` = `apps/mehrchain-frontend/src/app`; `BE` = `apps/mehrchain-backend/src/app`. T00–T25 map to GitHub issues [#55](https://github.com/farzad-bahadorifar/mehrchain/issues/55)–[#84](https://github.com/farzad-bahadorifar/mehrchain/issues/84). Task IDs are stable references, not execution order; use the release sequence below.
 
 | Task | Issue | Implementation | Commit | Status | Acceptance evidence in repository |
 | --- | --- | --- | --- | --- | --- |
@@ -56,16 +56,16 @@ Implemented in T05 (`ed38dd6`): an explicit manual reason, Cancel, private previ
 | T13 | [#69](https://github.com/farzad-bahadorifar/mehrchain/issues/69) | ESM fix committed; frontend fixtures corrected locally | `c8d193d`, `6400edf` | APK rerun pending | Existing remote backend test step passed; frontend/packaging require current acceptance |
 | T14 | [#71](https://github.com/farzad-bahadorifar/mehrchain/issues/71) | Setup handoff | `03b1c1e` | Pending owned sending domain/key | Resend login works; no domain exists and owner has no active domain |
 | T15 | [#72](https://github.com/farzad-bahadorifar/mehrchain/issues/72) | Local implementation | `7d4e701` | Phone/PWA/network acceptance pending | Bounded safe-read retry; honest warm/failed-idle/slow-follow-up baseline observations |
-| T16 | Pending issue | Local implementation | `932e857` | Phone/PWA acceptance pending | Minimal screens, visible Why, direct delete and short collection retry state |
-| T17 | Pending issue | Local implementation and disposable migration rehearsal | See T17 handoff | Production/checks/delivery acceptance pending | Optional unique usernames, identifier login, verified password setup/recovery and session guards |
-| T18 | Pending issue | Planned | — | Planned (P1; v1 gate) | GitHub stable-release update notice, opt-in APK update and consistent release/version metadata |
-| T19 | Pending issue | Implemented; layout correction in review | — | Device acceptance open (P1) | Fit mobile screens, compact desktop PWA, no Text size UI; verify zoom prevention, forms and scrolling on real devices |
-| T20 | Pending issue | Discovery planned | — | P1; owner review before implementation | Design-system audit, palette/Mero color alternatives and switchable HTML component/screen preview |
-| T21 | Pending issue | Diagnosis/design planned | — | P1; functional blocker first | Diagnose username availability/save routing and prototype a clear account edit/remove/error flow |
-| T22 | Pending issue | Discovery planned | — | P1; depends on T20/T21 | Full Profile architecture/wireframes and clickable compact Profile prototype |
-| T23 | Pending issue | Discovery planned | — | P1; coordinates with T22 | Badge summary card leading to a scalable dedicated Badge page prototype |
-| T24 | Pending issue | Discovery planned | — | P1; depends on T20/T22 | Redesign 21-day reward and color collection/studio without changing earning rules |
-| T25 | Pending issue | Feasibility planned | — | P2; optional exploration | Simple belly color-motion prototype, then optional Three.js spike and performance/fallback decision |
+| T16 | [#75](https://github.com/farzad-bahadorifar/mehrchain/issues/75) | Local implementation | `932e857` | Phone/PWA acceptance pending | Minimal screens, visible Why, direct delete and short collection retry state |
+| T17 | [#76](https://github.com/farzad-bahadorifar/mehrchain/issues/76) | Local implementation and disposable migration rehearsal | `9a4329f` | Production/checks/delivery acceptance pending | Optional unique usernames, identifier login, verified password setup/recovery and session guards |
+| T18 | [#77](https://github.com/farzad-bahadorifar/mehrchain/issues/77) | Implementation merged (PR #73) | `2a769a5` | Signed release / verification open | GitHub stable-release update notice, opt-in APK update and consistent release/version metadata |
+| T19 | [#78](https://github.com/farzad-bahadorifar/mehrchain/issues/78) | Implementation merged (PR #73, #74) | `cee5bf7` | Device acceptance open (P1) | Fit mobile screens, compact desktop PWA, no Text size UI; verify zoom prevention, forms and scrolling on real devices |
+| T20 | [#79](https://github.com/farzad-bahadorifar/mehrchain/issues/79) | Discovery planned | — | P1; owner review before implementation | Design-system audit, palette/Mero color alternatives and switchable HTML component/screen preview |
+| T21 | [#80](https://github.com/farzad-bahadorifar/mehrchain/issues/80) | Diagnosis/design planned | — | P1; functional blocker first | Diagnose username availability/save routing and prototype a clear account edit/remove/error flow |
+| T22 | [#81](https://github.com/farzad-bahadorifar/mehrchain/issues/81) | Discovery planned | — | P1; depends on T20/T21 | Full Profile architecture/wireframes and clickable compact Profile prototype |
+| T23 | [#82](https://github.com/farzad-bahadorifar/mehrchain/issues/82) | Discovery planned | — | P1; coordinates with T22 | Badge summary card leading to a scalable dedicated Badge page prototype |
+| T24 | [#83](https://github.com/farzad-bahadorifar/mehrchain/issues/83) | Discovery planned | — | P1; depends on T20/T22 | Redesign 21-day reward and color collection/studio without changing earning rules |
+| T25 | [#84](https://github.com/farzad-bahadorifar/mehrchain/issues/84) | Feasibility planned | — | P2; optional exploration | Simple belly color-motion prototype, then optional Three.js spike and performance/fallback decision |
 
 The T00–T08 handoffs and OpenSpec checklists are historical notes. Their uncommitted/not-run wording is superseded only by evidence recorded here: T05's verified push; T06/T07/T08 commits and delivery to failed Render backend builds; successful remote Prisma generation in the inspected T06/T08 logs. No local build/test or successful later release is inferred. These historical files are not edited by T10. The October 18 backend results precede T05–T08 and do not validate their code/schema or prove frontend/provider/race acceptance.
 
@@ -399,7 +399,7 @@ Implementation follows the recommended **Active habits / Best current streak / A
 - [x] Inspect provider timeout documentation and checked-in proxies; retain their forwarding contract. GET/HEAD retry transient gateway errors once within the remaining budget; writes are never automatically replayed. Execution of the new retry regression source remains pending.
 - [ ] Measure idle vs warm first-action response times using `scripts/measure-access-latency.cjs`.
 
-### T16 — Restore minimal screens, visible Why and direct habit deletion
+### T16 — Restore minimal screens, visible Why and direct habit deletion ([#75](https://github.com/farzad-bahadorifar/mehrchain/issues/75))
 
 **Priority:** P1, required before v1 product acceptance; first of the three owner additions.
 
@@ -419,7 +419,7 @@ Implementation follows the recommended **Active habits / Best current streak / A
 - [ ] Diagnose/fix Profile collection routing against T12's matching deployment and proxy, verify the refresh action, and replace raw `Cannot GET ...` output with a short useful error/retry state. Do not remove the collection feature to hide the defect.
 - [ ] Verify the requested screenshots' corrections at phone widths and in the installed PWA; cover custom/empty/sample Why, cancel/archive/delete, reload and failed writes. Link final evidence from T09.
 
-### T17 — Complete optional unique username management and identifier login
+### T17 — Complete optional unique username management and identifier login ([#76](https://github.com/farzad-bahadorifar/mehrchain/issues/76))
 
 **Priority:** P1, v1 scope after T16 and operational auth prerequisites.
 
@@ -436,7 +436,7 @@ Implementation follows the recommended **Active habits / Best current streak / A
 - [ ] For Google-created accounts, offer a verified password-setup path before username/password login is advertised. Do not treat the generated internal credential as a usable password or change the verified email/account identity.
 - [ ] Verify add/edit/remove and both login methods after reload, logout/login and another device, including blank-username accounts, Google accounts, case collisions, stale UI/session responses and preserved invites/Chains. Rehearse any additive migration on populated data and include it in the release gate.
 
-### T18 — Offer updates when a newer GitHub release is available
+### T18 — Offer updates when a newer GitHub release is available ([#77](https://github.com/farzad-bahadorifar/mehrchain/issues/77))
 
 **Priority:** P1, after T16/T17 and before the signed public v1 release. The v1 app must contain discovery so it can offer v1.0.1 and later updates.
 
@@ -454,7 +454,7 @@ Implementation follows the recommended **Active habits / Best current streak / A
 - [ ] Make official publication require a verified signed release artifact; do not publish debug/unsigned fallback binaries as the official APK. Make required generation/build/signing checks fail visibly rather than hiding failure with `|| true`. Verify APK identity, certificate, versionName/versionCode and checksums as part of the gate below.
 - [ ] Verify newer/same/older/prerelease metadata and Later/retry behavior; test an actual same-key APK upgrade from a test build to a higher-version build without account/habit loss. Record real-device results in T09; simulated metadata is separate evidence from actual installation.
 
-### T19 — Prevent mobile web/PWA page zoom and stabilize touch interaction
+### T19 — Prevent mobile web/PWA page zoom and stabilize touch interaction ([#78](https://github.com/farzad-bahadorifar/mehrchain/issues/78))
 
 **Priority:** P1, owner-requested October 23; required before final mobile web/PWA acceptance.
 
@@ -478,7 +478,7 @@ Implementation follows the recommended **Active habits / Best current streak / A
 
 **Implementation references:** [WebKit's zoom policy](https://webkit.org/blog/7367/new-interaction-behaviors-in-ios-10/), [W3C viewport/resize-text rule](https://www.w3.org/WAI/standards-guidelines/act/rules/b4f0c3/) and [W3C mobile text-resizing guidance](https://www.w3.org/TR/mobile-accessibility-mapping/). Recheck current target-browser behavior during implementation; the historical WebKit article does not prove current standalone-PWA behavior.
 
-### T20 — Analyze and prototype the design system, palette and Mero colors
+### T20 — Analyze and prototype the design system, palette and Mero colors ([#79](https://github.com/farzad-bahadorifar/mehrchain/issues/79))
 
 **Status / priority:** Discovery planned, P1. No implementation or prototype yet.
 
@@ -488,7 +488,7 @@ Deliver wireframes/specimens and a switchable `index.html` showing real screen
 compositions, not only swatches. Preserve Mero's identity and earned user colors.
 **Gate:** owner selects a direction/token mapping before shared styles change.
 
-### T21 — Diagnose username saving and prototype account editing
+### T21 — Diagnose username saving and prototype account editing ([#80](https://github.com/farzad-bahadorifar/mehrchain/issues/80))
 
 **Status / priority:** Diagnosis and interaction design planned, P1; functional
 diagnosis can proceed alongside T20, ahead of cosmetic work.
@@ -502,7 +502,7 @@ intentional removal and accurate pending/conflict/retry feedback. Replace repeat
 semantics. **Gate:** review the diagnosis and chosen interaction before repair or
 UI implementation; simulated saves are not a working-backend claim.
 
-### T22 — Redesign Profile structure and reduce scrolling
+### T22 — Redesign Profile structure and reduce scrolling ([#81](https://github.com/farzad-bahadorifar/mehrchain/issues/81))
 
 **Status / priority:** Discovery planned, P1; depends on T20 direction and T21 flow.
 
@@ -513,7 +513,7 @@ access comparisons. A Badge card opens T23; the color entry opens T24. Retain
 theme/version/logout/account-deletion access and the restored onboarding content.
 **Gate:** owner approves structure and visual prototype before Profile is rebuilt.
 
-### T23 — Prototype a dedicated Badge page
+### T23 — Prototype a dedicated Badge page ([#82](https://github.com/farzad-bahadorifar/mehrchain/issues/82))
 
 **Status / priority:** Discovery planned, P1; coordinates with T22.
 
@@ -523,7 +523,7 @@ large collection with synthetic data. Preserve current evidence-based earning
 rules and privacy. **Gate:** owner reviews the linked HTML flow and growth model
 before routes/components are implemented; no new achievement rules are implied.
 
-### T24 — Redesign the 21-day color reward and collection experience
+### T24 — Redesign the 21-day color reward and collection experience ([#83](https://github.com/farzad-bahadorifar/mehrchain/issues/83))
 
 **Status / priority:** Discovery planned, P1; uses T20 tokens and T22 structure.
 
@@ -534,7 +534,7 @@ streak, later collection-day/partner paths and permanent earned colors; preview 
 distinct from saved selection. **Gate:** owner approves the reward/collection
 experience before product implementation, with accessible reduced-motion states.
 
-### T25 — Explore interactive color movement inside Mero's belly
+### T25 — Explore interactive color movement inside Mero's belly ([#84](https://github.com/farzad-bahadorifar/mehrchain/issues/84))
 
 **Status / priority:** Exploratory feasibility planned, P2; no v1 dependency yet.
 
@@ -590,4 +590,4 @@ blockers, including username saving, still need verified resolution.
 
 ## Scope and completion
 
-The active roadmap spans **T00–T25**. T00–T15 retain their existing GitHub issue references; T16–T25 are local roadmap tasks awaiting issue/Project synchronization. T00–T04, T10 and T11 retain their recorded completed status. T05–T08 have historical implementations with release/field acceptance outstanding; T07 also requires T16's owner corrections. T09 is acceptance work, T12–T15 are stabilization, T16–T19 are the requested v1 work, and T20–T25 are analysis/prototype packages awaiting owner decisions before implementation. Completion requires evidence for the exact released revision, including the signed Android gate; documentation, a push, Capacitor dependency versions or a successful old build do not establish that result.
+The active roadmap spans **T00–T25**. All tasks T00–T25 map to active GitHub issues ([#55](https://github.com/farzad-bahadorifar/mehrchain/issues/55)–[#84](https://github.com/farzad-bahadorifar/mehrchain/issues/84)). T00–T04, T10 and T11 retain their recorded completed status. T05–T08 have historical implementations with release/field acceptance outstanding; T07 also requires T16's owner corrections. T09 is acceptance work, T12–T15 are stabilization, T16–T19 are the requested v1 work, and T20–T25 are analysis/prototype packages awaiting owner decisions before implementation. Completion requires evidence for the exact released revision, including the signed Android gate; documentation, a push, Capacitor dependency versions or a successful old build do not establish that result.
