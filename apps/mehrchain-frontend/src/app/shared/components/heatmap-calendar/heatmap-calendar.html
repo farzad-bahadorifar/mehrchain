@@ -68,7 +68,7 @@
         class="calendar-day rounded-lg flex flex-col items-center justify-center text-xs font-semibold relative"
         [ngClass]="{
           'opacity-30': !d.isCurrentMonth || d.isFuture,
-          'bg-primary text-white dark:text-background': d.isCompleted,
+          'bg-primary text-primary-foreground': d.isCompleted,
           'bg-muted/40 text-foreground': !d.isCompleted,
           'is-today': d.isToday,
           'is-completed': d.isCompleted,

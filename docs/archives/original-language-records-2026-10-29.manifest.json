@@ -1,0 +1,62 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "289899ebd8d08142e0bbd2e6210c4c467ce38f303e0ff4ef70f9a90e498060f1"
+  },
+  {
+    "path": "GEMINI.md",
+    "sha256": "6fd92b489cc10fee0f37ca8116f38bfcab72705cb8e008ff4776adc0cfe11b40"
+  },
+  {
+    "path": "docs/development_roadmap_history_v2_2026-10-29.md",
+    "sha256": "d9b695923d4e44bf49325dee2088d5da29547bc18d1dc2d8e59ed4e1dc16fe3f"
+  },
+  {
+    "path": "docs/v1_test_and_release_handoff.md",
+    "sha256": "033aae5c3c6753ca89c1165730dce2b1e2683fc8432c307634edee672690b715"
+  },
+  {
+    "path": "docs/v1_launch_execution_plan.md",
+    "sha256": "d008b60e335fe42c3947e876a21791a1036d0fa5659d92b8af45b81b0aeb9296"
+  },
+  {
+    "path": "docs/roadmap/context.md",
+    "sha256": "0d49c92419e19d86313460e638e319307fd85879b38f579a08fda10bdec107ac"
+  },
+  {
+    "path": "docs/roadmap/direction.md",
+    "sha256": "c29387250a523711e7533245f13145e7803e374570448a5f41f9380f1a1c9026"
+  },
+  {
+    "path": "docs/roadmap/opportunities.md",
+    "sha256": "4e5d84387dc6897b8352a83fdd0f804bdd7f4fd1da17471ad10bdfbdeecfc1d9"
+  },
+  {
+    "path": "docs/roadmap/index-intro.md",
+    "sha256": "869dbba5b8cc82fc395fa2ba3193c8b7c99552dff15f4ea2fa9d8fc57e12b842"
+  },
+  {
+    "path": "docs/roadmap/policies.md",
+    "sha256": "f909ea46f3b10bbcde1080915c71213b6a07cfab13f056c8fae396dd1f948703"
+  },
+  {
+    "path": "design/ux/t22-profile-structure/analysis.fa.md",
+    "sha256": "4a94d5cdc1660b29bb28e3260bdd255d5a5393ca377524a9cf6378bfe09b65b2"
+  },
+  {
+    "path": "design/ux/t22-profile-structure/v0.1.html",
+    "sha256": "49b025b1affd48a7808a72ad62ebb50f1c78f2f158afa3b005d2b99f314bb44e"
+  },
+  {
+    "path": "design/ux/t22-profile-structure/source/shell.html",
+    "sha256": "736a1c0e31d82cf172add206103fc34fba9dceed43482c26d94d11523ae8272d"
+  },
+  {
+    "path": "design/ux/t22-profile-structure/index.html",
+    "sha256": "0fe5e8d4def6a5254de500160a8cd8e06268c013f09a39b917b55916c04dca2a"
+  },
+  {
+    "path": "design/ux/t22-profile-structure/approved-v0.2.html",
+    "sha256": "0fe5e8d4def6a5254de500160a8cd8e06268c013f09a39b917b55916c04dca2a"
+  }
+]

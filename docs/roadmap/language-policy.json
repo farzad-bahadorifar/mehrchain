@@ -1,0 +1,8 @@
+{
+  "allowedFile": "README.md",
+  "startMarker": "<!-- PERSIAN_POEM:START -->",
+  "endMarker": "<!-- PERSIAN_POEM:END -->",
+  "poemSha256": "0bd7db75902b405170f72953749837e40b787ac634122e6b856f9b301a460d64",
+  "normalization": "Original two lines joined with a blank LF line; no wording changes",
+  "policy": "Preserve only this Persian poem. All other authored project material is English."
+}

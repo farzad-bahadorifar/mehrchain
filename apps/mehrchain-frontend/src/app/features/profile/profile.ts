@@ -1,6 +1,7 @@
 import { Component, DestroyRef, computed, effect, inject, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { MeroCustomizationService } from '../../core/services/mero-customization.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -35,11 +36,23 @@ export interface ProfileBadge {
     MeroComponent,
     UsernameSettingsComponent,
     PasswordSetupComponent,
+    RouterLink,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
 export class ProfileComponent {
+  readonly section: 'overview' | 'account' | 'badges' | 'colors' | 'settings' =
+    inject(ActivatedRoute).snapshot.data['section'] ?? 'overview';
+  readonly pageTitle = {
+    overview: 'Profile & Companion',
+    account: 'Account & security',
+    badges: 'Milestones & Badges',
+    colors: 'Your color collection',
+    settings: 'Appearance & app',
+  }[this.section];
+  readonly badgeFilter = signal<'all' | 'earned' | 'locked'>('all');
+  readonly selectedBadge = signal<ProfileBadge | null>(null);
   customization = inject(MeroCustomizationService);
   authService = inject(AuthService);
   themeService = inject(ThemeService);
@@ -150,6 +163,34 @@ export class ProfileComponent {
   });
 
   unlockedBadgesCount = computed(() => this.badges().filter((b) => b.isUnlocked).length);
+  readonly filteredBadges = computed(() =>
+    this.badges().filter(
+      (badge) =>
+        this.badgeFilter() === 'all' ||
+        (this.badgeFilter() === 'earned' ? badge.isUnlocked : !badge.isUnlocked),
+    ),
+  );
+  setBadgeFilter(filter: string): void {
+    if (filter === 'all' || filter === 'earned' || filter === 'locked') {
+      this.badgeFilter.set(filter);
+      this.selectedBadge.set(null);
+    }
+  }
+  readonly previewGlowColor = computed(() =>
+    this.draftDirty() && /^#[0-9a-f]{6}$/i.test(this.customColorInput())
+      ? this.customColorInput()
+      : undefined,
+  );
+
+  cancelColorEdit(): void {
+    const state = this.customization.collection();
+    const color = state?.colors.find((c) => c.slot === state.selectedSlot) ?? state?.colors[0];
+    this.editingSlot.set(color?.slot ?? 1);
+    this.customNameInput.set(color?.name ?? 'Custom Aura');
+    this.customColorInput.set(color?.hex ?? '#8b5cf6');
+    this.draftDirty.set(false);
+    this.saveFeedbackMessage.set(null);
+  }
 
   // 21-day Streak progress
   isCustomThemeUnlocked = this.customization.isUnlocked;

@@ -83,7 +83,7 @@
           type="button"
           (click)="shareInviteLink()"
           [disabled]="isSharing()"
-          class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-primary text-white font-bold text-xs shadow-xs hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
+          class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs shadow-xs hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
           title="Share Invite Link"
         >
           @if (isSharing()) {
@@ -152,7 +152,7 @@
       <button
         type="button"
         (click)="copyLinkOnly(); toggleQrModal(false)"
-        class="w-full py-2.5 rounded-xl bg-primary text-white text-xs font-bold shadow-xs active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+        class="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow-xs active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
       >
         <lucide-icon name="copy" class="w-3.5 h-3.5"></lucide-icon>
         <span>Copy Invite Link</span>

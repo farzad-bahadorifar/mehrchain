@@ -78,4 +78,34 @@ describe('Username settings', () => {
     expect(component.draft()).toBe('second');
     expect(component.feedback()).toBe('');
   });
+
+  it('cancels editing and does not silently remove a username through blank save', async () => {
+    const fixture = TestBed.createComponent(UsernameSettingsComponent);
+    fixture.detectChanges();
+    const component = fixture.componentInstance;
+    component.edit('');
+    await component.save();
+    expect(auth.updateUsername).not.toHaveBeenCalled();
+    expect(component.error()).toContain('Remove username');
+    component.cancelEdit();
+    expect(component.draft()).toBe('owner');
+    expect(component.error()).toBe('');
+  });
+
+  it('requires a separate confirmation before removing a username', () => {
+    const fixture = TestBed.createComponent(UsernameSettingsComponent);
+    fixture.detectChanges();
+    const button = [...(fixture.nativeElement as HTMLElement).querySelectorAll('button')].find(
+      (b) => b.textContent?.trim() === 'Remove username',
+    )!;
+    button.click();
+    fixture.detectChanges();
+    expect(auth.updateUsername).not.toHaveBeenCalled();
+    expect(fixture.nativeElement.textContent).toContain('This does not delete your account');
+    fixture.componentInstance.confirmRemoval.set(false);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('[aria-label="Confirm username removal"]'),
+    ).toBeNull();
+  });
 });

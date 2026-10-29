@@ -11,7 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
       class="mb-5 rounded-2xl border border-border bg-card p-4 space-y-3"
       aria-label="Username settings"
     >
-      <h2 class="text-sm font-bold text-foreground">Username (optional)</h2>
+      <h2 class="text-sm font-bold text-foreground">Username</h2>
       @if (auth.currentUser()?.usernameSource === 'legacy' && auth.currentUser()?.username) {
         <p class="text-xs text-muted-foreground">
           Existing username · Save to confirm your choice.
@@ -19,7 +19,7 @@ import { AuthService } from '../../../core/services/auth.service';
       }
       <form (ngSubmit)="save()" class="space-y-3">
         <fieldset [disabled]="saving()" class="space-y-3 min-w-0">
-          <label for="profile-username" class="sr-only">Username</label>
+          <label for="profile-username" class="block text-xs text-muted-foreground">Username</label>
           <input
             id="profile-username"
             name="username"
@@ -35,6 +35,13 @@ import { AuthService } from '../../../core/services/auth.service';
           <p class="text-xs text-muted-foreground" role="status">{{ availabilityMessage() }}</p>
           <div class="flex flex-wrap gap-3">
             <button
+              type="button"
+              (click)="cancelEdit()"
+              class="min-h-11 rounded-xl bg-muted px-4 text-sm text-foreground"
+            >
+              Cancel
+            </button>
+            <button
               type="submit"
               [disabled]="!valid() || availability() === 'checking' || availability() === 'taken'"
               class="rounded-xl bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-50"
@@ -44,8 +51,8 @@ import { AuthService } from '../../../core/services/auth.service';
             @if (auth.currentUser()?.username) {
               <button
                 type="button"
-                (click)="save(true)"
-                class="text-sm text-muted-foreground underline"
+                (click)="confirmRemoval.set(true)"
+                class="min-h-11 text-sm text-muted-foreground"
               >
                 Remove username
               </button>
@@ -62,6 +69,32 @@ import { AuthService } from '../../../core/services/auth.service';
           </div>
         </fieldset>
       </form>
+      @if (confirmRemoval()) {
+        <div class="rounded-xl border border-border p-3" aria-label="Confirm username removal">
+          <p class="text-sm text-foreground">Remove your username?</p>
+          <p class="text-xs text-muted-foreground mt-2">
+            Your email, Google access and account data stay. This does not delete your account.
+          </p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <button
+              type="button"
+              [disabled]="saving()"
+              (click)="confirmRemoval.set(false)"
+              class="min-h-11 rounded-xl bg-muted px-3 text-sm text-foreground"
+            >
+              Keep username
+            </button>
+            <button
+              type="button"
+              [disabled]="saving()"
+              (click)="save(true)"
+              class="min-h-11 rounded-xl border border-border px-3 text-sm text-foreground"
+            >
+              Confirm removal
+            </button>
+          </div>
+        </div>
+      }
       @if (feedback()) {
         <p role="status" class="text-xs text-foreground">{{ feedback() }}</p>
       }
@@ -81,6 +114,7 @@ export class UsernameSettingsComponent {
   readonly draft = signal('');
   readonly dirty = signal(false);
   readonly saving = signal(false);
+  readonly confirmRemoval = signal(false);
   readonly error = signal('');
   readonly feedback = signal('');
   readonly retryCheck = signal(0);
@@ -120,6 +154,7 @@ export class UsernameSettingsComponent {
           this.error.set('');
           this.feedback.set('');
           this.saving.set(false);
+          this.confirmRemoval.set(false);
         }
         if (!this.dirty()) this.draft.set(user?.username || '');
       });
@@ -179,7 +214,19 @@ export class UsernameSettingsComponent {
     this.feedback.set('');
   }
 
+  cancelEdit(): void {
+    this.draft.set(this.auth.currentUser()?.username || '');
+    this.dirty.set(false);
+    this.error.set('');
+    this.feedback.set('');
+    this.confirmRemoval.set(false);
+  }
+
   async save(remove = false) {
+    if (!remove && !this.normalized()) {
+      this.error.set('Enter a username, or choose Remove username.');
+      return;
+    }
     if (
       this.saving() ||
       (!remove && (!this.valid() || ['checking', 'taken'].includes(this.availability())))
@@ -197,6 +244,7 @@ export class UsernameSettingsComponent {
       if (!current()) return;
       this.draft.set(user.username || '');
       this.dirty.set(false);
+      this.confirmRemoval.set(false);
       this.feedback.set(user.username ? 'Username saved.' : 'Username removed.');
     } catch (error) {
       if (current())

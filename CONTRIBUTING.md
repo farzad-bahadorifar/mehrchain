@@ -8,6 +8,7 @@ MehrChain is a mindful habit companion designed to help people commit to positiv
 
 ## Table of Contents
 
+- [Read the Roadmap First](#read-the-roadmap-first)
 - [Getting Started](#getting-started)
 - [Project Architecture](#project-architecture)
 - [Development Workflow](#development-workflow)
@@ -18,6 +19,32 @@ MehrChain is a mindful habit companion designed to help people commit to positiv
 - [Code of Conduct](#code-of-conduct)
 
 ---
+
+## Read the Roadmap First
+
+Before writing code, investigating a bug, proposing UI or opening an issue:
+
+1. Read the [active roadmap](docs/development_roadmap.md).
+2. Read the [task workflow](docs/roadmap/workflow.md), applicable
+   [known decisions and blockers](docs/roadmap/context.md), and
+   [product direction](docs/roadmap/direction.md).
+3. Choose one precise task card. Check its scope, exclusions, starting files,
+   dependencies, acceptance and verification. Do not repeat an unchanged known
+   blocker or treat historical observations as today's live state.
+4. For UI analysis, follow the [existing-design-system wireframe contract](docs/ui_ux_discovery_plan.md).
+5. Use the [question notebook](docs/roadmap/opportunities.md) for an owner topic whose
+   decision is still unclear; do not create a vague executable issue.
+
+**English-only project material:** application/UI copy, documentation, task cards,
+issue/PR descriptions and authored code comments must be English. The language of
+an owner chat does not change this rule. **Exception: preserve the original Persian
+poem in README verbatim; do not translate or remove it.** Preserve real user-entered Unicode data
+and intentional test fixtures. Original-language historical evidence may remain
+in the [documented archive](docs/archives/README.md), accompanied by English references.
+
+The task registry is the status source; generated Markdown is a view. Use the
+documented local CLI. The owner currently creates GitHub issues/Project items;
+do not run legacy bulk-sync scripts or change external project state automatically.
 
 ## Getting Started
 
@@ -168,12 +195,13 @@ chore: update dependencies
 
 ### Pull Request Process
 
-1. Create a feature branch from `main`
-2. Make your changes with clear, focused commits
-3. Ensure all tests pass: `npx nx test mehrchain-frontend && npx nx test mehrchain-backend`
-4. Push your branch and open a PR against `main`
-5. Fill in the PR description explaining **what** and **why**
-6. Wait for review — we'll respond within a few days
+1. Read the roadmap and select the task card before starting a branch.
+2. Create a feature branch from `main`
+3. Make scoped changes and record actual acceptance evidence.
+4. Run checks appropriate to the change; follow the task's verification instructions.
+5. Push/open a PR when authorized, linking the exact task/issue and explaining what changed and why.
+6. Use English and distinguish local tests, deployment and real-device acceptance.
+7. Request review; never claim unverified acceptance.
 
 ---
 
@@ -244,32 +272,14 @@ npx nx test mehrchain-backend -- --coverage
 
 ## Where Help is Needed
 
-### 🔥 High Priority
-
-- **Chain Feature Backend** — Build the NestJS `ChainModule` to expose the `ChainRequest` model via API endpoints. The database schema is ready in Prisma, but there's no controller or service yet.
-- **Onboarding Refactor** — Break the 500-line `OnboardingComponent` into smaller, focused step components.
-- **Deploy to Production** — Help configure and verify Vercel (frontend) and Render (backend) deployments.
-
-### 🌟 Medium Priority
-
-- **Accessibility (a11y)** — Add ARIA labels, keyboard navigation, and screen reader support.
-- **Internationalization (i18n)** — Set up `@angular/localize` or `transloco` for multi-language support.
-- **Design System Documentation** — Document existing color tokens, component variants, and spacing conventions.
-- **E2E Tests** — Write end-to-end tests for critical user flows (register → verify → create habit → complete).
-
-### 💡 Creative Contributions
-
-- **Mero Mascot Illustrations** — Design SVG character illustrations to replace emoji-based mascot.
-- **Empty State Illustrations** — Create friendly illustrations for empty dashboard, chain, and journey pages.
-- **Milestone Animations** — Design celebration animations for 7, 14, and 21-day streak milestones.
-- **Chain UX Design** — Help design the social chain experience (wireframes, mockups, user flows).
+Use the active queue in [the roadmap](docs/development_roadmap.md), not a static feature wishlist. Read the selected task and its known constraints before offering a fix. Undefined owner topics belong in the question notebook until they have a bounded decision/output. Do not recreate completed Chain/onboarding work, replace Mero, change reward rules or introduce a new component system based on older suggestions.
 
 ---
 
 ## Submitting Changes
 
 1. **Check existing issues** before starting work to avoid duplicates
-2. **Open an issue first** for large features to discuss the approach
+2. **Define new scope through roadmap intake first**; follow the current owner-directed issue/Project handoff policy
 3. **Keep PRs focused** — one feature or fix per PR
 4. **Update tests** when changing behavior
 5. **Don't break existing tests** — all CI checks must pass

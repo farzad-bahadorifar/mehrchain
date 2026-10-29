@@ -1,494 +1,597 @@
-<div
-  class="app-page bg-background pb-6 px-4 sm:px-6 safe-top font-sans select-none animate-fade-in"
->
-  <!-- Top Navigation / Title -->
-  <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
-    <div>
-      <h1 class="text-2xl font-black text-foreground tracking-tight">Profile & Companion</h1>
-      <p class="text-xs sm:text-sm text-muted-foreground mt-0.5">Personal companion & settings</p>
+<div class="app-page bg-background pb-6 px-5 safe-top font-sans">
+  <header class="flex items-center gap-3 mb-6">
+    @if (section !== 'overview') {
+      <a
+        routerLink="/profile"
+        class="min-h-11 min-w-11 rounded-xl bg-muted flex items-center justify-center text-foreground"
+        aria-label="Back to Profile"
+        ><lucide-icon name="arrow-left" class="w-5 h-5"
+      /></a>
+    }
+    <div class="min-w-0">
+      <h1 class="text-2xl font-bold text-foreground tracking-tight">{{ pageTitle }}</h1>
+      @if (section === 'overview') {
+        <p class="text-xs text-muted-foreground mt-1">Personal companion & settings</p>
+      }
     </div>
-
-    <!-- Quick User Status -->
-    <div
-      class="min-w-0 max-w-full flex items-center gap-2 bg-card border border-border/60 px-3 py-1.5 rounded-full shadow-xs"
-    >
-      <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-      <span class="text-xs font-medium text-foreground truncate max-w-[130px] sm:max-w-[180px]">
-        {{ currentUser()?.name || currentUser()?.email || 'MehrChain Explorer' }}
-      </span>
-    </div>
-  </div>
-
-  <!-- Toast / Feedback Pill -->
+  </header>
   @if (saveFeedbackMessage()) {
     <div
       [attr.role]="saveFailed() ? 'alert' : 'status'"
-      class="mb-5 px-4 py-2.5 rounded-2xl bg-primary/10 border border-primary/25 text-primary text-xs font-bold flex items-center justify-between gap-2 animate-fade-in shadow-sm"
+      class="mb-5 p-3 rounded-2xl bg-primary/10 border border-primary/25 text-sm text-foreground flex gap-2 items-center"
     >
-      <div class="flex flex-wrap items-center gap-2">
-        <span>{{ saveFeedbackMessage() }}</span>
-      </div>
-      <button
+      <span class="flex-1">{{ saveFeedbackMessage() }}</span
+      ><button
         type="button"
+        class="min-h-11 min-w-11"
         (click)="saveFeedbackMessage.set(null)"
         aria-label="Dismiss feedback"
-        class="text-primary hover:opacity-75 p-0.5 cursor-pointer"
       >
-        <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
+        <lucide-icon name="x" class="w-4 h-4" />
       </button>
     </div>
   }
-
-  <!-- Mero keeps a fixed name; existing named-color preferences remain available. -->
-  <app-username-settings />
-  <section
-    class="mb-5 rounded-2xl border border-border bg-card p-4 space-y-3"
-    aria-label="Password settings"
-  >
-    <h2 class="text-sm font-bold text-foreground">
-      {{ currentUser()?.hasPassword ? 'Reset password' : 'Set a password by email' }}
-    </h2>
-    <app-password-setup
-      [email]="currentUser()?.email || ''"
-      [lockedEmail]="true"
-      (saved)="authService.logout()"
-    />
-  </section>
-  <div class="bg-card rounded-3xl p-5 border border-border/70 shadow-sm mb-6 text-center">
-    <app-mero size="lg" [showGlow]="true" [mood]="meroMood.mood() === 'sad' ? 'sad' : 'happy'" />
-    <h2 class="mt-2 text-xl font-bold text-foreground">Mero</h2>
-    <p class="mt-1 text-xs text-muted-foreground">A little company for your daily steps.</p>
-    <p class="mt-3 text-xs text-muted-foreground">
-      Glow: <span class="text-foreground">{{ customization.activeTheme().name }}</span>
-    </p>
-  </div>
-  <!-- Permanent private collection; only the next shared target is shown. -->
-  <section
-    class="mb-6 p-4 rounded-3xl bg-card border border-border/70 space-y-4"
-    aria-labelledby="color-collection-title"
-  >
-    <div class="flex flex-wrap items-center justify-between gap-2">
-      <div>
-        <h3 id="color-collection-title" class="text-base font-bold text-foreground">
-          Your color collection
-        </h3>
-        <p class="text-xs text-muted-foreground">Name your colors. Mero stays Mero.</p>
-      </div>
-      <button
-        type="button"
-        (click)="customization.refresh()"
-        [disabled]="customization.loading() || customization.saving()"
-        class="text-xs text-primary px-3 py-2 rounded-xl border border-border disabled:opacity-50"
-      >
-        {{ customization.loading() ? 'Refreshing…' : 'Refresh' }}
-      </button>
-    </div>
-
-    @if (customization.loadError()) {
-      <p role="alert" class="text-xs text-destructive">{{ customization.loadError() }}</p>
-    }
-
-    @if (customization.collection(); as collection) {
-      @if (isCustomThemeUnlocked()) {
-        <p class="text-xs text-muted-foreground">
-          {{ collection.colors.length }} saved / {{ collection.capacity }} earned slots.
-        </p>
-        <div class="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            (click)="useColor(0)"
-            [disabled]="customization.saving()"
-            [attr.aria-pressed]="collection.selectedSlot === 0"
-            class="px-3 py-2 rounded-xl border border-border text-xs text-foreground disabled:opacity-50"
-          >
-            Default glow {{ collection.selectedSlot === 0 ? '· Active' : '' }}
-          </button>
-          @if (nextEmptySlot(); as slot) {
-            <button
-              type="button"
-              (click)="beginEdit(slot)"
-              [disabled]="customization.saving()"
-              class="px-3 py-2 rounded-xl border border-primary/40 text-primary text-xs disabled:opacity-50"
-            >
-              Create color · Slot {{ slot }}
-            </button>
-          }
+  @switch (section) {
+    @case ('overview') {
+      <div class="flex gap-3 items-center mb-5">
+        <span
+          class="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0"
+          ><lucide-icon name="user" class="w-5 h-5"
+        /></span>
+        <div class="min-w-0">
+          <h2 class="text-sm font-bold text-foreground break-words">
+            {{ currentUser()?.name || 'Your space' }}
+          </h2>
+          <p class="text-xs text-muted-foreground break-all mt-1">
+            {{ currentUser()?.username ? '@' + currentUser()?.username : currentUser()?.email }}
+          </p>
         </div>
-
-        @if (collection.colors.length) {
-          <ul class="space-y-2 max-h-48 overflow-y-auto" aria-label="Saved colors">
-            @for (color of collection.colors; track color.slot) {
-              <li class="flex flex-wrap items-center gap-2 rounded-xl border border-border/60 p-2">
-                <span
-                  class="w-5 h-5 rounded-full border border-border shrink-0"
-                  [style.backgroundColor]="color.hex"
-                  aria-hidden="true"
-                ></span>
-                <span class="text-xs text-foreground min-w-0 break-words flex-1">{{
-                  color.name
-                }}</span>
-                @if (collection.selectedSlot === color.slot) {
-                  <span class="text-xs text-muted-foreground">Active</span>
-                } @else {
-                  <button
-                    type="button"
-                    (click)="useColor(color.slot)"
-                    [disabled]="customization.saving()"
-                    [attr.aria-label]="'Use color ' + color.name"
-                    class="text-xs text-primary px-2 py-1 disabled:opacity-50"
-                  >
-                    Use
-                  </button>
-                }
-                <button
-                  type="button"
-                  (click)="beginEdit(color.slot)"
-                  [disabled]="customization.saving()"
-                  [attr.aria-label]="'Edit color ' + color.name"
-                  class="text-xs text-primary px-2 py-1 disabled:opacity-50"
-                >
-                  Edit
-                </button>
-              </li>
+      </div>
+      <section
+        class="profile-companion bg-card rounded-3xl p-5 border border-border/70 shadow-soft mb-5 text-center"
+      >
+        <app-mero
+          size="lg"
+          [showGlow]="true"
+          [mood]="meroMood.mood() === 'sad' ? 'sad' : 'happy'"
+        />
+        <h2 class="mt-2 text-xl font-bold text-foreground">Mero</h2>
+        <p class="mt-1 text-xs text-muted-foreground">A little company for your daily steps.</p>
+        <p class="mt-3 text-xs text-muted-foreground">
+          Glow · {{ customization.activeTheme().name }}
+        </p>
+      </section>
+      <a routerLink="/profile/badges" class="profile-entry"
+        ><span class="profile-entry-icon profile-milestone"
+          ><lucide-icon name="trophy" class="w-5 h-5" /></span
+        ><span class="flex-1 min-w-0"
+          ><strong>Milestones & Badges</strong
+          ><small>
+            @if (customization.collection()) {
+              {{ unlockedBadgesCount() }} / {{ badges().length }} earned · view your milestones
+            } @else {
+              View your milestones
             }
-          </ul>
-        }
-
-        <form (ngSubmit)="saveCustomGlow()" class="space-y-3 pt-3 border-t border-border/60">
-          <p class="text-xs font-bold text-foreground">Edit slot {{ editingSlot() }}</p>
-          <fieldset [disabled]="customization.saving()" class="space-y-3 disabled:opacity-60">
-            <div class="flex flex-wrap gap-2" aria-label="Color presets">
-              @for (preset of PRESET_CUSTOM_COLORS; track preset.hex) {
-                <button
-                  type="button"
-                  (click)="applyPresetCustomColor(preset)"
-                  [attr.aria-label]="preset.name"
-                  [attr.aria-pressed]="customColorInput() === preset.hex"
-                  class="w-7 h-7 rounded-full border-2 border-border focus-visible:outline-2 focus-visible:outline-primary"
-                  [style.backgroundColor]="preset.hex"
-                ></button>
+          </small></span
+        ><lucide-icon name="arrow-right" class="w-4 h-4"
+      /></a>
+      <a routerLink="/profile/colors" class="profile-entry"
+        ><span class="profile-entry-icon profile-reward"
+          ><lucide-icon name="palette" class="w-5 h-5" /></span
+        ><span class="flex-1 min-w-0"
+          ><strong>Your color collection</strong
+          ><small>
+            @if (customization.collection(); as c) {
+              @if (c.unlockedAt) {
+                {{ c.colors.length }} saved / {{ c.capacity }} earned slots
+              } @else {
+                One habit · {{ c.currentStreak }} / 21 consecutive days
               }
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label for="mero-color-name" class="block text-xs text-muted-foreground mb-1"
-                  >Color name</label
-                >
-                <input
-                  id="mero-color-name"
-                  name="colorName"
-                  type="text"
-                  maxlength="60"
-                  required
-                  [ngModel]="customNameInput()"
-                  (ngModelChange)="customNameInput.set($event); draftDirty.set(true)"
-                  class="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm text-foreground"
-                />
-                <p class="mt-1 text-[11px] text-muted-foreground">
-                  {{ colorNameLength() }} / 30 characters
-                </p>
-              </div>
-              <div>
-                <label for="mero-color-hex" class="block text-xs text-muted-foreground mb-1"
-                  >Six-digit hex color</label
-                >
-                <div class="flex gap-2">
-                  <input
-                    type="color"
-                    name="colorPicker"
-                    aria-label="Pick a glow color"
-                    [ngModel]="customColorInput()"
-                    (ngModelChange)="customColorInput.set($event); draftDirty.set(true)"
-                    class="w-10 h-10 border border-border rounded-lg bg-background"
-                  />
-                  <input
-                    id="mero-color-hex"
-                    name="colorHex"
-                    type="text"
-                    maxlength="7"
-                    required
-                    placeholder="#8b5cf6"
-                    [ngModel]="customColorInput()"
-                    (ngModelChange)="customColorInput.set($event); draftDirty.set(true)"
-                    class="w-full min-w-0 bg-background border border-border rounded-xl px-3 py-2 text-sm font-mono text-foreground"
-                  />
-                </div>
-              </div>
-            </div>
-            <button
-              type="submit"
-              class="rounded-xl bg-primary text-primary-foreground px-4 py-2 text-xs font-bold"
-            >
-              {{ customization.saving() ? 'Saving…' : 'Save & apply color' }}
-            </button>
-          </fieldset>
-        </form>
-
-        <p class="text-xs text-muted-foreground">
-          Next slot: {{ collection.collectionDays }} / {{ collection.nextDayTarget }} days or
-          {{ collection.acceptedPartners }} / {{ collection.nextPartnerTarget }} partners.
-        </p>
-      } @else {
-        <p class="text-sm text-foreground">
-          Your first color opens after one habit reaches 21 consecutive days.
-        </p>
-        <p class="text-xs text-muted-foreground">
-          {{ currentStreak() }} / 21 days on your current longest habit streak.
-        </p>
-        <progress
-          class="w-full h-2 accent-primary"
-          [value]="currentStreak()"
-          max="21"
-          aria-label="Progress toward your first color"
-        ></progress>
-        <p class="text-xs text-muted-foreground">
-          Once earned, it stays yours. Later slots can come from completed days or accepted Chain
-          partners. Connecting is optional.
-        </p>
-      }
-    } @else if (!customization.loadError()) {
-      <p role="status" class="text-xs text-muted-foreground">Loading your saved collection…</p>
+            } @else {
+              Your saved colors and progress
+            }
+          </small></span
+        ><lucide-icon name="arrow-right" class="w-4 h-4"
+      /></a>
+      <p class="text-xs font-bold text-muted-foreground tracking-wide mt-6 mb-3">SETTINGS</p>
+      <a routerLink="/profile/account" class="profile-entry"
+        ><span class="profile-entry-icon"><lucide-icon name="user" class="w-5 h-5" /></span
+        ><span class="flex-1 min-w-0"
+          ><strong>Account & security</strong
+          ><small>Username, password & sign-in options</small></span
+        ><lucide-icon name="arrow-right" class="w-4 h-4"
+      /></a>
+      <a routerLink="/profile/settings" class="profile-entry"
+        ><span class="profile-entry-icon"><lucide-icon name="sun" class="w-5 h-5" /></span
+        ><span class="flex-1 min-w-0"
+          ><strong>Appearance & app</strong><small>Theme, updates & version</small></span
+        ><lucide-icon name="arrow-right" class="w-4 h-4"
+      /></a>
     }
-  </section>
-
-  <!-- 3. Milestones & Badges -->
-  <div class="mb-8">
-    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 px-1">
-      <div class="flex flex-wrap items-center gap-2">
-        <div class="w-7 h-7 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
-          <lucide-icon name="trophy" class="w-4 h-4"></lucide-icon>
-        </div>
-        <div>
-          <h3 class="text-base font-bold text-foreground">Milestones & Badges</h3>
-          <p class="text-[11px] text-muted-foreground">Your achievements and companion badges</p>
-        </div>
-      </div>
-      <span
-        class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20"
+    @case ('account') {
+      <section class="bg-card border border-border rounded-2xl p-4 mb-5">
+        <h2 class="text-sm font-bold text-foreground break-all">{{ currentUser()?.email }}</h2>
+        <p class="text-xs text-muted-foreground mt-1">
+          Your account data stays with your sign-in identity.
+        </p>
+      </section>
+      <app-username-settings />
+      <section
+        class="mb-5 rounded-2xl border border-border bg-card p-4 space-y-3"
+        aria-label="Password settings"
       >
-        {{ unlockedBadgesCount() }} / {{ badges().length }} Unlocked
-      </span>
-    </div>
+        <h2 class="text-sm font-bold text-foreground">
+          {{ currentUser()?.hasPassword ? 'Reset password' : 'Set a password by email' }}
+        </h2>
+        <app-password-setup
+          [email]="currentUser()?.email || ''"
+          [lockedEmail]="true"
+          (saved)="authService.logout()"
+        />
+      </section>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      @for (badge of badges(); track badge.id) {
-        <div
-          class="p-3.5 rounded-2xl border transition-all flex items-center gap-3"
-          [class]="
-            badge.isUnlocked
-              ? 'bg-card border-primary/30 shadow-xs ring-1 ring-primary/15'
-              : 'bg-muted/30 border-border/40 opacity-60'
-          "
-        >
-          <div
-            class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-transform"
-            [class]="
-              badge.isUnlocked
-                ? 'bg-primary/15 text-primary shadow-sm'
-                : 'bg-muted text-muted-foreground/60'
-            "
-          >
-            <lucide-icon [name]="badge.icon" class="w-5 h-5"></lucide-icon>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between gap-1">
-              <h4 class="text-xs font-bold text-foreground truncate">{{ badge.name }}</h4>
-              @if (badge.isUnlocked) {
-                <span
-                  class="text-[9px] font-bold text-teal-600 dark:text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md"
-                >
-                  ✓
-                </span>
-              }
-            </div>
-            <p class="text-[10px] text-muted-foreground truncate">{{ badge.description }}</p>
-            <p
-              class="text-[9px] font-medium mt-0.5"
-              [class]="badge.isUnlocked ? 'text-primary' : 'text-muted-foreground'"
-            >
-              {{ badge.progressText }}
-            </p>
-          </div>
-        </div>
-      }
-    </div>
-  </div>
-
-  <!-- 4. Appearance Theme & Account Settings -->
-  <section class="mb-4 p-4 rounded-2xl bg-card border border-border" aria-label="App updates">
-    <p class="text-sm">Installed version: {{ versionService.currentVersion }}</p>
-    @if (versionService.availableUpdate(); as update) {
-      <p class="text-sm mt-2">
-        {{ update.kind === 'android' ? 'Android' : 'Web' }} update: {{ update.version }}
-      </p>
-      <button
-        type="button"
-        class="min-h-11 px-4 mt-2 rounded-xl bg-primary text-primary-foreground"
-        (click)="versionService.activateUpdate()"
-      >
-        {{ update.kind === 'android' ? 'Download update' : 'Reload to update' }}
-      </button>
-    }
-    <button
-      type="button"
-      class="min-h-11 px-3 mt-2 rounded-xl bg-muted"
-      [disabled]="versionService.checking()"
-      (click)="versionService.checkForUpdates(true)"
-    >
-      {{ versionService.checking() ? 'Checking…' : 'Check for updates' }}
-    </button>
-    @if (versionService.checkError(); as error) {
-      <p role="status" class="text-sm mt-2">{{ error }}</p>
-    } @else if (versionService.checked() && !versionService.availableUpdate()) {
-      <p role="status" class="text-sm mt-2">No update is ready right now.</p>
-    }
-  </section>
-  <div class="space-y-4 mb-4">
-    <!-- Theme Selector -->
-    <div class="bg-card border border-border/60 rounded-2xl p-4 shadow-xs">
-      <div class="flex items-center justify-between mb-3">
-        <div>
-          <h4 class="text-xs font-bold text-foreground">Display Theme</h4>
-          <p class="text-[10px] text-muted-foreground">Select light, dark, or system mode</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-3 gap-2">
-        <button
-          type="button"
-          (click)="setThemeMode('light')"
-          class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 cursor-pointer"
-          [ngClass]="
-            themeService.mode() === 'light' ? 'bg-primary/15 border-primary/40' : 'border-border/60'
-          "
-          [class.text-primary]="themeService.mode() === 'light'"
-          [class.text-muted-foreground]="themeService.mode() !== 'light'"
-        >
-          <lucide-icon name="sun" class="w-3.5 h-3.5"></lucide-icon>
-          <span>Light</span>
-        </button>
-
-        <button
-          type="button"
-          (click)="setThemeMode('system')"
-          class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 cursor-pointer"
-          [ngClass]="
-            themeService.mode() === 'system'
-              ? 'bg-primary/15 border-primary/40'
-              : 'border-border/60'
-          "
-          [class.text-primary]="themeService.mode() === 'system'"
-          [class.text-muted-foreground]="themeService.mode() !== 'system'"
-        >
-          <lucide-icon name="monitor" class="w-3.5 h-3.5"></lucide-icon>
-          <span>System</span>
-        </button>
-
-        <button
-          type="button"
-          (click)="setThemeMode('dark')"
-          class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 cursor-pointer"
-          [ngClass]="
-            themeService.mode() === 'dark' ? 'bg-primary/15 border-primary/40' : 'border-border/60'
-          "
-          [class.text-primary]="themeService.mode() === 'dark'"
-          [class.text-muted-foreground]="themeService.mode() !== 'dark'"
-        >
-          <lucide-icon name="moon" class="w-3.5 h-3.5"></lucide-icon>
-          <span>Dark</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- What's New / Version Changelog Section (Issue #39) -->
-    <div class="bg-card border border-border/60 rounded-2xl p-4 shadow-xs">
-      <button
-        type="button"
-        (click)="toggleWhatsNew()"
-        [attr.aria-expanded]="isWhatsNewExpanded()"
-        class="w-full flex items-center justify-between text-left transition-colors cursor-pointer"
-      >
-        <div class="flex items-center gap-2.5">
-          <div
-            class="w-8 h-8 rounded-xl bg-blue-500/15 text-blue-500 flex items-center justify-center"
-          >
-            <lucide-icon name="sparkles" class="w-4 h-4"></lucide-icon>
-          </div>
-          <div>
-            <div class="flex flex-wrap items-center gap-2">
-              <h4 class="text-xs font-bold text-foreground">What's New</h4>
-              <span
-                class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary border border-primary/20"
-              >
-                v{{ versionService.currentVersion }}
-              </span>
-            </div>
-            <p class="text-[10px] text-muted-foreground">Recent improvements and features</p>
-          </div>
-        </div>
-        <lucide-icon
-          [name]="isWhatsNewExpanded() ? 'chevron-up' : 'chevron-down'"
-          class="w-4 h-4 text-muted-foreground transition-transform"
-        ></lucide-icon>
-      </button>
-
-      @if (isWhatsNewExpanded()) {
-        <div class="mt-4 pt-3 border-t border-border/50 space-y-4 animate-fade-in">
-          @for (release of versionService.changelog; track release.version) {
-            <div class="space-y-1.5">
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-1.5">
-                  <span class="text-xs font-bold text-foreground">v{{ release.version }}</span>
-                  <span class="text-[11px] font-medium text-muted-foreground"
-                    >— {{ release.title }}</span
-                  >
-                </div>
-                <span class="text-[10px] font-mono text-muted-foreground">{{ release.date }}</span>
-              </div>
-              <ul class="space-y-1 pl-1">
-                @for (item of release.highlights; track item) {
-                  <li
-                    class="flex items-start gap-2 text-[11px] text-muted-foreground leading-relaxed"
-                  >
-                    <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-1.5"></span>
-                    <span>{{ item }}</span>
-                  </li>
-                }
-              </ul>
-            </div>
-          }
-        </div>
-      }
-    </div>
-
-    <!-- Account Settings -->
-    <div class="bg-card border border-border/60 rounded-2xl p-4 shadow-xs space-y-3">
-      <div class="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h4 class="text-xs font-bold text-foreground">Account Actions</h4>
-          <p class="text-[10px] text-muted-foreground">Manage your session and account data</p>
-        </div>
-      </div>
-
-      <div class="flex flex-col sm:flex-row gap-2.5">
+      <section class="mt-6 border-t border-border pt-5">
+        <h2 class="text-sm font-bold text-foreground mb-3">Account actions</h2>
         <button
           type="button"
           (click)="handleSignOut()"
-          class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-foreground bg-muted/60 hover:bg-muted border border-border/60 transition-all active:scale-95 cursor-pointer"
+          class="w-full min-h-11 rounded-xl bg-muted text-foreground flex items-center justify-center gap-2"
         >
-          <lucide-icon name="log-out" class="w-4 h-4 text-muted-foreground"></lucide-icon>
-          <span>Sign Out</span>
-        </button>
-
-        <button
+          <lucide-icon name="log-out" class="w-4 h-4" />Sign out</button
+        ><button
           type="button"
           (click)="handleDeleteAccount()"
-          class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-destructive hover:bg-destructive/10 border border-destructive/20 transition-all active:scale-95 cursor-pointer"
+          class="w-full min-h-11 rounded-xl border border-rose-400/40 text-rose-600 dark:text-rose-400 mt-3 flex items-center justify-center gap-2"
         >
-          <lucide-icon name="trash-2" class="w-3.5 h-3.5"></lucide-icon>
-          <span>Delete Account</span>
+          <lucide-icon name="trash-2" class="w-4 h-4" />Delete account…
         </button>
+      </section>
+    }
+    @case ('colors') {
+      <section
+        class="profile-companion bg-card rounded-3xl p-5 border border-border/70 shadow-soft mb-5 text-center"
+      >
+        <app-mero
+          size="lg"
+          [showGlow]="true"
+          [mood]="meroMood.mood() === 'sad' ? 'sad' : 'happy'"
+          [previewColor]="section === 'colors' ? previewGlowColor() : undefined"
+        />
+        <h2 class="mt-2 text-xl font-bold text-foreground">Mero</h2>
+        <p class="mt-1 text-xs text-muted-foreground">A little company for your daily steps.</p>
+        <p class="mt-3 text-xs text-muted-foreground">
+          @if (section === 'colors' && draftDirty()) {
+            Preview · {{ customNameInput() }} · not saved
+          } @else {
+            Glow · {{ customization.activeTheme().name }}
+          }
+        </p>
+      </section>
+      <!-- Permanent private collection; only the next shared target is shown. -->
+      <section
+        class="mb-6 p-4 rounded-3xl bg-card border border-border/70 space-y-4"
+        aria-labelledby="color-collection-title"
+      >
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 id="color-collection-title" class="text-base font-bold text-foreground">
+              Your color collection
+            </h3>
+            <p class="text-xs text-muted-foreground">Name your colors. Mero stays Mero.</p>
+          </div>
+          <button
+            type="button"
+            (click)="customization.refresh()"
+            [disabled]="customization.loading() || customization.saving()"
+            class="text-xs text-primary px-3 py-2 rounded-xl border border-border disabled:opacity-50"
+          >
+            {{ customization.loading() ? 'Refreshing…' : 'Refresh' }}
+          </button>
+        </div>
+
+        @if (customization.loadError()) {
+          <p role="alert" class="text-xs text-destructive">{{ customization.loadError() }}</p>
+        }
+
+        @if (customization.collection(); as collection) {
+          @if (isCustomThemeUnlocked()) {
+            <p class="text-xs text-muted-foreground">
+              {{ collection.colors.length }} saved / {{ collection.capacity }} earned slots.
+            </p>
+            <div class="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                (click)="useColor(0)"
+                [disabled]="customization.saving()"
+                [attr.aria-pressed]="collection.selectedSlot === 0"
+                class="px-3 py-2 rounded-xl border border-border text-xs text-foreground disabled:opacity-50"
+              >
+                Default glow {{ collection.selectedSlot === 0 ? '· Active' : '' }}
+              </button>
+              @if (nextEmptySlot(); as slot) {
+                <button
+                  type="button"
+                  (click)="beginEdit(slot)"
+                  [disabled]="customization.saving()"
+                  class="px-3 py-2 rounded-xl border border-primary/40 text-primary text-xs disabled:opacity-50"
+                >
+                  Create color · Slot {{ slot }}
+                </button>
+              }
+            </div>
+
+            @if (collection.colors.length) {
+              <ul class="space-y-2 max-h-48 overflow-y-auto" aria-label="Saved colors">
+                @for (color of collection.colors; track color.slot) {
+                  <li
+                    class="flex flex-wrap items-center gap-2 rounded-xl border border-border/60 p-2"
+                  >
+                    <span
+                      class="w-5 h-5 rounded-full border border-border shrink-0"
+                      [style.backgroundColor]="color.hex"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="text-xs text-foreground min-w-0 break-words flex-1">{{
+                      color.name
+                    }}</span>
+                    @if (collection.selectedSlot === color.slot) {
+                      <span class="text-xs text-muted-foreground">Active</span>
+                    } @else {
+                      <button
+                        type="button"
+                        (click)="useColor(color.slot)"
+                        [disabled]="customization.saving()"
+                        [attr.aria-label]="'Use color ' + color.name"
+                        class="text-xs text-primary px-2 py-1 disabled:opacity-50"
+                      >
+                        Use
+                      </button>
+                    }
+                    <button
+                      type="button"
+                      (click)="beginEdit(color.slot)"
+                      [disabled]="customization.saving()"
+                      [attr.aria-label]="'Edit color ' + color.name"
+                      class="text-xs text-primary px-2 py-1 disabled:opacity-50"
+                    >
+                      Edit
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+
+            <form (ngSubmit)="saveCustomGlow()" class="space-y-3 pt-3 border-t border-border/60">
+              <p class="text-xs font-bold text-foreground">Edit slot {{ editingSlot() }}</p>
+              <fieldset [disabled]="customization.saving()" class="space-y-3 disabled:opacity-60">
+                <div class="flex flex-wrap gap-2" aria-label="Color presets">
+                  @for (preset of PRESET_CUSTOM_COLORS; track preset.hex) {
+                    <button
+                      type="button"
+                      (click)="applyPresetCustomColor(preset)"
+                      [attr.aria-label]="preset.name"
+                      [attr.aria-pressed]="customColorInput() === preset.hex"
+                      class="w-7 h-7 rounded-full border-2 border-border focus-visible:outline-2 focus-visible:outline-primary"
+                      [style.backgroundColor]="preset.hex"
+                    ></button>
+                  }
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label for="mero-color-name" class="block text-xs text-muted-foreground mb-1"
+                      >Color name</label
+                    >
+                    <input
+                      id="mero-color-name"
+                      name="colorName"
+                      type="text"
+                      maxlength="60"
+                      required
+                      [ngModel]="customNameInput()"
+                      (ngModelChange)="customNameInput.set($event); draftDirty.set(true)"
+                      class="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm text-foreground"
+                    />
+                    <p class="mt-1 text-[11px] text-muted-foreground">
+                      {{ colorNameLength() }} / 30 characters
+                    </p>
+                  </div>
+                  <div>
+                    <label for="mero-color-hex" class="block text-xs text-muted-foreground mb-1"
+                      >Six-digit hex color</label
+                    >
+                    <div class="flex gap-2">
+                      <input
+                        type="color"
+                        name="colorPicker"
+                        aria-label="Pick a glow color"
+                        [ngModel]="customColorInput()"
+                        (ngModelChange)="customColorInput.set($event); draftDirty.set(true)"
+                        class="w-10 h-10 border border-border rounded-lg bg-background"
+                      />
+                      <input
+                        id="mero-color-hex"
+                        name="colorHex"
+                        type="text"
+                        maxlength="7"
+                        required
+                        placeholder="#8b5cf6"
+                        [ngModel]="customColorInput()"
+                        (ngModelChange)="customColorInput.set($event); draftDirty.set(true)"
+                        class="w-full min-w-0 bg-background border border-border rounded-xl px-3 py-2 text-sm font-mono text-foreground"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  (click)="cancelColorEdit()"
+                  class="min-h-11 rounded-xl bg-muted text-foreground px-4 py-2 text-xs font-bold mr-2"
+                >
+                  Cancel preview
+                </button>
+                <button
+                  type="submit"
+                  class="min-h-11 rounded-xl bg-primary text-primary-foreground px-4 py-2 text-xs font-bold"
+                >
+                  {{ customization.saving() ? 'Saving…' : 'Save & apply color' }}
+                </button>
+              </fieldset>
+            </form>
+
+            <p class="text-xs text-muted-foreground">
+              Next slot: {{ collection.collectionDays }} / {{ collection.nextDayTarget }} days or
+              {{ collection.acceptedPartners }} / {{ collection.nextPartnerTarget }} partners.
+            </p>
+          } @else {
+            <p class="text-sm text-foreground">
+              Your first color opens after one habit reaches 21 consecutive days.
+            </p>
+            <p class="text-xs text-muted-foreground">
+              {{ currentStreak() }} / 21 days on your current longest habit streak.
+            </p>
+            <progress
+              class="w-full h-2 accent-primary"
+              [value]="currentStreak()"
+              max="21"
+              aria-label="Progress toward your first color"
+            ></progress>
+            <p class="text-xs text-muted-foreground">
+              Once earned, it stays yours. Later slots can come from completed days or accepted
+              Chain partners. Connecting is optional.
+            </p>
+          }
+        } @else if (!customization.loadError()) {
+          <p role="status" class="text-xs text-muted-foreground">Loading your saved collection…</p>
+        }
+      </section>
+    }
+    @case ('badges') {
+      @if (customization.loadError()) {
+        <div role="alert" class="mb-4 text-sm text-foreground">
+          <p>Could not load your milestones.</p>
+          <button type="button" class="min-h-11 text-primary" (click)="customization.refresh()">
+            Retry
+          </button>
+        </div>
+      }
+      @if (!customization.collection()) {
+        @if (!customization.loadError()) {
+          <p role="status" class="text-sm text-muted-foreground">Loading milestones…</p>
+        }
+      } @else {
+        <p class="text-xs text-muted-foreground">
+          {{ unlockedBadgesCount() }} / {{ badges().length }} earned · your own milestones
+        </p>
+        <div class="flex gap-2 p-1 rounded-xl bg-muted my-4" aria-label="Badge filters">
+          @for (filter of ['all', 'earned', 'locked']; track filter) {
+            <button
+              type="button"
+              class="flex-1 min-h-11 rounded-lg text-xs capitalize text-foreground"
+              [class.bg-card]="badgeFilter() === filter"
+              [attr.aria-pressed]="badgeFilter() === filter"
+              (click)="setBadgeFilter(filter)"
+            >
+              {{ filter }}
+            </button>
+          }
+        </div>
+        @if (selectedBadge(); as badge) {
+          <section
+            class="bg-card rounded-2xl border border-border p-4 mb-4"
+            aria-label="Badge details"
+          >
+            <h2 class="text-base font-bold text-foreground">{{ badge.name }}</h2>
+            <p class="text-sm text-muted-foreground mt-2">{{ badge.description }}</p>
+            <p class="text-xs text-primary mt-2">{{ badge.progressText }}</p>
+            <button
+              type="button"
+              (click)="selectedBadge.set(null)"
+              class="min-h-11 text-sm text-primary mt-2"
+            >
+              Close details
+            </button>
+          </section>
+        }
+        <div class="grid grid-cols-2 gap-3">
+          @for (badge of filteredBadges(); track badge.id) {
+            <button
+              type="button"
+              class="min-w-0 rounded-2xl border border-border bg-card p-4 text-center"
+              [class.border-dashed]="!badge.isUnlocked"
+              [attr.aria-expanded]="selectedBadge()?.id === badge.id"
+              (click)="selectedBadge.set(badge)"
+            >
+              <span
+                class="profile-entry-icon mx-auto mb-3"
+                [class.profile-milestone]="badge.isUnlocked"
+                ><lucide-icon [name]="badge.icon" class="w-5 h-5" /></span
+              ><span class="block text-xs font-bold text-foreground break-words">{{
+                badge.name
+              }}</span
+              ><span class="block text-xs text-muted-foreground mt-2">{{
+                badge.isUnlocked ? 'Earned' : 'Locked'
+              }}</span>
+            </button>
+          } @empty {
+            <p class="col-span-2 text-sm text-muted-foreground p-4">No badges in this view yet.</p>
+          }
+        </div>
+      }
+    }
+    @case ('settings') {
+      <section class="mb-4 p-4 rounded-2xl bg-card border border-border" aria-label="App updates">
+        <p class="text-sm">Installed version: {{ versionService.currentVersion }}</p>
+        @if (versionService.availableUpdate(); as update) {
+          <p class="text-sm mt-2">
+            {{ update.kind === 'android' ? 'Android' : 'Web' }} update: {{ update.version }}
+          </p>
+          <button
+            type="button"
+            class="min-h-11 px-4 mt-2 rounded-xl bg-primary text-primary-foreground"
+            (click)="versionService.activateUpdate()"
+          >
+            {{ update.kind === 'android' ? 'Download update' : 'Reload to update' }}
+          </button>
+        }
+        <button
+          type="button"
+          class="min-h-11 px-3 mt-2 rounded-xl bg-muted"
+          [disabled]="versionService.checking()"
+          (click)="versionService.checkForUpdates(true)"
+        >
+          {{ versionService.checking() ? 'Checking…' : 'Check for updates' }}
+        </button>
+        @if (versionService.checkError(); as error) {
+          <p role="status" class="text-sm mt-2">{{ error }}</p>
+        } @else if (versionService.checked() && !versionService.availableUpdate()) {
+          <p role="status" class="text-sm mt-2">No update is ready right now.</p>
+        }
+      </section>
+      <div class="space-y-4 mb-4">
+        <!-- Theme Selector -->
+        <div class="bg-card border border-border/60 rounded-2xl p-4 shadow-xs">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h4 class="text-xs font-bold text-foreground">Display Theme</h4>
+              <p class="text-[10px] text-muted-foreground">Select light, dark, or system mode</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              (click)="setThemeMode('light')"
+              class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 cursor-pointer"
+              [ngClass]="
+                themeService.mode() === 'light'
+                  ? 'bg-primary/15 border-primary/40'
+                  : 'border-border/60'
+              "
+              [class.text-primary]="themeService.mode() === 'light'"
+              [class.text-muted-foreground]="themeService.mode() !== 'light'"
+            >
+              <lucide-icon name="sun" class="w-3.5 h-3.5"></lucide-icon>
+              <span>Light</span>
+            </button>
+
+            <button
+              type="button"
+              (click)="setThemeMode('system')"
+              class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 cursor-pointer"
+              [ngClass]="
+                themeService.mode() === 'system'
+                  ? 'bg-primary/15 border-primary/40'
+                  : 'border-border/60'
+              "
+              [class.text-primary]="themeService.mode() === 'system'"
+              [class.text-muted-foreground]="themeService.mode() !== 'system'"
+            >
+              <lucide-icon name="monitor" class="w-3.5 h-3.5"></lucide-icon>
+              <span>System</span>
+            </button>
+
+            <button
+              type="button"
+              (click)="setThemeMode('dark')"
+              class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 cursor-pointer"
+              [ngClass]="
+                themeService.mode() === 'dark'
+                  ? 'bg-primary/15 border-primary/40'
+                  : 'border-border/60'
+              "
+              [class.text-primary]="themeService.mode() === 'dark'"
+              [class.text-muted-foreground]="themeService.mode() !== 'dark'"
+            >
+              <lucide-icon name="moon" class="w-3.5 h-3.5"></lucide-icon>
+              <span>Dark</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- What's New / Version Changelog Section (Issue #39) -->
+        <div class="bg-card border border-border/60 rounded-2xl p-4 shadow-xs">
+          <button
+            type="button"
+            (click)="toggleWhatsNew()"
+            [attr.aria-expanded]="isWhatsNewExpanded()"
+            class="w-full flex items-center justify-between text-left transition-colors cursor-pointer"
+          >
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-xl bg-blue-500/15 text-blue-500 flex items-center justify-center"
+              >
+                <lucide-icon name="sparkles" class="w-4 h-4"></lucide-icon>
+              </div>
+              <div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <h4 class="text-xs font-bold text-foreground">What's New</h4>
+                  <span
+                    class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary border border-primary/20"
+                  >
+                    v{{ versionService.currentVersion }}
+                  </span>
+                </div>
+                <p class="text-[10px] text-muted-foreground">Recent improvements and features</p>
+              </div>
+            </div>
+            <lucide-icon
+              [name]="isWhatsNewExpanded() ? 'chevron-up' : 'chevron-down'"
+              class="w-4 h-4 text-muted-foreground transition-transform"
+            ></lucide-icon>
+          </button>
+
+          @if (isWhatsNewExpanded()) {
+            <div class="mt-4 pt-3 border-t border-border/50 space-y-4 animate-fade-in">
+              @for (release of versionService.changelog; track release.version) {
+                <div class="space-y-1.5">
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-xs font-bold text-foreground">v{{ release.version }}</span>
+                      <span class="text-[11px] font-medium text-muted-foreground"
+                        >— {{ release.title }}</span
+                      >
+                    </div>
+                    <span class="text-[10px] font-mono text-muted-foreground">{{
+                      release.date
+                    }}</span>
+                  </div>
+                  <ul class="space-y-1 pl-1">
+                    @for (item of release.highlights; track item) {
+                      <li
+                        class="flex items-start gap-2 text-[11px] text-muted-foreground leading-relaxed"
+                      >
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-1.5"></span>
+                        <span>{{ item }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+            </div>
+          }
+        </div>
       </div>
-    </div>
-  </div>
+      <p class="text-xs text-muted-foreground mt-5">MehrChain · Small steps. Quiet support.</p>
+    }
+  }
 </div>

@@ -7,27 +7,27 @@
   --app-shell-width: 34rem;
   --app-navigation-height: calc(5rem + env(safe-area-inset-bottom, 0px));
   /* Light Theme Palette */
-  --color-background: hsl(210 20% 98%);
-  --color-foreground: hsl(220 29% 17%);
+  --color-background: #f4f8fb;
+  --color-foreground: #263243;
 
-  --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(220 29% 17%);
+  --color-card: #ffffff;
+  --color-card-foreground: #263243;
 
-  --color-primary: hsl(180 100% 25%);
-  --color-primary-foreground: hsl(0 0% 100%);
+  --color-primary: #007e87;
+  --color-primary-foreground: #ffffff;
 
-  --color-secondary: hsl(210 20% 96%);
-  --color-secondary-foreground: hsl(220 29% 17%);
+  --color-secondary: #e8f1f5;
+  --color-secondary-foreground: #263243;
 
-  --color-muted: hsl(210 20% 96%);
-  --color-muted-foreground: hsl(220 9% 46%);
+  --color-muted: #e8f1f5;
+  --color-muted-foreground: #647286;
 
-  --color-accent: hsl(180 100% 31%);
-  --color-accent-foreground: hsl(0 0% 100%);
+  --color-accent: #006e77;
+  --color-accent-foreground: #ffffff;
 
-  --color-border: hsl(210 20% 90%);
-  --color-input: hsl(210 20% 90%);
-  --color-ring: hsl(180 100% 25%);
+  --color-border: #dce6ed;
+  --color-input: #dce6ed;
+  --color-ring: #007e87;
 
   --shadow-soft: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
   --shadow-float: 0 8px 24px -8px rgba(0, 128, 128, 0.25);
@@ -35,27 +35,27 @@
 
 .dark {
   /* Dark Theme Palette: Deep obsidian slate with radiant emerald glow */
-  --color-background: hsl(222 47% 9%);
-  --color-foreground: hsl(210 40% 98%);
+  --color-background: #0e1b2a;
+  --color-foreground: #eff5fc;
 
-  --color-card: hsl(222 47% 14%);
-  --color-card-foreground: hsl(210 40% 98%);
+  --color-card: #17283b;
+  --color-card-foreground: #eff5fc;
 
-  --color-primary: hsl(172 75% 42%);
-  --color-primary-foreground: hsl(0 0% 100%);
+  --color-primary: #50dfd4;
+  --color-primary-foreground: #063336;
 
-  --color-secondary: hsl(217 33% 18%);
-  --color-secondary-foreground: hsl(210 40% 98%);
+  --color-secondary: #21374b;
+  --color-secondary-foreground: #eff5fc;
 
-  --color-muted: hsl(217 33% 18%);
-  --color-muted-foreground: hsl(215 20% 65%);
+  --color-muted: #21374b;
+  --color-muted-foreground: #a7b8cd;
 
-  --color-accent: hsl(172 80% 50%);
-  --color-accent-foreground: hsl(0 0% 100%);
+  --color-accent: #78e9df;
+  --color-accent-foreground: #063336;
 
-  --color-border: hsl(217 33% 22%);
-  --color-input: hsl(217 33% 22%);
-  --color-ring: hsl(172 75% 42%);
+  --color-border: #2d435a;
+  --color-input: #2d435a;
+  --color-ring: #50dfd4;
 
   --shadow-soft: 0 4px 14px -2px rgba(0, 0, 0, 0.5);
   --shadow-float: 0 8px 24px -8px rgba(20, 184, 166, 0.35);

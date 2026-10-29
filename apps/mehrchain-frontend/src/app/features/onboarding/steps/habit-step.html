@@ -10,7 +10,7 @@
         @for (habit of habits()[selectedCategory()]; track habit) {
           <button
             (click)="habitSelected.emit(habit)"
-            class="w-full text-left p-3.5 sm:p-4 rounded-2xl bg-muted/40 hover:bg-primary hover:text-white border border-transparent hover:shadow-md hover:shadow-primary/20 transition-all duration-200 font-medium group flex items-center justify-between text-sm"
+            class="w-full text-left p-3.5 sm:p-4 rounded-2xl bg-muted/40 hover:bg-primary hover:text-primary-foreground border border-transparent hover:shadow-md hover:shadow-primary/20 transition-all duration-200 font-medium group flex items-center justify-between text-sm"
           >
             <span>{{ habit }}</span>
             <lucide-icon

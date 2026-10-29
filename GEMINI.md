@@ -5,12 +5,9 @@
 
 ---
 
-## Response Formatting Rules (RTL/LTR)
+## Start here: roadmap and language policy
 
-1. **Farsi text (RTL)** must always be inside `<div dir="rtl">` and `</div>` tags.
-2. **Code blocks** (typescript, html, json, bash, etc.) must be **outside** `<div dir="rtl">` tags to preserve LTR formatting.
-3. **Inline English terms** in Farsi text must use backticks (e.g., `ExampleClass`).
-4. Farsi text must be clear, structured, and use proper punctuation.
+Read docs/development_roadmap.md before development, diagnosis, UI analysis or task intake. Follow docs/roadmap/workflow.md, applicable context.md D-IDs, direction.md and root AGENTS.md. All project-authored docs, tasks/issues/PRs, comments and UI copy are English regardless of owner chat language. Keep the original Persian README poem verbatim; it is the sole authored-prose exception. Preserve user Unicode data and intentional fixtures. Historical source records are retained in docs/archives/; use English references for current work.
 
 ---
 
@@ -141,32 +138,6 @@ npm run dev
 
 ---
 
-## Task Management & GitHub Lifecycle Protocol
+## Task management and GitHub lifecycle
 
-Always follow this lifecycle protocol for any task worked on in this project:
-
-### Phase 1: Before Starting a Task
-1. **Check Roadmap**: First inspect `docs/development_roadmap.md` to check if the task already exists.
-2. **If Task Exists in Roadmap**:
-   - Retrieve its GitHub Issue number (e.g., `#31`).
-   - Update its GitHub Project Board item status to `In progress` (or `Ready`).
-   - Update `docs/development_roadmap.md` status if needed (e.g. `🔄 In Progress`).
-3. **If Task Does NOT Exist in Roadmap**:
-   - Create a new GitHub Issue using `node scripts/create-task.js "<Title>" "<Body>" --open`.
-   - Add the task to `docs/development_roadmap.md` under the appropriate Sprint/Phase section with status `🔄 In Progress` and link to the newly created issue.
-   - Add the issue to the GitHub Project Board with status `In progress` and appropriate priority/dates.
-
-### Phase 2: Finishing a Task ("Task it" / "Log task" / "Track task" / "Close task")
-1. **Close GitHub Issue & Update Project**:
-   - Close the issue as completed (`state: closed`, `state_reason: 'completed'`).
-   - If issue was created on the fly, run `node scripts/create-task.js "<Title>" "<Body>"`.
-   - Move the task to `Done` status on the GitHub Project Board.
-2. **Update Roadmap Documentation**:
-   - Mark the task status as `✅ Done` in `docs/development_roadmap.md`.
-   - Ensure the task row links to the GitHub issue (e.g. `[#31](https://github.com/farzad-bahadorifar/mehrchain/issues/31)`).
-   - Record completion date and relevant notes.
-3. **Commit & Push**:
-   - Commit roadmap updates: `git commit -am "docs: update roadmap with Issue #XX"`
-   - Push to GitHub: `git push origin main`
-
-
+The current owner-directed workflow is docs/roadmap/workflow.md. Read the roadmap first; use one precise task card and the canonical tasks.json registry. The local CLI validates scope, known-context references and completion evidence. Done tasks leave the active view; future unknown topics use the separate question notebook. The owner creates GitHub issues/Project items later; do not create/close/sync issues, mutate Projects, commit, push or deploy merely to maintain task records. The former automatic issue/Project/commit/push protocol is superseded. Technical baseline notes above are historical context where they differ from current task decisions; verify sources before implementation.

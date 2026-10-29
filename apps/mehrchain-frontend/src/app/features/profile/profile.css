@@ -3,3 +3,67 @@
   display: block;
   width: 100%;
 }
+
+.profile-companion {
+  background: linear-gradient(125deg, #effcf9, #f8fafc 56%, #fff7e5);
+}
+:host-context(.dark) .profile-companion {
+  background: linear-gradient(130deg, #153942, #18293a 56%, #343329);
+}
+.profile-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin-block: 0.625rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-card);
+  color: var(--color-foreground);
+}
+.profile-entry:hover {
+  border-color: var(--color-primary);
+}
+.profile-entry strong {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.profile-entry small {
+  display: block;
+  margin-top: 0.1875rem;
+  color: var(--color-muted-foreground);
+  font-size: 0.6875rem;
+}
+.profile-entry-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-card));
+  color: var(--color-primary);
+}
+.profile-milestone {
+  background: #f2ecff;
+  color: #7550b6;
+}
+.profile-reward {
+  background: #fff4d8;
+  color: #986000;
+}
+:host-context(.dark) .profile-milestone {
+  background: #342e51;
+  color: #c3a5ff;
+}
+:host-context(.dark) .profile-reward {
+  background: #3e3626;
+  color: #f6ca75;
+}
+:host a:focus-visible,
+:host button:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 3px;
+}

@@ -85,4 +85,22 @@ describe('errorInterceptor', () => {
       { status: 400, statusText: 'Bad Request' },
     );
   });
+
+  it.each([404, 405])('does not expose framework route errors for username save (%s)', (status) => {
+    let message = '';
+    let receivedStatus = 0;
+    http.patch('/api/auth/username', { username: 'owner' }).subscribe({
+      error: (error) => {
+        message = error.message;
+        receivedStatus = error.status;
+      },
+    });
+    httpMock
+      .expectOne('/api/auth/username')
+      .flush({ message: 'Cannot PATCH /api/auth/username' }, { status, statusText: 'Unavailable' });
+    expect(message).toContain('temporarily unavailable');
+    expect(message).toContain('Your input is kept');
+    expect(message).not.toContain('Cannot PATCH');
+    expect(receivedStatus).toBe(status);
+  });
 });

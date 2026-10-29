@@ -24,5 +24,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/profile/profile').then((m) => m.ProfileComponent),
     canActivate: [onboardingGuard],
   },
+  ...(['account', 'badges', 'colors', 'settings'] as const).map((section) => ({
+    path: `profile/${section}`,
+    loadComponent: () => import('./features/profile/profile').then((m) => m.ProfileComponent),
+    canActivate: [onboardingGuard],
+    data: { section },
+  })),
   { path: '**', redirectTo: '' },
 ];

@@ -84,4 +84,16 @@ describe('MeroComponent', () => {
     fixture.detectChanges();
     expect(target.update).toHaveBeenLastCalledWith(expect.objectContaining({ mood: 'happy' }));
   });
+
+  it('previews a draft color and returns to the account color when cleared', async () => {
+    await fixture.whenStable();
+    fixture.componentRef.setInput('previewColor', '#f43f5e');
+    fixture.detectChanges();
+    expect(target.update).toHaveBeenLastCalledWith(
+      expect.objectContaining({ glowColor: '#f43f5e' }),
+    );
+    fixture.componentRef.setInput('previewColor', undefined);
+    fixture.detectChanges();
+    expect(target.update).toHaveBeenLastCalledWith(expect.objectContaining({ glowColor: null }));
+  });
 });

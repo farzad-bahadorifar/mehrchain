@@ -1,0 +1,2606 @@
+{
+  "version": 1,
+  "updated": "2026-10-29",
+  "lastId": 53,
+  "tasks": [
+    {
+      "id": "T20",
+      "title": "Approve V2 Aurora palette on existing components",
+      "type": "analysis",
+      "area": "design-system",
+      "priority": "P1",
+      "status": "Done",
+      "goal": "One approved V2 color direction is available for implementation.",
+      "scope": [
+        "V2 current/proposed color comparison on existing components"
+      ],
+      "outOfScope": [
+        "Further palette exploration",
+        "Production code or API fixes"
+      ],
+      "inputs": [
+        "design/ux/t22-profile-structure/index.html v0.2",
+        "source/styles.css; current global styles"
+      ],
+      "steps": [
+        "Review current/proposed on the same components",
+        "Record owner choice and exact artifact version"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "V2 artifact shows both palettes in the same system",
+          "state": "pass",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        },
+        {
+          "id": "A2",
+          "text": "Owner explicitly approves V2",
+          "state": "pass",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        }
+      ],
+      "verify": [
+        "Open the versioned HTML and read decisions.md"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "evidence": [
+        "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+      ],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Done",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        }
+      ],
+      "contextRefs": [
+        "D-001",
+        "D-005"
+      ]
+    },
+    {
+      "id": "T22",
+      "title": "Approve Profile A V2 overview and destinations",
+      "type": "analysis",
+      "area": "profile",
+      "priority": "P1",
+      "status": "Done",
+      "goal": "The approved Profile overview has four named destinations and no inline settings forms.",
+      "scope": [
+        "Overview, identity/Mero, direct Account/Badges/Colors/Appearance entries"
+      ],
+      "outOfScope": [
+        "New habit logic",
+        "Live username root cause"
+      ],
+      "inputs": [
+        "V0.2 artifact; selected A"
+      ],
+      "steps": [
+        "Review A and destinations",
+        "Record V2 approval"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The approved artifact identifies all four destinations",
+          "state": "pass",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        },
+        {
+          "id": "A2",
+          "text": "Owner explicitly approves V2",
+          "state": "pass",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        }
+      ],
+      "verify": [
+        "Review artifact and decision log"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "evidence": [
+        "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+      ],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Done",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        }
+      ],
+      "contextRefs": [
+        "D-005"
+      ]
+    },
+    {
+      "id": "T23",
+      "title": "Approve V2 Badges page design",
+      "type": "analysis",
+      "area": "profile-badges",
+      "priority": "P1",
+      "status": "Done",
+      "goal": "One approved summary-to-badges design exists for implementation.",
+      "scope": [
+        "Existing five badges, filters, details, back"
+      ],
+      "outOfScope": [
+        "New badge earning rules",
+        "Synthetic future badges as shipped content",
+        "Unrequested second design study"
+      ],
+      "inputs": [
+        "V0.2 Badges specimen"
+      ],
+      "steps": [
+        "Review summary/list/details in existing system",
+        "Record V2 approval"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Badges use existing Lucide language and Profile entry",
+          "state": "pass",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        },
+        {
+          "id": "A2",
+          "text": "V2 is owner approved",
+          "state": "pass",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        }
+      ],
+      "verify": [
+        "Review artifact and decision log"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "evidence": [
+        "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+      ],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Done",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        }
+      ],
+      "contextRefs": [
+        "D-005"
+      ]
+    },
+    {
+      "id": "T24",
+      "title": "Approve V2 color studio design",
+      "type": "analysis",
+      "area": "profile-colors",
+      "priority": "P1",
+      "status": "Done",
+      "goal": "One approved Profile-to-studio design separates draft preview from apply.",
+      "scope": [
+        "Locked progress, named-color preview, save/cancel"
+      ],
+      "outOfScope": [
+        "Changing T06 earning thresholds",
+        "Additional alternative after V2 approval",
+        "Live persistence acceptance"
+      ],
+      "inputs": [
+        "V0.2 Color studio specimen"
+      ],
+      "steps": [
+        "Review locked/studio and save/cancel flow",
+        "Record V2 approval"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Draft and saved color are distinguished in approved design",
+          "state": "pass",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        },
+        {
+          "id": "A2",
+          "text": "V2 is owner approved",
+          "state": "pass",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        }
+      ],
+      "verify": [
+        "Review artifact and decision log"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "evidence": [
+        "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+      ],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Done",
+          "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        }
+      ],
+      "contextRefs": [
+        "D-001",
+        "D-005"
+      ]
+    },
+    {
+      "id": "T26",
+      "title": "Apply approved V2 interface palette",
+      "type": "implementation",
+      "area": "design-system",
+      "priority": "P1",
+      "status": "Done",
+      "goal": "Local frontend renders the V2 light/dark interface tokens without changing saved Mero colors.",
+      "scope": [
+        "Global background/text/card/primary/border/focus tokens",
+        "Profile milestone/reward accents"
+      ],
+      "outOfScope": [
+        "New component language",
+        "Changing Mero selected color or reward rules",
+        "Deployment"
+      ],
+      "inputs": [
+        "apps/mehrchain-frontend/src/styles.css",
+        "Profile CSS and approved V0.2 source/styles.css"
+      ],
+      "steps": [
+        "Map exact approved light/dark token values",
+        "Keep default Mero/service color selection independent",
+        "Run frontend regressions and production build"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Approved light/dark token values are applied",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T26 scoped result and verification"
+        },
+        {
+          "id": "A2",
+          "text": "Saved Mero selection is not mutated by UI token changes",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T26 scoped result and verification"
+        },
+        {
+          "id": "A3",
+          "text": "Frontend production build passes",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T26 scoped result and verification"
+        }
+      ],
+      "verify": [
+        "npx nx test mehrchain-frontend --watch=false",
+        "npm run build:frontend"
+      ],
+      "dependsOn": [
+        "T20"
+      ],
+      "issue": null,
+      "evidence": [
+        "docs/roadmap/evidence/v2-implementation.md"
+      ],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "InProgress",
+          "evidence": "Explicit single-result scope registered."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md"
+        }
+      ],
+      "contextRefs": [
+        "D-001",
+        "D-005"
+      ]
+    },
+    {
+      "id": "T27",
+      "title": "Implement Profile A with four real destination routes",
+      "type": "implementation",
+      "area": "profile",
+      "priority": "P1",
+      "status": "Done",
+      "goal": "Local app opens compact Profile and service-backed account, badges, colors and settings pages via direct URLs.",
+      "scope": [
+        "/profile overview",
+        "/profile/account, /profile/badges, /profile/colors, /profile/settings",
+        "Existing badge rules, live service values, color draft preview/cancel, themes/version/logout/delete controls"
+      ],
+      "outOfScope": [
+        "Production deployment",
+        "New backend endpoints or earning rules",
+        "Synthetic future badges",
+        "Mero belly drag",
+        "Home/Chain/Journey logic changes"
+      ],
+      "inputs": [
+        "apps/mehrchain-frontend/src/app/features/profile/*",
+        "app.routes.ts",
+        "MeroCustomizationService, AuthService, VersionService",
+        "Approved V0.2"
+      ],
+      "steps": [
+        "Move existing controls into their named route sections",
+        "Keep identity/Mero and four direct entries on overview",
+        "Use real badge/collection state and preserve existing earning logic",
+        "Preview a draft through Mero input only; cancel without service writes",
+        "Verify direct URLs and back links, color failures and frontend build"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Overview has Mero/four entries and no username/password inputs",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T27 scoped result and verification"
+        },
+        {
+          "id": "A2",
+          "text": "All four destination URLs render their own section and Profile return link",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T27 scoped result and verification"
+        },
+        {
+          "id": "A3",
+          "text": "Existing badge rules and named colors survive relocation; filtering/details work",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T27 scoped result and verification"
+        },
+        {
+          "id": "A4",
+          "text": "Failed saves retain draft; preview/cancel never changes earned capacity or persisted selection",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T27 scoped result and verification"
+        },
+        {
+          "id": "A5",
+          "text": "Frontend navigation regressions and production build pass",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T27 scoped result and verification"
+        }
+      ],
+      "verify": [
+        "npx nx test mehrchain-frontend --watch=false",
+        "npm run build:frontend",
+        "Inspect compiled local Profile fixture and destinations"
+      ],
+      "dependsOn": [
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "issue": null,
+      "evidence": [
+        "docs/roadmap/evidence/v2-implementation.md"
+      ],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "InProgress",
+          "evidence": "Explicit single-result scope registered."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md"
+        }
+      ],
+      "contextRefs": [
+        "D-001",
+        "D-002",
+        "D-003",
+        "D-005"
+      ]
+    },
+    {
+      "id": "T28",
+      "title": "Make username cancel/removal and route-failure feedback explicit",
+      "type": "bug",
+      "area": "account-ui",
+      "priority": "P1",
+      "status": "Done",
+      "goal": "Local username form retains failed drafts, cancels edits and removes a handle only after a named confirmation.",
+      "scope": [
+        "Username settings component",
+        "404/405 username-save error normalization"
+      ],
+      "outOfScope": [
+        "Claiming deployed endpoint repair",
+        "Database migration",
+        "Changing username validation or account ownership",
+        "Deleting an account"
+      ],
+      "inputs": [
+        "shared/components/username-settings/username-settings.ts",
+        "core/interceptors/error.interceptor.ts",
+        "Existing T17 service/controller contracts"
+      ],
+      "steps": [
+        "Add cancel/reset to saved username",
+        "Keep blank Save distinct from explicit removal",
+        "Confirm removal with email/Google/data preservation copy",
+        "Normalize missing-route errors without losing status",
+        "Run conflict/stale-session/removal and interceptor tests"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Cancel restores saved name and clears local feedback without a write",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T28 scoped result and verification"
+        },
+        {
+          "id": "A2",
+          "text": "Blank Save does not remove; explicit Remove opens confirmation",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T28 scoped result and verification"
+        },
+        {
+          "id": "A3",
+          "text": "404/405 save shows actionable text instead of Cannot PATCH; error status retained",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T28 scoped result and verification"
+        },
+        {
+          "id": "A4",
+          "text": "Conflict/failed write keeps input; late results cannot affect another session",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T28 scoped result and verification"
+        }
+      ],
+      "verify": [
+        "npx nx test mehrchain-frontend --watch=false"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "evidence": [
+        "docs/roadmap/evidence/v2-implementation.md"
+      ],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "InProgress",
+          "evidence": "Explicit single-result scope registered."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md"
+        }
+      ],
+      "contextRefs": [
+        "D-004",
+        "D-005"
+      ]
+    },
+    {
+      "id": "T29",
+      "title": "Identify why the deployed username route fails",
+      "type": "analysis",
+      "area": "account-api",
+      "priority": "P1",
+      "status": "Blocked",
+      "goal": "A sanitized report proves the serving failure class and, when reachable, identifies the incompatible route/revision or actual save error with one repair plan.",
+      "scope": [
+        "Read direct/proxy /api/version and supported auth routes",
+        "Compare deployed evidence with local GET availability/PATCH username controller",
+        "If authenticated reproduction is required, use an authorized test identity without publishing credentials"
+      ],
+      "outOfScope": [
+        "Guessing root cause from screenshot",
+        "Database writes/migrations",
+        "Reimplementing existing T17 uniqueness logic",
+        "Marking fixed because UI message changed"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/username-route-probe.md",
+        "auth.controller.ts and AuthService.updateUsername",
+        "Production Pages and Render /api/version, API schema; old error Cannot PATCH"
+      ],
+      "steps": [
+        "Wait for direct/proxy network access",
+        "Record sanitized method/path/status and frontend/backend revision",
+        "Reproduce availability separately from save with authorized identity if necessary",
+        "Identify exact mismatch or response cause; create one narrowly scoped repair task only for that confirmed cause"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Direct and proxy serving revisions are recorded or explicitly classified unreachable with unblock condition",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Reachable route contract and actual failure root cause are evidenced, not inferred",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Report gives one repair target and verification, or proves current valid save works without a new code fix",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Compare /api/version and schema on direct Render and Pages",
+        "Record test-account save result only when authorized identity is available"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Blocked",
+          "evidence": "Explicit single-result scope registered."
+        }
+      ],
+      "blockedReason": "2026-10-29: Pages /api/version, Render /api/version and /api/docs-json each timed out after 20 seconds. Unblock when the serving endpoints are reachable and, if save reproduction is needed, an authorized test identity is available. No root cause or production fix is claimed.",
+      "contextRefs": [
+        "D-002",
+        "D-003",
+        "D-004",
+        "D-007"
+      ]
+    },
+    {
+      "id": "T30",
+      "title": "Check Profile V2 on Android Chrome and installed PWA",
+      "type": "verification",
+      "area": "profile-mobile",
+      "priority": "P1",
+      "status": "Ready",
+      "goal": "One recorded Android phone matrix confirms the five Profile routes remain usable in light/dark portrait and keyboard-open account/color forms.",
+      "scope": [
+        "Profile and its four destination routes",
+        "Android Chrome tab and installed PWA",
+        "Light/dark, direct entry/back, long name, keyboard-open username/color name"
+      ],
+      "outOfScope": [
+        "iPhone certification",
+        "Whole-app multi-day pilot",
+        "Backend repair",
+        "Claiming success from desktop screenshots"
+      ],
+      "inputs": [
+        "Accepted commit/build identity after T27",
+        "One actual Android phone with browser/OS versions",
+        "docs/roadmap/tasks/T27.md acceptance"
+      ],
+      "steps": [
+        "Record device/browser/build identity",
+        "Open each destination directly and return to Profile in both display modes",
+        "Open keyboard on username and color name; reach cancel/save and return without horizontal overflow",
+        "Attach per-route screenshots and pass/fail matrix; file any failure as a separate reproduction-specific bug"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Both browser tab and installed PWA identify the tested build and device",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "All five routes and back navigation pass in both themes",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Keyboard-open account/color forms retain input and reachable actions without horizontal overflow",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Real Android Chrome + installed PWA checklist; save results under docs/roadmap/evidence/"
+      ],
+      "dependsOn": [
+        "T27",
+        "T28"
+      ],
+      "issue": null,
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit single-result scope registered."
+        }
+      ],
+      "contextRefs": [
+        "D-001",
+        "D-004",
+        "D-005",
+        "D-006"
+      ]
+    },
+    {
+      "id": "T31",
+      "title": "Review one 2D belly-color interaction inside existing Mero",
+      "type": "analysis",
+      "area": "mero",
+      "priority": "P2",
+      "status": "Ready",
+      "goal": "A same-system HTML wireframe lets the owner try one bounded belly drag and choose accept/simplify/defer.",
+      "scope": [
+        "Existing Mero silhouette inside Profile and Welcome contexts",
+        "2D/canvas-only displacement and settling",
+        "Touch/mouse, reduced-motion still mode, normal outside scrolling"
+      ],
+      "outOfScope": [
+        "Three.js production integration",
+        "Full fluid simulation",
+        "Saved colors or new reward logic",
+        "Unbounded shader/performance research"
+      ],
+      "inputs": [
+        "design/ux/t22-profile-structure/index.html v0.2",
+        "Existing Mero asset/model and shared app shell",
+        "docs/ui_ux_discovery_plan.md mandatory contract"
+      ],
+      "steps": [
+        "Build design/ux/t31-mero-belly/index.html using current app components/tokens",
+        "Limit drag hit-area to belly; release/cancel safely",
+        "Show unchanged outside scroll and reduced-motion alternative",
+        "Record owner decision for that version; create any later 3D work only after a bounded new task is agreed"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "HTML uses existing Mero and MehrChain shell with current/proposed comparison",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Only belly drag displaces color; outside scrolling remains normal",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Reduced-motion still mode and pointer cancellation are demonstrated",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Owner accepts/simplifies/defers the version in a decision log",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Open HTML at 320/390px in both themes",
+        "Try touch/mouse, pointer cancellation and reduced motion"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit single-result scope registered."
+        }
+      ],
+      "contextRefs": [
+        "D-001",
+        "D-005"
+      ]
+    },
+    {
+      "title": "Maintain atomic roadmap cards from one validated registry",
+      "type": "implementation",
+      "area": "project-workflow",
+      "priority": "P1",
+      "goal": "One local command workflow adds defined tasks, rejects unverified completion and renders only unfinished work in the active index with preserved history.",
+      "scope": [
+        "Registry schema and CLI",
+        "Active/completed/legacy views",
+        "Task and issue templates",
+        "Contributor instructions"
+      ],
+      "outOfScope": [
+        "GitHub issue/Project mutations",
+        "Automatic commit, push or deployment",
+        "Reopening vague legacy umbrellas"
+      ],
+      "inputs": [
+        "scripts/roadmap.cjs",
+        "docs/roadmap/tasks.json",
+        "docs/roadmap/workflow.md",
+        "Owner request 2026-10-29"
+      ],
+      "steps": [
+        "Define one-result card with required inputs, steps, exclusions and acceptance",
+        "Preserve legacy evidence and retire mixed umbrella definitions",
+        "Generate task cards and separate active/completed views",
+        "Validate IDs, dependencies and completion evidence with meaningful tests",
+        "Provide manual issue linkage without network writes"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Incomplete definitions, duplicate IDs/issues and dependency cycles are rejected",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T32 scoped result and verification"
+        },
+        {
+          "id": "A2",
+          "text": "Done requires every criterion to pass with evidence, and closed task execution history cannot be reopened by CLI",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T32 scoped result and verification"
+        },
+        {
+          "id": "A3",
+          "text": "Active index excludes Done tasks; existing history and per-old-task disposition are preserved",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T32 scoped result and verification"
+        },
+        {
+          "id": "A4",
+          "text": "Future add-task and issue-link workflows, same-system UI contract and root instructions are documented; no GitHub mutation occurs",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md — T32 scoped result and verification"
+        }
+      ],
+      "verify": [
+        "node --test scripts/roadmap.spec.cjs",
+        "node scripts/roadmap.cjs validate",
+        "Inspect generated active/completed views and local documentation links"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T32",
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/v2-implementation.md"
+      ],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/v2-implementation.md"
+        }
+      ],
+      "contextRefs": [
+        "D-005",
+        "D-006"
+      ]
+    },
+    {
+      "title": "Define and audit completion-only heart eligibility",
+      "area": "chain-support",
+      "priority": "P1",
+      "goal": "One evidenced eligibility table specifies when a heart may acknowledge a completed linked commitment and identifies every client/server gap.",
+      "scope": [
+        "Deliver docs/roadmap/evidence/t33-completion-support-gate.md",
+        "Recipient-account-date completion prerequisite; source inspection of UI, service and API guards",
+        "Cases: incomplete, completed today, finite goal reached earlier, stale snapshot, pending send, duplicate/retry, recipient midnight, archive/private/disconnect"
+      ],
+      "outOfScope": [
+        "Changing code or existing daily allowance",
+        "Two-view layout (T34)",
+        "Inventing the earlier finite-goal eligibility rule"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.ts",
+        "apps/mehrchain-frontend/src/app/core/services/chain.service.ts",
+        "apps/mehrchain-backend/src/app/chain/chain.service.ts",
+        "apps/mehrchain-backend/src/app/commitments/commitment-calendar.ts",
+        "openspec/changes/update-quiet-chain-hearts/specs/quiet-chain-support/spec.md",
+        "Synthetic A supports B/H1; B timezone differs from A; images 2-5"
+      ],
+      "contextRefs": [
+        "D-008",
+        "D-007"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Trace sendHeart from control to locked transaction and ledger; record that availability/idempotency do not establish completion eligibility.",
+        "Build the stated scenario table using synthetic dates and compare each condition with source/spec guards.",
+        "Resolve with the owner whether a previously reached finite goal qualifies after its completion date; record exact chosen rule and reasons.",
+        "Identify minimum UI/API/spec changes and regression cases, including a direct API bypass attempt; do not implement them.",
+        "Write docs/roadmap/evidence/t33-completion-support-gate.md with current/requested differences, evidence, decision and exact follow-up targets or a reasoned no-change outcome."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The report exists at docs/roadmap/evidence/t33-completion-support-gate.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Every listed eligibility case has a precise allow/reject/pending result and source-backed current behavior.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "The chosen recipient-day and prior finite-goal rule has an explicit owner decision; allowance/privacy invariants are unchanged.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Direct API bypass, completion/send race and midnight/stale cases have named future verification steps.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Read UI and backend sendHeart guards side by side; replay the truth table with two synthetic account timezones.",
+        "Review docs/roadmap/evidence/t33-completion-support-gate.md against every scope item; unresolved required evidence prevents completion."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T33",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review separate Connect and Show up views inside Chain",
+      "area": "chain-navigation",
+      "priority": "P1",
+      "goal": "One clickable Chain wireframe separates relationship management from completion acknowledgements in two views.",
+      "scope": [
+        "Deliver design/ux/t34-chain-connect-show-up/index.html, analysis.md, checklist.md and decisions.md",
+        "Two local views within the existing Chain main tab, retaining four global navigation items",
+        "Connect: invite/share/accept and relationship management; Show up: eligible linked completions and heart states",
+        "Empty, incomplete, completed, stale/loading, send pending/failure/sent and return paths"
+      ],
+      "outOfScope": [
+        "Backend enforcement (separate follow-up to T33)",
+        "Journey memories",
+        "A third global navigation bar or reminder feed"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.html",
+        "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.html",
+        "apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.html",
+        "T33 chosen eligibility report; images 3-5"
+      ],
+      "contextRefs": [
+        "D-008",
+        "D-005"
+      ],
+      "dependsOn": [
+        "T33"
+      ],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Use the T33 rule to place each synthetic relationship/completion in exactly one appropriate view.",
+        "Prototype tab switching, invite entry/return and restrained empty states without pressuring incomplete partners.",
+        "Demonstrate a server-confirmed filled sent heart and retry without introducing named received-support messages.",
+        "Build current/proposed comparison in design/ux/t34-chain-connect-show-up/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t34-chain-connect-show-up/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Connect and Show up can be entered/switched within Chain and have clear back/return paths.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Incomplete or stale records cannot appear as supportable completions; pending/error/sent states match T33.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Relationship management and invitation actions remain discoverable; no partner streak comparison or popularity count appears.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Try zero, one and many synthetic connections, with long titles, fresh completion and failed refresh/send.",
+        "Open design/ux/t34-chain-connect-show-up/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T34",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Define finite experiences versus Endless commitments",
+      "area": "commitment-model",
+      "priority": "P1",
+      "goal": "One owner-reviewed domain contract defines a one-time/N-completion experience and an Endless intention without assuming every entry is a habit.",
+      "scope": [
+        "Deliver docs/roadmap/evidence/t35-finite-experience-contract.md",
+        "Vocabulary and counting for N=1, N=3, N=21 and Endless",
+        "Solo use, optional independent connections to one or many partners; whether dates must coincide",
+        "Creation, progress, reached-goal choice and compatibility with existing data; decide whether any UI change is needed"
+      ],
+      "outOfScope": [
+        "Implementing a to-do/wishlist product",
+        "Creating group chat or a shared multi-user goal from multiple independent links",
+        "Changing Mero thresholds or migrating data",
+        "Detailed shared outcome contract (T37) and Journey layouts (T38-T40)"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "apps/mehrchain-frontend/src/app/features/onboarding/steps/habit-step.html",
+        "apps/mehrchain-frontend/src/app/shared/components/commitment-card/commitment-card.html",
+        "apps/mehrchain-backend/src/app/commitments/commitments.service.ts",
+        "apps/mehrchain-backend/src/app/commitments/commitment-calendar.ts",
+        "libs/shared-data/src/lib/commitment.interface.ts",
+        "docs/roadmap/policies.md"
+      ],
+      "contextRefs": [
+        "D-009",
+        "D-001"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Map current totalDays=-1 and Custom N completed-day counting, current terms and reached-goal choices.",
+        "Write concrete N=1/3/21/Endless examples covering gaps between completions and solo/linked use.",
+        "Select vocabulary/counting/creation rules and compatibility treatment with the owner; list separately the unresolved implementation location.",
+        "Decide with reasons whether existing screens can support the selected contract; define one exact later wireframe card per necessary change, not speculative screens.",
+        "Write docs/roadmap/evidence/t35-finite-experience-contract.md with current/requested differences, evidence, decision and exact follow-up targets or a reasoned no-change outcome."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The report exists at docs/roadmap/evidence/t35-finite-experience-contract.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "The table distinguishes cumulative completions from consecutive streaks and says what finishes each finite experience.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Solo and many-partner examples have explicit meaning without assuming a new group entity.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Owner decision records chosen vocabulary/counting and UI-needed or no-UI-needed rationale; existing-record treatment is stated.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Walk N=1 once, N=3 across nonconsecutive dates, N=21 and Endless through the selected contract; compare each with current service/calendar/spec behavior.",
+        "Review docs/roadmap/evidence/t35-finite-experience-contract.md against every scope item; unresolved required evidence prevents completion."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T35",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Define Endless third-day archive and restart attempts",
+      "area": "endless-lifecycle",
+      "priority": "P1",
+      "goal": "One approved state-transition contract specifies Endless absence archival and a new start from day one while preserving earlier effort.",
+      "scope": [
+        "Deliver docs/roadmap/evidence/t36-endless-attempt-lifecycle.md",
+        "Completion absence of this commitment, not app visits; two fully missed account dates and third-day archive",
+        "Partial creation/restart dates, DST/account timezone, lazy read reconciliation and delayed cron",
+        "New attempt identity versus retained history/cumulative progress; streak reset, same-date repeat, repeated restart, delete/archive alternatives and earned rewards"
+      ],
+      "outOfScope": [
+        "Data migration or backend changes",
+        "Message schedule/copy (T43)",
+        "Joint Chain outcome classification (T37)",
+        "Deleting old histories to make counters start from one"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "apps/mehrchain-backend/src/app/commitments/commitment-lifecycle.service.ts",
+        "apps/mehrchain-backend/src/app/commitments/commitment-calendar.ts",
+        "apps/mehrchain-backend/src/app/commitments/commitments.service.ts",
+        "openspec/changes/update-habit-chain-lifecycle/specs/habit-chain-lifecycle/spec.md",
+        "T35 selected finite/Endless model"
+      ],
+      "contextRefs": [
+        "D-009",
+        "D-001"
+      ],
+      "dependsOn": [
+        "T35"
+      ],
+      "steps": [
+        "Compare requested new attempt with current restore, which resets streak and retains cumulative progress.",
+        "Use Monday completion / Tuesday-Wednesday missed / Thursday local midnight as the canonical timeline; include creation and restart partial days.",
+        "Define attempt/history/counter/reward invariants and archive/delete/restart transitions; determine whether the old data model can represent them.",
+        "Obtain owner decision on the attempt model and record required spec/API/storage deltas without editing product code.",
+        "Write docs/roadmap/evidence/t36-endless-attempt-lifecycle.md with current/requested differences, evidence, decision and exact follow-up targets or a reasoned no-change outcome."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The report exists at docs/roadmap/evidence/t36-endless-attempt-lifecycle.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Timeline says exactly when archive occurs even if the app/server sleeps, and app visits do not count as completion.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Restart starts a distinct agreed attempt from day one without erasing old effort, relocking colors or reconnecting old Chains.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Finite exclusion, repeat restart and same-date completion behavior are explicit and owner approved.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Tabletop each transition against current lifecycle tests; verify the plan preserves D-001 earned state and names any incompatible existing field.",
+        "Review docs/roadmap/evidence/t36-endless-attempt-lifecycle.md against every scope item; unresolved required evidence prevents completion."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T36",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Define joint Chain success and unfinished memory outcomes",
+      "area": "chain-lifecycle",
+      "priority": "P1",
+      "goal": "One approved pair-outcome table defines when a linked experience remains ongoing, finishes successfully or becomes an unfinished memory.",
+      "scope": [
+        "Deliver docs/roadmap/evidence/t37-shared-experience-outcomes.md",
+        "Finite/finite with equal or unequal targets, either completion order, gaps without finite absence disconnection",
+        "Endless/Endless absence after two fully missed dates; mixed finite/Endless requires an explicit selected rule",
+        "One commitment with several independent partners, manual disconnect, archive/private/delete and reconnect generations"
+      ],
+      "outOfScope": [
+        "Implementing persistence or migrating connection rows",
+        "Memory screens (T40)",
+        "Changing daily heart allowance or exposing private Why/disconnect notes"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "apps/mehrchain-backend/src/app/chain/chain-state.ts",
+        "apps/mehrchain-backend/src/app/chain/chain.service.ts",
+        "apps/mehrchain-backend/src/app/commitments/commitment-lifecycle.service.ts",
+        "libs/shared-data/src/lib/chain.interface.ts",
+        "T35 experience contract; T36 attempt lifecycle; image 10"
+      ],
+      "contextRefs": [
+        "D-009",
+        "D-008"
+      ],
+      "dependsOn": [
+        "T35",
+        "T36"
+      ],
+      "steps": [
+        "Show how current directional partner-goal status and finite inactivity detach differ from requested joint outcomes.",
+        "Build both completion orders and mixed-pair examples; separate one person finishing from both linked goals finishing.",
+        "Select mixed-pair, manual exit and record-retention outcomes with the owner; distinguish ended reasons from public labels.",
+        "Specify the minimum durable snapshot/generation data needed for memories without reviving old support or identities after deletion.",
+        "Write docs/roadmap/evidence/t37-shared-experience-outcomes.md with current/requested differences, evidence, decision and exact follow-up targets or a reasoned no-change outcome."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The report exists at docs/roadmap/evidence/t37-shared-experience-outcomes.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Both finite completion orders finish successfully only at the chosen joint boundary; early finisher does not discard the other endpoint.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "All finite/finite, Endless/Endless and mixed-pair examples have an owner-selected outcome and exact transition event.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Multi-partner changes affect only applicable pairs; history/privacy/reconnect treatment and source gaps are recorded.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Walk the pair table in both directions and with one habit connected to two synthetic partners; compare with chainState and lifecycle detach.",
+        "Review docs/roadmap/evidence/t37-shared-experience-outcomes.md against every scope item; unresolved required evidence prevents completion."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T37",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review compact Journey entry into solo and shared memories",
+      "area": "journey-navigation",
+      "priority": "P2",
+      "goal": "One Journey wireframe replaces long inline history on the overview with a direct Memories destination containing solo/shared views.",
+      "scope": [
+        "Deliver design/ux/t38-journey-memory-entry/index.html, analysis.md, checklist.md and decisions.md",
+        "Journey overview to Memories entry and return",
+        "Solo/shared top-level separation; placement of existing calendar, summaries and history",
+        "Empty/populated/loading/error navigation states and short mobile height"
+      ],
+      "outOfScope": [
+        "Detailed solo/shared memory records (T39/T40)",
+        "Changing lifecycle/counting or removing access to existing history",
+        "Banning scrolling within destination lists"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/features/journey/journey.html",
+        "apps/mehrchain-frontend/src/app/features/journey/journey.ts",
+        "apps/mehrchain-frontend/src/app/features/profile/profile.html",
+        "T35 selected terminology; approved Profile A structure"
+      ],
+      "contextRefs": [
+        "D-009",
+        "D-005"
+      ],
+      "dependsOn": [
+        "T35"
+      ],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Inventory current Journey sections and assign each an overview or destination position with reasons.",
+        "Use the compact Profile destination pattern to prototype Journey -> Memories -> Solo/Shared -> return.",
+        "Keep detail data schematic and label it as such; delegate actual record layouts to T39/T40.",
+        "Build current/proposed comparison in design/ux/t38-journey-memory-entry/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t38-journey-memory-entry/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Overview has a direct Memories entry and no embedded full history list; calendar/history remain reachable.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Solo and Shared destinations switch clearly and return to Journey without losing the selected destination.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "The short-height review distinguishes normal destination scrolling from a long overview.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Enter/return using clicks and keyboard with empty and populated synthetic histories; inspect 320x568 and 390px.",
+        "Open design/ux/t38-journey-memory-entry/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T38",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review solo memory list and attempt detail",
+      "area": "journey-solo",
+      "priority": "P2",
+      "goal": "One Solo Memories wireframe makes past finite experiences and Endless attempts readable and offers the agreed new-start action.",
+      "scope": [
+        "Deliver design/ux/t39-solo-memory-details/index.html, analysis.md, checklist.md and decisions.md",
+        "Solo destination list, record detail and return preserving list position",
+        "Finite completed/unfinished records and Endless archived attempts using T35/T36 meanings",
+        "Dates, preserved completions, empty/history unavailable states and explicit new-start/archive/delete consequences"
+      ],
+      "outOfScope": [
+        "Shared memory layout",
+        "New reward rules or persistence",
+        "Resetting old effort to depict a new attempt"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/features/journey/journey.html",
+        "apps/mehrchain-frontend/src/app/features/journey/journey.ts",
+        "T35 contract; T36 attempt report; T38 approved navigation artifact"
+      ],
+      "contextRefs": [
+        "D-009",
+        "D-001"
+      ],
+      "dependsOn": [
+        "T36",
+        "T38"
+      ],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Create synthetic one-time successful, finite unfinished and archived Endless examples from the approved contracts.",
+        "Prototype list -> detail -> new start/cancel and back; explicitly distinguish old record and new attempt.",
+        "Show history retained and separate destructive deletion confirmation from starting again.",
+        "Build current/proposed comparison in design/ux/t39-solo-memory-details/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t39-solo-memory-details/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Each listed memory opens a detail matching its selected finite/Endless contract and dates.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "New-start preview shows a new attempt from day one, keeps the old memory and does not reconnect a partner.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Return preserves context; deletion/archive are distinct actions and unknown data is not shown as zero.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Navigate successful, unfinished and archived examples, cancel new start/delete, then return to the original list position.",
+        "Open design/ux/t39-solo-memory-details/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T39",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review shared memories by ongoing, successful and unfinished outcomes",
+      "area": "journey-shared",
+      "priority": "P2",
+      "goal": "One Shared Memories wireframe displays the three agreed pair outcomes with readable details and neutral English labels.",
+      "scope": [
+        "Deliver design/ux/t40-shared-memory-details/index.html, analysis.md, checklist.md and decisions.md",
+        "Shared destination: Ongoing, Successfully finished and Left unfinished categories, with final labels reviewed",
+        "Finite early-finisher/both-finished, Endless absence and mixed-pair records from T37",
+        "List/detail/back, empty/loading/error, multi-partner records, private ended receipt relationship"
+      ],
+      "outOfScope": [
+        "Defining a second lifecycle independent of T37",
+        "Named support feed, comparison or partner Why",
+        "Automatically restoring a Chain from history"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/features/journey/journey.html",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.html",
+        "T37 approved pair-outcome report; T38 approved navigation artifact; image 10"
+      ],
+      "contextRefs": [
+        "D-009",
+        "D-008"
+      ],
+      "dependsOn": [
+        "T37",
+        "T38"
+      ],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Map each approved T37 outcome to exactly one category and neutral label.",
+        "Prototype category -> pair detail -> return, including a goal reached by one endpoint and an ended memory.",
+        "Show how a private pending receipt relates to a durable memory without duplicating unread messages or revealing private reasons.",
+        "Build current/proposed comparison in design/ux/t40-shared-memory-details/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t40-shared-memory-details/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Category labels/outcomes match T37; one person finishing cannot appear as joint success prematurely.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Details preserve the earlier experience and partner-safe identity while withholding private Why and named support.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Reconnect/new invitation is an explicit separate flow; old support and connections never revive in a mock.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Review both finite completion orders, Endless absence, mixed pair and several partners across all three categories.",
+        "Open design/ux/t40-shared-memory-details/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T40",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Inventory notification events and actual platform delivery",
+      "area": "notifications",
+      "priority": "P1",
+      "goal": "One fixed event-by-platform matrix explains what notification paths actually exist from trigger through content, icon, tap and cancellation.",
+      "scope": [
+        "Deliver docs/roadmap/evidence/t41-notification-inventory.md",
+        "Events: configured daily reminder, partner completion, received heart, invitation, disconnect receipt, Why offer, absence Why, archive notice and partner nudge",
+        "Surfaces: in-app, Android native local/remote, browser tab and installed PWA; foreground/background/closed and offline",
+        "Per event: trigger, service, permission, scheduling/deduplication, title/body/icon, action route, cancellation on completion/archive/logout"
+      ],
+      "outOfScope": [
+        "Implementing push infrastructure or new notifications",
+        "Web update banner (T52)",
+        "Promising OS delivery from a permission check or class name",
+        "Configuring email/SMS"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "apps/mehrchain-frontend/src/app/core/services/notification.service.ts",
+        "apps/mehrchain-backend/src/app/chain/chain-notification.service.ts",
+        "apps/mehrchain-backend/src/app/chain/chain-cron.service.ts",
+        "apps/mehrchain-frontend/src/app/core/services/chain.service.ts",
+        "apps/mehrchain-frontend/src/app/features/onboarding/onboarding.ts",
+        "android/app/src/main/AndroidManifest.xml",
+        "Images 5 and 10; synthetic two-account events"
+      ],
+      "contextRefs": [
+        "D-011",
+        "D-008",
+        "D-002",
+        "D-003"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Enumerate all call sites and native/web configuration; distinguish database updates and receipts from OS delivery.",
+        "For each fixed event and platform, mark implemented/tested, source-only, missing, intentionally disabled or unsupported with evidence.",
+        "Inspect icon assets and tap listener routing; check schedule/cancel lifecycle and whether web success means anything was scheduled.",
+        "Run bounded local/test-device cases when available; record device/build/permission state and a precise unblock condition for unavailable required evidence.",
+        "Produce one gap ledger grouped by exact event or delivery defect; defer desired schedules to T42-T44.",
+        "Write docs/roadmap/evidence/t41-notification-inventory.md with current/requested differences, evidence, decision and exact follow-up targets or a reasoned no-change outcome."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The report exists at docs/roadmap/evidence/t41-notification-inventory.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Every listed event/platform has a trigger-to-action/cancel row, including intentionally absent functionality; no cell silently assumes native/PWA parity.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Icon/resource existence, current title/body, tap destination and permission behavior are source-cited and executed evidence is distinguished.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Web success-without-scheduling and relationship-update-only service are explicitly assessed; no delivery claim lacks observed evidence.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Search NotificationService schedule/cancel call sites and native notification resources; test a synthetic reminder and action with recorded platform/permission/build or retain a named missing-evidence item.",
+        "Review docs/roadmap/evidence/t41-notification-inventory.md against every scope item; unresolved required evidence prevents completion."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T41",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review a voluntary Why offer after Endless progress",
+      "area": "motivation-why",
+      "priority": "P2",
+      "goal": "One approved wireframe specifies when an Endless user with no personal Why is gently offered optional entry and how dismissal works.",
+      "scope": [
+        "Deliver design/ux/t42-optional-why-offer/index.html, analysis.md, checklist.md and decisions.md",
+        "Select an exact completed-day threshold, once/reoffer policy and qualifying empty/sample Why rules",
+        "Offer entry, skip, save pending/error/success, existing Why and return to original screen",
+        "Author-only text with no fabricated motivation or mandatory field"
+      ],
+      "outOfScope": [
+        "Absence message schedule (T43)",
+        "Partner nudge (T44)",
+        "Changing the existing always-visible optional Why field into an accordion",
+        "Implementing persistence or background delivery"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/features/onboarding/steps/habit-step.html",
+        "apps/mehrchain-frontend/src/app/features/dashboard/dashboard.html",
+        "apps/mehrchain-backend/src/app/commitments/dto/update-commitment.dto.ts",
+        "T35 selected model; T41 inventory; docs/roadmap/policies.md personal motivation rule"
+      ],
+      "contextRefs": [
+        "D-011",
+        "D-009"
+      ],
+      "dependsOn": [
+        "T35",
+        "T41"
+      ],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Choose with the owner the exact threshold counted from the agreed Endless attempt and one explicit dismissal/reoffer rule.",
+        "Compare an in-app contextual offer with actual channel limitations from T41; do not imply unavailable delivery.",
+        "Prototype blank, qualifying existing, skipped and failed-save cases with synthetic private text.",
+        "Build current/proposed comparison in design/ux/t42-optional-why-offer/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t42-optional-why-offer/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Threshold, eligible Endless attempt and skip/reoffer rule are numeric/explicit in the decision log.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Existing custom Why suppresses the offer; blank/sample content never becomes an invented reason.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Skip is easy, saving is confirmed, failed input remains and no partner can view the text.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Simulate one step below/at/above the chosen threshold, pre-existing Why, skip, re-entry and failed save.",
+        "Open design/ux/t42-optional-why-offer/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T42",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review one absence reminder and archive-message schedule",
+      "area": "absence-messages",
+      "priority": "P1",
+      "goal": "One approved timeline and wireframe settle exactly which private Why and archive messages occur during an Endless absence.",
+      "scope": [
+        "Deliver design/ux/t43-absence-message-schedule/index.html, analysis.md, checklist.md and decisions.md",
+        "Resolve one-missed-day versus two-missed-day wording into a single selected timetable",
+        "Two fully missed account dates, third-day archive message and author-written Why only",
+        "Exact trigger hour/channel/fallback, notification content/icon/tap, lock-screen visibility, deduplication and cancellation after completion/restart/delete"
+      ],
+      "outOfScope": [
+        "Changing attempt/archive contract selected by T36",
+        "Partner-triggered nudge budget (T44)",
+        "Implementing schedules or claiming PWA push readiness"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/core/services/notification.service.ts",
+        "apps/mehrchain-frontend/src/app/features/journey/journey.html",
+        "apps/mehrchain-backend/src/app/commitments/commitment-calendar.ts",
+        "T36 archive contract; T41 event/platform inventory; attachment reminder timing ambiguity"
+      ],
+      "contextRefs": [
+        "D-011",
+        "D-009",
+        "D-002",
+        "D-003"
+      ],
+      "dependsOn": [
+        "T36",
+        "T41"
+      ],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Draw Monday completion, two missed dates and third-day archive in the persisted account timezone, then add a late/never-opened app scenario.",
+        "Select exact motivation reminder count/timing and archive notice timing; distinguish notification generation from reconciliation time.",
+        "Specify blank-Why behavior, author-only/lock-screen text and supported platform fallback using T41.",
+        "Prototype message -> own commitment or archived memory, acknowledgement, archive/delete/new-start entry and stale/offline behavior.",
+        "Build current/proposed comparison in design/ux/t43-absence-message-schedule/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t43-absence-message-schedule/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "One owner-approved table settles day-one/day-two ambiguity, exact triggers, channel, repeat cap and third-day archive notice.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Completion before delivery suppresses the stale motivation message; late reconciliation cannot duplicate messages.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Blank Why never produces a fabricated reason; archive notice explains the outcome and reaches the correct private destination.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "Native/PWA/in-app delivery and visibility limits are explicit rather than simulated as working push.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A7",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Walk completion before/after trigger, no Why, permission denied, offline/closed app, repeated foreground sync and timezone midnight.",
+        "Open design/ux/t43-absence-message-schedule/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T43",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review a private partner nudge with one exact anti-spam limit",
+      "area": "chain-nudge",
+      "priority": "P2",
+      "goal": "One approved nudge contract and wireframe let a partner trigger a restrained private reminder without revealing the recipient Why.",
+      "scope": [
+        "Deliver design/ux/t44-private-partner-nudge/index.html, analysis.md, checklist.md and decisions.md",
+        "Eligibility during an Endless absence before archive; resolve start-of-second-day versus end-of-second-day timing",
+        "Choose one or two total nudges with exact per-attempt/window cap, cooldown and shared budget across partners",
+        "Recipient consent, no qualifying Why, pending/error/sent, completion/archive races and recipient-private arrival"
+      ],
+      "outOfScope": [
+        "Reactivating the deliberately disabled old endpoint",
+        "Partner access to Why or free-text messaging",
+        "Replacing completion-only hearts with pressure/reminders",
+        "Implementing remote delivery"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-backend/src/app/chain/chain.service.ts sendNudge",
+        "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.html",
+        "T33 support contract; T36 archive lifecycle; T41 delivery inventory; T43 absence schedule"
+      ],
+      "contextRefs": [
+        "D-008",
+        "D-011",
+        "D-009"
+      ],
+      "dependsOn": [
+        "T33",
+        "T36",
+        "T41",
+        "T43"
+      ],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Document the existing intentional nudge rejection and explain why the proposed consent/eligibility/limit is a new capability.",
+        "Select exact eligible window, total cap, cooldown and multi-partner shared-budget rule with the owner; define interaction with self reminders.",
+        "Prototype eligible/ineligible sender controls and recipient-only reminder, never returning the private Why to the sender.",
+        "Specify deduplication, server validation and archive/completion races as future verification inputs.",
+        "Build current/proposed comparison in design/ux/t44-private-partner-nudge/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t44-private-partner-nudge/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Window/cooldown/cap are exact and owner selected; several partners cannot multiply the agreed reminder budget.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "A partner neither sees Why nor learns its text through a control/response; no-Why/consent behavior is explicitly selected.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Completed/archived/stale/pending/failed states do not send a reminder or falsely show success; self-reminder overlap has a rule.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Try two partners sending concurrently, retries, recipient completion just before send, archive boundary, consent off and no personal Why.",
+        "Open design/ux/t44-private-partner-nudge/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T44",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review a small anonymous +N received-heart indicator",
+      "area": "support-summary",
+      "priority": "P2",
+      "goal": "One approved same-system specimen defines the placement and exact meaning of a small received-heart total such as +3.",
+      "scope": [
+        "Deliver design/ux/t45-received-heart-total/index.html, analysis.md, checklist.md and decisions.md",
+        "Home own-habit summary and corresponding own-habit Chain summary only",
+        "0/1/3/large counts, upper-right placement, existing single-heart behavior, accessible count label and recipient-day expiry",
+        "Explicitly settle whether +N is the total rather than an additional/unread count"
+      ],
+      "outOfScope": [
+        "Changing ledger/expiry/supporter identities",
+        "Partner popularity counts",
+        "Adding unread or animation semantics not approved by the owner"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/shared/components/commitment-card/commitment-card.html",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.html",
+        "T33 eligibility report; images 1/2/3/12; current numeric summary already implemented"
+      ],
+      "contextRefs": [
+        "D-010",
+        "D-008"
+      ],
+      "dependsOn": [
+        "T33"
+      ],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Compare existing multiple-heart numeral with the requested small +N on the same own-habit components.",
+        "Prototype 0/1/3/99/1000 and stale/expired data without identifying supporters.",
+        "Select notation, total/unread meaning, position and readable accessible label; document any extra implementation dependency.",
+        "Build current/proposed comparison in design/ux/t45-received-heart-total/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t45-received-heart-total/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Notation and placement for zero/one/many are explicit and the owner understands exactly what +N counts.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Count does not collide with title/progress/Details and remains an anonymous own-habit total.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Stale/expired states do not display yesterday as today; accessible text gives the complete count.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Compare synthetic counts 0/1/3/99/1000 in both target locations and force recipient-day expiry.",
+        "Open design/ux/t45-received-heart-total/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T45",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review a readable single-line Home commitment title",
+      "area": "home-title",
+      "priority": "P2",
+      "goal": "One approved Home card specimen keeps the title on one line without losing access to its full text or squeezing card actions.",
+      "scope": [
+        "Deliver design/ux/t46-home-single-line-title/index.html, analysis.md, checklist.md and decisions.md",
+        "Home title row only; normal, long spaced and unbroken titles",
+        "Single-line truncation/full-title access and text zoom",
+        "Details action, streak/progress/support indicators and completion button remain usable"
+      ],
+      "outOfScope": [
+        "Whole-app responsive repair",
+        "Changing titles stored by the user",
+        "Shrinking type indefinitely to fit any string"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/shared/components/commitment-card/commitment-card.html",
+        "apps/mehrchain-frontend/src/app/features/dashboard/dashboard.html",
+        "Images 1/2/6/9/12; short title, supplied long title and 120-character synthetic unbroken title"
+      ],
+      "contextRefs": [
+        "D-010",
+        "D-005"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Compare current break-words row against a single-line proposal using identical widths.",
+        "Provide a touch/keyboard-accessible full-title path; choose readable typography and overflow behavior with the owner.",
+        "Demonstrate Details open/close and text zoom without clipping actions or card frame.",
+        "Build current/proposed comparison in design/ux/t46-home-single-line-title/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t46-home-single-line-title/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Title is one line at 320/390px; full title is available to touch, keyboard and assistive technology.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Details remains reachable and the completion button stays within the card.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Long unbroken input and 200% text zoom have documented usable behavior without forced tiny text.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Try 12-, 45- and 120-character synthetic titles with spaces/no spaces at normal and 200% text size.",
+        "Open design/ux/t46-home-single-line-title/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T46",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review Chain identity labels without an @ prefix",
+      "area": "chain-identity",
+      "priority": "P2",
+      "goal": "One approved label/data contract shows Chain names without @ and selects the exact fallback when a username is absent.",
+      "scope": [
+        "Deliver design/ux/t47-chain-identity-label/index.html, analysis.md, checklist.md and decisions.md",
+        "Partner card, invite acceptance identity and private ended receipt identity",
+        "Username first, existing display name and requested email fallback evaluated explicitly",
+        "Long/missing values, avatar initial, accessible text; preserve user Unicode data"
+      ],
+      "outOfScope": [
+        "Changing stored username or account validation",
+        "Automatically exposing partner email or adding it to API payloads",
+        "Public profile/account redesign"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.ts",
+        "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.html",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.html",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.ts",
+        "apps/mehrchain-backend/src/app/chain/chain.service.ts response selections",
+        "libs/shared-data/src/lib/chain.interface.ts; images 3/4/8/10"
+      ],
+      "contextRefs": [
+        "D-010"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Inventory all three identity locations and current response fields; name is available, email is not part of inspected partner selection.",
+        "Prototype username without @, no username/name present, both missing, long and Unicode names.",
+        "Select deterministic fallback order with the owner; record whether email is excluded or requires a separately authorized data contract instead of incidental exposure.",
+        "Build current/proposed comparison in design/ux/t47-chain-identity-label/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t47-chain-identity-label/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "All three locations omit the app-added @ prefix without changing stored values.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Fallback order and missing-identity label are explicit; any email decision includes a deliberate data/disclosure contract and separate implementation scope.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Long names, avatar initial and accessible labels agree with the displayed identity and do not overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Run username/name/both missing/long Unicode synthetic identity cases in partner, invite and receipt contexts.",
+        "Open design/ux/t47-chain-identity-label/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T47",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Locate why a confirmed sent heart may remain outline-only",
+      "area": "chain-heart-rendering",
+      "priority": "P1",
+      "goal": "One rendered-evidence report identifies whether the sent-heart state fails in data, class propagation, SVG fill or the photographed build.",
+      "scope": [
+        "Deliver docs/roadmap/evidence/t48-sent-heart-rendering.md",
+        "Confirmed sent versus unsent/pending/stale/error card state only",
+        "Lucide host-to-SVG fill, computed styles, generated Tailwind class and served revision where available",
+        "Current local production bundle and Android reproduction of the reported appearance when an identified build/device is available"
+      ],
+      "outOfScope": [
+        "Changing heart allowance/eligibility",
+        "Assuming fill binding is absent; it already exists",
+        "Marking screenshot state as a confirmed persisted send"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.html",
+        "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.ts",
+        "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.spec.ts",
+        "apps/mehrchain-frontend/src/app/core/services/chain.service.ts",
+        "Images 3/4; synthetic response with heartSent=true"
+      ],
+      "contextRefs": [
+        "D-010",
+        "D-008",
+        "D-006"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Render heartSent=false/true and pending/stale/error from synthetic responses in the identified local production bundle.",
+        "Inspect nested SVG fill/stroke and computed class propagation rather than only the Lucide host attribute.",
+        "Compare real confirmed response and phone appearance only on an identified authorized test build; missing device/build evidence must remain explicitly unresolved.",
+        "Classify proven local rendering defect, state defect, serving mismatch or no reproduction; give one exact repair target only for an evidenced cause.",
+        "Write docs/roadmap/evidence/t48-sent-heart-rendering.md with current/requested differences, evidence, decision and exact follow-up targets or a reasoned no-change outcome."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The report exists at docs/roadmap/evidence/t48-sent-heart-rendering.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Report contains inspected nested SVG/computed-style evidence for unsent and confirmed sent states in both themes.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Confirmed sent means a solid readable heart; failed/pending requests never appear saved and retries do not toggle off.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Each conclusion is limited to the tested build; unknown screenshot send/build state is not presented as root cause or production repair.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Inspect current production-rendered Lucide SVG with synthetic heartSent=true/false; exercise success/failure/reload/stale paths and record the exact build.",
+        "Review docs/roadmap/evidence/t48-sent-heart-rendering.md against every scope item; unresolved required evidence prevents completion."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T48",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review the Chain acceptance card and habit selector",
+      "area": "chain-acceptance",
+      "priority": "P2",
+      "goal": "One reviewed acceptance wireframe provides a readable identity, habit choice and explicit acceptance in the existing app context.",
+      "scope": [
+        "Deliver design/ux/t49-invite-acceptance-card/index.html, analysis.md, checklist.md and decisions.md",
+        "Invite acceptance card on Chain; one/many/no eligible public commitments",
+        "Long identity/title, selected item, native picker versus same-system accessible alternative",
+        "Loading, expired/unavailable/self/already accepted invite, save pending/error/success and cancellation"
+      ],
+      "outOfScope": [
+        "Account/install routing (T50)",
+        "Attributing native picker appearance to an Android bug without comparison",
+        "Changing eligibility or automatically accepting an invite"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.html",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.ts",
+        "Images 7/8; current native select; approved V2 components"
+      ],
+      "contextRefs": [
+        "D-010",
+        "D-008",
+        "D-005"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Reproduce the long-label native select in the current shell and compare actual Android rendering if available; record unavailable evidence.",
+        "Prototype a readable acceptance card with existing shared controls; compare keeping native selection versus one justified accessible alternative.",
+        "Show choose/create-public-commitment, retry without duplicate acceptance, cancel and return.",
+        "Build current/proposed comparison in design/ux/t49-invite-acceptance-card/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t49-invite-acceptance-card/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Inviter, invited commitment, chosen own commitment and consequence of acceptance are readable at 320/390px.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Native picker behavior is documented as platform-specific; any replacement includes keyboard, focus and selection semantics.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "No eligible commitment, unavailable invite and pending/failed acceptance have explicit states without false success.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Use 0/1/10 eligible synthetic commitments with long text; select by keyboard/touch, cancel and retry failed acceptance.",
+        "Open design/ux/t49-invite-acceptance-card/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T49",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Review invite continuation across account and installation states",
+      "area": "invite-routing",
+      "priority": "P1",
+      "goal": "One documented flow and clickable replay settle whether a recipient can return to the exact invitation after authentication or installation.",
+      "scope": [
+        "Deliver design/ux/t50-invite-arrival-continuation/index.html, analysis.md, checklist.md and decisions.md",
+        "New account, returning signed-out account and signed-in account",
+        "Browser tab, installed PWA, installed APK, and no installed app; fresh launch versus already-open app",
+        "Invite preservation through login/onboarding, optional installation, back/cancel, expired token and safe explicit acceptance"
+      ],
+      "outOfScope": [
+        "Implementing universal links, APK install or auth providers",
+        "Real email/SMS delivery certification",
+        "Acceptance-card control styling (T49)",
+        "Assuming a web link opens an installed APK"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "docs/ui_ux_discovery_plan.md",
+        "apps/mehrchain-frontend/src/app/core/guards/onboarding-guard.ts",
+        "apps/mehrchain-frontend/src/app/core/services/auth.service.ts returnUrl handling",
+        "apps/mehrchain-frontend/src/app/core/services/chain.service.ts getInviteUrl",
+        "apps/mehrchain-frontend/src/app/features/onboarding/onboarding.ts",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.ts",
+        "apps/mehrchain-frontend/src/app/app.ts",
+        "android/app/src/main/AndroidManifest.xml; images 7/8/11"
+      ],
+      "contextRefs": [
+        "D-010",
+        "D-002",
+        "D-003",
+        "D-007"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Inspect the listed current templates, services and approved V2 tokens; identify which values are synthetic.",
+        "Build the account-state by installation-state matrix; map actual guards, returnUrl allowlist, invite tokens and Android link configuration.",
+        "Record current path and exact lost/retained invite state at each login/onboarding/install boundary; unavailable platform checks get explicit conditions.",
+        "Replay each route in same-system HTML; retain the existing path if adequate and explain why, or propose only the exact failing transition.",
+        "Select destination after auth/install and cancellation behavior with the owner; no automatic acceptance or unsupported login promise.",
+        "Build current/proposed comparison in design/ux/t50-invite-arrival-continuation/index.html using the real MehrChain shell, Poppins, Lucide, Mero where present, existing components and approved light/dark tokens.",
+        "Verify the task scenarios at 320px, 390px and compact desktop in both themes, with keyboard/focus and reduced motion where relevant; document native/device unknowns.",
+        "Record artifact version, exact approved scope and explicit owner accept/revise/defer decision in design/ux/t50-invite-arrival-continuation/decisions.md. Add implementation only as a separate card after approval."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "All three account states and four installation states have a current/proposed path and source/test/unknown classification.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Exact invitation survives the selected continuation; external returnUrl is rejected and acceptance stays deliberate.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "PWA/APK optional-install and unavailable email/SMS scenarios have honest fallback/return behavior; limitations are explicit.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
+          "state": "pending"
+        },
+        {
+          "id": "A6",
+          "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Use synthetic encoded invite codes through sign-in/onboarding and cancel/back; review all matrix cells and inspect Android/PWA link handling separately.",
+        "Open design/ux/t50-invite-arrival-continuation/index.html and execute checklist.md; compare with current product templates and docs/ui_ux_discovery_plan.md.",
+        "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T50",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Audit responsive frames across the current app route matrix",
+      "area": "responsive-audit",
+      "priority": "P2",
+      "goal": "One bounded route/state matrix records reproducible overflow or unreachable controls and assigns each distinct failure to a precise future bug.",
+      "scope": [
+        "Deliver docs/roadmap/evidence/t51-responsive-route-matrix.md",
+        "Welcome/session restore, signup/login, habit creation/edit/delete, Home/details, Chain/share/invite/receipt, Journey/history and shared shell",
+        "Profile five-route checks referenced from T30 rather than repeated acceptance; inspect cross-shell interaction only",
+        "320x568, 390x844, 768px and compact desktop; both themes; long text, 200% text, keyboard-open forms, bottom nav/FAB/update/refresh banners"
+      ],
+      "outOfScope": [
+        "A wholesale responsive rewrite",
+        "Closing T30 from desktop emulation",
+        "Redesigning proposed future Memories or Chain tabs",
+        "Fixing all findings inside this audit"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "apps/mehrchain-frontend/src/app/app.html",
+        "apps/mehrchain-frontend/src/styles.css app-shell/app-page/navigation rules",
+        "apps/mehrchain-frontend/src/app/features/onboarding/onboarding.html",
+        "apps/mehrchain-frontend/src/app/features/dashboard/dashboard.html",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.html",
+        "apps/mehrchain-frontend/src/app/features/journey/journey.html",
+        "T30 device scope; images 1-12; synthetic long names/titles"
+      ],
+      "contextRefs": [
+        "D-010",
+        "D-005",
+        "D-006"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Identify the tested source/build and enumerate the listed screens/states with fixtures before running the matrix.",
+        "Measure document/scroll widths and visible action bounds; record keyboard/safe-area behavior on an actual device separately from emulation.",
+        "Capture sanitized failures with viewport, route, state and exact steps; distinguish intended list scroll from horizontal overflow.",
+        "Deduplicate title/acceptance/update findings against T46/T49/T52; record their IDs rather than proposing competing fixes.",
+        "Write docs/roadmap/evidence/t51-responsive-route-matrix.md with current/requested differences, evidence, decision and exact follow-up targets or a reasoned no-change outcome."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The report exists at docs/roadmap/evidence/t51-responsive-route-matrix.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Every listed route/state/viewport is pass/fail/not-tested with reason, build identity and emulated/real-device label.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Each failure has precise reproduction, expected bounds/actions and a single owning existing/new task recommendation.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "No global responsiveness or mobile acceptance is claimed from partial inspection; T30 ownership remains intact.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Run the fixed route matrix, compare document scrollWidth/clientWidth and action reachability; read T30 evidence for Profile and keep unavailable device cells open.",
+        "Review docs/roadmap/evidence/t51-responsive-route-matrix.md against every scope item; unresolved required evidence prevents completion."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T51",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Explain web update activation and isolate the reported fit regression",
+      "area": "web-update",
+      "priority": "P1",
+      "goal": "One before/after update report explains the notice and determines whether Reload changes the app viewport or only exposes a different build/session state.",
+      "scope": [
+        "Deliver docs/roadmap/evidence/t52-web-update-viewport.md",
+        "Service-worker ready event, available update identity, Later dismissal, deliberate Reload and post-reload served revision",
+        "Welcome/session-restoring and signed-in Home, tab versus installed PWA, update banner and bottom navigation/safe-area geometry",
+        "Reproduce with identified current/next builds and recorded viewport/device; compare without update and with Later"
+      ],
+      "outOfScope": [
+        "Removing update support because the notice is unexpected",
+        "Assuming Reload caused fit failure from image 11",
+        "Native APK updater certification or production deployment",
+        "Changing auth/update code without an evidenced repair target"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "apps/mehrchain-frontend/src/app/core/services/version.service.ts",
+        "apps/mehrchain-frontend/src/app/core/services/version.service.spec.ts",
+        "apps/mehrchain-frontend/src/app/app.html",
+        "apps/mehrchain-frontend/src/app/features/onboarding/onboarding.html",
+        "apps/mehrchain-frontend/src/styles.css",
+        "ngsw-config.json; image 11; prior shell fixes in git history"
+      ],
+      "contextRefs": [
+        "D-010",
+        "D-007",
+        "D-006"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Document what schedules the notice, what Later persists and why Reload activates a new web build; keep it separate from habit notifications.",
+        "Record previous/current shell fixes and build hashes before reproducing; use a local isolated update fixture rather than deploy.",
+        "Measure viewport/shell/banner/navigation before notice, after Later and after confirmed Reload during session restore and signed-in state.",
+        "On Android Chrome/PWA record browser/OS/display mode and active worker revision; if unavailable, state exact missing evidence and do not claim the phone regression resolved.",
+        "Classify version/cache mismatch, layout interaction, auth timing, no reproduction or a proved cause and provide one repair/verification plan.",
+        "Write docs/roadmap/evidence/t52-web-update-viewport.md with current/requested differences, evidence, decision and exact follow-up targets or a reasoned no-change outcome."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The report exists at docs/roadmap/evidence/t52-web-update-viewport.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Report explains the exact notice source and Reload/Later behavior with code references.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Before/after measurements identify builds, worker revision, viewport and session/display state; missing real-device evidence is explicit.",
+          "state": "pending"
+        },
+        {
+          "id": "A4",
+          "text": "Any causal conclusion follows a reproducible comparison; a fixed-looking screenshot or build success alone cannot close the reported regression.",
+          "state": "pending"
+        },
+        {
+          "id": "A5",
+          "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Run isolated two-build service-worker update fixture and compare no-notice/Later/Reload, Welcome/session restore/Home on tab/PWA; inspect old shell-fix history.",
+        "Review docs/roadmap/evidence/t52-web-update-viewport.md against every scope item; unresolved required evidence prevents completion."
+      ],
+      "type": "analysis",
+      "issue": null,
+      "id": "T52",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Label Endless correctly in the Chain sharing selector",
+      "type": "bug",
+      "area": "chain-invite-label",
+      "priority": "P2",
+      "goal": "The local Chain sharing selector shows Endless instead of -1d for an Endless commitment and keeps finite duration labels correct.",
+      "scope": [
+        "Selected commitment duration label in invite-section only",
+        "Finite N label and current streak text remain semantically unchanged"
+      ],
+      "outOfScope": [
+        "Changing commitment counting or finite absence rules",
+        "Redesigning selectors/acceptance",
+        "Production deployment or relabeling stored data"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/owner-intake-2026-10-29.md",
+        "apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.html",
+        "apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.spec.ts",
+        "apps/mehrchain-frontend/src/app/features/chain/chain.html existing Endless option label",
+        "Images 3/5/10; source directly interpolates totalDays=-1 plus d"
+      ],
+      "contextRefs": [
+        "D-010",
+        "D-009"
+      ],
+      "dependsOn": [],
+      "steps": [
+        "Render synthetic totalDays=-1 and totalDays=3 selections to establish the current sentinel leak.",
+        "Use a minimal conditional duration label consistent with the existing acceptance selector; do not change the underlying value.",
+        "Verify the selected item and switch between finite/Endless, leaving streak text and share payload unchanged."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Endless selection displays Endless and never a visible -1d sentinel.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Finite three-day selection retains its finite duration and the share payload remains bound to the selected commitment ID.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "No counting/reward/lifecycle or backend data behavior changes; the label remains within the current card at 320/390px.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Render invite-section with totalDays=-1 and 3, switch selection and inspect text/payload; run a targeted existing frontend test if the change affects logic, plus npm run build:frontend."
+      ],
+      "issue": null,
+      "id": "T53",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    }
+  ]
+}

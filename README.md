@@ -2,21 +2,29 @@
 
 **Light your own lamp. Brighten the world.**
 
+<!-- PERSIAN_POEM:START -->
 تو مگو همه بِجَنگند و زِ صُلح من چه آید؟		تو یکی نه‌‌ای هزاری تو چراغِ خود بَراَفْروز
 
 که یکی چراغِ روشن زِ هزار مُرده بهتر		که بِهْ است یک قَدِ خوش زِ هزارْ قامَتِ کوز
+<!-- PERSIAN_POEM:END -->
+
+
 
 MehrChain is an open-source, mindful growth companion designed to help people commit to positive habits, nurture mental well-being, and spark supportive human connections through small, daily intentional actions.
 
-> 🚀 **Project Status:** v1.0.0 | Nx Monorepo | Angular 21 (Zoneless + Signals) & NestJS 11 | 233 Automated Tests (100% Green) | Cloudflare Pages + Render CI/CD
+> **Development status:** See the [active roadmap](docs/development_roadmap.md), [task evidence](docs/roadmap/completed.md) and source version metadata. Local checks, deployment and real-device acceptance are separate.
 
 [![Build & Release Android APK](https://github.com/farzad-bahadorifar/mehrchain/actions/workflows/build-apk.yml/badge.svg)](https://github.com/farzad-bahadorifar/mehrchain/actions/workflows/build-apk.yml)
-[![Version](https://img.shields.io/badge/version-v1.0.0-teal.svg)](https://github.com/farzad-bahadorifar/mehrchain/releases)
-[![Tests](https://img.shields.io/badge/tests-233%20passed-brightgreen.svg)](https://github.com/farzad-bahadorifar/mehrchain/actions)
+[Version metadata](app-version.json)
+[![CI](https://github.com/farzad-bahadorifar/mehrchain/actions/workflows/ci.yml/badge.svg)](https://github.com/farzad-bahadorifar/mehrchain/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
+
+## Before contributing
+
+Read [the active roadmap](docs/development_roadmap.md) and [CONTRIBUTING.md](CONTRIBUTING.md) before development. Use English for all project-authored development material and UI copy; keep the original Persian poem above unchanged.
 
 ## 🌟 Our Philosophy
 
@@ -77,7 +85,7 @@ mehrchain/                               # Nx 22.5 Monorepo
 * **Styling:** Tailwind CSS 4 with HSL design tokens & system/dark/light themes
 * **Icons:** Lucide Angular (Tree-shaken, 100% vector SVG)
 * **Mobile & PWA:** Capacitor 8 + Ionic Angular (`mode: 'ios'`) + Angular Service Worker (`ngsw`)
-* **Testing:** Vitest (143 unit & component tests across 31 suites)
+* **Testing:** Vitest for frontend unit and component checks; see task evidence for dated results.
 
 ### **Backend**
 * **Framework:** NestJS 11 (Modular architecture, DTOs, global `ValidationPipe`)
@@ -85,7 +93,7 @@ mehrchain/                               # Nx 22.5 Monorepo
 * **Authentication:** Google OAuth token verification, Passport JWT (30-day expiry), bcryptjs, Resend SMTP with OTP
 * **Error Handling:** Global `AllExceptionsFilter` with normalized API error payloads
 * **Documentation:** OpenAPI / Swagger (`/api/docs`)
-* **Testing:** Jest (90 service & controller unit tests across 11 suites)
+* **Testing:** Jest for backend checks; see task evidence for dated results.
 
 ---
 
@@ -104,7 +112,10 @@ mehrchain/                               # Nx 22.5 Monorepo
 
 ## 📚 Technical Documentation
 
-* 📐 **[Development Roadmap](docs/development_roadmap.md)** — Master schedule, sprint timeline, and completed tasks backlog.
+* 📐 **[Development Roadmap](docs/development_roadmap.md)** — Current task registry, analysis/wireframe review gates, release dependencies, and linked historical evidence.
+* 🎨 **[Wireframe Delivery Contract](docs/ui_ux_discovery_plan.md)** — Analysis and clickable previews in MehrChain's existing design system, with per-task coverage and versioned owner decisions.
+* 🧭 **[Decisions & Known Constraints](docs/roadmap/context.md)** — Dated reasons, known blockers, work not to repeat, and explicit reopening conditions.
+* 🔭 **[Product Direction](docs/roadmap/direction.md)** — Why the product evolved this way, near-term outcomes, and a separate path for future unknowns.
 * 🔗 **[Chain Feature Specification](docs/chain_feature_spec.md)** — Comprehensive architecture, state machine, and data models for Chain.
 * 📐 **[Architecture Analysis](docs/architecture_analysis.md)** — High-level diagrams, service graph, and database ERD.
 * 🏆 **[Technical Audit Scorecard](docs/technical_scorecard.md)** — Multi-dimension code audit and quality assessment.
@@ -169,13 +180,13 @@ Run `npm run dev` again after the build to resume local development.
 
 ### 5. Run Automated Tests
 ```bash
-# Run all 233 tests across frontend and backend
+# Run current frontend and backend tests
 npx nx run-many -t test
 
-# Run frontend tests (Vitest — 143 tests)
+# Run frontend tests (Vitest)
 npx nx test mehrchain-frontend
 
-# Run backend tests (Jest — 90 tests)
+# Run backend tests (Jest)
 npx nx test mehrchain-backend
 ```
 

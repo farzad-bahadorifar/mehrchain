@@ -16,6 +16,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           req.method === 'GET' || req.method === 'HEAD'
             ? 'The server is temporarily unavailable. Please wait a moment and retry.'
             : 'Could not confirm the change. Refresh to check before retrying. Your input is kept.';
+      } else if ([404, 405].includes(error.status) && /\/auth\/username(?:\?|$)/.test(req.url)) {
+        normalizedMessage =
+          'Username changes are temporarily unavailable. Your input is kept. Try again later.';
       } else if (error.status === 401) {
         const isAuthEndpoint =
           req.url.includes('/auth/google') ||

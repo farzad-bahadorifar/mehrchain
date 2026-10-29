@@ -7,6 +7,7 @@ import { MeroCustomizationService } from '../../core/services/mero-customization
 import { CommitmentService } from '../../core/services/commitment.service';
 import { AuthService } from '../../core/services/auth.service';
 import { MeroMoodService } from '../../core/services/mero-mood.service';
+import { ActivatedRoute } from '@angular/router';
 
 describe('Profile color collection', () => {
   let fixture: ComponentFixture<ProfileComponent>;
@@ -56,6 +57,7 @@ describe('Profile color collection', () => {
       imports: [ProfileComponent],
       providers: [
         ...commonTestProviders,
+        { provide: ActivatedRoute, useValue: { snapshot: { data: { section: 'colors' } } } },
         {
           provide: AuthService,
           useValue: {
@@ -156,5 +158,52 @@ describe('Profile color collection', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('<img src=x>');
     expect(fixture.nativeElement.querySelector('img')).toBeNull();
+  });
+
+  it('cancels a draft without mutating saved colors or earned capacity', () => {
+    unlock();
+    collection.update((c) => ({
+      ...c,
+      selectedSlot: 1,
+      colors: [{ slot: 1, name: 'Saved', hex: '#06b6d4' }],
+    }));
+    fixture.detectChanges();
+    component.beginEdit(2);
+    component.customNameInput.set('Unpublished');
+    component.customColorInput.set('#f43f5e');
+    expect(component.previewGlowColor()).toBe('#f43f5e');
+    fixture.detectChanges();
+    const cancel = [...(fixture.nativeElement as HTMLElement).querySelectorAll('button')].find(
+      (button) => button.textContent?.trim() === 'Cancel preview',
+    )!;
+    expect(cancel).toBeTruthy();
+    cancel.click();
+    expect(component.previewGlowColor()).toBeUndefined();
+    expect(component.customNameInput()).toBe('Saved');
+    expect(collection().selectedSlot).toBe(1);
+    expect(collection().capacity).toBe(2);
+    expect(customization.saveColor).not.toHaveBeenCalled();
+    expect(customization.selectColor).not.toHaveBeenCalled();
+  });
+
+  it('keeps the overview compact and exposes all four real destinations', () => {
+    TestBed.inject(ActivatedRoute).snapshot.data['section'] = 'overview';
+    const overview = TestBed.createComponent(ProfileComponent);
+    overview.detectChanges();
+    const element: HTMLElement = overview.nativeElement;
+    const links = [...element.querySelectorAll('a')].map((a) => a.getAttribute('href'));
+    expect(links).toEqual(
+      expect.arrayContaining([
+        '/profile/account',
+        '/profile/badges',
+        '/profile/colors',
+        '/profile/settings',
+      ]),
+    );
+    expect(element.querySelector('input')).toBeNull();
+    expect(element.querySelector('app-username-settings')).toBeNull();
+    expect(element.querySelector('app-password-setup')).toBeNull();
+    expect(element.querySelector('app-mero')).not.toBeNull();
+    overview.destroy();
   });
 });

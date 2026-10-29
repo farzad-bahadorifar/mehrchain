@@ -1,3 +1,8 @@
+// Deprecated: this script contains historical bulk GitHub writes and must not run.
+if (require.main === module) {
+  console.error('Legacy bulk sync disabled. Read docs/roadmap/workflow.md and use scripts/roadmap.cjs; the owner creates issues.');
+  process.exit(1);
+}
 /**
  * Sync Roadmap with GitHub Issues and Project Board
  *

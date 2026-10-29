@@ -40,6 +40,8 @@ export class MeroComponent {
   mood = input<MascotMood>('reference');
   showGlow = input<boolean>(true);
   customGradient = input<string | null>(null);
+  // Undefined uses the account selection. A draft preview never writes that selection.
+  previewColor = input<string | null | undefined>(undefined);
 
   constructor() {
     effect(() => {
@@ -47,7 +49,10 @@ export class MeroComponent {
         mood: this.mood(),
         glow: this.showGlow() ? 1 : 0.75,
         size: this.pixels(),
-        glowColor: this.customizationService?.effectiveGlowColor() ?? null,
+        glowColor:
+          this.previewColor() === undefined
+            ? (this.customizationService?.effectiveGlowColor() ?? null)
+            : (this.previewColor() ?? null),
       };
       this.renderTarget?.update(options);
     });
@@ -60,7 +65,10 @@ export class MeroComponent {
           mood: this.mood(),
           glow: this.showGlow() ? 1 : 0.75,
           size: this.pixels(),
-          glowColor: this.customizationService?.effectiveGlowColor() ?? null,
+          glowColor:
+            this.previewColor() === undefined
+              ? (this.customizationService?.effectiveGlowColor() ?? null)
+              : (this.previewColor() ?? null),
         },
         (state) => this.renderState.set(state),
       );

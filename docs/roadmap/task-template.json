@@ -1,0 +1,16 @@
+{
+  "title": "One exact observable result",
+  "type": "bug",
+  "area": "profile",
+  "priority": "P1",
+  "goal": "Given a precise input/trigger, the user observes this exact expected result.",
+  "scope": ["Only the behavior being changed"],
+  "outOfScope": ["Adjacent behavior that must not change"],
+  "inputs": ["Existing file/route; sanitized reproduction or fixture; expected baseline"],
+  "contextRefs": ["D-NNN"],
+  "steps": ["Reproduce", "Make the smallest scoped change", "Verify every acceptance item"],
+  "acceptance": [{"id":"A1","text":"Objective pass/fail behavior", "state":"pending"}],
+  "verify": ["Exact command or step with expected output"],
+  "dependsOn": [],
+  "issue": null
+}

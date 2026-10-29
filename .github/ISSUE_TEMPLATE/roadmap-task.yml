@@ -1,0 +1,55 @@
+name: Defined roadmap task
+description: One independently verifiable roadmap deliverable
+title: "[TNN] "
+body:
+  - type: input
+    id: task
+    attributes:
+      label: Roadmap ID and card URL
+      description: One executable task per issue. Link docs/roadmap/tasks/TNN.md.
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: One observable result
+      description: For a bug, include current behavior, exact trigger and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: In scope / out of scope
+    validations:
+      required: true
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Starting files, reproduction, fixtures and dependencies
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Known decisions, constraints and why earlier paths were not taken
+      description: Copy the card's D-ID references. Include evidence/date and reopening conditions; do not repeat known mail/domain/SMS blockers as unknown bugs.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Ordered implementation or analysis steps
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance checklist and verification
+      description: Copy the card's checks and exact commands/manual steps. UI analysis must deliver a same-design-system HTML wireframe.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Completion evidence
+      description: Fill when completing. Distinguish local verification, production and real-device results.

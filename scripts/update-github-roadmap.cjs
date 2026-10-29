@@ -1,3 +1,8 @@
+// Deprecated: do not replay historical task creation/Project mutations.
+if (require.main === module) {
+  console.error('Legacy bulk update disabled. Use docs/roadmap/workflow.md; no GitHub changes were made.');
+  process.exit(1);
+}
 const https = require('https');
 const { execSync } = require('child_process');
 const fs = require('fs');
