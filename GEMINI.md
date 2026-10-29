@@ -5,6 +5,15 @@
 
 ---
 
+## Response Formatting Rules (RTL/LTR)
+
+1. **Persian / Farsi chat text (RTL)** must always be wrapped inside `<div dir="rtl">` and `</div>` tags for proper readability and alignment in the chat interface.
+2. **Code blocks** (TypeScript, HTML, CSS, JSON, Bash, Mermaid, etc.) must be placed **outside** `<div dir="rtl">` tags to preserve standard LTR code formatting.
+3. **Inline English terms** inside Persian text must be enclosed in backticks (e.g., `CommitmentStore`, `Silent Chain`, `docs/index.html`).
+4. **Project language boundary**: All project-authored code, commit messages, PRs, issues, task descriptions, comments, and application UI copy remain strictly 100% English (the sole authored-prose exception is the original Persian poem in `README.md`). Persian is used exclusively for conversational interactions with the owner in chat.
+
+---
+
 ## Start here: roadmap and language policy
 
 Read docs/development_roadmap.md before development, diagnosis, UI analysis or task intake. Follow docs/roadmap/workflow.md, applicable context.md D-IDs, direction.md and root AGENTS.md. All project-authored docs, tasks/issues/PRs, comments and UI copy are English regardless of owner chat language. Keep the original Persian README poem verbatim; it is the sole authored-prose exception. Preserve user Unicode data and intentional fixtures. Historical source records are retained in docs/archives/; use English references for current work.

@@ -44,7 +44,7 @@
         "Open the versioned HTML and read decisions.md"
       ],
       "dependsOn": [],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/79",
       "evidence": [
         "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
       ],
@@ -53,6 +53,11 @@
           "date": "2026-10-29",
           "event": "Done",
           "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/79"
         }
       ],
       "contextRefs": [
@@ -100,7 +105,7 @@
         "Review artifact and decision log"
       ],
       "dependsOn": [],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/81",
       "evidence": [
         "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
       ],
@@ -109,6 +114,11 @@
           "date": "2026-10-29",
           "event": "Done",
           "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/81"
         }
       ],
       "contextRefs": [
@@ -156,7 +166,7 @@
         "Review artifact and decision log"
       ],
       "dependsOn": [],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/82",
       "evidence": [
         "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
       ],
@@ -165,6 +175,11 @@
           "date": "2026-10-29",
           "event": "Done",
           "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/82"
         }
       ],
       "contextRefs": [
@@ -212,7 +227,7 @@
         "Review artifact and decision log"
       ],
       "dependsOn": [],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/83",
       "evidence": [
         "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
       ],
@@ -221,6 +236,11 @@
           "date": "2026-10-29",
           "event": "Done",
           "evidence": "design/ux/t22-profile-structure/decisions.md — V2 approved by owner on 2026-10-29."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/83"
         }
       ],
       "contextRefs": [
@@ -281,7 +301,7 @@
       "dependsOn": [
         "T20"
       ],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/85",
       "evidence": [
         "docs/roadmap/evidence/v2-implementation.md"
       ],
@@ -295,6 +315,11 @@
           "date": "2026-10-29",
           "event": "Done",
           "evidence": "docs/roadmap/evidence/v2-implementation.md"
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/85"
         }
       ],
       "contextRefs": [
@@ -377,7 +402,7 @@
         "T23",
         "T24"
       ],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/86",
       "evidence": [
         "docs/roadmap/evidence/v2-implementation.md"
       ],
@@ -391,6 +416,11 @@
           "date": "2026-10-29",
           "event": "Done",
           "evidence": "docs/roadmap/evidence/v2-implementation.md"
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/86"
         }
       ],
       "contextRefs": [
@@ -460,7 +490,7 @@
         "npx nx test mehrchain-frontend --watch=false"
       ],
       "dependsOn": [],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/87",
       "evidence": [
         "docs/roadmap/evidence/v2-implementation.md"
       ],
@@ -474,6 +504,11 @@
           "date": "2026-10-29",
           "event": "Done",
           "evidence": "docs/roadmap/evidence/v2-implementation.md"
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/87"
         }
       ],
       "contextRefs": [
@@ -533,13 +568,18 @@
         "Record test-account save result only when authorized identity is available"
       ],
       "dependsOn": [],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/88",
       "evidence": [],
       "history": [
         {
           "date": "2026-10-29",
           "event": "Blocked",
           "evidence": "Explicit single-result scope registered."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/88"
         }
       ],
       "blockedReason": "2026-10-29: Pages /api/version, Render /api/version and /api/docs-json each timed out after 20 seconds. Unblock when the serving endpoints are reachable and, if save reproduction is needed, an authorized test identity is available. No root cause or production fix is claimed.",
@@ -604,13 +644,18 @@
         "T27",
         "T28"
       ],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/89",
       "evidence": [],
       "history": [
         {
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit single-result scope registered."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/89"
         }
       ],
       "contextRefs": [
@@ -677,13 +722,18 @@
         "Try touch/mouse, pointer cancellation and reduced motion"
       ],
       "dependsOn": [],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/90",
       "evidence": [],
       "history": [
         {
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit single-result scope registered."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/90"
         }
       ],
       "contextRefs": [
@@ -753,7 +803,7 @@
         "Inspect generated active/completed views and local documentation links"
       ],
       "dependsOn": [],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/91",
       "id": "T32",
       "status": "Done",
       "evidence": [
@@ -774,6 +824,11 @@
           "date": "2026-10-29",
           "event": "Done",
           "evidence": "docs/roadmap/evidence/v2-implementation.md"
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/91"
         }
       ],
       "contextRefs": [
@@ -849,7 +904,7 @@
         "Review docs/roadmap/evidence/t33-completion-support-gate.md against every scope item; unresolved required evidence prevents completion."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/92",
       "id": "T33",
       "status": "Ready",
       "evidence": [],
@@ -858,6 +913,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/92"
         }
       ]
     },
@@ -939,7 +999,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/93",
       "id": "T34",
       "status": "Ready",
       "evidence": [],
@@ -948,6 +1008,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/93"
         }
       ]
     },
@@ -1021,7 +1086,7 @@
         "Review docs/roadmap/evidence/t35-finite-experience-contract.md against every scope item; unresolved required evidence prevents completion."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/94",
       "id": "T35",
       "status": "Ready",
       "evidence": [],
@@ -1030,6 +1095,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/94"
         }
       ]
     },
@@ -1104,7 +1174,7 @@
         "Review docs/roadmap/evidence/t36-endless-attempt-lifecycle.md against every scope item; unresolved required evidence prevents completion."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/95",
       "id": "T36",
       "status": "Ready",
       "evidence": [],
@@ -1113,6 +1183,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/95"
         }
       ]
     },
@@ -1187,7 +1262,7 @@
         "Review docs/roadmap/evidence/t37-shared-experience-outcomes.md against every scope item; unresolved required evidence prevents completion."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/96",
       "id": "T37",
       "status": "Ready",
       "evidence": [],
@@ -1196,6 +1271,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/96"
         }
       ]
     },
@@ -1277,7 +1357,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/97",
       "id": "T38",
       "status": "Ready",
       "evidence": [],
@@ -1286,6 +1366,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/97"
         }
       ]
     },
@@ -1367,7 +1452,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/98",
       "id": "T39",
       "status": "Ready",
       "evidence": [],
@@ -1376,6 +1461,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/98"
         }
       ]
     },
@@ -1457,7 +1547,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/99",
       "id": "T40",
       "status": "Ready",
       "evidence": [],
@@ -1466,6 +1556,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/99"
         }
       ]
     },
@@ -1543,7 +1638,7 @@
         "Review docs/roadmap/evidence/t41-notification-inventory.md against every scope item; unresolved required evidence prevents completion."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/100",
       "id": "T41",
       "status": "Ready",
       "evidence": [],
@@ -1552,6 +1647,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/100"
         }
       ]
     },
@@ -1635,7 +1735,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/101",
       "id": "T42",
       "status": "Ready",
       "evidence": [],
@@ -1644,6 +1744,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/101"
         }
       ]
     },
@@ -1734,7 +1839,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/102",
       "id": "T43",
       "status": "Ready",
       "evidence": [],
@@ -1743,6 +1848,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/102"
         }
       ]
     },
@@ -1829,7 +1939,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/103",
       "id": "T44",
       "status": "Ready",
       "evidence": [],
@@ -1838,6 +1948,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/103"
         }
       ]
     },
@@ -1918,7 +2033,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/104",
       "id": "T45",
       "status": "Ready",
       "evidence": [],
@@ -1927,6 +2042,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/104"
         }
       ]
     },
@@ -2005,7 +2125,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/105",
       "id": "T46",
       "status": "Ready",
       "evidence": [],
@@ -2014,6 +2134,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/105"
         }
       ]
     },
@@ -2094,7 +2219,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/106",
       "id": "T47",
       "status": "Ready",
       "evidence": [],
@@ -2103,6 +2228,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/106"
         }
       ]
     },
@@ -2175,7 +2305,7 @@
         "Review docs/roadmap/evidence/t48-sent-heart-rendering.md against every scope item; unresolved required evidence prevents completion."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/107",
       "id": "T48",
       "status": "Ready",
       "evidence": [],
@@ -2184,6 +2314,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/107"
         }
       ]
     },
@@ -2263,7 +2398,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/108",
       "id": "T49",
       "status": "Ready",
       "evidence": [],
@@ -2272,6 +2407,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/108"
         }
       ]
     },
@@ -2358,7 +2498,7 @@
         "Check decisions.md for explicit owner decision on this exact version; waiting for review is not Done."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/109",
       "id": "T50",
       "status": "Ready",
       "evidence": [],
@@ -2367,6 +2507,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/109"
         }
       ]
     },
@@ -2442,7 +2587,7 @@
         "Review docs/roadmap/evidence/t51-responsive-route-matrix.md against every scope item; unresolved required evidence prevents completion."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/110",
       "id": "T51",
       "status": "Ready",
       "evidence": [],
@@ -2451,6 +2596,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/110"
         }
       ]
     },
@@ -2526,7 +2676,7 @@
         "Review docs/roadmap/evidence/t52-web-update-viewport.md against every scope item; unresolved required evidence prevents completion."
       ],
       "type": "analysis",
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/111",
       "id": "T52",
       "status": "Ready",
       "evidence": [],
@@ -2535,6 +2685,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/111"
         }
       ]
     },
@@ -2590,7 +2745,7 @@
       "verify": [
         "Render invite-section with totalDays=-1 and 3, switch selection and inspect text/payload; run a targeted existing frontend test if the change affects logic, plus npm run build:frontend."
       ],
-      "issue": null,
+      "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/112",
       "id": "T53",
       "status": "Ready",
       "evidence": [],
@@ -2599,6 +2754,11 @@
           "date": "2026-10-29",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Issue linked",
+          "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/112"
         }
       ]
     }
