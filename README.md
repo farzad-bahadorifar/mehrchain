@@ -2,70 +2,75 @@
 
 **Light your own lamp. Brighten the world.**
 
-<!-- PERSIAN_POEM:START -->
-تو مگو همه بِجَنگند و زِ صُلح من چه آید؟		تو یکی نه‌‌ای هزاری تو چراغِ خود بَراَفْروز
+تو مگو همه بِجَنگند و زِ صُلح من چه آید؟ تو یکی نه‌‌ای هزاری تو چراغِ خود بَراَفْروز
 
-که یکی چراغِ روشن زِ هزار مُرده بهتر		که بِهْ است یک قَدِ خوش زِ هزارْ قامَتِ کوز
-<!-- PERSIAN_POEM:END -->
-
-
+که یکی چراغِ روشن زِ هزار مُرده بهتر که بِهْ است یک قَدِ خوش زِ هزارْ قامَتِ کوز
 
 MehrChain is an open-source, mindful growth companion designed to help people commit to positive habits, nurture mental well-being, and spark supportive human connections through small, daily intentional actions.
 
-> **Development status:** See the [active roadmap](docs/development_roadmap.md), [task evidence](docs/roadmap/completed.md) and source version metadata. Local checks, deployment and real-device acceptance are separate.
+- 🌐 **Landing Page:** [farzad-bahadorifar.github.io/mehrchain](https://farzad-bahadorifar.github.io/mehrchain/ "null")
+    
+- 📱 **Web App (PWA):** [mehrchain.pages.dev](https://mehrchain.pages.dev/ "null")
+    
+- 📦 **Android APK:** [GitHub Releases](https://github.com/farzad-bahadorifar/mehrchain/releases/latest "null")
+    
 
-[![Build & Release Android APK](https://github.com/farzad-bahadorifar/mehrchain/actions/workflows/build-apk.yml/badge.svg)](https://github.com/farzad-bahadorifar/mehrchain/actions/workflows/build-apk.yml)
-[Version metadata](app-version.json)
-[![CI](https://github.com/farzad-bahadorifar/mehrchain/actions/workflows/ci.yml/badge.svg)](https://github.com/farzad-bahadorifar/mehrchain/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+> **Development status:** See the [active roadmap](https://gemini.google.com/app/docs/development_roadmap.md "null"), [task evidence](https://gemini.google.com/app/docs/roadmap/completed.md "null"), and source version metadata. Local checks, deployment, and real-device acceptance are tracked separately.
 
----
+[Version metadata](https://gemini.google.com/app/app-version.json "null")  
 
-## Before contributing
+## 🤝 Seeking Co-Founder, Contributors & Infrastructure Partners
 
-Read [the active roadmap](docs/development_roadmap.md) and [CONTRIBUTING.md](CONTRIBUTING.md) before development. Use English for all project-authored development material and UI copy; keep the original Persian poem above unchanged.
+MehrChain is built with love from Iran through an AI-augmented engineering workflow. While the full-stack architecture, PWA, Android build, and structured V2 engineering roadmap (`T29`–`T53`) are actively progressing, international payment restrictions currently block access to paid global infrastructure (such as custom domains, production Resend SMTP configuration in `D-002`, and dedicated cloud hosting).
+
+We are actively looking for:
+
+1. **A Global Co-Founder / Operations Partner (Based Outside Iran):** Someone who deeply resonates with mindful technology and mental well-being to co-own global operations, infrastructure provisioning, community growth, and future charity integrations.
+    
+2. **Infrastructure Sponsors:** Support with domain registration, transactional email (Resend), or cloud credits to help transition MehrChain from free-tier hosting (`github.io` & `pages.dev`) to a full global launch.
+    
+3. **Open-Source Contributors:** Frontend (Angular 21), Backend (NestJS 11), and UI/UX contributors to pick up scoped, atomic tasks from our [active roadmap](https://gemini.google.com/app/docs/development_roadmap.md "null") (`T29`–`T53`).
+    
+
+💬 **Interested in partnering or helping out?** Reach out via [GitHub Issues](https://github.com/farzad-bahadorifar/mehrchain/issues "null") or connect with the founder on X/Threads.
 
 ## 🌟 Our Philosophy
 
 MehrChain bridges **mindful well-being** with **habit formation mechanics** and **quiet human connection**:
 
-* **Be the Spark:** Inspired by Rumi's timeless wisdom, true transformation starts from within. Light your own lamp first before brightening the world.
-* **Quiet Accountability:** No toxic leaderboards, punitive streak resets, or social media show-off feeds. Your chain partner sees your consistency and quietly cheers you on.
-* **Endless Journey:** Real self-growth has no artificial deadline. Choose an "Endless Journey" or set your custom duration.
-* **Mindful Companion:** **Mero** is your gentle 3D companion that celebrates every spark and waits patiently when you are away.
-* **Kindness First:** The word *"Mehr"* means kindness and love in Persian. MehrChain is built on empathy, self-compassion, and giving back.
+- **Be the Spark:** Inspired by Rumi's timeless wisdom, true transformation starts from within. Light your own lamp first before brightening the world.
+    
+- **Quiet Accountability:** No toxic leaderboards, punitive streak resets, or social media show-off feeds. Your chain partner sees your consistency and quietly cheers you on.
+    
+- **Completion-First Support:** Show up for yourself first—complete your own daily commitment to unlock sending supportive hearts to your chain (`D-008`).
+    
+- **Mindful Journeys & Memories:** Choose between finite shared experiences or an "Endless Journey" where every attempt is honored as a lasting memory (`D-009`).
+    
+- **Mindful Companion:** **Mero** is your gentle companion that celebrates every spark, waits patiently when you are away, and unlocks custom aura colors after 21 consecutive days (`D-001`).
+    
+- **Kindness First:** The word _"Mehr"_ means kindness and love in Persian. MehrChain is built on empathy, self-compassion, and giving back.
+    
 
----
+## Before Contributing
 
-## 📸 Screenshots & Landing
+Read [the active roadmap](https://gemini.google.com/app/docs/development_roadmap.md "null"), [decision memory](https://gemini.google.com/app/docs/roadmap/context.md "null"), and [CONTRIBUTING.md](https://gemini.google.com/app/CONTRIBUTING.md "null") before development. Use English for all project-authored development material, issue/PR text, and UI copy; keep the original Persian poem at the top of this file unchanged.
 
-<p align="center">
-  <a href="https://farzad-bahadorifar.github.io/mehrchain/" target="_blank">
-    <img width="600" alt="MehrChain Preview" src="docs/app-screenshot.png" />
-  </a>
-</p>
+## 🌟 Key Capabilities
 
-* 🌐 **Landing Page:** [farzad-bahadorifar.github.io/mehrchain](https://farzad-bahadorifar.github.io/mehrchain/)
-* 📱 **Web App (PWA):** [mehrchain.pages.dev](https://mehrchain.pages.dev)
-* 📦 **Android APK:** [GitHub Releases](https://github.com/farzad-bahadorifar/mehrchain/releases/latest)
-
----
-
-## 🌟 Key Features
-
-* **⚡ One-Tap Spark:** Energized habit completion with CSS glow pulse animation, instant local feedback, and chain auto-notification.
-* **♾️ Endless Journey & Custom Durations:** Commit to lifetime habits (`totalDays = -1`) without artificial deadlines, or set custom duration targets.
-* **🔗 The Silent Chain:** Link habits with friends via invite links or QR codes. Includes 5 intelligent states (*Completed, Waiting, Resting, Fading, Journey Complete*), mutual heart reactions, and gentle reminders.
-* **🏆 Milestones & Badges:** Milestone achievement system featuring 5 initial badges (*First Spark, Chain Starter, 7-Day Streak, 21-Day Master, Kind Soul*) with clean Lucide icons.
-* **🧘 Mero Companion & 21-Day Custom Glow:** Official 3D companion mascot with 7 reactive emotional states (*Idle, Content, Happy, Waiting, Celebrating, Sleepy, Missing*), custom nickname, and 21-day streak custom aura color unlock.
-* **📱 Offline-First Engine:** Optimistic updates in `localStorage` with background synchronization to the NestJS API when network connectivity resumes.
-* **🔐 Seamless Authentication:** 1-click Google OAuth / ID token login, stateless JWTs, and secure 6-digit email OTP verification.
-* **🌐 Cloudflare API Proxy:** Built-in edge proxying (`/api/*`) on Cloudflare Pages Functions to guarantee fast global connectivity.
-* **✨ What's New Changelog:** Built-in version release notes in Profile with update notifications and blue indicator dot.
-* **📖 Mindful Reads:** Upcoming articles section in Chain focusing on kindness, mindful routines, and human connection.
-
----
+- **⚡ One-Tap Spark:** Energized habit completion with glow pulse animation, instant local feedback, and chain notifications.
+    
+- **♾️ Endless Commitments & Finite Experiences:** Commit to lifetime habits (`totalDays = -1`) or structured experiences, with dedicated solo and shared memory archives.
+    
+- **🔗 The Silent Chain:** Link habits with friends via invite links or QR codes featuring intelligent states (_Completed, Waiting, Resting, Fading, Journey Complete_), mutual heart reactions, and anti-spam gentle nudges.
+    
+- **🏆 V2 Profile, Badges & Custom Glow:** Scoped V2 interface tokens (`T26`–`T28`) with dedicated Account, Badges, Colors, and Appearance routes, plus a 21-day streak custom aura color unlock.
+    
+- **📱 Offline-First Engine:** Optimistic updates in `localStorage` with background synchronization to the NestJS API when network connectivity resumes.
+    
+- **🔐 Seamless Authentication:** 1-click Google OAuth / ID token login, stateless JWTs, and 6-digit email OTP verification.
+    
+- **🌐 Cloudflare API Proxy:** Built-in edge proxying (`/api/*`) on Cloudflare Pages Functions.
+    
 
 ## 🛠 Tech Stack
 
@@ -80,131 +85,134 @@ mehrchain/                               # Nx 22.5 Monorepo
 ```
 
 ### **Frontend**
-* **Framework:** Angular 21 (Zoneless change detection, Signals, Control Flow `@if/@for`)
-* **State Management:** NgRx Signal Store (`@ngrx/signals`) with Facade pattern
-* **Styling:** Tailwind CSS 4 with HSL design tokens & system/dark/light themes
-* **Icons:** Lucide Angular (Tree-shaken, 100% vector SVG)
-* **Mobile & PWA:** Capacitor 8 + Ionic Angular (`mode: 'ios'`) + Angular Service Worker (`ngsw`)
-* **Testing:** Vitest for frontend unit and component checks; see task evidence for dated results.
+
+- **Framework:** Angular 21 (Zoneless change detection, Signals, Control Flow `@if/@for`)
+    
+- **State Management:** NgRx Signal Store (`@ngrx/signals`) with Facade pattern
+    
+- **Styling:** Tailwind CSS 4 with V2 HSL design tokens & system/dark/light themes
+    
+- **Icons:** Lucide Angular (Tree-shaken, 100% vector SVG)
+    
+- **Mobile & PWA:** Capacitor 8 + Ionic Angular (`mode: 'ios'`) + Angular Service Worker (`ngsw`)
+    
+- **Testing:** Vitest for frontend unit and component checks.
+    
 
 ### **Backend**
-* **Framework:** NestJS 11 (Modular architecture, DTOs, global `ValidationPipe`)
-* **Database & ORM:** PostgreSQL (Neon Serverless) with Prisma ORM
-* **Authentication:** Google OAuth token verification, Passport JWT (30-day expiry), bcryptjs, Resend SMTP with OTP
-* **Error Handling:** Global `AllExceptionsFilter` with normalized API error payloads
-* **Documentation:** OpenAPI / Swagger (`/api/docs`)
-* **Testing:** Jest for backend checks; see task evidence for dated results.
 
----
+- **Framework:** NestJS 11 (Modular architecture, DTOs, global `ValidationPipe`)
+    
+- **Database & ORM:** PostgreSQL (Neon Serverless) with Prisma ORM
+    
+- **Authentication:** Google OAuth token verification, Passport JWT (30-day expiry), bcryptjs, Resend SMTP with OTP
+    
+- **Error Handling:** Global `AllExceptionsFilter` with normalized API error payloads
+    
+- **Documentation:** OpenAPI / Swagger (`/api/docs`)
+    
+- **Testing:** Jest for backend checks.
+    
 
-## 🗺️ Master Schedule & Releases
+## 🗺️ Roadmap & Active Workstreams
 
-| Version | Focus | Deliverables | Status |
-|:-------:|-------|--------------|:------:|
-| **v0.9.0** | MVP Foundation | Single-player habit tracking, heatmap calendar, initial auth | ✅ Done |
-| **v0.9.1** | Silent Chain Beta | Multi-user habit chains, invite links, 5 card states | ✅ Done |
-| **v1.0.0** | Production Launch | Spark button, Endless Journey, 5 Badges, Custom Glow, Google Auth, What's New | ✅ Launch Ready |
-| **v1.1.0** | UX Polish & Micro-Interactions | WebGL particle burst, markdown articles CMS, design system docs | ⏳ Planned |
-| **v1.2.0** | Accessibility & i18n | WCAG AA compliance, ARIA labels, Transloco multi-language | ⏳ Planned |
-| **v2.0.0** | Beyond Habit Tracker | Real-world charity integration, mindful challenges, real-time sync | 🔮 Vision |
+Instead of vague milestones, MehrChain tracks every change as an atomic, verifiable task card in the [**Active Roadmap**](https://gemini.google.com/app/docs/development_roadmap.md "null").
 
----
+|   |   |   |
+|---|---|---|
+|**Workstream**|**Active Cards**|**Focus & Status**|
+|**V2 Profile & Tokens**|`T20`–`T28`|V2 design tokens, Profile routes (Account, Badges, Colors, Appearance), username handling (**Done Locally**)|
+|**Completion-Only Support & Chain Views**|`T33`, `T34`|Auditing heart eligibility rules (`D-008`) and separate Connect / Show Up views (**Ready**)|
+|**Experiences, Attempts & Pair Outcomes**|`T35`, `T36`, `T37`|Finite experiences vs. Endless commitments, 3-day archive rules, joint outcomes (**Ready**)|
+|**Journey Memories**|`T38`, `T39`, `T40`|Solo and shared memory archives across ongoing, successful, and unfinished attempts (**Ready**)|
+|**Notifications & Private Why**|`T41`–`T44`|Platform delivery inventory, voluntary private "Why", absence reminders, anti-spam partner nudges (**Ready**)|
+|**UI Refinements & Diagnostics**|`T29`–`T31`, `T45`–`T53`|Live route diagnostics, PWA phone verification, responsive frame audits, invite continuation (**Active Queue**)|
 
 ## 📚 Technical Documentation
 
-* 📐 **[Development Roadmap](docs/development_roadmap.md)** — Current task registry, analysis/wireframe review gates, release dependencies, and linked historical evidence.
-* 🎨 **[Wireframe Delivery Contract](docs/ui_ux_discovery_plan.md)** — Analysis and clickable previews in MehrChain's existing design system, with per-task coverage and versioned owner decisions.
-* 🧭 **[Decisions & Known Constraints](docs/roadmap/context.md)** — Dated reasons, known blockers, work not to repeat, and explicit reopening conditions.
-* 🔭 **[Product Direction](docs/roadmap/direction.md)** — Why the product evolved this way, near-term outcomes, and a separate path for future unknowns.
-* 🔗 **[Chain Feature Specification](docs/chain_feature_spec.md)** — Comprehensive architecture, state machine, and data models for Chain.
-* 📐 **[Architecture Analysis](docs/architecture_analysis.md)** — High-level diagrams, service graph, and database ERD.
-* 🏆 **[Technical Audit Scorecard](docs/technical_scorecard.md)** — Multi-dimension code audit and quality assessment.
-* 🎨 **[UI/UX Evaluation](docs/ux_evaluation.md)** — Heuristic review, design principles, and Mero mascot rules.
-* 🤖 **[AI Context & Rules](GEMINI.md)** — Monorepo rules and GitHub task lifecycle protocols.
-
----
+- 📐 [**Development Roadmap**](https://gemini.google.com/app/docs/development_roadmap.md "null") — Current task registry (`T29`–`T53`), review gates, release dependencies, and linked historical evidence.
+    
+- 🧭 [**Decisions & Known Constraints**](https://gemini.google.com/app/docs/roadmap/context.md "null") — Dated reasons (`D-001` to `D-011`), known blockers, work not to repeat, and explicit reopening conditions.
+    
+- 🔭 [**Product Direction**](https://gemini.google.com/app/docs/roadmap/direction.md "null") — Why the product evolved this way, near-term outcomes, and future unknowns.
+    
+- ✅ [**Completed Ledger**](https://gemini.google.com/app/docs/roadmap/completed.md "null") — Exact completed outcomes and verification evidence outside the active queue.
+    
+- 🎨 [**Wireframe Delivery Contract**](https://gemini.google.com/app/docs/ui_ux_discovery_plan.md "null") — Clickable previews and design system rules.
+    
+- 🔗 [**Chain Feature Specification**](https://gemini.google.com/app/docs/chain_feature_spec.md "null") — Architecture, state machine, and data models for Chain.
+    
+- 🤖 [**AI Context & Rules**](https://gemini.google.com/app/GEMINI.md "null") — Monorepo rules and task lifecycle protocols.
+    
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-* **Node.js:** 22 LTS or higher
-* **npm:** 10.x or higher
-* **Database:** PostgreSQL (local instance or free [Neon](https://neon.tech/) cloud database)
+
+- **Node.js:** 22 LTS or higher
+    
+- **npm:** 10.x or higher
+    
+- **Database:** PostgreSQL (local instance or free [Neon](https://neon.tech/ "null") cloud database)
+    
 
 ### 1. Clone & Install
-```bash
+
+```
 git clone https://github.com/farzad-bahadorifar/mehrchain.git
 cd mehrchain
 npm install
 ```
 
 ### 2. Environment Configuration
+
 Copy `.env.example` to `.env` and configure your variables:
-```env
+
+```
 DATABASE_URL="postgresql://user:password@host:5432/mehrchain?schema=public"
 JWT_SECRET="your-development-jwt-secret"
 PORT=3000
 ```
 
 ### 3. Initialize Database
-```bash
+
+```
 npx prisma generate --schema=apps/mehrchain-backend/prisma/schema.prisma
 npx prisma migrate dev --schema=apps/mehrchain-backend/prisma/schema.prisma
 ```
 
 ### 4. Run Development Servers
-Start frontend and backend concurrently with live reload:
-```bash
+
+```
 npm run dev
 ```
-* 🌐 **Frontend:** `http://localhost:4300`
-* 🔌 **Backend API:** `http://localhost:3000/api`
-* 📖 **Swagger Docs:** `http://localhost:3000/api/docs`
 
-Both development logs appear in the same terminal, prefixed by project name.
-Press `Ctrl+C` to stop both services before building on Windows: a running backend
-locks Prisma's `query_engine-windows.dll.node`, causing `prisma generate` to fail
-with `EPERM` when replacing it.
+- 🌐 **Frontend:** `http://localhost:4300`
+    
+- 🔌 **Backend API:** `http://localhost:3000/api`
+    
+- 📖 **Swagger Docs:** `http://localhost:3000/api/docs`
+    
 
-To build production outputs from the repository root:
+Press `Ctrl+C` to stop both services before building on Windows: a running backend locks Prisma's `query_engine-windows.dll.node`, causing `prisma generate` to fail with `EPERM` when replacing it.
 
-```bash
-npm run build
-# Or build one application:
-npm run build:frontend
-npm run build:backend
+### 5. Build & Test
+
 ```
-
-Outputs: `dist/mehrchain-frontend/browser` and `dist/mehrchain-backend`.
-Run `npm run dev` again after the build to resume local development.
-
-### 5. Run Automated Tests
-```bash
-# Run current frontend and backend tests
+# Run frontend (Vitest) and backend (Jest) tests
 npx nx run-many -t test
 
-# Run frontend tests (Vitest)
-npx nx test mehrchain-frontend
-
-# Run backend tests (Jest)
-npx nx test mehrchain-backend
+# Build production outputs
+npm run build
 ```
 
 ### 6. Build Mobile / Android
-```bash
-# Build web assets and sync to native Capacitor project
-npm run mobile:build
 
-# Open in Android Studio
+```
+npm run mobile:build
 npx cap open android
 ```
 
----
-
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
-
-<p align="center">
-  <i>Made with ❤️ and mindfulness for a kinder, more connected world.</i>
-</p>
+This project is licensed under the [MIT License](https://gemini.google.com/app/LICENSE "null").
