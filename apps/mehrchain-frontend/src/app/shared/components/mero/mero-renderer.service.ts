@@ -26,6 +26,7 @@ interface MeroTarget {
   state: MeroRenderState;
   presentedKey?: string;
   notify: (state: MeroRenderState) => void;
+  _cleanupPointer?: () => void;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -66,6 +67,10 @@ export class MeroRendererService implements OnDestroy {
       : {},
   );
 
+  // --- Belly light drag state ---
+  private draggingTarget?: MeroTarget;
+  private isDragging = false;
+
   constructor() {
     if (this.browser) {
       this.document.addEventListener('visibilitychange', this.onVisibilityChange);
@@ -94,6 +99,84 @@ export class MeroRendererService implements OnDestroy {
       this.restore(target);
       if (typeof WebGL2RenderingContext === 'undefined') this.unavailable = true;
       if (this.unavailable && target.state !== 'ready') this.setState(target, 'unavailable');
+
+      // --- Belly light pointer events ---
+      const canvasEl = canvas;
+      const ndcFromPointer = (e: PointerEvent): [number, number] => {
+        const rect = canvasEl.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        return [x, y];
+      };
+
+      const unprojectToModelLocal = (ndcX: number, ndcY: number): { x: number; y: number; z: number } | null => {
+        if (!this.scene) return null;
+        const camera = this.scene.camera;
+        const model = this.scene.mascot.model;
+        // For orthographic camera, NDC maps linearly to world coordinates
+        const worldX = ndcX * (camera.right as number);
+        const worldY = ndcY * (camera.top as number);
+        // Transform from world to model-local (model has idle animation offset)
+        const localX = worldX - model.position.x;
+        const localY = worldY - model.position.y;
+        return { x: localX, y: localY, z: 0.55 };
+      };
+
+      const onPointerDown = (e: PointerEvent) => {
+        if (this.isDragging || !this.scene) return;
+        const [ndcX, ndcY] = ndcFromPointer(e);
+        // Check if pointer is near belly region
+        if (Math.abs(ndcX) <= 0.55 && ndcY >= -0.75 && ndcY <= 0.25) {
+          this.isDragging = true;
+          this.draggingTarget = target;
+          try {
+            canvasEl.setPointerCapture?.(e.pointerId);
+          } catch {
+            // Pointer capture is optional and may fail on untracked pointer IDs
+          }
+          canvasEl.style.cursor = 'grabbing';
+          const local = unprojectToModelLocal(ndcX, ndcY);
+          if (local && this.scene) {
+            this.scene.mascot.setLightDragTarget(local);
+          }
+          this.schedule();
+        }
+      };
+
+      const onPointerMove = (e: PointerEvent) => {
+        if (!this.isDragging || !this.scene || this.draggingTarget !== target) return;
+        const [ndcX, ndcY] = ndcFromPointer(e);
+        const local = unprojectToModelLocal(ndcX, ndcY);
+        if (local) {
+          this.scene.mascot.setLightDragTarget(local);
+        }
+        this.schedule();
+      };
+
+      const onPointerEnd = () => {
+        if (!this.isDragging || this.draggingTarget !== target) return;
+        this.isDragging = false;
+        this.draggingTarget = undefined;
+        canvasEl.style.cursor = 'grab';
+        if (this.scene) {
+          this.scene.mascot.setLightDragTarget(null);
+        }
+        this.schedule();
+      };
+
+      canvasEl.addEventListener('pointerdown', onPointerDown);
+      canvasEl.addEventListener('pointermove', onPointerMove);
+      canvasEl.addEventListener('pointerup', onPointerEnd);
+      canvasEl.addEventListener('pointercancel', onPointerEnd);
+      canvasEl.addEventListener('lostpointercapture', onPointerEnd);
+
+      target._cleanupPointer = () => {
+        canvasEl.removeEventListener('pointerdown', onPointerDown);
+        canvasEl.removeEventListener('pointermove', onPointerMove);
+        canvasEl.removeEventListener('pointerup', onPointerEnd);
+        canvasEl.removeEventListener('pointercancel', onPointerEnd);
+        canvasEl.removeEventListener('lostpointercapture', onPointerEnd);
+      };
     } else notify('unavailable');
     return {
       update: (next: MeroRenderOptions) => {
@@ -116,7 +199,10 @@ export class MeroRendererService implements OnDestroy {
         else if (![...this.targets].some((item) => item.visible)) this.cancelFrame();
       },
       destroy: () => {
-        if (target) this.targets.delete(target);
+        if (target) {
+          target._cleanupPointer?.();
+          this.targets.delete(target);
+        }
         if (this.targets.size === 0) {
           this.cancelFrame();
           this.releaseWhenIdle();
@@ -258,7 +344,8 @@ export class MeroRendererService implements OnDestroy {
   private readonly render = (time: number) => {
     this.frame = undefined;
     if (!this.scene || this.document.hidden) return;
-    const moving = [...this.targets].some((target) => target.visible && this.animated(target));
+    const orbActive = this.isDragging || (this.scene.mascot.getExtractAmount() > 0.005);
+    const moving = orbActive || [...this.targets].some((target) => target.visible && this.animated(target));
     const dirty = [...this.targets].some((target) => target.visible && target.dirty);
     if (!dirty && time - this.lastFrame < this.policy.frameInterval) {
       if (moving) this.schedule();
@@ -267,7 +354,7 @@ export class MeroRendererService implements OnDestroy {
     const started = performance.now();
     try {
       for (const target of this.targets) {
-        if (!target.visible || (!target.dirty && !this.animated(target))) continue;
+        if (!target.visible || (!target.dirty && !this.animated(target) && !orbActive)) continue;
         const pixels = Math.max(
           1,
           Math.min(

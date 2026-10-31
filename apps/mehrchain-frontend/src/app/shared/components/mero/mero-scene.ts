@@ -51,6 +51,8 @@ export function createMeroScene(detail: MascotDetail, onContextLost: () => void)
   let pixels = 0;
 
   return {
+    mascot,
+    camera,
     draw(
       target: CanvasRenderingContext2D,
       size: number,

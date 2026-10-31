@@ -9,6 +9,8 @@ describe('Mero shared rendering lifecycle', () => {
   let factory: ReturnType<typeof vi.fn<typeof createMeroScene>>;
   let loader: ReturnType<typeof vi.fn<() => Promise<{ createMeroScene: typeof createMeroScene }>>>;
   let scene: {
+    mascot: ReturnType<typeof createMeroScene>['mascot'];
+    camera: ReturnType<typeof createMeroScene>['camera'];
     draw: ReturnType<typeof vi.fn<ReturnType<typeof createMeroScene>['draw']>>;
     dispose: ReturnType<typeof vi.fn<() => void>>;
   };
@@ -19,7 +21,27 @@ describe('Mero shared rendering lifecycle', () => {
   beforeEach(() => {
     frames = new Map();
     nextFrame = 0;
+    const mockMascot = {
+      model: {
+        position: { x: 0, y: 0, z: 0 },
+      },
+      setLightDragTarget: vi.fn(),
+      getExtractAmount: vi.fn().mockReturnValue(0),
+      setGlowColor: vi.fn(),
+      setGlow: vi.fn(),
+      setMood: vi.fn(),
+      update: vi.fn(),
+      dispose: vi.fn(),
+    } as unknown as ReturnType<typeof createMeroScene>['mascot'];
+
+    const mockCamera = {
+      right: 1.4,
+      top: 1.4,
+    } as unknown as ReturnType<typeof createMeroScene>['camera'];
+
     scene = {
+      mascot: mockMascot,
+      camera: mockCamera,
       draw: vi.fn((target, size) => {
         target.canvas.width = size;
         target.canvas.height = size;

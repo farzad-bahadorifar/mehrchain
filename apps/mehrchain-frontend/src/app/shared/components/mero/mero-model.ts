@@ -184,7 +184,7 @@ export function createMascot({
   };
   skin.customProgramCacheKey = () => 'mehrchain-belly-halo-v2';
   const cream = new THREE.MeshStandardMaterial({
-    color: '#242012',
+    color: '#c9bc8e',
     emissive: '#f5e7a3',
     emissiveIntensity: glowUniform.value,
     roughness: 0.88,
@@ -286,8 +286,86 @@ export function createMascot({
   }
   let currentMood: MascotMood = 'reference';
   let currentGlowColor: string | null = null;
+
+  // --- Interactive Draggable Belly Light Orb ---
+  const BELLY_ANCHOR = new THREE.Vector3(0, BELLY.centerY, frontSurface(0, BELLY.centerY) + 0.08);
+
+  // Orb group: invisible by default, scales up when extracted
+  const orbGroup = new THREE.Group();
+  orbGroup.name = 'Belly light orb';
+  orbGroup.position.copy(BELLY_ANCHOR);
+  orbGroup.visible = false;
+  orbGroup.scale.setScalar(0.001);
+
+  // Core sphere
+  const coreMaterial = new THREE.MeshBasicMaterial({
+    color: '#fffbeb',
+    transparent: true,
+    opacity: 0,
+    depthTest: false,
+  });
+  const coreMesh = new THREE.Mesh(new THREE.SphereGeometry(0.18, 24, 24), coreMaterial);
+  coreMesh.renderOrder = 10;
+  orbGroup.add(coreMesh);
+
+  // Procedural glow texture for the halo sprite
+  const glowCanvas = typeof OffscreenCanvas !== 'undefined'
+    ? new OffscreenCanvas(128, 128)
+    : (() => { const c = document.createElement('canvas'); c.width = 128; c.height = 128; return c; })();
+  const glowCtx = glowCanvas.getContext('2d');
+  let glowTexture: THREE.Texture;
+  if (glowCtx && typeof glowCtx.createRadialGradient === 'function') {
+    const grad = glowCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    grad.addColorStop(0, 'rgba(255, 252, 220, 1.0)');
+    grad.addColorStop(0.35, 'rgba(254, 240, 138, 0.65)');
+    grad.addColorStop(0.68, 'rgba(245, 158, 11, 0.18)');
+    grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
+    glowCtx.fillStyle = grad;
+    glowCtx.fillRect(0, 0, 128, 128);
+    glowTexture = new THREE.CanvasTexture(glowCanvas as HTMLCanvasElement);
+  } else {
+    // Fallback for headless test environments where 2D canvas context is not implemented
+    glowTexture = new THREE.Texture();
+  }
+  const haloSpriteMaterial = new THREE.SpriteMaterial({
+    map: glowTexture,
+    transparent: true,
+    opacity: 0,
+    depthWrite: false,
+    depthTest: false,
+  });
+  const haloSprite = new THREE.Sprite(haloSpriteMaterial);
+  haloSprite.scale.set(0.95, 0.95, 1);
+  haloSprite.renderOrder = 11;
+  orbGroup.add(haloSprite);
+  model.add(orbGroup);
+
+  // Interaction state
+  let isDraggingLight = false;
+  const orbTarget = BELLY_ANCHOR.clone();
+  const orbCurrent = BELLY_ANCHOR.clone();
+  let extractAmount = 0;
+
+  // Store eye base rotation for smooth tracking
+  const eyeBaseRotX = -0.15;
+
   const mascot = {
     model,
+    setLightDragTarget(localPoint: { x: number; y: number; z: number } | null) {
+      if (localPoint) {
+        isDraggingLight = true;
+        const clampedX = THREE.MathUtils.clamp(localPoint.x, -1.15, 1.15);
+        const clampedY = THREE.MathUtils.clamp(localPoint.y, -1.05, 1.05);
+        const clampedZ = Math.max(localPoint.z, 0.52);
+        orbTarget.set(clampedX, clampedY, clampedZ);
+      } else {
+        isDraggingLight = false;
+        orbTarget.copy(BELLY_ANCHOR);
+      }
+    },
+    getExtractAmount(): number {
+      return extractAmount;
+    },
     setGlowColor(value: string | null) {
       const color = value && /^#[0-9a-f]{6}$/i.test(value) ? value : null;
       if (color === currentGlowColor) return;
@@ -297,12 +375,20 @@ export function createMascot({
       if (color) {
         const linear = new THREE.Color(color);
         haloColorUniform.value.set(linear.r * 0.16, linear.g * 0.16, linear.b * 0.16);
-      } else haloColorUniform.value.set(0.16, 0.14, 0.025);
+        // Tint orb to match custom glow color
+        coreMaterial.color.set(color);
+        haloSpriteMaterial.color.set(color);
+      } else {
+        haloColorUniform.value.set(0.16, 0.14, 0.025);
+        coreMaterial.color.set('#fffbeb');
+        haloSpriteMaterial.color.set('#ffffff');
+      }
     },
     setGlow(value: number) {
       glowUniform.value = THREE.MathUtils.clamp(value, 0, 2);
-      cream.emissiveIntensity = glowUniform.value;
+      // Wings always stay at full glow; belly is adjusted during update
       wingMaterial.emissiveIntensity = glowUniform.value;
+      cream.emissiveIntensity = glowUniform.value;
     },
     setMood(value: MascotMood) {
       if (!mouths.has(value)) throw new RangeError('Mood must be reference, happy or sad');
@@ -330,6 +416,55 @@ export function createMascot({
       eyes.forEach((eye) => {
         eye.scale.y = blink;
       });
+
+      // --- Orb smooth damping ---
+      const lerpFactor = isDraggingLight ? 0.10 : 0.07;
+      orbCurrent.lerp(isDraggingLight ? orbTarget : BELLY_ANCHOR, lerpFactor);
+
+      const dist = orbCurrent.distanceTo(BELLY_ANCHOR);
+      const targetExtract = isDraggingLight
+        ? Math.min(1, dist / 0.35)
+        : dist > 0.04
+          ? Math.min(1, dist / 0.35)
+          : 0;
+      extractAmount += (targetExtract - extractAmount) * 0.12;
+
+      // Update orb visuals
+      orbGroup.position.copy(orbCurrent);
+      const pulse = 1 + Math.sin(seconds * 3.0) * 0.05;
+      const scale = Math.max(0.001, extractAmount * pulse);
+      orbGroup.scale.setScalar(scale);
+      orbGroup.visible = extractAmount > 0.01;
+      coreMaterial.opacity = extractAmount * 0.95;
+      haloSpriteMaterial.opacity = extractAmount * 0.90;
+
+      // Dim only the belly glow as the orb leaves (wings stay at full)
+      const bellyFactor = 1 - extractAmount * 0.55;
+      cream.emissiveIntensity = glowUniform.value * bellyFactor;
+
+      // --- Gentle eye tracking ---
+      eyes.forEach((eye, i) => {
+        const side = i === 0 ? -1 : 1;
+        const baseRotY = side * 0.32;
+        if (extractAmount > 0.02) {
+          const lookY = THREE.MathUtils.clamp(
+            (orbCurrent.x - eye.position.x) * 0.28,
+            -0.22,
+            0.22,
+          ) * extractAmount;
+          const lookX = THREE.MathUtils.clamp(
+            -(orbCurrent.y - eye.position.y) * 0.25,
+            -0.18,
+            0.18,
+          ) * extractAmount;
+          eye.rotation.x = eyeBaseRotX + lookX;
+          eye.rotation.y = baseRotY + lookY;
+        } else {
+          // Smoothly return to base rotation
+          eye.rotation.x += (eyeBaseRotX - eye.rotation.x) * 0.08;
+          eye.rotation.y += (baseRotY - eye.rotation.y) * 0.08;
+        }
+      });
     },
     dispose() {
       const geometries = new Set<THREE.BufferGeometry>();
@@ -341,6 +476,8 @@ export function createMascot({
           list.forEach((material: THREE.Material) => materials.add(material));
         }
       });
+      // Also dispose orb-specific resources
+      glowTexture.dispose();
       geometries.forEach((geometry) => geometry.dispose());
       materials.forEach((material) => material.dispose());
       model.removeFromParent();
