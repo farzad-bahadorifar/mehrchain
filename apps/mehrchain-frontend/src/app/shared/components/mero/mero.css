@@ -72,3 +72,47 @@
   touch-action: none;
   cursor: grab;
 }
+
+/* Keep the canvas box stable even before global utility CSS becomes available. */
+.mero-frame {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  max-width: 100%;
+}
+.mero-frame[data-size='xs'] {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+.mero-frame[data-size='sm'] {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+.mero-frame[data-size='lg'] {
+  width: 8rem;
+  height: 8rem;
+}
+.mero-frame[data-size='hero'] {
+  width: 14rem;
+  height: 14rem;
+}
+@media (min-width: 40rem) {
+  .mero-frame[data-size='hero'] {
+    width: 16rem;
+    height: 16rem;
+  }
+}
+:host-context(.onboarding-welcome) .mero-frame[data-size='hero'] {
+  width: min(14rem, 28svh);
+  height: auto;
+  aspect-ratio: 1;
+}
+@media (max-height: 28rem) {
+  :host-context(.onboarding-welcome) .mero-frame[data-size='hero'] {
+    width: min(7rem, 20svh);
+  }
+}
