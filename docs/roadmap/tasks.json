@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated": "2026-10-29",
-  "lastId": 53,
+  "updated": "2026-11-02",
+  "lastId": 56,
   "tasks": [
     {
       "id": "T20",
@@ -671,7 +671,7 @@
       "type": "analysis",
       "area": "mero",
       "priority": "P2",
-      "status": "Ready",
+      "status": "Dropped",
       "goal": "A same-system HTML wireframe lets the owner try one bounded belly drag and choose accept/simplify/defer.",
       "scope": [
         "Existing Mero silhouette inside Profile and Welcome contexts",
@@ -734,12 +734,18 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/90"
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Dropped",
+          "evidence": "Owner 2026-11-02 directly requested correction of the shipped Three.js interaction. T54 replaces this unexecuted 2D study; no prototype approval or completion is claimed."
         }
       ],
       "contextRefs": [
         "D-001",
         "D-005"
-      ]
+      ],
+      "dropReason": "Owner 2026-11-02 directly requested correction of the shipped Three.js interaction. T54 replaces this unexecuted 2D study; no prototype approval or completion is claimed."
     },
     {
       "title": "Maintain atomic roadmap cards from one validated registry",
@@ -2759,6 +2765,286 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/112"
+        }
+      ]
+    },
+    {
+      "type": "bug",
+      "priority": "P1",
+      "contextRefs": [
+        "D-012",
+        "D-001",
+        "D-005"
+      ],
+      "outOfScope": [
+        "Reward thresholds, saved colors, redesign, deployment and physical Android/APK acceptance"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "title": "Repair whole-belly light dragging in Welcome and Profile locally",
+      "area": "mero",
+      "goal": "Locally, only Welcome hero and Profile overview allow a belly-start drag; its full glow travels across the viewport, leaving a dark belly, with visible eye tracking and safe return.",
+      "scope": [
+        "Explicit opt-in at the two intended instances",
+        "Viewport light overlay, whole-belly extraction, per-target rendering isolation",
+        "Pointer ownership, cancellation, outside scrolling, reduced motion and cleanup"
+      ],
+      "inputs": [
+        "Owner request and four screenshots dated 2026-11-02; prior commit da81981",
+        "apps/mehrchain-frontend/src/app/shared/components/mero/",
+        "apps/mehrchain-frontend/src/app/features/onboarding/onboarding.html",
+        "apps/mehrchain-frontend/src/app/features/profile/profile.html",
+        "Supersedes the unexecuted T31 2D study; does not claim its acceptance"
+      ],
+      "steps": [
+        "Confirm clipping, shared interaction and incomplete belly dimming",
+        "Repair local rendering and opt-in pointer lifecycle",
+        "Verify interaction, isolation, cleanup and production compilation"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Only the Welcome hero and Profile overview opt in; other mascots retain scrolling.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — Opt-in route bindings and component regression; other instances remain passive."
+        },
+        {
+          "id": "A2",
+          "text": "Dragging starts on the belly and the whole light can follow a pointer beyond the mascot canvas.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — Viewport layer and outside-canvas regression (850,700), plus actual renderer browser fixture."
+        },
+        {
+          "id": "A3",
+          "text": "The belly and its halo empty during extraction, eyes visibly track, release restores the original state and idle animation remains intact.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — Full material/shader/CSS halo extraction, visible eye displacement, restore and independent animation regressions."
+        },
+        {
+          "id": "A4",
+          "text": "Pointer ID, cancel, lost capture, visibility, route destruction and reduced-motion behavior are verified without cross-target contamination.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — Pointer ownership, cancel/capture-loss, cleanup and reduced-motion regressions; no shared-state leakage."
+        },
+        {
+          "id": "A5",
+          "text": "Targeted regressions and production frontend build pass; evidence states local versus device limits.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — 69 tests across 8 files and production frontend build passed; report separates desktop/local evidence from phone acceptance."
+        }
+      ],
+      "verify": [
+        "npx nx test mehrchain-frontend --watch=false --include=**/mero*.spec.ts",
+        "npm run build:frontend",
+        "Inspect running Welcome/Profile at phone widths; drag beyond canvas and release/cancel; inspect passive mascots"
+      ],
+      "id": "T54",
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/t54-mero-light.md"
+      ],
+      "history": [
+        {
+          "date": "2026-11-02",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — Opt-in route bindings and component regression; other instances remain passive."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Verified A2",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — Viewport layer and outside-canvas regression (850,700), plus actual renderer browser fixture."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Verified A3",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — Full material/shader/CSS halo extraction, visible eye displacement, restore and independent animation regressions."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Verified A4",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — Pointer ownership, cancel/capture-loss, cleanup and reduced-motion regressions; no shared-state leakage."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Verified A5",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md — 69 tests across 8 files and production frontend build passed; report separates desktop/local evidence from phone acceptance."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/t54-mero-light.md"
+        }
+      ]
+    },
+    {
+      "type": "bug",
+      "priority": "P1",
+      "contextRefs": [
+        "D-012",
+        "D-010",
+        "D-006"
+      ],
+      "outOfScope": [
+        "Reward thresholds, saved colors, redesign, deployment and physical Android/APK acceptance"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "title": "Keep first-launch app styling ready before rendering locally",
+      "area": "web-startup",
+      "goal": "The local production document blocks application first paint on its complete generated stylesheet, preventing an unstyled oversized Welcome mascot while CSS is delayed.",
+      "scope": [
+        "Production stylesheet loading contract",
+        "Explicit component size bounds independent of utility CSS",
+        "Delayed-stylesheet production regression evidence"
+      ],
+      "inputs": [
+        "Owner first-launch PWA screenshot dated 2026-11-02; no APK test reported",
+        "apps/mehrchain-frontend/project.json production styles optimization",
+        "apps/mehrchain-frontend/src/app/shared/components/mero/mero.css",
+        "T52 owns the separate update/reload investigation; T30 owns Profile device checks"
+      ],
+      "steps": [
+        "Inspect generated production index stylesheet loading and compare delayed CSS",
+        "Make full production CSS render-blocking and bound the mascot geometry",
+        "Verify production loading contract and document physical-PWA reproduction limits"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Production index loads full application styles with a normal render-blocking stylesheet link, without a print/onload switch.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t55-startup-styles.md — Emitted production document has one normal blocking stylesheet; guard passes and rejects the copied pre-fix print/onload document."
+        },
+        {
+          "id": "A2",
+          "text": "All mascot sizes have explicit component dimensions including constrained Welcome sizing.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t55-startup-styles.md — Explicit component dimensions preserve all sizes, with viewport-constrained Welcome hero; production Welcome measured 224px at 390x844."
+        },
+        {
+          "id": "A3",
+          "text": "A delayed-stylesheet production check demonstrates no unstyled application frame and normal layout after CSS arrives; physical PWA/APK acceptance remains explicitly unverified.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t55-startup-styles.md — Held-CSS browser comparison reproduces the old incomplete screen and suppresses it after correction; T56 retains physical installed-PWA acceptance."
+        }
+      ],
+      "verify": [
+        "npm run build:frontend",
+        "Run delayed stylesheet check against the built production app and inspect Welcome after load",
+        "node scripts/roadmap.cjs validate"
+      ],
+      "id": "T55",
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/t55-startup-styles.md"
+      ],
+      "history": [
+        {
+          "date": "2026-11-02",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/t55-startup-styles.md — Emitted production document has one normal blocking stylesheet; guard passes and rejects the copied pre-fix print/onload document."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Verified A2",
+          "evidence": "docs/roadmap/evidence/t55-startup-styles.md — Explicit component dimensions preserve all sizes, with viewport-constrained Welcome hero; production Welcome measured 224px at 390x844."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Verified A3",
+          "evidence": "docs/roadmap/evidence/t55-startup-styles.md — Held-CSS browser comparison reproduces the old incomplete screen and suppresses it after correction; T56 retains physical installed-PWA acceptance."
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/t55-startup-styles.md"
+        }
+      ]
+    },
+    {
+      "title": "Verify cold-start Welcome styling on installed Android PWA",
+      "type": "verification",
+      "area": "web-startup",
+      "priority": "P1",
+      "goal": "On a named Android device and served revision containing T55, repeated installed-PWA cold launches show the fully styled, correctly sized Welcome screen without the reported oversized mascot or bare buttons.",
+      "scope": [
+        "Installed Android PWA first-launch Welcome screen",
+        "Record Android/Chrome versions, display mode, served build and controlling worker",
+        "Compare a disposable fresh installation and existing-installation process restarts; five launches per case"
+      ],
+      "outOfScope": [
+        "APK acceptance",
+        "T52 update-banner Reload/Later diagnosis",
+        "Profile V2 layout acceptance owned by T30",
+        "Clearing real account data or claiming phone evidence from desktop fixtures"
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/t55-startup-styles.md",
+        "Owner first screenshot dated 2026-11-02",
+        "A deployed revision containing the T55 fix and an Android test device"
+      ],
+      "contextRefs": [
+        "D-012",
+        "D-010",
+        "D-006"
+      ],
+      "steps": [
+        "Identify deployed revision and worker; use a disposable test installation",
+        "Record first-paint video or time-stamped frames for five fresh-installation and five process-restart launches",
+        "Check mascot dimensions, full control styling and screen fit; attach exact failures as linked bugs"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Evidence identifies device, OS/browser, standalone display mode, serving revision and worker.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Ten recorded launches across the two cases contain no oversized mascot, unstyled controls or persistent blank screen.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Any remaining failure is recorded with frames, stylesheet state and reproduction, without an unsupported service-worker or Three.js cause.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "On Android, run and document the ten-launch matrix against the named deployed build; retain sanitized first-paint evidence."
+      ],
+      "dependsOn": [
+        "T55"
+      ],
+      "issue": null,
+      "id": "T56",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-11-02",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
         }
       ]
     }

@@ -10,5 +10,7 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T27 — Implement Profile A with four real destination routes](tasks/T27.md): Local app opens compact Profile and service-backed account, badges, colors and settings pages via direct URLs.
 - [T28 — Make username cancel/removal and route-failure feedback explicit](tasks/T28.md): Local username form retains failed drafts, cancels edits and removes a handle only after a named confirmation.
 - [T32 — Maintain atomic roadmap cards from one validated registry](tasks/T32.md): One local command workflow adds defined tasks, rejects unverified completion and renders only unfinished work in the active index with preserved history.
+- [T54 — Repair whole-belly light dragging in Welcome and Profile locally](tasks/T54.md): Locally, only Welcome hero and Profile overview allow a belly-start drag; its full glow travels across the viewport, leaving a dark belly, with visible eye tracking and safe return.
+- [T55 — Keep first-launch app styling ready before rendering locally](tasks/T55.md): The local production document blocks application first paint on its complete generated stylesheet, preventing an unstyled oversized Welcome mascot while CSS is delayed.
 
 Earlier implementation/acceptance records remain in [legacy disposition](legacy.md) and linked history.

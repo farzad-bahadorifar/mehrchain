@@ -58,7 +58,12 @@ subchecks, not partial implementation of four open discovery umbrellas. Its own
 card lists the full scoped result. T28 owns username UI safety/error presentation;
 T29 alone owns the actual deployed-route investigation. T21's former mixed scope
 is retired. Home/Chain/Journey specimens were palette context, not new logic.
-T31 is one bounded 2D belly-interaction review; further 3D work is unplanned.
+T31 originally defined one 2D belly-interaction review. On 2026-11-02 the owner
+directly requested correction of the already-shipped Three.js interaction. D-012
+and T54 supersede that unexecuted study; it is Dropped, not approved or completed.
+The existing design remains intact. T55/T56 separately track startup styling and
+installed-PWA cold-start acceptance. The analysis contract still applies to future
+UI studies.
 
 ## Future analysis intake
 

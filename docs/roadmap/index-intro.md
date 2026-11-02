@@ -93,7 +93,12 @@ only an approved result can become a separate implementation card. Pure domain o
 technical reports do not need an invented UI.
 
 T29 resumes only when its network blocker changes. T30's existing Profile phone
-acceptance remains independent and is not replaced by T51. T31 stays one bounded
-P2 Mero interaction study. Future topics use the same intake path. All
+acceptance remains independent and is not replaced by T51. The November 2 owner
+request supersedes the unexecuted T31 study; its history is retained as Dropped.
+T54 owns the local whole-belly drag repair, T55 the separate local startup-style
+fix, and T56 the installed Android PWA cold-start acceptance after deployment.
+See [D-012](context.md#d-012) and the [interaction evidence](evidence/t54-mero-light.md) /
+[startup evidence](evidence/t55-startup-styles.md). T52 still owns the separate
+update-notice investigation. Future topics use the same intake path. All
 project-authored development material, issue/PR text and application copy must be
 English; see [contributing](../../CONTRIBUTING.md).

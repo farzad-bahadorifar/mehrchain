@@ -93,8 +93,13 @@ only an approved result can become a separate implementation card. Pure domain o
 technical reports do not need an invented UI.
 
 T29 resumes only when its network blocker changes. T30's existing Profile phone
-acceptance remains independent and is not replaced by T51. T31 stays one bounded
-P2 Mero interaction study. Future topics use the same intake path. All
+acceptance remains independent and is not replaced by T51. The November 2 owner
+request supersedes the unexecuted T31 study; its history is retained as Dropped.
+T54 owns the local whole-belly drag repair, T55 the separate local startup-style
+fix, and T56 the installed Android PWA cold-start acceptance after deployment.
+See [D-012](roadmap/context.md#d-012) and the [interaction evidence](roadmap/evidence/t54-mero-light.md) /
+[startup evidence](roadmap/evidence/t55-startup-styles.md). T52 still owns the separate
+update-notice investigation. Future topics use the same intake path. All
 project-authored development material, issue/PR text and application copy must be
 English; see [contributing](../CONTRIBUTING.md).
 
@@ -105,7 +110,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | --- | --- | --- | --- | --- |
 | [T29](roadmap/tasks/T29.md) | Identify why the deployed username route fails | analysis | Blocked | P1 |
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Ready | P1 |
-| [T31](roadmap/tasks/T31.md) | Review one 2D belly-color interaction inside existing Mero | analysis | Ready | P2 |
 | [T33](roadmap/tasks/T33.md) | Define and audit completion-only heart eligibility | analysis | Ready | P1 |
 | [T34](roadmap/tasks/T34.md) | Review separate Connect and Show up views inside Chain | analysis | Ready | P1 |
 | [T35](roadmap/tasks/T35.md) | Define finite experiences versus Endless commitments | analysis | Ready | P1 |
@@ -127,7 +131,8 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T51](roadmap/tasks/T51.md) | Audit responsive frames across the current app route matrix | analysis | Ready | P2 |
 | [T52](roadmap/tasks/T52.md) | Explain web update activation and isolate the reported fit regression | analysis | Ready | P1 |
 | [T53](roadmap/tasks/T53.md) | Label Endless correctly in the Chain sharing selector | bug | Ready | P2 |
+| [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Ready | P1 |
 
-Updated: 2026-10-29, Asia/Tehran. Next ID: T54.
+Updated: 2026-11-02, Asia/Tehran. Next ID: T57.
 
 This table is generated; [tasks.json](roadmap/tasks.json) owns task status.

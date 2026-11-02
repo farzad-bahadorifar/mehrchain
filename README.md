@@ -2,9 +2,11 @@
 
 **Light your own lamp. Brighten the world.**
 
-تو مگو همه بِجَنگند و زِ صُلح من چه آید؟ تو یکی نه‌‌ای هزاری تو چراغِ خود بَراَفْروز
+<!-- PERSIAN_POEM:START -->
+تو مگو همه بِجَنگند و زِ صُلح من چه آید؟		تو یکی نه‌‌ای هزاری تو چراغِ خود بَراَفْروز
 
-که یکی چراغِ روشن زِ هزار مُرده بهتر که بِهْ است یک قَدِ خوش زِ هزارْ قامَتِ کوز
+که یکی چراغِ روشن زِ هزار مُرده بهتر		که بِهْ است یک قَدِ خوش زِ هزارْ قامَتِ کوز
+<!-- PERSIAN_POEM:END -->
 
 MehrChain is an open-source, mindful growth companion designed to help people commit to positive habits, nurture mental well-being, and spark supportive human connections through small, daily intentional actions.
 

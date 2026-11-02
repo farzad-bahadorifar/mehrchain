@@ -1,6 +1,6 @@
 # Decision memory, reasons and known constraints
 
-Updated **2026-10-29, Asia/Tehran**. Read before starting or adding work.
+Updated **2026-11-02, Asia/Tehran**. Read before starting or adding work.
 This document explains why the project took its current path; `tasks.json` alone
 owns task status. Do not investigate an unchanged known constraint as a new mystery.
 Do not treat an old observation as proof of today's live environment either.
@@ -262,6 +262,30 @@ local tests and historical/live operational observations are distinct evidence.
   assume email/SMS readiness (D-002/D-003), or apply an ambiguous absence schedule.
 - **Advance when:** a specific schedule/channel/privacy design is approved with
   platform limits and deduplication rules. Register implementation separately.
+
+## D-012
+
+**Subject: whole-belly light drag and the separate first-launch style defect.**
+
+- **Owner direction, 2026-11-02:** correct the existing Three.js interaction directly.
+  Only the large Welcome mascot and Profile overview may start a belly drag.
+  The whole luminous belly leaves its glow behind while its light can travel over
+  the entire viewport; eyes follow it and release/cancel returns it smoothly.
+  Keep body animation, saved colors and D-001 reward rules intact.
+- **Inspected baseline:** commit `da81981` enabled every shared canvas, clamped
+  model coordinates and rendered a small orb inside the mascot canvas. T31's old
+  2D study never accepted or tracked this production implementation.
+- **Source:** this owner request and four attached screenshots. Store no raw
+  account screenshots in the repository. The first image shows broadly missing
+  utility styling, not proof of a Three.js size defect or service-worker cause.
+- **Current action:** T54 owns the local interaction repair; T55 separately owns
+  the local first-paint stylesheet fix; T56 owns installed-PWA cold-start acceptance.
+  Retire T31's superseded study with a reason,
+  preserving its history. T30 and T52 retain their original device/update scope.
+- **Do not repeat:** enable dragging on Home, Chain, small auth mascots or color
+  previews; change rewards; claim Android/PWA/APK acceptance from local checks.
+- **Reopen when:** a named revision/device reproduces a remaining defect. Record
+  serving revision, display mode, stylesheet state and exact gesture first.
 
 ## Maintaining this memory
 
