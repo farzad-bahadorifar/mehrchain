@@ -43,6 +43,14 @@ describe('Mero scene presentation', () => {
     expect(model.position.y).toBe(0);
     expect(model.rotation.z).toBe(0);
     expect(wing.rotation.z).toBe(0);
+    scene.draw(target, 256, 'happy', 1, 1, true, null, { x: 8, y: 6, amount: 1 });
+    const belly = model.getObjectByName('Curved luminous belly') as THREE.Mesh<
+      THREE.BufferGeometry,
+      THREE.MeshStandardMaterial
+    >;
+    expect(belly.material.emissiveIntensity).toBe(0);
+    scene.draw(target, 80, 'reference', 1, 1, false);
+    expect(belly.material.emissiveIntensity).toBe(1);
     scene.dispose();
   });
 });

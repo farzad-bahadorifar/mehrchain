@@ -53,6 +53,11 @@ export function createMeroScene(detail: MascotDetail, onContextLost: () => void)
   return {
     mascot,
     camera,
+    // Apply the animated model's inverse transform for hit testing and gaze.
+    localPoint(x: number, y: number) {
+      mascot.model.updateMatrixWorld(true);
+      return mascot.model.worldToLocal(new THREE.Vector3(x * camera.right, y * camera.top, 0.7));
+    },
     draw(
       target: CanvasRenderingContext2D,
       size: number,
@@ -61,6 +66,7 @@ export function createMeroScene(detail: MascotDetail, onContextLost: () => void)
       seconds: number,
       animated: boolean,
       glowColor: string | null = null,
+      light: { x: number; y: number; amount: number } | null = null,
     ) {
       if (pixels !== size) {
         renderer.setSize(size, size, false);
@@ -69,6 +75,7 @@ export function createMeroScene(detail: MascotDetail, onContextLost: () => void)
       mascot.setMood(mood);
       mascot.setGlow(glow);
       mascot.setGlowColor(glowColor);
+      mascot.setLightState(light, light?.amount ?? 0);
       mascot.update(seconds, animated, animated);
       renderer.render(scene, camera);
       if (target.canvas.width !== size || target.canvas.height !== size) {

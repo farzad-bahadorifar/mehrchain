@@ -62,4 +62,33 @@ describe('Mero procedural geometry', () => {
     expect(left.rotation.z).toBe(0);
     mascot.dispose();
   });
+  it('empties the full belly, visibly follows distant light and resets every shared draw', () => {
+    const mascot = createMascot({ mood: 'happy', detail: 'low' });
+    const belly = mascot.model.getObjectByName('Curved luminous belly') as THREE.Mesh<
+      THREE.BufferGeometry,
+      THREE.MeshStandardMaterial
+    >;
+    const leftEye = mascot.model.getObjectByName('Left eye')!;
+    const wing = mascot.model.getObjectByName('Left flipper')!;
+    const initialEye = leftEye.position.clone();
+    const initialColor = belly.material.color.clone();
+    mascot.setLightState({ x: 10, y: 8 }, 1);
+    mascot.update(1, true, true);
+    expect(belly.material.emissiveIntensity).toBe(0);
+    expect(belly.material.color.equals(initialColor)).toBe(false);
+    expect(leftEye.position.x - initialEye.x).toBeGreaterThan(0.04);
+    expect(leftEye.position.y - initialEye.y).toBeGreaterThan(0.03);
+    expect(mascot.model.position.y).not.toBe(0);
+    expect(wing.rotation.z).not.toBe(0);
+    mascot.setLightState({ x: -10, y: -8 }, 1);
+    mascot.update(1, true, true);
+    expect(leftEye.position.x).toBeLessThan(initialEye.x);
+    expect(leftEye.position.y).toBeLessThan(initialEye.y);
+    mascot.setLightState(null);
+    mascot.update(1, true, true);
+    expect(belly.material.emissiveIntensity).toBe(1);
+    expect(belly.material.color.equals(initialColor)).toBe(true);
+    expect(leftEye.position.equals(initialEye)).toBe(true);
+    mascot.dispose();
+  });
 });

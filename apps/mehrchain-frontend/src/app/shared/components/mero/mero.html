@@ -11,7 +11,6 @@
         : 'Mero, smiling'
   "
 >
-  <!-- Warm Belly Glow Light -->
   @if (showGlow()) {
     <div class="mero-belly-glow" [style.background]="effectiveGradient()"></div>
   }
@@ -25,4 +24,5 @@
     [class.mero-canvas--ready]="ready()"
     aria-hidden="true"
   ></canvas>
+  <div #lightHandle class="mero-light-handle" aria-hidden="true"></div>
 </div>

@@ -85,6 +85,17 @@ describe('MeroComponent', () => {
     expect(target.update).toHaveBeenLastCalledWith(expect.objectContaining({ mood: 'happy' }));
   });
 
+  it('keeps interaction off by default and forwards an explicit opt-in', async () => {
+    await fixture.whenStable();
+    expect(renderer.attach.mock.lastCall![1].interactive).toBe(false);
+    expect(renderer.attach.mock.lastCall![3]).toBe(
+      fixture.nativeElement.querySelector('.mero-light-handle'),
+    );
+    fixture.componentRef.setInput('interactive', true);
+    fixture.detectChanges();
+    expect(target.update).toHaveBeenLastCalledWith(expect.objectContaining({ interactive: true }));
+  });
+
   it('previews a draft color and returns to the account color when cleared', async () => {
     await fixture.whenStable();
     fixture.componentRef.setInput('previewColor', '#f43f5e');

@@ -37,6 +37,8 @@ export class MeroComponent {
 
   // Inputs
   size = input<MeroSize>('md');
+  interactive = input(false);
+  private readonly lightHandle = viewChild.required<ElementRef<HTMLElement>>('lightHandle');
   mood = input<MascotMood>('reference');
   showGlow = input<boolean>(true);
   customGradient = input<string | null>(null);
@@ -47,6 +49,7 @@ export class MeroComponent {
     effect(() => {
       const options = {
         mood: this.mood(),
+        interactive: this.interactive(),
         glow: this.showGlow() ? 1 : 0.75,
         size: this.pixels(),
         glowColor:
@@ -63,6 +66,7 @@ export class MeroComponent {
         canvas,
         {
           mood: this.mood(),
+          interactive: this.interactive(),
           glow: this.showGlow() ? 1 : 0.75,
           size: this.pixels(),
           glowColor:
@@ -71,6 +75,7 @@ export class MeroComponent {
               : (this.previewColor() ?? null),
         },
         (state) => this.renderState.set(state),
+        this.lightHandle().nativeElement,
       );
       this.zone.runOutsideAngular(() => {
         const resize =

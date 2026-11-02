@@ -10,6 +10,7 @@ export const MERO_SCENE_LOADER = new InjectionToken<() => Promise<typeof import(
 );
 
 export interface MeroRenderOptions {
+  interactive?: boolean;
   mood: MascotMood;
   glow: number;
   size: number;
@@ -26,7 +27,9 @@ interface MeroTarget {
   state: MeroRenderState;
   presentedKey?: string;
   notify: (state: MeroRenderState) => void;
-  _cleanupPointer?: () => void;
+  cleanupPointer?: () => void;
+  lightHandle?: HTMLElement;
+  halo?: HTMLElement | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -67,18 +70,34 @@ export class MeroRendererService implements OnDestroy {
       : {},
   );
 
-  // --- Belly light drag state ---
-  private draggingTarget?: MeroTarget;
-  private isDragging = false;
+  private light?: {
+    target: MeroTarget;
+    overlay: HTMLElement;
+    pointerId: number | null;
+    x: number;
+    y: number;
+    destinationX: number;
+    destinationY: number;
+    offsetX: number;
+    offsetY: number;
+    amount: number;
+    lastTime?: number;
+  };
 
   constructor() {
     if (this.browser) {
       this.document.addEventListener('visibilitychange', this.onVisibilityChange);
       this.motion?.addEventListener('change', this.onMotionChange);
+      this.document.defaultView?.addEventListener('blur', this.onWindowBlur);
     }
   }
 
-  attach(canvas: HTMLCanvasElement, options: MeroRenderOptions, notify: MeroTarget['notify']) {
+  attach(
+    canvas: HTMLCanvasElement,
+    options: MeroRenderOptions,
+    notify: MeroTarget['notify'],
+    lightHandle?: HTMLElement,
+  ) {
     let context: CanvasRenderingContext2D | null = null;
     try {
       if (
@@ -100,88 +119,16 @@ export class MeroRendererService implements OnDestroy {
       if (typeof WebGL2RenderingContext === 'undefined') this.unavailable = true;
       if (this.unavailable && target.state !== 'ready') this.setState(target, 'unavailable');
 
-      // --- Belly light pointer events ---
-      const canvasEl = canvas;
-      const ndcFromPointer = (e: PointerEvent): [number, number] => {
-        const rect = canvasEl.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-        return [x, y];
-      };
-
-      const unprojectToModelLocal = (ndcX: number, ndcY: number): { x: number; y: number; z: number } | null => {
-        if (!this.scene) return null;
-        const camera = this.scene.camera;
-        const model = this.scene.mascot.model;
-        // For orthographic camera, NDC maps linearly to world coordinates
-        const worldX = ndcX * (camera.right as number);
-        const worldY = ndcY * (camera.top as number);
-        // Transform from world to model-local (model has idle animation offset)
-        const localX = worldX - model.position.x;
-        const localY = worldY - model.position.y;
-        return { x: localX, y: localY, z: 0.55 };
-      };
-
-      const onPointerDown = (e: PointerEvent) => {
-        if (this.isDragging || !this.scene) return;
-        const [ndcX, ndcY] = ndcFromPointer(e);
-        // Check if pointer is near belly region
-        if (Math.abs(ndcX) <= 0.55 && ndcY >= -0.75 && ndcY <= 0.25) {
-          this.isDragging = true;
-          this.draggingTarget = target;
-          try {
-            canvasEl.setPointerCapture?.(e.pointerId);
-          } catch {
-            // Pointer capture is optional and may fail on untracked pointer IDs
-          }
-          canvasEl.style.cursor = 'grabbing';
-          const local = unprojectToModelLocal(ndcX, ndcY);
-          if (local && this.scene) {
-            this.scene.mascot.setLightDragTarget(local);
-          }
-          this.schedule();
-        }
-      };
-
-      const onPointerMove = (e: PointerEvent) => {
-        if (!this.isDragging || !this.scene || this.draggingTarget !== target) return;
-        const [ndcX, ndcY] = ndcFromPointer(e);
-        const local = unprojectToModelLocal(ndcX, ndcY);
-        if (local) {
-          this.scene.mascot.setLightDragTarget(local);
-        }
-        this.schedule();
-      };
-
-      const onPointerEnd = () => {
-        if (!this.isDragging || this.draggingTarget !== target) return;
-        this.isDragging = false;
-        this.draggingTarget = undefined;
-        canvasEl.style.cursor = 'grab';
-        if (this.scene) {
-          this.scene.mascot.setLightDragTarget(null);
-        }
-        this.schedule();
-      };
-
-      canvasEl.addEventListener('pointerdown', onPointerDown);
-      canvasEl.addEventListener('pointermove', onPointerMove);
-      canvasEl.addEventListener('pointerup', onPointerEnd);
-      canvasEl.addEventListener('pointercancel', onPointerEnd);
-      canvasEl.addEventListener('lostpointercapture', onPointerEnd);
-
-      target._cleanupPointer = () => {
-        canvasEl.removeEventListener('pointerdown', onPointerDown);
-        canvasEl.removeEventListener('pointermove', onPointerMove);
-        canvasEl.removeEventListener('pointerup', onPointerEnd);
-        canvasEl.removeEventListener('pointercancel', onPointerEnd);
-        canvasEl.removeEventListener('lostpointercapture', onPointerEnd);
-      };
+      target.lightHandle = lightHandle;
+      target.halo = canvas.parentElement?.querySelector<HTMLElement>('.mero-belly-glow');
+      this.bindLight(target, lightHandle ?? canvas);
     } else notify('unavailable');
     return {
       update: (next: MeroRenderOptions) => {
         if (!target || !this.targets.has(target)) return;
         target.options = next;
+        this.updateHandle(target);
+        if (!next.interactive && this.light?.target === target) this.clearLight();
         target.dirty = true;
         if (target.presentedKey !== this.key(next)) {
           if (!this.restore(target)) {
@@ -194,13 +141,16 @@ export class MeroRendererService implements OnDestroy {
       setVisible: (visible: boolean) => {
         if (!target || !this.targets.has(target) || target.visible === visible) return;
         target.visible = visible;
+        if (!visible && this.light?.target === target) this.clearLight();
+        this.updateHandle(target);
         target.dirty = true;
         if (visible) this.schedule();
         else if (![...this.targets].some((item) => item.visible)) this.cancelFrame();
       },
       destroy: () => {
         if (target) {
-          target._cleanupPointer?.();
+          if (this.light?.target === target) this.clearLight();
+          target.cleanupPointer?.();
           this.targets.delete(target);
         }
         if (this.targets.size === 0) {
@@ -211,6 +161,188 @@ export class MeroRendererService implements OnDestroy {
     };
   }
 
+  private updateHandle(target: MeroTarget) {
+    if (target.lightHandle) {
+      target.lightHandle.style.display =
+        target.options.interactive &&
+        target.visible &&
+        target.state === 'ready' &&
+        !this.unavailable
+          ? 'block'
+          : 'none';
+    }
+  }
+
+  private localPoint(target: MeroTarget, x: number, y: number) {
+    const rect = target.context.canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+    return (
+      this.scene?.localPoint(
+        ((x - rect.left) / rect.width) * 2 - 1,
+        1 - ((y - rect.top) / rect.height) * 2,
+      ) ?? null
+    );
+  }
+
+  private anchor(target: MeroTarget) {
+    const rect = target.context.canvas.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height * (0.5 + 61 / 504) };
+  }
+
+  private bindLight(target: MeroTarget, handle: HTMLElement) {
+    const down = (event: PointerEvent) => {
+      if (
+        !target.options.interactive ||
+        !target.visible ||
+        target.state !== 'ready' ||
+        this.unavailable ||
+        this.light ||
+        event.button !== 0 ||
+        event.isPrimary === false
+      )
+        return;
+      const point = this.localPoint(target, event.clientX, event.clientY);
+      if (
+        !point ||
+        Math.pow(Math.abs(point.x / 0.7), 2 / 0.92) +
+          Math.pow(Math.abs((point.y + 61 / 180) / (100 / 180)), 2 / 0.92) >
+          1
+      )
+        return;
+      const anchor = this.anchor(target);
+      const overlay = this.document.createElement('div');
+      overlay.className = 'mero-detached-light';
+      overlay.setAttribute('aria-hidden', 'true');
+      // A body-level, non-interactive layer escapes card/shell/canvas clipping.
+      overlay.style.cssText =
+        'position:fixed;pointer-events:none;z-index:10000;left:0;top:0;' +
+        'border-radius:50%;transform:translate(-50%,-50%);opacity:0;';
+      this.document.body.appendChild(overlay);
+      this.light = {
+        target,
+        overlay,
+        pointerId: event.pointerId,
+        x: anchor.x,
+        y: anchor.y,
+        destinationX: anchor.x,
+        destinationY: anchor.y,
+        amount: 0,
+        offsetX: anchor.x - event.clientX,
+        offsetY: anchor.y - event.clientY,
+      };
+      try {
+        handle.setPointerCapture?.(event.pointerId);
+      } catch {
+        /* Document listeners remain active. */
+      }
+      handle.style.cursor = 'grabbing';
+      event.preventDefault();
+      event.stopPropagation();
+      this.schedule();
+    };
+    const move = (event: PointerEvent) => {
+      const light = this.light;
+      if (!light || light.target !== target || event.pointerId !== light.pointerId) return;
+      light.destinationX = event.clientX + light.offsetX;
+      light.destinationY = event.clientY + light.offsetY;
+      event.preventDefault();
+      this.schedule();
+    };
+    const end = (event: PointerEvent) => {
+      const light = this.light;
+      if (!light || light.target !== target || event.pointerId !== light.pointerId) return;
+      light.pointerId = null;
+      handle.style.cursor = 'grab';
+      try {
+        if (handle.hasPointerCapture?.(event.pointerId))
+          handle.releasePointerCapture(event.pointerId);
+      } catch {
+        /* Capture may already have been released by the browser. */
+      }
+      if (this.motion?.matches) this.clearLight();
+      this.schedule();
+    };
+    // Do not let the onboarding touch-swipe recognizer turn a light drag into navigation.
+    const stopTouch = (event: TouchEvent) => event.stopPropagation();
+    handle.addEventListener('pointerdown', down);
+    handle.addEventListener('lostpointercapture', end);
+    handle.addEventListener('touchstart', stopTouch);
+    this.document.addEventListener('pointermove', move, { passive: false });
+    this.document.addEventListener('pointerup', end);
+    this.document.addEventListener('pointercancel', end);
+    target.cleanupPointer = () => {
+      handle.removeEventListener('pointerdown', down);
+      handle.removeEventListener('lostpointercapture', end);
+      handle.removeEventListener('touchstart', stopTouch);
+      this.document.removeEventListener('pointermove', move);
+      this.document.removeEventListener('pointerup', end);
+      this.document.removeEventListener('pointercancel', end);
+    };
+  }
+
+  private advanceLight(time: number) {
+    const light = this.light;
+    if (!light) return;
+    const anchor = this.anchor(light.target);
+    const dt = Math.min(0.05, Math.max(0, (time - (light.lastTime ?? time - 16)) / 1000));
+    light.lastTime = time;
+    const returning = light.pointerId === null;
+    const blend = this.motion?.matches ? 1 : 1 - Math.exp(-(returning ? 9 : 25) * dt);
+    light.x += ((returning ? anchor.x : light.destinationX) - light.x) * blend;
+    light.y += ((returning ? anchor.y : light.destinationY) - light.y) * blend;
+    const size = light.target.context.canvas.getBoundingClientRect().width;
+    const distance = Math.hypot(light.x - anchor.x, light.y - anchor.y);
+    light.amount = Math.min(1, distance / Math.max(1, size * 0.25));
+    if (light.target.halo) light.target.halo.style.opacity = String(0.8 * (1 - light.amount));
+    const selected = light.target.options.glowColor;
+    const color = selected && /^#[0-9a-f]{6}$/i.test(selected) ? selected : '#fff6ad';
+    Object.assign(light.overlay.style, {
+      left: light.x + 'px',
+      top: light.y + 'px',
+      width: size * 0.9 + 'px',
+      height: size * 0.72 + 'px',
+      opacity: String(light.amount),
+      background:
+        'radial-gradient(ellipse, ' +
+        color +
+        ' 0%, ' +
+        color +
+        ' 38%, ' +
+        color +
+        'cc 50%, ' +
+        color +
+        '44 64%, ' +
+        color +
+        '00 74%)',
+    });
+    if (returning && distance < 0.3) this.clearLight();
+  }
+
+  private lightState(target: MeroTarget) {
+    if (this.light?.target !== target) return null;
+    const point = this.localPoint(target, this.light.x, this.light.y);
+    return point ? { x: point.x, y: point.y, amount: this.light.amount } : null;
+  }
+
+  private clearLight() {
+    const light = this.light;
+    if (!light) return;
+    this.light = undefined;
+    light.overlay.remove();
+    light.target.halo?.style.removeProperty('opacity');
+    light.target.dirty = true;
+    const handle = light.target.lightHandle ?? light.target.context.canvas;
+    handle.style.cursor = 'grab';
+    if (light.pointerId !== null) {
+      try {
+        if (handle.hasPointerCapture?.(light.pointerId))
+          handle.releasePointerCapture(light.pointerId);
+      } catch {
+        /* The target may already be detached. */
+      }
+    }
+  }
+
   private key(options: MeroRenderOptions) {
     return JSON.stringify([options.mood, options.glow, options.glowColor ?? null]);
   }
@@ -218,6 +350,7 @@ export class MeroRendererService implements OnDestroy {
   private setState(target: MeroTarget, state: MeroRenderState) {
     if (target.state === state) return;
     target.state = state;
+    this.updateHandle(target);
     target.notify(state);
   }
 
@@ -278,14 +411,22 @@ export class MeroRendererService implements OnDestroy {
   }
 
   private readonly onVisibilityChange = () => {
-    if (this.document.hidden) this.cancelFrame();
-    else {
+    if (this.document.hidden) {
+      this.clearLight();
+      this.cancelFrame();
+    } else {
       this.targets.forEach((target) => (target.dirty = true));
       this.schedule();
     }
   };
 
+  private readonly onWindowBlur = () => {
+    this.clearLight();
+    this.schedule();
+  };
+
   private readonly onMotionChange = () => {
+    if (this.motion?.matches && this.light?.pointerId === null) this.clearLight();
     this.targets.forEach((target) => (target.dirty = true));
     this.schedule();
   };
@@ -344,8 +485,9 @@ export class MeroRendererService implements OnDestroy {
   private readonly render = (time: number) => {
     this.frame = undefined;
     if (!this.scene || this.document.hidden) return;
-    const orbActive = this.isDragging || (this.scene.mascot.getExtractAmount() > 0.005);
-    const moving = orbActive || [...this.targets].some((target) => target.visible && this.animated(target));
+    const orbActive = !!this.light;
+    const moving =
+      orbActive || [...this.targets].some((target) => target.visible && this.animated(target));
     const dirty = [...this.targets].some((target) => target.visible && target.dirty);
     if (!dirty && time - this.lastFrame < this.policy.frameInterval) {
       if (moving) this.schedule();
@@ -353,8 +495,13 @@ export class MeroRendererService implements OnDestroy {
     }
     const started = performance.now();
     try {
+      this.advanceLight(time);
       for (const target of this.targets) {
-        if (!target.visible || (!target.dirty && !this.animated(target) && !orbActive)) continue;
+        if (
+          !target.visible ||
+          (!target.dirty && !this.animated(target) && this.light?.target !== target)
+        )
+          continue;
         const pixels = Math.max(
           1,
           Math.min(
@@ -376,9 +523,10 @@ export class MeroRendererService implements OnDestroy {
           time / 1000,
           this.animated(target),
           target.options.glowColor ?? null,
+          this.lightState(target),
         );
         if (this.unavailable) return;
-        if (target.dirty) this.remember(target);
+        if (target.dirty && this.light?.target !== target) this.remember(target);
         target.dirty = false;
         target.presentedKey = this.key(target.options);
         this.setState(target, 'ready');
@@ -398,6 +546,7 @@ export class MeroRendererService implements OnDestroy {
   };
 
   private fail() {
+    this.clearLight();
     this.unavailable = true;
     this.cancelFrame();
     this.cancelRelease();
@@ -407,6 +556,7 @@ export class MeroRendererService implements OnDestroy {
         this.setState(target, 'unavailable');
       }
     });
+    this.targets.forEach((target) => this.updateHandle(target));
     this.scene?.dispose();
     this.scene = undefined;
   }
@@ -417,11 +567,14 @@ export class MeroRendererService implements OnDestroy {
   }
 
   ngOnDestroy() {
+    this.clearLight();
+    this.targets.forEach((target) => target.cleanupPointer?.());
     this.destroyed = true;
     this.cancelFrame();
     this.cancelRelease();
     this.document.removeEventListener('visibilitychange', this.onVisibilityChange);
     this.motion?.removeEventListener('change', this.onMotionChange);
+    this.document.defaultView?.removeEventListener('blur', this.onWindowBlur);
     this.scene?.dispose();
     this.scene = undefined;
     this.targets.clear();

@@ -10,6 +10,7 @@ describe('Mero shared rendering lifecycle', () => {
   let loader: ReturnType<typeof vi.fn<() => Promise<{ createMeroScene: typeof createMeroScene }>>>;
   let scene: {
     mascot: ReturnType<typeof createMeroScene>['mascot'];
+    localPoint: ReturnType<typeof createMeroScene>['localPoint'];
     camera: ReturnType<typeof createMeroScene>['camera'];
     draw: ReturnType<typeof vi.fn<ReturnType<typeof createMeroScene>['draw']>>;
     dispose: ReturnType<typeof vi.fn<() => void>>;
@@ -25,8 +26,7 @@ describe('Mero shared rendering lifecycle', () => {
       model: {
         position: { x: 0, y: 0, z: 0 },
       },
-      setLightDragTarget: vi.fn(),
-      getExtractAmount: vi.fn().mockReturnValue(0),
+      setLightState: vi.fn(),
       setGlowColor: vi.fn(),
       setGlow: vi.fn(),
       setMood: vi.fn(),
@@ -42,6 +42,10 @@ describe('Mero shared rendering lifecycle', () => {
     scene = {
       mascot: mockMascot,
       camera: mockCamera,
+      localPoint: (x, y) =>
+        ({ x: x * 1.4, y: y * 1.4, z: 0.7 }) as ReturnType<
+          ReturnType<typeof createMeroScene>['localPoint']
+        >,
       draw: vi.fn((target, size) => {
         target.canvas.width = size;
         target.canvas.height = size;
@@ -86,6 +90,17 @@ describe('Mero shared rendering lifecycle', () => {
 
   function attach(next = options) {
     const canvas = document.createElement('canvas');
+    const parent = document.createElement('div');
+    parent.appendChild(canvas);
+    const halo = document.createElement('div');
+    halo.className = 'mero-belly-glow';
+    parent.appendChild(halo);
+    vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue({
+      left: 100,
+      top: 100,
+      width: 200,
+      height: 200,
+    } as DOMRect);
     const ready = vi.fn();
     return { handle: service.attach(canvas, next, ready), ready, canvas };
   }
@@ -311,6 +326,122 @@ describe('Mero shared rendering lifecycle', () => {
     expect(factory).toHaveBeenCalledWith('low', expect.any(Function));
     expect(scene.draw.mock.lastCall?.[1]).toBe(256);
     expect(scene.draw.mock.lastCall?.[5]).toBe(false);
+    expect(frames.size).toBe(0);
+  });
+  function pointer(target: EventTarget, type: string, x = 200, y = 224, id = 1) {
+    const event = new MouseEvent(type, {
+      clientX: x,
+      clientY: y,
+      button: 0,
+      bubbles: true,
+      cancelable: true,
+    });
+    Object.defineProperties(event, { pointerId: { value: id }, isPrimary: { value: true } });
+    target.dispatchEvent(event);
+    return event;
+  }
+
+  it('allows only opted-in belly starts and carries the whole light beyond its canvas', async () => {
+    const passive = attach();
+    const active = attach({ ...options, interactive: true });
+    await visible(passive.handle);
+    await visible(active.handle);
+    frame();
+    pointer(passive.canvas, 'pointerdown');
+    expect(document.querySelector('.mero-detached-light')).toBeNull();
+    pointer(active.canvas, 'pointerdown', 200, 120);
+    expect(document.querySelector('.mero-detached-light')).toBeNull();
+    expect(pointer(active.canvas, 'pointerdown').defaultPrevented).toBe(true);
+    pointer(document, 'pointermove', 850, 700);
+    for (let i = 1; i < 15; i++) frame(100 + i * 50);
+    const overlay = document.querySelector<HTMLElement>('.mero-detached-light')!;
+    expect(overlay.parentElement).toBe(document.body);
+    expect(parseFloat(overlay.style.left)).toBeGreaterThan(800);
+    expect(parseFloat(overlay.style.top)).toBeGreaterThan(650);
+    expect(overlay.style.width).toBe('180px');
+    expect(overlay.style.pointerEvents).toBe('none');
+    expect(
+      (active.canvas.parentElement!.querySelector('.mero-belly-glow') as HTMLElement).style.opacity,
+    ).toBe('0');
+    expect(scene.draw.mock.lastCall?.[7]).toEqual(expect.objectContaining({ amount: 1 }));
+    passive.handle.update({ ...options, glowColor: '#06b6d4' });
+    frame(900);
+    expect(
+      [...scene.draw.mock.calls].reverse().find((call) => call[6] === '#06b6d4')?.[7],
+    ).toBeNull();
+    pointer(document, 'pointerup');
+    for (let i = 1; i < 35; i++) frame(900 + i * 50);
+    expect(document.querySelector('.mero-detached-light')).toBeNull();
+    expect(scene.draw.mock.lastCall?.[7]).toBeNull();
+    expect(
+      (active.canvas.parentElement!.querySelector('.mero-belly-glow') as HTMLElement).style.opacity,
+    ).toBe('');
+    expect(frames.size).toBe(0);
+  });
+
+  it('ignores a second pointer and safely returns after cancellation or capture loss', async () => {
+    const active = attach({ ...options, interactive: true });
+    await visible(active.handle);
+    frame();
+    pointer(active.canvas, 'pointerdown');
+    pointer(document, 'pointermove', 800, 700, 2);
+    frame(150);
+    expect(document.querySelector<HTMLElement>('.mero-detached-light')!.style.opacity).toBe('0');
+    pointer(document, 'pointerup', 200, 224, 2);
+    pointer(document, 'pointermove', 800, 700);
+    frame(200);
+    expect(
+      Number(document.querySelector<HTMLElement>('.mero-detached-light')!.style.opacity),
+    ).toBeGreaterThan(0);
+    pointer(document, 'pointercancel');
+    for (let i = 1; i < 35; i++) frame(200 + i * 50);
+    expect(document.querySelector('.mero-detached-light')).toBeNull();
+    pointer(active.canvas, 'pointerdown');
+    pointer(active.canvas, 'lostpointercapture');
+    frame(2000);
+    expect(document.querySelector('.mero-detached-light')).toBeNull();
+  });
+
+  it.each(['hidden view', 'hidden tab', 'destroy', 'opt out', 'context loss', 'window blur'])(
+    'cleans up an active light on %s',
+    async (reason) => {
+      const active = attach({ ...options, interactive: true });
+      await visible(active.handle);
+      frame();
+      pointer(active.canvas, 'pointerdown');
+      pointer(document, 'pointermove', 800, 700);
+      frame(150);
+      if (reason === 'hidden view') active.handle.setVisible(false);
+      if (reason === 'hidden tab') {
+        visibility.mockReturnValue(true);
+        document.dispatchEvent(new Event('visibilitychange'));
+      }
+      if (reason === 'destroy') active.handle.destroy();
+      if (reason === 'opt out') active.handle.update(options);
+      if (reason === 'context loss') factory.mock.calls[0][1]();
+      if (reason === 'window blur') window.dispatchEvent(new Event('blur'));
+      expect(document.querySelector('.mero-detached-light')).toBeNull();
+      pointer(document, 'pointermove', 900, 900);
+      expect(document.querySelector('.mero-detached-light')).toBeNull();
+    },
+  );
+
+  it('keeps reduced motion direct and restores immediately on release', async () => {
+    motion.matches = true;
+    const active = attach({ ...options, interactive: true });
+    await visible(active.handle);
+    frame();
+    pointer(active.canvas, 'pointerdown');
+    pointer(document, 'pointermove', 800, 700);
+    frame(150);
+    expect(
+      parseFloat(document.querySelector<HTMLElement>('.mero-detached-light')!.style.left),
+    ).toBeGreaterThan(790);
+    expect(scene.draw.mock.lastCall?.[5]).toBe(false);
+    pointer(document, 'pointerup');
+    frame(200);
+    expect(document.querySelector('.mero-detached-light')).toBeNull();
+    expect(scene.draw.mock.lastCall?.[7]).toBeNull();
     expect(frames.size).toBe(0);
   });
 });
