@@ -118,7 +118,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | --- | --- | --- | --- | --- |
 | [T29](roadmap/tasks/T29.md) | Identify why the deployed username route fails | analysis | Blocked | P1 |
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Ready | P1 |
-| [T40](roadmap/tasks/T40.md) | Review shared memories by ongoing, successful and unfinished outcomes | analysis | Ready | P2 |
 | [T42](roadmap/tasks/T42.md) | Review a voluntary Why offer after Endless progress | analysis | Ready | P2 |
 | [T43](roadmap/tasks/T43.md) | Review one absence reminder and archive-message schedule | analysis | Ready | P1 |
 | [T44](roadmap/tasks/T44.md) | Review a private partner nudge with one exact anti-spam limit | analysis | Ready | P2 |

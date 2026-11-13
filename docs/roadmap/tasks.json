@@ -1821,32 +1821,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t40-shared-memory-details/index.html v0.1 provides comparison of Ongoing, Successfully Finished, and Left Unfinished on consistent layout with analysis.md documenting source fidelity."
         },
         {
           "id": "A2",
           "text": "Category labels/outcomes match T37; one person finishing cannot appear as joint success prematurely.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Outcome categories match T37 definitions; record c2 explicitly validates that an early finisher remains labeled Ongoing and does not claim joint success prematurely."
         },
         {
           "id": "A3",
           "text": "Details preserve the earlier experience and partner-safe identity while withholding private Why and named support.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Detail view displays shared days, participant commitments, and dates while strictly withholding private Why and anonymous support counts."
         },
         {
           "id": "A4",
           "text": "Reconnect/new invitation is an explicit separate flow; old support and connections never revive in a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Reconnecting is an explicit separate button generating a fresh invite link; old connections and support are never revived."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "checklist.md confirms testing across 320px, 390px, desktop, both color themes, and accessible keyboard focus with zero overflow."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming false device deployment."
         }
       ],
       "verify": [
@@ -1857,8 +1863,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/99",
       "id": "T40",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t40-shared-memory-details/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 6 criteria verified."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -1869,6 +1877,41 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/99"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "design/ux/t40-shared-memory-details/index.html v0.1 provides comparison of Ongoing, Successfully Finished, and Left Unfinished on consistent layout with analysis.md documenting source fidelity."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "Outcome categories match T37 definitions; record c2 explicitly validates that an early finisher remains labeled Ongoing and does not claim joint success prematurely."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "Detail view displays shared days, participant commitments, and dates while strictly withholding private Why and anonymous support counts."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "Reconnecting is an explicit separate button generating a fresh invite link; old connections and support are never revived."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "checklist.md confirms testing across 320px, 390px, desktop, both color themes, and accessible keyboard focus with zero overflow."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A6",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming false device deployment."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "design/ux/t40-shared-memory-details/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 6 criteria verified."
         }
       ]
     },

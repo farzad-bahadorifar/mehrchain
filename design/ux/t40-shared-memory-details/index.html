@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MehrChain · T40: Shared Memories by Outcome Categories</title>
+<style>
+:root {
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --primary-light: rgba(13, 148, 136, 0.1);
+  --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --neutral-gray: #64748b;
+  --neutral-bg: rgba(100, 116, 139, 0.1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #090d16;
+    --card-bg: #111827;
+    --foreground: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #1f293d;
+    --primary: #14b8a6;
+    --primary-foreground: #042f2e;
+    --primary-light: rgba(20, 184, 166, 0.15);
+    --success: #34d399;
+    --success-bg: rgba(52, 211, 153, 0.15);
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.15);
+    --neutral-gray: #94a3b8;
+    --neutral-bg: rgba(148, 163, 184, 0.15);
+  }
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --success: #10b981;
+  --warning: #f59e0b;
+}
+[data-theme="dark"] {
+  --bg: #090d16;
+  --card-bg: #111827;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #1f293d;
+  --primary: #14b8a6;
+  --success: #34d399;
+  --warning: #fbbf24;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--foreground);
+  line-height: 1.5;
+  padding: 24px;
+}
+.header {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 800; }
+.controls { display: flex; gap: 8px; }
+button.btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+}
+.category-filter {
+  display: flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 3px;
+  margin-bottom: 16px;
+}
+.cat-btn {
+  flex: 1;
+  padding: 6px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.cat-btn.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.item-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.item-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+.item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.item-title { font-size: 14px; font-weight: 700; }
+.tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.tag-ongoing { background: var(--warning-bg); color: var(--warning); }
+.tag-success { background: var(--success-bg); color: var(--success); }
+.tag-unfinished { background: var(--neutral-bg); color: var(--neutral-gray); }
+
+.detail-view { display: none; }
+.detail-view.active { display: block; }
+.list-view.hidden { display: none; }
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.data-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.data-row:last-child { border-bottom: none; }
+.data-label { color: var(--muted); }
+.data-val { font-weight: 600; }
+.btn-invite {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>T40: Shared Memories by Outcome Categories</h1>
+    <p>Categorizing pairwise memories into Ongoing, Successfully Finished, and Left Unfinished.</p>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+</div>
+
+<div class="container">
+  <!-- LIST VIEW -->
+  <div id="listView" class="list-view">
+    <div class="category-filter">
+      <button id="tabAll" class="cat-btn active" onclick="filterCat('all')">All (3)</button>
+      <button id="tabSuccess" class="cat-btn" onclick="filterCat('success')">Finished (1)</button>
+      <button id="tabOngoing" class="cat-btn" onclick="filterCat('ongoing')">Ongoing (1)</button>
+      <button id="tabUnfinished" class="cat-btn" onclick="filterCat('unfinished')">Ended (1)</button>
+    </div>
+
+    <!-- Record 1: Successfully Finished -->
+    <div class="item-card item-success" onclick="openDetail('c1')">
+      <div class="item-top">
+        <span class="item-title">Hydration Spark with Sara</span>
+        <span class="tag tag-success">Successfully Finished</span>
+      </div>
+      <div style="font-size: 11px; color: var(--muted);">Both reached 21-day milestone · Oct 1 – Oct 22, 2026</div>
+    </div>
+
+    <!-- Record 2: Ongoing (A reached goal, B at day 4) -->
+    <div class="item-card item-ongoing" onclick="openDetail('c2')">
+      <div class="item-top">
+        <span class="item-title">Morning Walk with Alex</span>
+        <span class="tag tag-ongoing">Ongoing</span>
+      </div>
+      <div style="font-size: 11px; color: var(--muted);">You completed 5/5 days · Alex is at 4/5 days</div>
+    </div>
+
+    <!-- Record 3: Left Unfinished -->
+    <div class="item-card item-unfinished" onclick="openDetail('c3')">
+      <div class="item-top">
+        <span class="item-title">Reading Habit with Reza</span>
+        <span class="tag tag-unfinished">Left Unfinished</span>
+      </div>
+      <div style="font-size: 11px; color: var(--muted);">Ended after 12 shared days · Oct 15, 2026</div>
+    </div>
+  </div>
+
+  <!-- DETAIL VIEW -->
+  <div id="detailView" class="detail-view">
+    <button class="back-btn" onclick="closeDetail()">← Back to Shared Memories</button>
+
+    <div style="margin-bottom: 16px;">
+      <h2 id="detailTitle" style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">Hydration Spark with Sara</h2>
+      <span id="detailTag" class="tag tag-success">Successfully Finished</span>
+    </div>
+
+    <div class="data-box">
+      <div class="data-row">
+        <span class="data-label">Your Commitment</span>
+        <span id="detailMyHabit" class="data-val">Drink 2L Water</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Partner Commitment</span>
+        <span id="detailPartnerHabit" class="data-val">Herbal Tea Daily</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Companion</span>
+        <span id="detailPartner" class="data-val">Sara</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Shared Days</span>
+        <span id="detailDays" class="data-val">21 days completed</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Timeline</span>
+        <span id="detailDates" class="data-val">Oct 1 – Oct 22, 2026</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Privacy Invariant</span>
+        <span class="data-val" style="color: var(--muted); font-style: italic;">Personal Why & notes are kept private</span>
+      </div>
+    </div>
+
+    <button class="btn-invite" onclick="inviteAgain()">🔗 Send New Invitation Link to Sara</button>
+  </div>
+</div>
+
+<script>
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+}
+
+const data = {
+  c1: {
+    title: "Hydration Spark with Sara",
+    tag: "Successfully Finished",
+    tagClass: "tag-success",
+    myHabit: "Drink 2L Water",
+    partnerHabit: "Herbal Tea Daily",
+    partner: "Sara",
+    days: "21 days completed by both",
+    dates: "Oct 1 – Oct 22, 2026"
+  },
+  c2: {
+    title: "Morning Walk with Alex",
+    tag: "Ongoing",
+    tagClass: "tag-ongoing",
+    myHabit: "Morning 30m Walk (Completed)",
+    partnerHabit: "Daily Jogging (4/5 days)",
+    partner: "Alex",
+    days: "Ongoing support active",
+    dates: "Started Nov 8, 2026"
+  },
+  c3: {
+    title: "Reading Habit with Reza",
+    tag: "Left Unfinished",
+    tagClass: "tag-unfinished",
+    myHabit: "Daily Book Reading",
+    partnerHabit: "Tech Articles",
+    partner: "Reza",
+    days: "12 shared days completed",
+    dates: "Oct 2 – Oct 15, 2026"
+  }
+};
+
+function filterCat(cat) {
+  ['tabAll','tabSuccess','tabOngoing','tabUnfinished'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.querySelectorAll('.item-card').forEach(el => el.style.display = 'block');
+
+  if (cat === 'all') {
+    document.getElementById('tabAll').classList.add('active');
+  } else if (cat === 'success') {
+    document.getElementById('tabSuccess').classList.add('active');
+    document.querySelectorAll('.item-card:not(.item-success)').forEach(el => el.style.display = 'none');
+  } else if (cat === 'ongoing') {
+    document.getElementById('tabOngoing').classList.add('active');
+    document.querySelectorAll('.item-card:not(.item-ongoing)').forEach(el => el.style.display = 'none');
+  } else if (cat === 'unfinished') {
+    document.getElementById('tabUnfinished').classList.add('active');
+    document.querySelectorAll('.item-card:not(.item-unfinished)').forEach(el => el.style.display = 'none');
+  }
+}
+
+function openDetail(id) {
+  const d = data[id];
+  document.getElementById('detailTitle').textContent = d.title;
+  const tag = document.getElementById('detailTag');
+  tag.textContent = d.tag;
+  tag.className = 'tag ' + d.tagClass;
+  document.getElementById('detailMyHabit').textContent = d.myHabit;
+  document.getElementById('detailPartnerHabit').textContent = d.partnerHabit;
+  document.getElementById('detailPartner').textContent = d.partner;
+  document.getElementById('detailDays').textContent = d.days;
+  document.getElementById('detailDates').textContent = d.dates;
+
+  document.getElementById('listView').classList.add('hidden');
+  document.getElementById('detailView').classList.add('active');
+}
+
+function closeDetail() {
+  document.getElementById('detailView').classList.remove('active');
+  document.getElementById('listView').classList.remove('hidden');
+}
+
+function inviteAgain() {
+  alert("✨ New invitation flow initiated! Creates a fresh link with a new generation ID.");
+}
+</script>
+</body>
+</html>
