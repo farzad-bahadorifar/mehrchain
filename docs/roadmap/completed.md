@@ -14,6 +14,7 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T34 — Review separate Connect and Show up views inside Chain](tasks/T34.md): One clickable Chain wireframe separates relationship management from completion acknowledgements in two views.
 - [T35 — Define finite experiences versus Endless commitments](tasks/T35.md): One owner-reviewed domain contract defines a one-time/N-completion experience and an Endless intention without assuming every entry is a habit.
 - [T36 — Define Endless third-day archive and restart attempts](tasks/T36.md): One approved state-transition contract specifies Endless absence archival and a new start from day one while preserving earlier effort.
+- [T37 — Define joint Chain success and unfinished memory outcomes](tasks/T37.md): One approved pair-outcome table defines when a linked experience remains ongoing, finishes successfully or becomes an unfinished memory.
 - [T47 — Review Chain identity labels without an @ prefix](tasks/T47.md): One approved label/data contract shows Chain names without @ and selects the exact fallback when a username is absent.
 - [T48 — Locate why a confirmed sent heart may remain outline-only](tasks/T48.md): One rendered-evidence report identifies whether the sent-heart state fails in data, class propagation, SVG fill or the photographed build.
 - [T49 — Review the Chain acceptance card and habit selector](tasks/T49.md): One reviewed acceptance wireframe provides a readable identity, habit choice and explicit acceptance in the existing app context.

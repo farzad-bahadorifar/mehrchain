@@ -1419,27 +1419,32 @@
         {
           "id": "A1",
           "text": "The report exists at docs/roadmap/evidence/t37-shared-experience-outcomes.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md delivers comprehensive outcome matrix separating owner intent, inspected code, executed checks and remaining unknowns."
         },
         {
           "id": "A2",
           "text": "Both finite completion orders finish successfully only at the chosen joint boundary; early finisher does not discard the other endpoint.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md section 2 defines joint completion boundary: finite pair finishes successfully only when both finish, without early finisher discarding partner."
         },
         {
           "id": "A3",
           "text": "All finite/finite, Endless/Endless and mixed-pair examples have an owner-selected outcome and exact transition event.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md section 2 covers finite/finite, Endless/Endless and mixed-pair configurations with exact transition events and categories."
         },
         {
           "id": "A4",
           "text": "Multi-partner changes affect only applicable pairs; history/privacy/reconnect treatment and source gaps are recorded.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md section 3 establishes multi-partner independence, generation ID for reconnects, durable snapshot retention and strict privacy invariants."
         },
         {
           "id": "A5",
           "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md section 4 maps backend chainState joint resolver and Shared Memories views (T40) to atomic follow-ups."
         }
       ],
       "verify": [
@@ -1449,8 +1454,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/96",
       "id": "T37",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/t37-shared-experience-outcomes.md delivers complete pair-outcome contract for joint chain success, ongoing states and unfinished memories."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -1461,6 +1468,36 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/96"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md delivers comprehensive outcome matrix separating owner intent, inspected code, executed checks and remaining unknowns."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md section 2 defines joint completion boundary: finite pair finishes successfully only when both finish, without early finisher discarding partner."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md section 2 covers finite/finite, Endless/Endless and mixed-pair configurations with exact transition events and categories."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md section 3 establishes multi-partner independence, generation ID for reconnects, durable snapshot retention and strict privacy invariants."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md section 4 maps backend chainState joint resolver and Shared Memories views (T40) to atomic follow-ups."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/t37-shared-experience-outcomes.md delivers complete pair-outcome contract for joint chain success, ongoing states and unfinished memories."
         }
       ]
     },
