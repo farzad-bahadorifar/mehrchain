@@ -1,0 +1,21 @@
+// Author offline review artifacts only. No application implementation.
+const fs = require('node:fs');
+const path = require('node:path');
+const esbuild = require('esbuild');
+const root = __dirname;
+const repo = path.resolve(root, '../../..');
+const task = process.argv[2];
+if (!['t47-chain-identity-label', 't49-invite-acceptance-card'].includes(task)) throw Error('Select T47 or T49 review');
+const id = task.startsWith('t47') ? 'T47' : 'T49';
+const mode = id === 'T47' ? 'identity' : 'acceptance';
+const version = id === 'T47' ? 'v0.2' : 'v0.1';
+const names = ['house', 'link-2', 'trending-up', 'user', 'heart', 'arrow-left', 'check', 'chevron-right'];
+const imports = names.map((name, i) => `import i${i} from ${JSON.stringify(path.join(repo, 'node_modules/lucide-angular/esm2020/icons', name + '.mjs'))};`).join('\n') + `\nconst ICONS={${names.map((n, i) => JSON.stringify(n) + ':i' + i).join(',')}};`;
+const source = `const MODE=${JSON.stringify(mode)};const TASK=${JSON.stringify(id)};\n` + fs.readFileSync(path.join(root, 'app.js'), 'utf8').replace('/*ICONS*/', imports);
+const js = esbuild.buildSync({ stdin: { contents: source, resolveDir: root }, bundle: true, write: false, platform: 'browser', format: 'iife', minify: true, target: 'es2022' }).outputFiles[0].text;
+new Function(js);
+let fonts = '';
+for (const [name, weight] of [['Poppins-Regular.ttf', 400], ['Poppins-SemiBold.ttf', 600]]) fonts += `@font-face{font-family:Poppins;font-weight:${weight};src:url(data:font/ttf;base64,${fs.readFileSync(path.join(root, '../t22-profile-structure/source', name)).toString('base64')}) format('truetype')}\n`;
+const css = fs.readFileSync(path.join(root, '../t34-chain-connect-show-up/source/styles.css'), 'utf8') + fs.readFileSync(path.join(root, 'styles.css'), 'utf8');
+const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MehrChain · ${id} · ${version}</title><style>${fonts}${css}</style></head><body><header class="review-header"><div><span class="review-kicker">MEHRCHAIN / ${id} / ${version}</span><h1>${mode === 'identity' ? 'One familiar name, wherever you connect.' : 'Choose a habit. Make the connection.'}</h1><p>${mode === 'identity' ? 'Review identity in partner cards, invitations and private chain updates.' : 'Review the invitation, your choice and an explicit acceptance.'}</p></div><span class="review-status">For review</span></header><main class="review-workspace"><aside class="review-controls"><h2>Review controls</h2><label for="theme">Appearance</label><select id="theme"><option value="light">Light</option><option value="dark">Dark</option></select><label for="width">Frame width</label><select id="width"><option>390</option><option>320</option><option>544</option></select><label for="scenario">Scenario</label><select id="scenario"></select><div id="extra-controls"></div><button id="reset" class="review-reset">Reset scenario</button><p class="review-disclosure">Synthetic data. All actions remain in this preview's memory. No account, invitation, email disclosure or real save is changed.</p><p id="contract" class="review-disclosure"></p><p class="review-disclosure">Current is reconstructed from repository templates, not a captured phone screen. Both frames share data, appearance and dimensions.</p></aside><section id="previews" class="review-previews" data-compare="true" aria-label="Current and proposed"></section></main><footer class="review-footer">${id} ${version} · Awaiting owner review. ${mode === 'identity' ? 'Email fallback is excluded from this proposal.' : 'Selection alone never accepts an invitation. Android native picker appearance remains unverified.'}</footer><script>${js.replaceAll('</script', '<\\/script')}</script></body></html>`;
+const out = path.join(root, '..', task); fs.mkdirSync(out, { recursive: true });fs.writeFileSync(path.join(out, 'index.html'), html); console.log(`${id} ${version} built (${Math.round(Buffer.byteLength(html) / 1024)} KiB)`);

@@ -132,7 +132,11 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T52](roadmap/tasks/T52.md) | Explain web update activation and isolate the reported fit regression | analysis | Ready | P1 |
 | [T53](roadmap/tasks/T53.md) | Label Endless correctly in the Chain sharing selector | bug | Ready | P2 |
 | [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Ready | P1 |
+| [T57](roadmap/tasks/T57.md) | Restore Mero WebGL context and guard against background loss | bug | Ready | P1 |
+| [T58](roadmap/tasks/T58.md) | Fix Android transparent navigation bar and remove green bottom inset | bug | Ready | P2 |
+| [T59](roadmap/tasks/T59.md) | Improve session restore error diagnostics and timeout resilience | bug | Ready | P1 |
+| [T60](roadmap/tasks/T60.md) | Upgrade Android splash screen assets for high-DPI displays | implementation | Ready | P2 |
 
-Updated: 2026-11-02, Asia/Tehran. Next ID: T57.
+Updated: 2026-11-13, Asia/Tehran. Next ID: T61.
 
 This table is generated; [tasks.json](roadmap/tasks.json) owns task status.

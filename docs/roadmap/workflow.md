@@ -101,6 +101,15 @@ contributor sees the domain/mail/SMS/product constraints before working.
 Project fields: ID, type, area, status, priority, dependencies. Status changes in
 GitHub are reconciled deliberately with the registry, not by old bulk-sync scripts.
 
+## Implementation Quality & Engineering Contract
+
+Every code change and implementation task in MehrChain must strictly adhere to the following engineering contract:
+1. **Maximum Security & Safe Defaults**: Never bypass authentication, access controls, or session verification to fake offline or successful states. Never expose credentials, swallow errors silently, or compromise data security.
+2. **Business Context & Decision Integrity**: Respect historical decisions and constraints (all D-ID records in `context.md`). Never introduce regressions or side effects that alter previously agreed-upon product rules, habit lifecycles, or Mero specifications.
+3. **Architectural Purity & Codebase Handwriting**: Maintain the existing monorepo architecture (Angular zoneless Signals with the store-facade pattern, clean NestJS domain modules, strict TypeScript). Write idiomatic, maintainable code matching the repository's established style without introducing foreign patterns or unnecessary abstractions.
+4. **Design System & Visual Consistency**: Adhere strictly to MehrChain V2 design tokens, Poppins typography, Lucide icons, and the official Mero mascot asset rules. Never introduce arbitrary rogue CSS colors, unvetted external libraries, or foreign UI components.
+5. **Pre-Release Verification & Comprehensive Testing**: No implementation is marked complete without automated unit tests covering the exact change and objective verification evidence. Validate against real-world edge cases (including low-memory mobile devices, WebGL context lifecycle, and network timeouts) before claiming completion.
+
 ## Maintenance
 
 `node scripts/roadmap.cjs validate` checks IDs, definitions, dependencies, issue

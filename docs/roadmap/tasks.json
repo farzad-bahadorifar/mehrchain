@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated": "2026-11-02",
-  "lastId": 56,
+  "updated": "2026-11-13",
+  "lastId": 60,
   "tasks": [
     {
       "id": "T20",
@@ -3043,6 +3043,225 @@
       "history": [
         {
           "date": "2026-11-02",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Restore Mero WebGL context and guard against background loss",
+      "type": "bug",
+      "area": "mascot",
+      "priority": "P1",
+      "goal": "When the application is paused, backgrounded, or experiences WebGL context loss on mobile devices, Mero restores the scene or falls back cleanly without leaving an orphaned belly glow.",
+      "scope": [
+        "Listen for webglcontextrestored and re-init scene in MeroRendererService",
+        "Recover scene on visibilitychange after backgrounding",
+        "Hide .mero-belly-glow when Mero canvas is in unavailable or lost state"
+      ],
+      "outOfScope": [
+        "New 3D models or shader changes",
+        "Altering the 21-day color unlock ladder (D-001)"
+      ],
+      "inputs": [
+        "apps/mehrchain-frontend/src/app/shared/components/mero/mero.html",
+        "apps/mehrchain-frontend/src/app/shared/components/mero/mero-renderer.service.ts",
+        "apps/mehrchain-frontend/src/app/shared/components/mero/mero-scene.ts"
+      ],
+      "contextRefs": [
+        "D-001"
+      ],
+      "steps": [
+        "Reproduce WebGL context loss during backgrounding/visibilitychange",
+        "Add webglcontextrestored listener and safe scene recreation",
+        "Ensure .mero-belly-glow is hidden when renderState is unavailable",
+        "Run unit tests for Mero renderer and verify recovery"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Mero canvas attempts recovery on webglcontextrestored and visibilitychange instead of permanent failure",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "The standalone CSS belly glow does not remain visible if the mascot canvas is unavailable",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "npx nx test mehrchain-frontend --testPathPattern=mero"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T57",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-11-13",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Fix Android transparent navigation bar and remove green bottom inset",
+      "type": "bug",
+      "area": "mobile",
+      "priority": "P2",
+      "goal": "The Android system navigation bar renders with a transparent background so no solid green accent bar appears at the bottom of the screen.",
+      "scope": [
+        "Set android:navigationBarColor to @android:color/transparent in android/app/src/main/res/values/styles.xml",
+        "Configure edge-to-edge window insets in Android native theme"
+      ],
+      "outOfScope": [
+        "Web browser viewport styles",
+        "Altering onboarding card structure"
+      ],
+      "inputs": [
+        "android/app/src/main/res/values/styles.xml"
+      ],
+      "contextRefs": [
+        "D-006"
+      ],
+      "steps": [
+        "Add navigationBarColor transparency to AppTheme.NoActionBar",
+        "Verify Android styles XML validity and build cleanliness"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "styles.xml sets android:navigationBarColor to transparent",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "No colored system bar overlay is rendered at the bottom of Android app screens",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Inspect android/app/src/main/res/values/styles.xml and verify XML integrity"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T58",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-11-13",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Improve session restore error diagnostics and timeout resilience",
+      "type": "bug",
+      "area": "auth",
+      "priority": "P1",
+      "goal": "When session restore (/me) fails on startup, provide detailed actionable diagnostic feedback (HTTP status, network error, or timeout) without silently locking the user out or bypassing authentication.",
+      "scope": [
+        "apps/mehrchain-frontend/src/app/core/services/auth.service.ts session restore error handling",
+        "apps/mehrchain-frontend/src/app/features/onboarding/onboarding.html error banner display",
+        "Differentiate network offline, 502/504 gateway wake-up timeout, and 401 unauthorized"
+      ],
+      "outOfScope": [
+        "Allowing unauthenticated or stale offline entry into dashboard without valid session",
+        "Backend hosting provider changes"
+      ],
+      "inputs": [
+        "apps/mehrchain-frontend/src/app/core/services/auth.service.ts",
+        "apps/mehrchain-frontend/src/app/features/onboarding/onboarding.html"
+      ],
+      "contextRefs": [
+        "D-002",
+        "D-007"
+      ],
+      "steps": [
+        "Inspect auth.service.ts error handling in restoreSession",
+        "Capture specific HTTP error status or network timeout cause",
+        "Present actionable diagnostic information and a functional retry mechanism",
+        "Add unit tests verifying error state handling"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Session error signal provides diagnostic context (status code or network timeout) rather than only a generic string",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Retry connection triggers an active re-probe without requiring full app restart",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Authentication and session security boundaries remain intact without unverified bypass",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "npx nx test mehrchain-frontend --testPathPattern=auth.service"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T59",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-11-13",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        }
+      ]
+    },
+    {
+      "title": "Upgrade Android splash screen assets for high-DPI displays",
+      "type": "implementation",
+      "area": "mobile",
+      "priority": "P2",
+      "goal": "Android splash screen drawables across all density buckets render sharp, anti-aliased assets without jagged pixel edges on modern displays.",
+      "scope": [
+        "Replace low-resolution splash.png drawables in android/app/src/main/res/drawable-* with high-DPI assets"
+      ],
+      "outOfScope": [
+        "Web favicon or PWA splash generation"
+      ],
+      "inputs": [
+        "android/app/src/main/res/drawable/splash.png",
+        "apps/mehrchain-frontend/public/assets/mero.png"
+      ],
+      "contextRefs": [
+        "D-001",
+        "D-006"
+      ],
+      "steps": [
+        "Inspect existing splash drawables",
+        "Generate clean, high-DPI splash assets for hdpi, xhdpi, xxhdpi, and xxxhdpi",
+        "Verify image resolutions and aspect ratios"
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "All density folders have crisp, properly sized splash drawables without edge artifacts",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Inspect generated asset dimensions across drawable directories"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T60",
+      "status": "Ready",
+      "evidence": [],
+      "history": [
+        {
+          "date": "2026-11-13",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
         }
