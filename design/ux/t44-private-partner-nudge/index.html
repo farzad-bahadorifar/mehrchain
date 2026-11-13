@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MehrChain · T44: Private Partner Nudge with Anti-Spam Limit</title>
+<style>
+:root {
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --primary-light: rgba(13, 148, 136, 0.1);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #090d16;
+    --card-bg: #111827;
+    --foreground: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #1f293d;
+    --primary: #14b8a6;
+    --primary-foreground: #042f2e;
+    --primary-light: rgba(20, 184, 166, 0.15);
+    --success: #34d399;
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.15);
+  }
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+}
+[data-theme="dark"] {
+  --bg: #090d16;
+  --card-bg: #111827;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #1f293d;
+  --primary: #14b8a6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--foreground);
+  line-height: 1.5;
+  padding: 24px;
+}
+.header {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 800; }
+.header p { font-size: 12px; color: var(--muted); }
+.controls { display: flex; gap: 8px; }
+button.btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.btn-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.opt-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.opt-btn.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+.chain-item {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.chain-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.partner-name { font-size: 14px; font-weight: 700; }
+.status-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.status-absent { background: var(--warning-bg); color: var(--warning); }
+.status-done { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+.nudge-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.nudge-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nudge-btn:disabled {
+  background: var(--border);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+.preview-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.bubble {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>T44: Private Partner Nudge Contract & Limit</h1>
+    <p>Restrained partner nudge with a strict cap of 1 per absence window across all partners.</p>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Controls -->
+  <div class="card">
+    <h2 style="font-size: 13px; color: var(--muted);">Simulate Partner State</h2>
+    <div class="btn-group">
+      <button id="sEligible" class="opt-btn active" onclick="setScenario('eligible')">Day 2 Absence (Eligible)</button>
+      <button id="sCapped" class="opt-btn" onclick="setScenario('capped')">Already Nudged (Cap Reached)</button>
+      <button id="sDone" class="opt-btn" onclick="setScenario('done')">Partner Completed Today</button>
+      <button id="sOptOut" class="opt-btn" onclick="setScenario('optout')">Partner Consent Off</button>
+    </div>
+  </div>
+
+  <!-- Sender View (In Chain) -->
+  <div class="card">
+    <h2>🤝 Sender View (In Your Chain)</h2>
+    <div class="chain-item">
+      <div class="chain-header">
+        <div>
+          <span class="partner-name">Sara</span>
+          <div style="font-size: 11px; color: var(--muted);">Hydration Spark · Endless Journey</div>
+        </div>
+        <span id="partnerStatus" class="status-pill status-absent">Away 1 day</span>
+      </div>
+
+      <div class="nudge-action">
+        <span id="nudgeHint" style="font-size: 11px; color: var(--muted);">Send a gentle, private reminder</span>
+        <button id="nudgeBtn" class="nudge-btn" onclick="performNudge()">
+          🔔 Send Gentle Nudge
+        </button>
+      </div>
+    </div>
+    <div style="font-size: 11px; color: var(--muted);">
+      🔒 <strong>Privacy Invariant:</strong> You never see Sara's private Why text. The reminder is delivered privately to her device.
+    </div>
+  </div>
+
+  <!-- Recipient View Preview -->
+  <div class="card">
+    <h2>📱 Recipient View (What Sara Sees)</h2>
+    <div class="preview-box">
+      <div style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">In-App Notice upon Opening</div>
+      <div id="recipientBubble" class="bubble">
+        <div style="font-weight: 700; color: var(--primary); margin-bottom: 2px;">
+          🌱 Friendly check-in from Reza
+        </div>
+        <div id="recipientBody" style="color: var(--foreground);">
+          "Reza noticed you've been away for 2 days. Remember your why: <em>'To feel energized and hydrated throughout the day.'</em>"
+        </div>
+      </div>
+      <div style="font-size: 11px; color: var(--muted); margin-top: 6px;">
+        Delivery: In-app card on open. (If Sara left Why blank, renders clean neutral encouragement without fabricated text).
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentScenario = 'eligible';
+let nudgeSent = false;
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+}
+
+function setScenario(sc) {
+  currentScenario = sc;
+  nudgeSent = false;
+  ['sEligible','sCapped','sDone','sOptOut'].forEach(id => document.getElementById(id).classList.remove('active'));
+  if (sc === 'eligible') document.getElementById('sEligible').classList.add('active');
+  if (sc === 'capped') document.getElementById('sCapped').classList.add('active');
+  if (sc === 'done') document.getElementById('sDone').classList.add('active');
+  if (sc === 'optout') document.getElementById('sOptOut').classList.add('active');
+
+  const btn = document.getElementById('nudgeBtn');
+  const hint = document.getElementById('nudgeHint');
+  const status = document.getElementById('partnerStatus');
+  const bubble = document.getElementById('recipientBubble');
+
+  if (sc === 'eligible') {
+    status.className = 'status-pill status-absent';
+    status.textContent = 'Day 2 away';
+    btn.disabled = false;
+    btn.innerHTML = '🔔 Send Gentle Nudge';
+    hint.textContent = '1 nudge available for this absence period';
+    bubble.style.display = 'block';
+  } else if (sc === 'capped') {
+    status.className = 'status-pill status-absent';
+    status.textContent = 'Day 2 away';
+    btn.disabled = true;
+    btn.innerHTML = '✓ Nudge already sent';
+    hint.textContent = 'Maximum 1 nudge reached across all partners';
+    bubble.style.display = 'block';
+  } else if (sc === 'done') {
+    status.className = 'status-pill status-done';
+    status.textContent = 'Sparked today';
+    btn.disabled = true;
+    btn.innerHTML = 'Already Sparked';
+    hint.textContent = 'Sara has already completed her habit today';
+    bubble.style.display = 'none';
+  } else if (sc === 'optout') {
+    status.className = 'status-pill status-absent';
+    status.textContent = 'Day 2 away';
+    btn.disabled = true;
+    btn.innerHTML = 'Check-ins disabled';
+    hint.textContent = 'Sara has turned off partner check-ins in privacy settings';
+    bubble.style.display = 'none';
+  }
+}
+
+function performNudge() {
+  const btn = document.getElementById('nudgeBtn');
+  const hint = document.getElementById('nudgeHint');
+  btn.disabled = true;
+  btn.innerHTML = '✓ Nudge Sent ✨';
+  hint.textContent = 'Nudge delivered privately to Sara.';
+}
+</script>
+</body>
+</html>

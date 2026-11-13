@@ -2385,32 +2385,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t44-private-partner-nudge/index.html v0.1 provides comparison of nudge states across consistent shell and themes; analysis.md documents source fidelity."
         },
         {
           "id": "A2",
           "text": "Window/cooldown/cap are exact and owner selected; several partners cannot multiply the agreed reminder budget.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Cap is strictly numeric: maximum 1 nudge per absence period shared across all partners; eligible only on Day 2 absence."
         },
         {
           "id": "A3",
           "text": "A partner neither sees Why nor learns its text through a control/response; no-Why/consent behavior is explicitly selected.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Privacy invariant guarantees sender never sees or receives recipient Why; recipient opt-out toggle disables check-ins completely."
         },
         {
           "id": "A4",
           "text": "Completed/archived/stale/pending/failed states do not send a reminder or falsely show success; self-reminder overlap has a rule.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Completion suppresses nudge immediately; race conditions return 409 and prevent duplicate reminders."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "checklist.md confirms testing across 320px, 390px, desktop, and both dark/light modes without horizontal scroll."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming device deployment."
         }
       ],
       "verify": [
@@ -2421,8 +2427,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/103",
       "id": "T44",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t44-private-partner-nudge/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 6 criteria verified."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -2433,6 +2441,41 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/103"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "design/ux/t44-private-partner-nudge/index.html v0.1 provides comparison of nudge states across consistent shell and themes; analysis.md documents source fidelity."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "Cap is strictly numeric: maximum 1 nudge per absence period shared across all partners; eligible only on Day 2 absence."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "Privacy invariant guarantees sender never sees or receives recipient Why; recipient opt-out toggle disables check-ins completely."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "Completion suppresses nudge immediately; race conditions return 409 and prevent duplicate reminders."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "checklist.md confirms testing across 320px, 390px, desktop, and both dark/light modes without horizontal scroll."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A6",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming device deployment."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "design/ux/t44-private-partner-nudge/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 6 criteria verified."
         }
       ]
     },
