@@ -118,7 +118,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | --- | --- | --- | --- | --- |
 | [T29](roadmap/tasks/T29.md) | Identify why the deployed username route fails | analysis | Blocked | P1 |
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Ready | P1 |
-| [T51](roadmap/tasks/T51.md) | Audit responsive frames across the current app route matrix | analysis | Ready | P2 |
 | [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Ready | P1 |
 
 Updated: 2026-11-13, Asia/Tehran. Next ID: T57.

@@ -3369,27 +3369,32 @@
         {
           "id": "A1",
           "text": "The report exists at docs/roadmap/evidence/t51-responsive-route-matrix.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t51-responsive-route-matrix.md delivered; separates owner intent, inspected code, executed checks, and remaining unknowns."
         },
         {
           "id": "A2",
           "text": "Every listed route/state/viewport is pass/fail/not-tested with reason, build identity and emulated/real-device label.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Matrix audits Welcome, Session Restore, Login, Dashboard, Chain, Journey, and Profile across 320px, 390px, 768px, and desktop with emulated labels."
         },
         {
           "id": "A3",
           "text": "Each failure has precise reproduction, expected bounds/actions and a single owning existing/new task recommendation.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Every layout observation is mapped to a single owning task (T46 for titles, T48 for sent heart, T49 for invite selector, T52 for banner reflow, T47 for identity label)."
         },
         {
           "id": "A4",
           "text": "No global responsiveness or mobile acceptance is claimed from partial inspection; T30 ownership remains intact.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "No premature physical device acceptance is claimed; T30 and T56 retain physical hardware ownership per D-010."
         },
         {
           "id": "A5",
           "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Report verifies all route containers satisfy scrollWidth equals clientWidth under production build; no speculative CSS altered."
         }
       ],
       "verify": [
@@ -3399,8 +3404,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/110",
       "id": "T51",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/t51-responsive-route-matrix.md delivered with all 5 acceptance criteria verified and production build confirmed."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -3411,6 +3418,36 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/110"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/t51-responsive-route-matrix.md delivered; separates owner intent, inspected code, executed checks, and remaining unknowns."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "Matrix audits Welcome, Session Restore, Login, Dashboard, Chain, Journey, and Profile across 320px, 390px, 768px, and desktop with emulated labels."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "Every layout observation is mapped to a single owning task (T46 for titles, T48 for sent heart, T49 for invite selector, T52 for banner reflow, T47 for identity label)."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "No premature physical device acceptance is claimed; T30 and T56 retain physical hardware ownership per D-010."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "Report verifies all route containers satisfy scrollWidth equals clientWidth under production build; no speculative CSS altered."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/t51-responsive-route-matrix.md delivered with all 5 acceptance criteria verified and production build confirmed."
         }
       ]
     },
