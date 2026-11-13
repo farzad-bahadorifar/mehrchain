@@ -77,6 +77,18 @@
             }
           </select>
 
+          @if (selectedPublicCommitment(); as selectedHabit) {
+            <div class="p-2.5 rounded-xl bg-muted/40 border border-border/60 text-xs">
+              <span class="text-muted-foreground block text-[10px] font-bold uppercase tracking-wider">
+                Selected Habit
+              </span>
+              <p class="font-semibold text-foreground break-words mt-0.5">{{ selectedHabit.title }}</p>
+              <p class="text-[11px] text-muted-foreground mt-0.5">
+                {{ selectedHabit.totalDays === -1 ? 'Endless Journey' : selectedHabit.totalDays + ' completed days' }}
+              </p>
+            </div>
+          }
+
           <div class="flex items-center gap-2 pt-1">
             <button
               type="button"
@@ -144,7 +156,7 @@
               @if (receipt.reason !== 'HABIT_UNAVAILABLE') {
                 {{
                   receipt.partner.username
-                    ? '@' + receipt.partner.username
+                    ? receipt.partner.username
                     : receipt.partner.name || 'Your partner'
                 }}
                 disconnected this chain.
@@ -152,7 +164,7 @@
                 Chain with
                 {{
                   receipt.partner.username
-                    ? '@' + receipt.partner.username
+                    ? receipt.partner.username
                     : receipt.partner.name || 'your partner'
                 }}
                 ended.

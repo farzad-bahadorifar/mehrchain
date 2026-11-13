@@ -70,9 +70,11 @@ export class ChainCardComponent {
     });
   }
 
-  readonly partnerUsername = computed(() => this.connection().partner?.username || 'partner');
+  readonly partnerUsername = computed(
+    () => (this.connection().partner?.username || '').replace(/^@+/, '') || 'partner',
+  );
   readonly partnerDisplayName = computed(
-    () => this.connection().partner?.name || this.partnerUsername(),
+    () => (this.connection().partner?.name || '').replace(/^@+/, '') || this.partnerUsername(),
   );
   readonly partnerHabitTitle = computed(
     () => this.connection().partnerCommitment?.title || 'Daily habit',

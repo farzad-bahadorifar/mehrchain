@@ -34,7 +34,8 @@ describe('ChainCardComponent', () => {
     fixture.componentRef.setInput('connection', { ...connection, receivedHeartCount: 2 });
     fixture.detectChanges();
     const text = fixture.nativeElement.textContent;
-    expect(text).toContain('@sara');
+    expect(text).toContain('Sara Smith');
+    expect(text).not.toContain('@');
     expect(text).toContain('Morning Meditation');
     expect(text).toContain('Not completed today');
     expect(text).not.toContain('supported your habit');

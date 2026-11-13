@@ -9,7 +9,7 @@
       </div>
       <div class="min-w-0">
         <p class="font-semibold text-foreground text-sm break-words">
-          {{ connection().partner?.username ? '@' + partnerUsername() : partnerDisplayName() }}
+          {{ partnerDisplayName() }}
         </p>
         <p class="text-sm text-foreground break-words">{{ partnerHabitTitle() }}</p>
         <p class="mt-1 text-xs text-muted-foreground">{{ stateLabel() }}</p>

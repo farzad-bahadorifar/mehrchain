@@ -66,6 +66,9 @@ export class ChainComponent {
   // Incoming invite link parameters
   readonly incomingInvite = signal<ChainInvitePayload | null>(null);
   readonly inviteSelectedCommitmentId = signal<string>('');
+  readonly selectedPublicCommitment = computed(() =>
+    this.publicCommitments().find((c) => c.id === this.inviteSelectedCommitmentId()),
+  );
 
   constructor() {
     timer(0, 15000)
@@ -90,9 +93,9 @@ export class ChainComponent {
           if (this.route.snapshot.queryParams['invite'] !== code) return;
           this.incomingInvite.set({
             inviteCode: invite.inviteCode,
-            inviterName: invite.sender?.username
-              ? `@${invite.sender.username}`
-              : invite.sender?.name || 'Friend',
+            inviterName: (invite.sender?.username
+              ? invite.sender.username
+              : invite.sender?.name || 'Friend').replace(/^@+/, ''),
             habitTitle: invite.senderCommitment?.title || 'Habit',
             category: invite.senderCommitment?.category as any,
           });
@@ -119,7 +122,7 @@ export class ChainComponent {
     this.isLinking.set(true);
     try {
       await this.chainService.acceptInvite(invite.inviteCode, id);
-      this.showToast(`Chain connected with @${invite.inviterName}!`);
+      this.showToast(`Chain connected with ${invite.inviterName}!`);
       this.dismissIncomingInvite();
     } catch {
       this.showToast('Could not connect this chain. Please retry.');
