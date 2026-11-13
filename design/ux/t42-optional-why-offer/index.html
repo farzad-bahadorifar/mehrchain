@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MehrChain · T42: Voluntary Why Offer After Endless Progress</title>
+<style>
+:root {
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --primary-light: rgba(13, 148, 136, 0.1);
+  --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --danger: #ef4444;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #090d16;
+    --card-bg: #111827;
+    --foreground: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #1f293d;
+    --primary: #14b8a6;
+    --primary-foreground: #042f2e;
+    --primary-light: rgba(20, 184, 166, 0.15);
+    --success: #34d399;
+    --success-bg: rgba(52, 211, 153, 0.15);
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.15);
+    --danger: #f87171;
+  }
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+}
+[data-theme="dark"] {
+  --bg: #090d16;
+  --card-bg: #111827;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #1f293d;
+  --primary: #14b8a6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--foreground);
+  line-height: 1.5;
+  padding: 24px;
+}
+.header {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 800; }
+.header p { font-size: 12px; color: var(--muted); }
+.controls { display: flex; gap: 8px; }
+button.btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.btn-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.opt-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.opt-btn.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+.why-card {
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.why-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+.why-card-desc {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.input-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 12px;
+  resize: vertical;
+  min-height: 60px;
+  margin-bottom: 8px;
+}
+.input-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.save-btn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.skip-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.skip-btn:hover { text-decoration: underline; }
+.privacy-badge {
+  font-size: 10px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>T42: Voluntary Why Offer After Endless Progress</h1>
+    <p>A gentle, optional prompt for Endless journey authors to anchor their personal motivation.</p>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Controls -->
+  <div class="card">
+    <h2 style="font-size: 13px; color: var(--muted);">Simulate Commitment State</h2>
+    <div class="btn-group">
+      <button id="bDay1" class="opt-btn" onclick="setState(1, false)">Day 1 (No Offer)</button>
+      <button id="bDay2" class="opt-btn" onclick="setState(2, false)">Day 2 (No Offer)</button>
+      <button id="bDay3" class="opt-btn active" onclick="setState(3, false)">Day 3 Milestone (Eligible)</button>
+      <button id="bDay3HasWhy" class="opt-btn" onclick="setState(3, true)">Day 3 (Why Exists)</button>
+    </div>
+  </div>
+
+  <!-- Dashboard View Preview -->
+  <div class="card">
+    <h2>🏠 Home Dashboard</h2>
+    <div style="font-size: 13px; font-weight: 700; margin-bottom: 12px;">
+      Morning Meditation <span style="font-size: 11px; font-weight: 600; color: var(--primary);">· Endless Journey</span>
+    </div>
+
+    <!-- The Voluntary Why Offer -->
+    <div id="whyOfferCard" class="why-card" style="display: block;">
+      <div class="why-card-title">🌱 Anchor Your Motivation</div>
+      <div class="why-card-desc">
+        You've sparked 3 days in a row! Writing down your personal Why helps keep you centered on days when life gets busy.
+      </div>
+      <textarea id="whyInput" class="input-textarea" placeholder="e.g. To start each workday with calm clarity..." maxlength="140"></textarea>
+      <div class="action-row">
+        <button class="skip-btn" onclick="skipOffer()">Maybe later</button>
+        <button class="save-btn" onclick="saveWhy()">Save My Why</button>
+      </div>
+      <div class="privacy-badge">
+        🔒 Strictly private to you. Never shared with chain partners.
+      </div>
+    </div>
+
+    <div id="noOfferState" style="display: none; padding: 16px; background: var(--bg); border-radius: 12px; font-size: 12px; color: var(--muted);">
+      Standard dashboard card without prompt. (Progress below threshold or Why already saved).
+    </div>
+
+    <!-- Feedback messages -->
+    <div id="feedbackMsg" style="display: none; margin-top: 10px; font-size: 12px; font-weight: 600;"></div>
+  </div>
+</div>
+
+<script>
+let currentDay = 3;
+let alreadyHasWhy = false;
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+}
+
+function setState(day, hasWhy) {
+  currentDay = day;
+  alreadyHasWhy = hasWhy;
+  ['bDay1','bDay2','bDay3','bDay3HasWhy'].forEach(id => document.getElementById(id).classList.remove('active'));
+  if (day === 1) document.getElementById('bDay1').classList.add('active');
+  if (day === 2) document.getElementById('bDay2').classList.add('active');
+  if (day === 3 && !hasWhy) document.getElementById('bDay3').classList.add('active');
+  if (day === 3 && hasWhy) document.getElementById('bDay3HasWhy').classList.add('active');
+
+  const offerCard = document.getElementById('whyOfferCard');
+  const noOffer = document.getElementById('noOfferState');
+  const fb = document.getElementById('feedbackMsg');
+  fb.style.display = 'none';
+
+  if (day >= 3 && !hasWhy) {
+    offerCard.style.display = 'block';
+    noOffer.style.display = 'none';
+  } else {
+    offerCard.style.display = 'none';
+    noOffer.style.display = 'block';
+  }
+}
+
+function skipOffer() {
+  document.getElementById('whyOfferCard').style.display = 'none';
+  const fb = document.getElementById('feedbackMsg');
+  fb.style.display = 'block';
+  fb.style.color = 'var(--muted)';
+  fb.textContent = 'Dismissed. You can always add your Why from habit settings.';
+}
+
+function saveWhy() {
+  const val = document.getElementById('whyInput').value.trim();
+  const fb = document.getElementById('feedbackMsg');
+  if (!val) {
+    fb.style.display = 'block';
+    fb.style.color = 'var(--danger)';
+    fb.textContent = 'Please enter a personal reason or tap "Maybe later".';
+    return;
+  }
+  document.getElementById('whyOfferCard').style.display = 'none';
+  fb.style.display = 'block';
+  fb.style.color = 'var(--success)';
+  fb.textContent = '✨ Your Why has been saved privately!';
+}
+</script>
+</body>
+</html>

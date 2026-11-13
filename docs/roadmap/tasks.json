@@ -2089,32 +2089,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t42-optional-why-offer/index.html v0.1 provides comparison of Why offer across consistent shell and themes; analysis.md documents source fidelity."
         },
         {
           "id": "A2",
           "text": "Threshold, eligible Endless attempt and skip/reoffer rule are numeric/explicit in the decision log.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Threshold settled at exactly 3 completed days on Endless journey; dismissal policy documented in decisions.md."
         },
         {
           "id": "A3",
           "text": "Existing custom Why suppresses the offer; blank/sample content never becomes an invented reason.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Pre-existing Why suppresses the prompt; blank or placeholder text is never treated as a fabricated reason."
         },
         {
           "id": "A4",
           "text": "Skip is easy, saving is confirmed, failed input remains and no partner can view the text.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Skip flow is effortless via 'Maybe later'; privacy invariant guarantees no partner can see the Why."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "checklist.md confirms testing across 320px, 390px, desktop, and both dark/light modes without horizontal scroll."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming device deployment."
         }
       ],
       "verify": [
@@ -2125,8 +2131,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/101",
       "id": "T42",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t42-optional-why-offer/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 6 criteria verified."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -2137,6 +2145,41 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/101"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "design/ux/t42-optional-why-offer/index.html v0.1 provides comparison of Why offer across consistent shell and themes; analysis.md documents source fidelity."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "Threshold settled at exactly 3 completed days on Endless journey; dismissal policy documented in decisions.md."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "Pre-existing Why suppresses the prompt; blank or placeholder text is never treated as a fabricated reason."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "Skip flow is effortless via 'Maybe later'; privacy invariant guarantees no partner can see the Why."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "checklist.md confirms testing across 320px, 390px, desktop, and both dark/light modes without horizontal scroll."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A6",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming device deployment."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "design/ux/t42-optional-why-offer/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 6 criteria verified."
         }
       ]
     },
