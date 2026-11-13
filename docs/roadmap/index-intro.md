@@ -18,7 +18,7 @@ Read [decision memory](context.md), [workflow](workflow.md) and
 | [D-002: Resend email](context.md#d-002) | The recorded domain/sender/configuration prerequisites are not ready. Do not rediscover this as an unexplained OTP bug unless conditions change. |
 | [D-003: SMS](context.md#d-003) | Not a current route per the owner. Do not invent a provider-related cause or automatically implement SMS. |
 | [D-004: live username](context.md#d-004) | Timeouts block diagnosis; improved UI copy is not a backend repair. |
-| [D-008: completion-only support](context.md#d-008) | The owner wants hearts after completion; current send guards do not enforce that prerequisite. T33 defines the gap before T34's two-view design. |
+| [D-008: completion-only support](context.md#d-008) | Completion creates a support card; the owner confirmed next-morning acknowledgement. T33 records the contract and gaps; current code does not enforce it. T34 designs the two views. |
 | [D-009: experiences and memories](context.md#d-009) | Finite experiences, joint outcomes and new Endless attempts differ from the current lifecycle. Settle contracts before Journey wireframes or implementation. |
 | [D-011: Why and reminders](context.md#d-011) | Timing and platform delivery are not accepted yet. Inventory first; choose an exact schedule and nudge cap, preserving private optional Why. |
 
@@ -85,8 +85,16 @@ marked complete by adding these cards.
 | Diagnoses and responsive evidence | T48, T50, T51, T52 | Independent bounded reports/flow review; no whole-app repair umbrella |
 | Confirmed sentinel-label bug | T53 | Local Endless label only; independent of proposed domain changes |
 
-**Start with T33** for the support rule; **T35** and **T41** are independent
-foundation analyses. T48/T52 can independently investigate reported rendering/update
+**T33's support analysis is complete** with the November 3 completion-card and
+next-morning acknowledgement decision; see the [report](evidence/t33-completion-support-gate.md).
+**T34, T47 and T49 designs are accepted as of November 5**: Connect/Show up with
+default Show up, no @ in displayed identities, and native invitation selection
+with the complete selected title below it. See their task cards and version
+decision logs. T48 has a proven local SVG gap and owner-approved repair scope;
+its solid-heart product acceptance is still pending. Plan separate implementation
+outcomes using these decisions before changing product behavior.
+**T35** and **T41** remain independent foundation analyses.
+T48/T52 can independently investigate reported rendering/update
 behavior. A Ready card with unmet dependencies is defined but cannot start yet.
 Each UI card names its same-system `index.html`, checklist and version decision;
 only an approved result can become a separate implementation card. Pure domain or
