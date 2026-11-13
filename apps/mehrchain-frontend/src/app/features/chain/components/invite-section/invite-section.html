@@ -36,7 +36,11 @@
                 {{ selectedCommitment()?.title }}
               </p>
               <p class="text-[10px] text-muted-foreground">
-                {{ selectedCommitment()?.totalDays }}d • Streak:
+                {{
+                  selectedCommitment()?.totalDays === -1
+                    ? 'Endless'
+                    : selectedCommitment()?.totalDays + 'd'
+                }} • Streak:
                 {{ selectedCommitment()?.currentStreak }}d
               </p>
             </div>
@@ -69,7 +73,7 @@
                   <span class="text-xs font-bold text-foreground truncate">{{ c.title }}</span>
                 </div>
                 <span class="text-[10px] text-muted-foreground font-semibold shrink-0">
-                  {{ c.totalDays }}d
+                  {{ c.totalDays === -1 ? 'Endless' : c.totalDays + 'd' }}
                 </span>
               </button>
             }

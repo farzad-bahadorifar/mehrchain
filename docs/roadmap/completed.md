@@ -10,6 +10,11 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T27 — Implement Profile A with four real destination routes](tasks/T27.md): Local app opens compact Profile and service-backed account, badges, colors and settings pages via direct URLs.
 - [T28 — Make username cancel/removal and route-failure feedback explicit](tasks/T28.md): Local username form retains failed drafts, cancels edits and removes a handle only after a named confirmation.
 - [T32 — Maintain atomic roadmap cards from one validated registry](tasks/T32.md): One local command workflow adds defined tasks, rejects unverified completion and renders only unfinished work in the active index with preserved history.
+- [T33 — Define and audit completion-only heart eligibility](tasks/T33.md): One evidenced eligibility table specifies when a heart may acknowledge a completed linked commitment and identifies every client/server gap.
+- [T34 — Review separate Connect and Show up views inside Chain](tasks/T34.md): One clickable Chain wireframe separates relationship management from completion acknowledgements in two views.
+- [T47 — Review Chain identity labels without an @ prefix](tasks/T47.md): One approved label/data contract shows Chain names without @ and selects the exact fallback when a username is absent.
+- [T49 — Review the Chain acceptance card and habit selector](tasks/T49.md): One reviewed acceptance wireframe provides a readable identity, habit choice and explicit acceptance in the existing app context.
+- [T53 — Label Endless correctly in the Chain sharing selector](tasks/T53.md): The local Chain sharing selector shows Endless instead of -1d for an Endless commitment and keeps finite duration labels correct.
 - [T54 — Repair whole-belly light dragging in Welcome and Profile locally](tasks/T54.md): Locally, only Welcome hero and Profile overview allow a belly-start drag; its full glow travels across the viewport, leaving a dark belly, with visible eye tracking and safe return.
 - [T55 — Keep first-launch app styling ready before rendering locally](tasks/T55.md): The local production document blocks application first paint on its complete generated stylesheet, preventing an unstyled oversized Welcome mascot while CSS is delayed.
 

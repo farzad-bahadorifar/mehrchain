@@ -110,4 +110,46 @@ describe('InviteSectionComponent', () => {
     expect(shareSpy).toHaveBeenCalledTimes(1);
     expect(copySpy).toHaveBeenLastCalledWith(expect.stringContaining('invite=server-code'));
   });
+
+  it('should display Endless instead of -1d for an Endless commitment', () => {
+    const endlessCommitments: Commitment[] = [
+      {
+        id: 'comm-endless',
+        title: 'Meditation Intention',
+        category: 'growth',
+        totalDays: -1,
+        currentDay: 12,
+        currentStreak: 12,
+        isCompletedToday: false,
+        startDate: new Date().toISOString(),
+        isPublic: true,
+      },
+      {
+        id: 'comm-finite',
+        title: '3-Day Water Sprint',
+        category: 'health',
+        totalDays: 3,
+        currentDay: 1,
+        currentStreak: 1,
+        isCompletedToday: false,
+        startDate: new Date().toISOString(),
+        isPublic: true,
+      },
+    ];
+
+    fixture.componentRef.setInput('commitments', endlessCommitments);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Endless');
+    expect(compiled.textContent).not.toContain('-1d');
+
+    // Open dropdown to check list items
+    component.isDropdownOpen.set(true);
+    fixture.detectChanges();
+
+    expect(compiled.textContent).toContain('Endless');
+    expect(compiled.textContent).toContain('3d');
+    expect(compiled.textContent).not.toContain('-1d');
+  });
 });

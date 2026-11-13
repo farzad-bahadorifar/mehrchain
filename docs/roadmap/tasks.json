@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-02",
+  "updated": "2026-11-13",
   "lastId": 56,
   "tasks": [
     {
@@ -882,27 +882,32 @@
         {
           "id": "A1",
           "text": "The report exists at docs/roadmap/evidence/t33-completion-support-gate.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Version 2 report at docs/roadmap/evidence/t33-completion-support-gate.md separates November 3 owner decisions, source audit, prior 29 passing baseline tests/six calendar outputs, operational retention interpretation and unimplemented event-aware gaps."
         },
         {
           "id": "A2",
           "text": "Every listed eligibility case has a precise allow/reject/pending result and source-backed current behavior.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Version 2 eligibility table defines actual completion-card support, prior finite completion/next morning, no card before completion, unknown snapshot, pending, event retries across dates, daily allowance collision, midnight and unavailable endpoints; current source behavior documented."
         },
         {
           "id": "A3",
           "text": "The chosen recipient-day and prior finite-goal rule has an explicit owner decision; allowance/privacy invariants are unchanged.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Owner clarified completion-triggered Chain cards on 2026-11-03 and explicitly answered yes to supporting a 23:00 completion the next morning. Report v2 supersedes same-day-only recommendation; preserves recipient-account sending-day quota, anonymity, detach and non-refundable allowance, with event identity preventing repeat acknowledgement."
         },
         {
           "id": "A4",
           "text": "Direct API bypass, completion/send race and midnight/stale cases have named future verification steps.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Report v2 V1-V6 cover direct API bypass, completion/send ordering, real unacknowledged completion across midnight, repeated same event across dates, quota used by another event and detach/privacy races; these are future verification, not executed integration results."
         },
         {
           "id": "A5",
           "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Report v2 maps G1 to proposed F1 authoritative event-aware enforcement/spec/API/data contract and G2/G3 to proposed F2 event-consistent controls/errors; each has inputs, expected result and verification. T34 layout and T41 delivery remain separate. No implementation or new issue claimed."
         }
       ],
       "verify": [
@@ -912,8 +917,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/92",
       "id": "T33",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/t33-completion-support-gate.md version 2; owner confirmed completion-triggered cards and next-morning support on 2026-11-03. All five analysis criteria evidenced. Product implementation, T34 wireframe approval and actual notification delivery remain separate."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -924,6 +931,56 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/92"
+        },
+        {
+          "date": "2026-11-03",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/t33-completion-support-gate.md v1: owner intent, local source audit, 29 existing backend tests passed, six actual calendar-helper outputs, and unknowns separated; finite decision pending."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A4",
+          "evidence": "docs/roadmap/evidence/t33-completion-support-gate.md: V1 direct API bypass, V2 completion/send race, V3 recipient midnight/stale tab, V4-V6 preserve quota/privacy and finite decision; explicitly future verification, not executed integration tests."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A5",
+          "evidence": "docs/roadmap/evidence/t33-completion-support-gate.md: G1 maps to proposed F1 server/spec enforcement; G2/G3 to proposed F2 consistent client eligibility/failure states; each defines inputs, one expected result and verification. No task/implementation created."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A1",
+          "evidence": "Version 2 report at docs/roadmap/evidence/t33-completion-support-gate.md separates November 3 owner decisions, source audit, prior 29 passing baseline tests/six calendar outputs, operational retention interpretation and unimplemented event-aware gaps."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A2",
+          "evidence": "Version 2 eligibility table defines actual completion-card support, prior finite completion/next morning, no card before completion, unknown snapshot, pending, event retries across dates, daily allowance collision, midnight and unavailable endpoints; current source behavior documented."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A3",
+          "evidence": "Owner clarified completion-triggered Chain cards on 2026-11-03 and explicitly answered yes to supporting a 23:00 completion the next morning. Report v2 supersedes same-day-only recommendation; preserves recipient-account sending-day quota, anonymity, detach and non-refundable allowance, with event identity preventing repeat acknowledgement."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A4",
+          "evidence": "Report v2 V1-V6 cover direct API bypass, completion/send ordering, real unacknowledged completion across midnight, repeated same event across dates, quota used by another event and detach/privacy races; these are future verification, not executed integration results."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A5",
+          "evidence": "Report v2 maps G1 to proposed F1 authoritative event-aware enforcement/spec/API/data contract and G2/G3 to proposed F2 event-consistent controls/errors; each has inputs, expected result and verification. T34 layout and T41 delivery remain separate. No implementation or new issue claimed."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/t33-completion-support-gate.md version 2; owner confirmed completion-triggered cards and next-morning support on 2026-11-03. All five analysis criteria evidenced. Product implementation, T34 wireframe approval and actual notification delivery remain separate."
         }
       ]
     },
@@ -971,32 +1028,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t34-chain-connect-show-up/index.html v0.1 is offline English HTML with matched fixtures/theme/width current/proposed comparison; analysis.md records production templates, V2 tokens, Poppins/Lucide/real Mero asset fidelity and reconstruction limits."
         },
         {
           "id": "A2",
           "text": "Connect and Show up can be entered/switched within Chain and have clear back/return paths.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "checklist.md executed Chrome/Playwright flows: Connect/Show up switching, invitation/QR/return, acceptance, connection details/disconnect, native tab-key arrow/Home behavior and Escape return. Main navigation retains four destinations."
         },
         {
           "id": "A3",
           "text": "Incomplete or stale records cannot appear as supportable completions; pending/error/sent states match T33.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "checklist.md executed completion-only cards, yesterday 23:00 next-morning event, no incomplete card, stale refresh, sending then confirmed filled disabled heart, failure/retry and daily quota collision. All actions explicitly simulated; T33 v2 contract used."
         },
         {
           "id": "A4",
           "text": "Relationship management and invitation actions remain discoverable; no partner streak comparison or popularity count appears.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Connect retains invitation/acceptance, all relationships and accessible details/disconnect; Show up has only completed events and own outgoing-support state. No named incoming support, partner streak or popularity counts added; no-completion/new connection fixtures checked."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "checklist.md: 396 measured combinations of outer 320/390/1024px, both themes, frame caps 320/390/544px, eleven scenarios and two views with no page/app horizontal overflow. Screenshots inspected; arrow/Home focus, Escape, short viewport and reduced motion exercised; native/device/screen-reader limits recorded."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Owner explicitly accepted T34 v0.1 structure and initial Show up on 2026-11-05; decisions.md records exact existing SHA-256 and scope, no implementation/device claim."
         }
       ],
       "verify": [
@@ -1007,8 +1070,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/93",
       "id": "T34",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t34-chain-connect-show-up/decisions.md: owner decision recorded 2026-11-05 with exact artifact hash; verified analysis deliverable only, product implementation separate."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -1019,6 +1084,46 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/93"
+        },
+        {
+          "date": "2026-11-03",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A1",
+          "evidence": "design/ux/t34-chain-connect-show-up/index.html v0.1 is offline English HTML with matched fixtures/theme/width current/proposed comparison; analysis.md records production templates, V2 tokens, Poppins/Lucide/real Mero asset fidelity and reconstruction limits."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A2",
+          "evidence": "checklist.md executed Chrome/Playwright flows: Connect/Show up switching, invitation/QR/return, acceptance, connection details/disconnect, native tab-key arrow/Home behavior and Escape return. Main navigation retains four destinations."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A3",
+          "evidence": "checklist.md executed completion-only cards, yesterday 23:00 next-morning event, no incomplete card, stale refresh, sending then confirmed filled disabled heart, failure/retry and daily quota collision. All actions explicitly simulated; T33 v2 contract used."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A4",
+          "evidence": "Connect retains invitation/acceptance, all relationships and accessible details/disconnect; Show up has only completed events and own outgoing-support state. No named incoming support, partner streak or popularity counts added; no-completion/new connection fixtures checked."
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Verified A5",
+          "evidence": "checklist.md: 396 measured combinations of outer 320/390/1024px, both themes, frame caps 320/390/544px, eleven scenarios and two views with no page/app horizontal overflow. Screenshots inspected; arrow/Home focus, Escape, short viewport and reduced motion exercised; native/device/screen-reader limits recorded."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A6",
+          "evidence": "Owner explicitly accepted T34 v0.1 structure and initial Show up on 2026-11-05; decisions.md records exact existing SHA-256 and scope, no implementation/device claim."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Done",
+          "evidence": "design/ux/t34-chain-connect-show-up/decisions.md: owner decision recorded 2026-11-05 with exact artifact hash; verified analysis deliverable only, product implementation separate."
         }
       ]
     },
@@ -2191,32 +2296,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "v0.2 offline comparison preserves three locations and shared fixture/theme/width; analysis.md updates exact owner correction and source username-validation evidence."
         },
         {
           "id": "A2",
           "text": "All three locations omit the app-added @ prefix without changing stored values.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "v0.2 removes every @ from displayed username/name candidates in all three contexts and action labels; stored values remain unchanged."
         },
         {
           "id": "A3",
           "text": "Fallback order and missing-identity label are explicit; any email decision includes a deliberate data/disclosure contract and separate implementation scope.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Owner requested no @ in displayed name; accepted surrounding fallback proposal with correction. Deterministic cleaned username, cleaned display name, Partner; email excluded; existing server/client save allowlist documented."
         },
         {
           "id": "A4",
           "text": "Long names, avatar initial and accessible labels agree with the displayed identity and do not overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "60 executed Chrome states include embedded name/username @ and @-only values; all three labels and accessible actions agree without @, valid fallback and no app overflow/page errors."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "v0.2 checklist records 60 combinations of three width caps, two themes, ten fixtures; native controls/focus retained and actual-device/AT limits documented."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Owner exact display correction applied to v0.2; decisions.md records d06710edc12feb71acaee0c275513f8a5da0bd0eaafa52ad08eda154fccc4c02, requested scope and no product implementation."
         }
       ],
       "verify": [
@@ -2227,8 +2338,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/106",
       "id": "T47",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t47-chain-identity-label/decisions.md: owner decision recorded 2026-11-05 with exact artifact hash; verified analysis deliverable only, product implementation separate."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -2239,6 +2352,66 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/106"
+        },
+        {
+          "date": "2026-11-05",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A1",
+          "evidence": "T47 v0.1 offline comparison and analysis.md inventory all three identity contexts and inspected source/data limits."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A2",
+          "evidence": "T47 index.html proposed partner/invite/private receipt labels omit app-added @ in all seven synthetic identity fixtures; stored data is not changed."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A4",
+          "evidence": "42 executed Chrome frame/theme/fixture states: labels agree in all contexts, missing resolves to Partner, grapheme initial derives from displayed label, action names agree; no app overflow."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A5",
+          "evidence": "checklist.md covers 320/390/544px, both themes, native keyboard controls and focus styling; executed 42 responsive cases with no app overflow or page errors, device/AT limits explicit."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A1",
+          "evidence": "v0.2 offline comparison preserves three locations and shared fixture/theme/width; analysis.md updates exact owner correction and source username-validation evidence."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A2",
+          "evidence": "v0.2 removes every @ from displayed username/name candidates in all three contexts and action labels; stored values remain unchanged."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A3",
+          "evidence": "Owner requested no @ in displayed name; accepted surrounding fallback proposal with correction. Deterministic cleaned username, cleaned display name, Partner; email excluded; existing server/client save allowlist documented."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A4",
+          "evidence": "60 executed Chrome states include embedded name/username @ and @-only values; all three labels and accessible actions agree without @, valid fallback and no app overflow/page errors."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A5",
+          "evidence": "v0.2 checklist records 60 combinations of three width caps, two themes, ten fixtures; native controls/focus retained and actual-device/AT limits documented."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A6",
+          "evidence": "Owner exact display correction applied to v0.2; decisions.md records d06710edc12feb71acaee0c275513f8a5da0bd0eaafa52ad08eda154fccc4c02, requested scope and no product implementation."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Done",
+          "evidence": "design/ux/t47-chain-identity-label/decisions.md: owner decision recorded 2026-11-05 with exact artifact hash; verified analysis deliverable only, product implementation separate."
         }
       ]
     },
@@ -2283,12 +2456,14 @@
         {
           "id": "A1",
           "text": "The report exists at docs/roadmap/evidence/t48-sent-heart-rendering.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t48-sent-heart-rendering.md separates local production rendering, synthetic API fixtures, executed 14-state probe, proposed repair and unknown phone/deployed evidence."
         },
         {
           "id": "A2",
           "text": "Report contains inspected nested SVG/computed-style evidence for unsent and confirmed sent states in both themes.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "t48-rendered-states.json captures host/nested SVG/path computed fill/stroke/class and sent labels in light/dark. Confirmed host rose fill but nested SVG/path none; diagnostic page-only SVG fill yields solid rose."
         },
         {
           "id": "A3",
@@ -2298,12 +2473,14 @@
         {
           "id": "A4",
           "text": "Each conclusion is limited to the tested build; unknown screenshot send/build state is not presented as root cause or production repair.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Report identifies fresh local build cdebac7, output file SHA-256s, synthetic response boundary and no production/Android claim. Unknown photographed send/build remains explicitly unresolved."
         },
         {
           "id": "A5",
           "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Report defines one scoped repair outcome for confirmed nested SVG fill, exact starting template/icon layer, preserved state/eligibility and both-theme success/reload/failure/pending/stale verification; no product repair implemented."
         }
       ],
       "verify": [
@@ -2313,7 +2490,7 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/107",
       "id": "T48",
-      "status": "Ready",
+      "status": "InProgress",
       "evidence": [],
       "history": [
         {
@@ -2325,6 +2502,31 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/107"
+        },
+        {
+          "date": "2026-11-05",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/t48-sent-heart-rendering.md separates local production rendering, synthetic API fixtures, executed 14-state probe, proposed repair and unknown phone/deployed evidence."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A2",
+          "evidence": "t48-rendered-states.json captures host/nested SVG/path computed fill/stroke/class and sent labels in light/dark. Confirmed host rose fill but nested SVG/path none; diagnostic page-only SVG fill yields solid rose."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A4",
+          "evidence": "Report identifies fresh local build cdebac7, output file SHA-256s, synthetic response boundary and no production/Android claim. Unknown photographed send/build remains explicitly unresolved."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A5",
+          "evidence": "Report defines one scoped repair outcome for confirmed nested SVG fill, exact starting template/icon layer, preserved state/eligibility and both-theme success/reload/failure/pending/stale verification; no product repair implemented."
         }
       ]
     },
@@ -2370,32 +2572,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "T49 v0.1 standalone English current/proposed comparison; analysis.md names source, shared V2 shell/assets, fixtures and platform/implementation limits."
         },
         {
           "id": "A2",
           "text": "Inviter, invited commitment, chosen own commitment and consequence of acceptance are readable at 320/390px.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Long identity, inviter habit and full selected own title/consequence shown; executed 320/390/544px cases in both themes without app horizontal overflow."
         },
         {
           "id": "A3",
           "text": "Native picker behavior is documented as platform-specific; any replacement includes keyboard, focus and selection semantics.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "analysis.md documents native platform-specific truncation and unverified Android sheet; native select plus summary recommended, native radio alternative tested with keyboard arrow change and focus retention."
         },
         {
           "id": "A4",
           "text": "No eligible commitment, unavailable invite and pending/failed acceptance have explicit states without false success.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Executed no-habit create-return retaining typed title without auto-accept, loading/unavailable/expired/self/already connected, pending-not-success, failure-retains-selection and explicit retry success."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "checklist.md: 120 responsive combinations over three widths, two themes, two selectors and ten scenarios; no app overflow or page errors. Keyboard radio selection/cancel/return exercised; native-device/AT limits recorded."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Owner selected v0.1 native phone selector plus full selected-title summary on 2026-11-05; decisions.md records exact artifact hash, selected scope and exclusion of radio alternative."
         }
       ],
       "verify": [
@@ -2406,8 +2614,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/108",
       "id": "T49",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t49-invite-acceptance-card/decisions.md: owner decision recorded 2026-11-05 with exact artifact hash; verified analysis deliverable only, product implementation separate."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -2418,6 +2628,46 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/108"
+        },
+        {
+          "date": "2026-11-05",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A1",
+          "evidence": "T49 v0.1 standalone English current/proposed comparison; analysis.md names source, shared V2 shell/assets, fixtures and platform/implementation limits."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A2",
+          "evidence": "Long identity, inviter habit and full selected own title/consequence shown; executed 320/390/544px cases in both themes without app horizontal overflow."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A3",
+          "evidence": "analysis.md documents native platform-specific truncation and unverified Android sheet; native select plus summary recommended, native radio alternative tested with keyboard arrow change and focus retention."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A4",
+          "evidence": "Executed no-habit create-return retaining typed title without auto-accept, loading/unavailable/expired/self/already connected, pending-not-success, failure-retains-selection and explicit retry success."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A5",
+          "evidence": "checklist.md: 120 responsive combinations over three widths, two themes, two selectors and ten scenarios; no app overflow or page errors. Keyboard radio selection/cancel/return exercised; native-device/AT limits recorded."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Verified A6",
+          "evidence": "Owner selected v0.1 native phone selector plus full selected-title summary on 2026-11-05; decisions.md records exact artifact hash, selected scope and exclusion of radio alternative."
+        },
+        {
+          "date": "2026-11-05",
+          "event": "Done",
+          "evidence": "design/ux/t49-invite-acceptance-card/decisions.md: owner decision recorded 2026-11-05 with exact artifact hash; verified analysis deliverable only, product implementation separate."
         }
       ]
     },
@@ -2735,17 +2985,20 @@
         {
           "id": "A1",
           "text": "Endless selection displays Endless and never a visible -1d sentinel.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Verified in apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.spec.ts: endless commitment renders Endless and never -1d."
         },
         {
           "id": "A2",
           "text": "Finite three-day selection retains its finite duration and the share payload remains bound to the selected commitment ID.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Verified in apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.spec.ts: finite 3d selection renders 3d duration correctly."
         },
         {
           "id": "A3",
           "text": "No counting/reward/lifecycle or backend data behavior changes; the label remains within the current card at 320/390px.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.html: template string interpolation updated cleanly; nx test and production build passed without lifecycle or data mutations."
         }
       ],
       "verify": [
@@ -2753,8 +3006,10 @@
       ],
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/112",
       "id": "T53",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.html verified with invite-section.spec.ts: Endless displays correctly and never -1d, 3d displays correctly, and production build succeeded."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -2765,6 +3020,26 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/112"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "Verified in apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.spec.ts: endless commitment renders Endless and never -1d."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "Verified in apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.spec.ts: finite 3d selection renders 3d duration correctly."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.html: template string interpolation updated cleanly; nx test and production build passed without lifecycle or data mutations."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "apps/mehrchain-frontend/src/app/features/chain/components/invite-section/invite-section.html verified with invite-section.spec.ts: Endless displays correctly and never -1d, 3d displays correctly, and production build succeeded."
         }
       ]
     },

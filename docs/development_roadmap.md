@@ -18,7 +18,7 @@ Read [decision memory](roadmap/context.md), [workflow](roadmap/workflow.md) and
 | [D-002: Resend email](roadmap/context.md#d-002) | The recorded domain/sender/configuration prerequisites are not ready. Do not rediscover this as an unexplained OTP bug unless conditions change. |
 | [D-003: SMS](roadmap/context.md#d-003) | Not a current route per the owner. Do not invent a provider-related cause or automatically implement SMS. |
 | [D-004: live username](roadmap/context.md#d-004) | Timeouts block diagnosis; improved UI copy is not a backend repair. |
-| [D-008: completion-only support](roadmap/context.md#d-008) | The owner wants hearts after completion; current send guards do not enforce that prerequisite. T33 defines the gap before T34's two-view design. |
+| [D-008: completion-only support](roadmap/context.md#d-008) | Completion creates a support card; the owner confirmed next-morning acknowledgement. T33 records the contract and gaps; current code does not enforce it. T34 designs the two views. |
 | [D-009: experiences and memories](roadmap/context.md#d-009) | Finite experiences, joint outcomes and new Endless attempts differ from the current lifecycle. Settle contracts before Journey wireframes or implementation. |
 | [D-011: Why and reminders](roadmap/context.md#d-011) | Timing and platform delivery are not accepted yet. Inventory first; choose an exact schedule and nudge cap, preserving private optional Why. |
 
@@ -85,8 +85,16 @@ marked complete by adding these cards.
 | Diagnoses and responsive evidence | T48, T50, T51, T52 | Independent bounded reports/flow review; no whole-app repair umbrella |
 | Confirmed sentinel-label bug | T53 | Local Endless label only; independent of proposed domain changes |
 
-**Start with T33** for the support rule; **T35** and **T41** are independent
-foundation analyses. T48/T52 can independently investigate reported rendering/update
+**T33's support analysis is complete** with the November 3 completion-card and
+next-morning acknowledgement decision; see the [report](roadmap/evidence/t33-completion-support-gate.md).
+**T34, T47 and T49 designs are accepted as of November 5**: Connect/Show up with
+default Show up, no @ in displayed identities, and native invitation selection
+with the complete selected title below it. See their task cards and version
+decision logs. T48 has a proven local SVG gap and owner-approved repair scope;
+its solid-heart product acceptance is still pending. Plan separate implementation
+outcomes using these decisions before changing product behavior.
+**T35** and **T41** remain independent foundation analyses.
+T48/T52 can independently investigate reported rendering/update
 behavior. A Ready card with unmet dependencies is defined but cannot start yet.
 Each UI card names its same-system `index.html`, checklist and version decision;
 only an approved result can become a separate implementation card. Pure domain or
@@ -110,8 +118,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | --- | --- | --- | --- | --- |
 | [T29](roadmap/tasks/T29.md) | Identify why the deployed username route fails | analysis | Blocked | P1 |
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Ready | P1 |
-| [T33](roadmap/tasks/T33.md) | Define and audit completion-only heart eligibility | analysis | Ready | P1 |
-| [T34](roadmap/tasks/T34.md) | Review separate Connect and Show up views inside Chain | analysis | Ready | P1 |
 | [T35](roadmap/tasks/T35.md) | Define finite experiences versus Endless commitments | analysis | Ready | P1 |
 | [T36](roadmap/tasks/T36.md) | Define Endless third-day archive and restart attempts | analysis | Ready | P1 |
 | [T37](roadmap/tasks/T37.md) | Define joint Chain success and unfinished memory outcomes | analysis | Ready | P1 |
@@ -124,15 +130,12 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T44](roadmap/tasks/T44.md) | Review a private partner nudge with one exact anti-spam limit | analysis | Ready | P2 |
 | [T45](roadmap/tasks/T45.md) | Review a small anonymous +N received-heart indicator | analysis | Ready | P2 |
 | [T46](roadmap/tasks/T46.md) | Review a readable single-line Home commitment title | analysis | Ready | P2 |
-| [T47](roadmap/tasks/T47.md) | Review Chain identity labels without an @ prefix | analysis | Ready | P2 |
-| [T48](roadmap/tasks/T48.md) | Locate why a confirmed sent heart may remain outline-only | analysis | Ready | P1 |
-| [T49](roadmap/tasks/T49.md) | Review the Chain acceptance card and habit selector | analysis | Ready | P2 |
+| [T48](roadmap/tasks/T48.md) | Locate why a confirmed sent heart may remain outline-only | analysis | InProgress | P1 |
 | [T50](roadmap/tasks/T50.md) | Review invite continuation across account and installation states | analysis | Ready | P1 |
 | [T51](roadmap/tasks/T51.md) | Audit responsive frames across the current app route matrix | analysis | Ready | P2 |
 | [T52](roadmap/tasks/T52.md) | Explain web update activation and isolate the reported fit regression | analysis | Ready | P1 |
-| [T53](roadmap/tasks/T53.md) | Label Endless correctly in the Chain sharing selector | bug | Ready | P2 |
 | [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Ready | P1 |
 
-Updated: 2026-11-02, Asia/Tehran. Next ID: T57.
+Updated: 2026-11-13, Asia/Tehran. Next ID: T57.
 
 This table is generated; [tasks.json](roadmap/tasks.json) owns task status.
