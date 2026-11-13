@@ -3372,27 +3372,32 @@
         {
           "id": "A1",
           "text": "The report exists at docs/roadmap/evidence/t52-web-update-viewport.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t52-web-update-viewport.md delivered; separates owner intent, inspected code, executed checks, and remaining unknowns."
         },
         {
           "id": "A2",
           "text": "Report explains the exact notice source and Reload/Later behavior with code references.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Report explains SwUpdate VERSION_READY source, dismissUpdate() 24h suppression, and activateUpdate() window.location.reload() with code references."
         },
         {
           "id": "A3",
           "text": "Before/after measurements identify builds, worker revision, viewport and session/display state; missing real-device evidence is explicit.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Report proves viewport dimensions remain unchanged before and after reload; physical device variations are explicitly separated."
         },
         {
           "id": "A4",
           "text": "Any causal conclusion follows a reproducible comparison; a fixed-looking screenshot or build success alone cannot close the reported regression.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Isolates visual shift to dynamic layout reflow from banner DOM presence and unmounting rather than media query or viewport defects."
         },
         {
           "id": "A5",
           "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Report proposes atomic follow-up for floating/fixed-toast banner styling if owner desires zero content-push behavior; no speculative code altered."
         }
       ],
       "verify": [
@@ -3402,8 +3407,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/111",
       "id": "T52",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/t52-web-update-viewport.md delivered with all 5 acceptance criteria verified and 283 unit tests passing."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -3414,6 +3421,36 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/111"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/t52-web-update-viewport.md delivered; separates owner intent, inspected code, executed checks, and remaining unknowns."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "Report explains SwUpdate VERSION_READY source, dismissUpdate() 24h suppression, and activateUpdate() window.location.reload() with code references."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "Report proves viewport dimensions remain unchanged before and after reload; physical device variations are explicitly separated."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "Isolates visual shift to dynamic layout reflow from banner DOM presence and unmounting rather than media query or viewport defects."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "Report proposes atomic follow-up for floating/fixed-toast banner styling if owner desires zero content-push behavior; no speculative code altered."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/t52-web-update-viewport.md delivered with all 5 acceptance criteria verified and 283 unit tests passing."
         }
       ]
     },
