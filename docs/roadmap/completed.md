@@ -12,6 +12,7 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T32 — Maintain atomic roadmap cards from one validated registry](tasks/T32.md): One local command workflow adds defined tasks, rejects unverified completion and renders only unfinished work in the active index with preserved history.
 - [T33 — Define and audit completion-only heart eligibility](tasks/T33.md): One evidenced eligibility table specifies when a heart may acknowledge a completed linked commitment and identifies every client/server gap.
 - [T34 — Review separate Connect and Show up views inside Chain](tasks/T34.md): One clickable Chain wireframe separates relationship management from completion acknowledgements in two views.
+- [T35 — Define finite experiences versus Endless commitments](tasks/T35.md): One owner-reviewed domain contract defines a one-time/N-completion experience and an Endless intention without assuming every entry is a habit.
 - [T47 — Review Chain identity labels without an @ prefix](tasks/T47.md): One approved label/data contract shows Chain names without @ and selects the exact fallback when a username is absent.
 - [T48 — Locate why a confirmed sent heart may remain outline-only](tasks/T48.md): One rendered-evidence report identifies whether the sent-heart state fails in data, class propagation, SVG fill or the photographed build.
 - [T49 — Review the Chain acceptance card and habit selector](tasks/T49.md): One reviewed acceptance wireframe provides a readable identity, habit choice and explicit acceptance in the existing app context.

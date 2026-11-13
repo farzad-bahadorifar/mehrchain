@@ -1169,27 +1169,32 @@
         {
           "id": "A1",
           "text": "The report exists at docs/roadmap/evidence/t35-finite-experience-contract.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md delivers complete analysis separating owner intent, inspected code, executed checks and remaining unknowns."
         },
         {
           "id": "A2",
           "text": "The table distinguishes cumulative completions from consecutive streaks and says what finishes each finite experience.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md section 3 establishes exact table distinguishing cumulative completions from consecutive streaks and defines completion threshold currentDay >= totalDays."
         },
         {
           "id": "A3",
           "text": "Solo and many-partner examples have explicit meaning without assuming a new group entity.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md section 4 documents solo and independent multi-partner relationships with no group entity."
         },
         {
           "id": "A4",
           "text": "Owner decision records chosen vocabulary/counting and UI-needed or no-UI-needed rationale; existing-record treatment is stated.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md section 3 & 5 records vocabulary, counting rules, UI-needed decisions and backward-compatible data handling."
         },
         {
           "id": "A5",
           "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md section 6 maps lifecycle guard and Journey memory wireframes to scoped atomic follow-ups without speculative fixes."
         }
       ],
       "verify": [
@@ -1199,8 +1204,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/94",
       "id": "T35",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/t35-finite-experience-contract.md delivers complete domain contract for finite experiences vs Endless intentions with full acceptance criteria."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -1211,6 +1218,36 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/94"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md delivers complete analysis separating owner intent, inspected code, executed checks and remaining unknowns."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md section 3 establishes exact table distinguishing cumulative completions from consecutive streaks and defines completion threshold currentDay >= totalDays."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md section 4 documents solo and independent multi-partner relationships with no group entity."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md section 3 & 5 records vocabulary, counting rules, UI-needed decisions and backward-compatible data handling."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md section 6 maps lifecycle guard and Journey memory wireframes to scoped atomic follow-ups without speculative fixes."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/t35-finite-experience-contract.md delivers complete domain contract for finite experiences vs Endless intentions with full acceptance criteria."
         }
       ]
     },
