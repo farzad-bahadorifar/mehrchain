@@ -125,7 +125,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T43](roadmap/tasks/T43.md) | Review one absence reminder and archive-message schedule | analysis | Ready | P1 |
 | [T44](roadmap/tasks/T44.md) | Review a private partner nudge with one exact anti-spam limit | analysis | Ready | P2 |
 | [T45](roadmap/tasks/T45.md) | Review a small anonymous +N received-heart indicator | analysis | Ready | P2 |
-| [T46](roadmap/tasks/T46.md) | Review a readable single-line Home commitment title | analysis | Ready | P2 |
 | [T50](roadmap/tasks/T50.md) | Review invite continuation across account and installation states | analysis | Ready | P1 |
 | [T51](roadmap/tasks/T51.md) | Audit responsive frames across the current app route matrix | analysis | Ready | P2 |
 | [T52](roadmap/tasks/T52.md) | Explain web update activation and isolate the reported fit regression | analysis | Ready | P1 |

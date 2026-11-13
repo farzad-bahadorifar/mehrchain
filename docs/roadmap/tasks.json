@@ -2350,32 +2350,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t46-home-single-line-title/index.html compares current break-words and proposed truncate side by side; analysis.md documents source fidelity."
         },
         {
           "id": "A2",
           "text": "Title is one line at 320/390px; full title is available to touch, keyboard and assistive technology.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t46-home-single-line-title/checklist.md C1 & C2: title is single line at 320/390px; full title available via title tooltip and Details disclosure."
         },
         {
           "id": "A3",
           "text": "Details remains reachable and the completion button stays within the card.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t46-home-single-line-title/checklist.md C3 & C4: Details toggle preserves shrink-0 min-touch size and Spark button stays enclosed."
         },
         {
           "id": "A4",
           "text": "Long unbroken input and 200% text zoom have documented usable behavior without forced tiny text.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t46-home-single-line-title/analysis.md section 3 documents unbroken input and 150/200% text zoom behavior without forced tiny font."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t46-home-single-line-title/checklist.md covers 320px, 390px, desktop and both themes with zero page overflow."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t46-home-single-line-title/decisions.md records v0.1 approval; verified analysis deliverable only, product implementation separate."
         }
       ],
       "verify": [
@@ -2386,8 +2392,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/105",
       "id": "T46",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t46-home-single-line-title/decisions.md: single-line title with details disclosure approved with complete analysis and checklist."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -2398,6 +2406,41 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/105"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "design/ux/t46-home-single-line-title/index.html compares current break-words and proposed truncate side by side; analysis.md documents source fidelity."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "design/ux/t46-home-single-line-title/checklist.md C1 & C2: title is single line at 320/390px; full title available via title tooltip and Details disclosure."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "design/ux/t46-home-single-line-title/checklist.md C3 & C4: Details toggle preserves shrink-0 min-touch size and Spark button stays enclosed."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "design/ux/t46-home-single-line-title/analysis.md section 3 documents unbroken input and 150/200% text zoom behavior without forced tiny font."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "design/ux/t46-home-single-line-title/checklist.md covers 320px, 390px, desktop and both themes with zero page overflow."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A6",
+          "evidence": "design/ux/t46-home-single-line-title/decisions.md records v0.1 approval; verified analysis deliverable only, product implementation separate."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "design/ux/t46-home-single-line-title/decisions.md: single-line title with details disclosure approved with complete analysis and checklist."
         }
       ]
     },

@@ -16,6 +16,7 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T36 — Define Endless third-day archive and restart attempts](tasks/T36.md): One approved state-transition contract specifies Endless absence archival and a new start from day one while preserving earlier effort.
 - [T37 — Define joint Chain success and unfinished memory outcomes](tasks/T37.md): One approved pair-outcome table defines when a linked experience remains ongoing, finishes successfully or becomes an unfinished memory.
 - [T41 — Inventory notification events and actual platform delivery](tasks/T41.md): One fixed event-by-platform matrix explains what notification paths actually exist from trigger through content, icon, tap and cancellation.
+- [T46 — Review a readable single-line Home commitment title](tasks/T46.md): One approved Home card specimen keeps the title on one line without losing access to its full text or squeezing card actions.
 - [T47 — Review Chain identity labels without an @ prefix](tasks/T47.md): One approved label/data contract shows Chain names without @ and selects the exact fallback when a username is absent.
 - [T48 — Locate why a confirmed sent heart may remain outline-only](tasks/T48.md): One rendered-evidence report identifies whether the sent-heart state fails in data, class propagation, SVG fill or the photographed build.
 - [T49 — Review the Chain acceptance card and habit selector](tasks/T49.md): One reviewed acceptance wireframe provides a readable identity, habit choice and explicit acceptance in the existing app context.
