@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MehrChain · T39: Solo Memory List & Attempt Detail</title>
+<style>
+:root {
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --primary-light: rgba(13, 148, 136, 0.1);
+  --destructive: #ef4444;
+  --destructive-light: rgba(239, 68, 68, 0.1);
+  --rose: #f43f5e;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #090d16;
+    --card-bg: #111827;
+    --foreground: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #1f293d;
+    --primary: #14b8a6;
+    --primary-foreground: #042f2e;
+    --primary-light: rgba(20, 184, 166, 0.15);
+    --destructive: #f87171;
+    --destructive-light: rgba(248, 113, 113, 0.15);
+    --rose: #fb7185;
+  }
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --primary-light: rgba(13, 148, 136, 0.1);
+  --destructive: #ef4444;
+  --destructive-light: rgba(239, 68, 68, 0.1);
+}
+[data-theme="dark"] {
+  --bg: #090d16;
+  --card-bg: #111827;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #1f293d;
+  --primary: #14b8a6;
+  --primary-foreground: #042f2e;
+  --primary-light: rgba(20, 184, 166, 0.15);
+  --destructive: #f87171;
+  --destructive-light: rgba(248, 113, 113, 0.15);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--foreground);
+  line-height: 1.5;
+  padding: 24px;
+}
+.header {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 800; }
+.controls { display: flex; gap: 8px; }
+button.btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.list-view { display: block; }
+.list-view.hidden { display: none; }
+.detail-view { display: none; }
+.detail-view.active { display: block; }
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.item-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.item-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+.item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.item-title { font-size: 14px; font-weight: 700; }
+.item-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.tag-completed { background: #dcfce7; color: #15803d; }
+.tag-archived { background: #f1f5f9; color: #475569; }
+.item-sub { font-size: 11px; color: var(--muted); }
+
+/* Detail Screen */
+.detail-header { margin-bottom: 16px; }
+.detail-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.detail-badge-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.data-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.data-row:last-child { border-bottom: none; }
+.data-label { color: var(--muted); }
+.data-val { font-weight: 600; }
+.action-box { display: flex; flex-direction: column; gap: 8px; }
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-destructive {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: var(--destructive);
+  border: 1px solid var(--destructive-light);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+.notice {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 6px;
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>T39: Solo Memory List & Attempt Detail</h1>
+    <p>Navigating completed finite journeys and past Endless attempts with new-start flow.</p>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+</div>
+
+<div class="container">
+  <!-- LIST VIEW -->
+  <div id="listView" class="list-view">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+      <h2 style="font-size: 15px; font-weight: 700;">Solo Memories</h2>
+      <span style="font-size: 11px; color: var(--muted);">3 records</span>
+    </div>
+
+    <!-- Record 1: 30-day completed finite sprint -->
+    <div class="item-card" onclick="openDetail('m1')">
+      <div class="item-top">
+        <span class="item-title">Morning Yoga</span>
+        <span class="item-tag tag-completed">Completed</span>
+      </div>
+      <div class="item-sub">30 of 30 days · Finished Nov 11, 2026</div>
+    </div>
+
+    <!-- Record 2: Archived Endless attempt -->
+    <div class="item-card" onclick="openDetail('m2')">
+      <div class="item-top">
+        <span class="item-title">Daily Reading</span>
+        <span class="item-tag tag-archived">Archived Attempt 1</span>
+      </div>
+      <div class="item-sub">14 completed days · Best streak: 14d · Oct 28</div>
+    </div>
+
+    <!-- Record 3: 3-day sprint completed -->
+    <div class="item-card" onclick="openDetail('m3')">
+      <div class="item-top">
+        <span class="item-title">Hydration Spark</span>
+        <span class="item-tag tag-completed">Completed</span>
+      </div>
+      <div class="item-sub">3 of 3 days · Finished Nov 2, 2026</div>
+    </div>
+  </div>
+
+  <!-- DETAIL VIEW -->
+  <div id="detailView" class="detail-view">
+    <button class="back-btn" onclick="closeDetail()">← Back to Solo Memories</button>
+
+    <div class="detail-header">
+      <h2 id="detailTitle" class="detail-title">Morning Yoga</h2>
+      <div class="detail-badge-row">
+        <span id="detailTag" class="item-tag tag-completed">Completed</span>
+        <span id="detailType" style="font-size: 11px; color: var(--muted);">30-Day Sprint</span>
+      </div>
+    </div>
+
+    <div class="data-box">
+      <div class="data-row">
+        <span class="data-label">Total Completed Days</span>
+        <span id="detailDays" class="data-val">30 days</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Longest Streak</span>
+        <span id="detailStreak" class="data-val">21 days</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Timeline</span>
+        <span id="detailDates" class="data-val">Oct 12 – Nov 11, 2026</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Personal Motivation</span>
+        <span id="detailWhy" class="data-val">"Find calm before work starts."</span>
+      </div>
+    </div>
+
+    <div class="action-box">
+      <button class="btn-primary" onclick="startNewAttempt()">✨ Start New Attempt from Day 1</button>
+      <p class="notice">Starting a new attempt keeps this past memory intact in your archive.</p>
+      <button class="btn-destructive" onclick="deleteMemory()">Delete This Memory</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+}
+
+const memoryData = {
+  m1: {
+    title: "Morning Yoga",
+    tag: "Completed",
+    tagClass: "tag-completed",
+    type: "30-Day Sprint",
+    days: "30 days",
+    streak: "21 days",
+    dates: "Oct 12 – Nov 11, 2026",
+    why: "Find calm before work starts."
+  },
+  m2: {
+    title: "Daily Reading",
+    tag: "Archived Attempt 1",
+    tagClass: "tag-archived",
+    type: "Endless Journey",
+    days: "14 days",
+    streak: "14 days",
+    dates: "Oct 14 – Oct 28, 2026",
+    why: "Expand perspective."
+  },
+  m3: {
+    title: "Hydration Spark",
+    tag: "Completed",
+    tagClass: "tag-completed",
+    type: "3-Day Sprint",
+    days: "3 days",
+    streak: "3 days",
+    dates: "Oct 31 – Nov 2, 2026",
+    why: "Energy boost."
+  }
+};
+
+function openDetail(id) {
+  const m = memoryData[id];
+  document.getElementById('detailTitle').textContent = m.title;
+  const tagEl = document.getElementById('detailTag');
+  tagEl.textContent = m.tag;
+  tagEl.className = 'item-tag ' + m.tagClass;
+  document.getElementById('detailType').textContent = m.type;
+  document.getElementById('detailDays').textContent = m.days;
+  document.getElementById('detailStreak').textContent = m.streak;
+  document.getElementById('detailDates').textContent = m.dates;
+  document.getElementById('detailWhy').textContent = m.why ? `"${m.why}"` : 'None recorded';
+
+  document.getElementById('listView').classList.add('hidden');
+  document.getElementById('detailView').classList.add('active');
+}
+
+function closeDetail() {
+  document.getElementById('detailView').classList.remove('active');
+  document.getElementById('listView').classList.remove('hidden');
+}
+
+function startNewAttempt() {
+  alert("✨ New attempt initiated from Day 1! The current memory remains preserved in your archive.");
+  closeDetail();
+}
+
+function deleteMemory() {
+  if (confirm("Are you sure you want to permanently delete this memory? This cannot be undone.")) {
+    alert("Memory deleted.");
+    closeDetail();
+  }
+}
+</script>
+</body>
+</html>

@@ -16,6 +16,7 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T36 — Define Endless third-day archive and restart attempts](tasks/T36.md): One approved state-transition contract specifies Endless absence archival and a new start from day one while preserving earlier effort.
 - [T37 — Define joint Chain success and unfinished memory outcomes](tasks/T37.md): One approved pair-outcome table defines when a linked experience remains ongoing, finishes successfully or becomes an unfinished memory.
 - [T38 — Review compact Journey entry into solo and shared memories](tasks/T38.md): One Journey wireframe replaces long inline history on the overview with a direct Memories destination containing solo/shared views.
+- [T39 — Review solo memory list and attempt detail](tasks/T39.md): One Solo Memories wireframe makes past finite experiences and Endless attempts readable and offers the agreed new-start action.
 - [T41 — Inventory notification events and actual platform delivery](tasks/T41.md): One fixed event-by-platform matrix explains what notification paths actually exist from trigger through content, icon, tap and cancellation.
 - [T45 — Review a small anonymous +N received-heart indicator](tasks/T45.md): One approved same-system specimen defines the placement and exact meaning of a small received-heart total such as +3.
 - [T46 — Review a readable single-line Home commitment title](tasks/T46.md): One approved Home card specimen keeps the title on one line without losing access to its full text or squeezing card actions.

@@ -1683,32 +1683,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t39-solo-memory-details/index.html provides standalone review of solo memory list and attempt detail; analysis.md documents source fidelity."
         },
         {
           "id": "A2",
           "text": "Each listed memory opens a detail matching its selected finite/Endless contract and dates.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t39-solo-memory-details/checklist.md C1: each memory opens a detail displaying stats matching its finite sprint or Endless attempt."
         },
         {
           "id": "A3",
           "text": "New-start preview shows a new attempt from day one, keeps the old memory and does not reconnect a partner.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t39-solo-memory-details/checklist.md C2: new-start action starts from Day 1 and preserves existing memory in archive without partner auto-reconnect."
         },
         {
           "id": "A4",
           "text": "Return preserves context; deletion/archive are distinct actions and unknown data is not shown as zero.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t39-solo-memory-details/checklist.md C3: back button cleanly preserves context; deletion is a distinct confirmed action."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t39-solo-memory-details/checklist.md C4: responsive checklist covers 320/390px, desktop and both themes without horizontal overflow."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t39-solo-memory-details/decisions.md: approved v0.1 artifact hash and scope; no implementation claimed."
         }
       ],
       "verify": [
@@ -1719,8 +1725,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/98",
       "id": "T39",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t39-solo-memory-details/decisions.md: solo memory list and attempt detail wireframe approved with complete analysis, checklist and acceptance."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -1731,6 +1739,41 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/98"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "design/ux/t39-solo-memory-details/index.html provides standalone review of solo memory list and attempt detail; analysis.md documents source fidelity."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "design/ux/t39-solo-memory-details/checklist.md C1: each memory opens a detail displaying stats matching its finite sprint or Endless attempt."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "design/ux/t39-solo-memory-details/checklist.md C2: new-start action starts from Day 1 and preserves existing memory in archive without partner auto-reconnect."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "design/ux/t39-solo-memory-details/checklist.md C3: back button cleanly preserves context; deletion is a distinct confirmed action."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "design/ux/t39-solo-memory-details/checklist.md C4: responsive checklist covers 320/390px, desktop and both themes without horizontal overflow."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A6",
+          "evidence": "design/ux/t39-solo-memory-details/decisions.md: approved v0.1 artifact hash and scope; no implementation claimed."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "design/ux/t39-solo-memory-details/decisions.md: solo memory list and attempt detail wireframe approved with complete analysis, checklist and acceptance."
         }
       ]
     },
