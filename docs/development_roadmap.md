@@ -120,7 +120,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Ready | P1 |
 | [T42](roadmap/tasks/T42.md) | Review a voluntary Why offer after Endless progress | analysis | Ready | P2 |
 | [T44](roadmap/tasks/T44.md) | Review a private partner nudge with one exact anti-spam limit | analysis | Ready | P2 |
-| [T50](roadmap/tasks/T50.md) | Review invite continuation across account and installation states | analysis | Ready | P1 |
 | [T51](roadmap/tasks/T51.md) | Audit responsive frames across the current app route matrix | analysis | Ready | P2 |
 | [T52](roadmap/tasks/T52.md) | Explain web update activation and isolate the reported fit regression | analysis | Ready | P1 |
 | [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Ready | P1 |

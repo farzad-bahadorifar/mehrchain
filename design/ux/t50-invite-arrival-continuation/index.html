@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MehrChain · T50: Invite Arrival Continuation Matrix</title>
+<style>
+:root {
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --primary-light: rgba(13, 148, 136, 0.1);
+  --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #090d16;
+    --card-bg: #111827;
+    --foreground: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #1f293d;
+    --primary: #14b8a6;
+    --primary-foreground: #042f2e;
+    --primary-light: rgba(20, 184, 166, 0.15);
+    --success: #34d399;
+    --success-bg: rgba(52, 211, 153, 0.15);
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.15);
+    --danger: #f87171;
+    --danger-bg: rgba(248, 113, 113, 0.15);
+  }
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+}
+[data-theme="dark"] {
+  --bg: #090d16;
+  --card-bg: #111827;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #1f293d;
+  --primary: #14b8a6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--foreground);
+  line-height: 1.5;
+  padding: 24px;
+}
+.header {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 800; }
+.header p { font-size: 12px; color: var(--muted); }
+.controls { display: flex; gap: 8px; }
+button.btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.selector-group {
+  margin-bottom: 14px;
+}
+.selector-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
+}
+.btn-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.opt-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.opt-btn.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+.flow-step {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.flow-step:last-child { border-bottom: none; }
+.step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.step-content { flex: 1; }
+.step-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.step-desc { font-size: 11px; color: var(--muted); }
+.code-pill {
+  font-family: monospace;
+  font-size: 11px;
+  background: var(--bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.alert-box {
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.alert-warning { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning); }
+.alert-success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success); }
+.alert-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger); }
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>T50: Invite Arrival Continuation Matrix</h1>
+    <p>Simulating invite return routing across 3 account states and 4 installation states.</p>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Controls -->
+  <div class="card">
+    <div class="selector-group">
+      <span class="selector-label">1. Account State</span>
+      <div class="btn-group">
+        <button id="accSigned" class="opt-btn active" onclick="setAccount('signed_in')">Signed-In Account</button>
+        <button id="accReturning" class="opt-btn" onclick="setAccount('returning_signed_out')">Returning Signed-Out Account</button>
+        <button id="accNew" class="opt-btn" onclick="setAccount('new_account')">New Account (First Time)</button>
+      </div>
+    </div>
+
+    <div class="selector-group">
+      <span class="selector-label">2. Installation State</span>
+      <div class="btn-group">
+        <button id="instBrowser" class="opt-btn active" onclick="setInstall('browser')">Browser Tab</button>
+        <button id="instPWA" class="opt-btn" onclick="setInstall('pwa')">Installed PWA</button>
+        <button id="instAPK" class="opt-btn" onclick="setInstall('apk')">Installed APK</button>
+        <button id="instNone" class="opt-btn" onclick="setInstall('none')">No App Installed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Replay Result -->
+  <div class="card">
+    <h2>🔄 Replay Flow: <span id="flowHeadline" style="color: var(--primary);">Signed-In in Browser</span></h2>
+    <div id="flowSteps"></div>
+    <div id="flowAlert"></div>
+  </div>
+
+  <!-- Security & Gap Documentation -->
+  <div class="card">
+    <h2>🛡️ Security & Delivery Verification</h2>
+    <div style="font-size: 12px; line-height: 1.6;">
+      <p><strong>Open-Redirect Mitigation:</strong> <code class="code-pill">auth.service.ts</code> method <code class="code-pill">pendingInviteReturnUrl()</code> strictly enforces that <code class="code-pill">returnUrl</code> must start with <code class="code-pill">/chain?</code>, have single segment <code class="code-pill">chain</code>, and possess non-empty <code class="code-pill">invite</code> query param. External domains (e.g. <code class="code-pill">//evil.com</code>) or unauthorized internal paths are safely dropped to <code class="code-pill">/dashboard</code>.</p>
+      <p style="margin-top: 8px;"><strong>Android APK Reality:</strong> <code class="code-pill">AndroidManifest.xml</code> currently contains only <code class="code-pill">android.intent.action.MAIN</code>. External web links will open in the system browser, not the installed APK, until custom App Links (assetlinks.json) or intent filters are implemented.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+let accountState = 'signed_in';
+let installState = 'browser';
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+}
+
+function setAccount(acc) {
+  accountState = acc;
+  ['accSigned','accReturning','accNew'].forEach(id => document.getElementById(id).classList.remove('active'));
+  if (acc === 'signed_in') document.getElementById('accSigned').classList.add('active');
+  if (acc === 'returning_signed_out') document.getElementById('accReturning').classList.add('active');
+  if (acc === 'new_account') document.getElementById('accNew').classList.add('active');
+  renderFlow();
+}
+
+function setInstall(inst) {
+  installState = inst;
+  ['instBrowser','instPWA','instAPK','instNone'].forEach(id => document.getElementById(id).classList.remove('active'));
+  if (inst === 'browser') document.getElementById('instBrowser').classList.add('active');
+  if (inst === 'pwa') document.getElementById('instPWA').classList.add('active');
+  if (inst === 'apk') document.getElementById('instAPK').classList.add('active');
+  if (inst === 'none') document.getElementById('instNone').classList.add('active');
+  renderFlow();
+}
+
+function renderFlow() {
+  const stepsEl = document.getElementById('flowSteps');
+  const alertEl = document.getElementById('flowAlert');
+  const headlineEl = document.getElementById('flowHeadline');
+
+  let steps = [];
+  let alertHtml = '';
+
+  if (accountState === 'signed_in') {
+    headlineEl.textContent = 'Direct Route to Invite Acceptance';
+    steps = [
+      { num: 1, title: "Tap Shared Invite Link", desc: "User opens link: /chain?invite=mhr_inv_xyz123" },
+      { num: 2, title: "Onboarding Guard Evaluates", desc: "User already has token and active commitment; guard passes directly to /chain." },
+      { num: 3, title: "Invite Acceptance Card Displays", desc: "T49 card renders with inviter profile and native commitment selector. Acceptance remains deliberate (no automatic link creation)." }
+    ];
+    alertHtml = '<div class="alert-box alert-success">✅ Ideal direct route. Zero auth boundaries or data loss.</div>';
+  } else if (accountState === 'returning_signed_out') {
+    headlineEl.textContent = 'Preserved Route via Login ReturnUrl';
+    steps = [
+      { num: 1, title: "Tap Shared Invite Link", desc: "User opens link: /chain?invite=mhr_inv_xyz123" },
+      { num: 2, title: "Onboarding Guard Redirects", desc: "Unauthenticated user redirected to: /?returnUrl=%2Fchain%3Finvite%3Dmhr_inv_xyz123" },
+      { num: 3, title: "User Logs In / Enters OTP", desc: "User authenticates. navigateAfterLogin() validates pendingInviteReturnUrl()." },
+      { num: 4, title: "Target URL Restored", desc: "User is navigated directly to /chain?invite=mhr_inv_xyz123. T49 acceptance card displayed." }
+    ];
+    alertHtml = '<div class="alert-box alert-success">✅ ReturnUrl securely preserves destination across login boundary.</div>';
+  } else if (accountState === 'new_account') {
+    headlineEl.textContent = 'Preserved Route via Full Onboarding';
+    steps = [
+      { num: 1, title: "Tap Shared Invite Link", desc: "New recipient opens link: /chain?invite=mhr_inv_xyz123" },
+      { num: 2, title: "Onboarding Guard Redirects", desc: "Redirected to Welcome flow with returnUrl preserved in query parameters." },
+      { num: 3, title: "Recipient Completes Onboarding", desc: "User defines first habit, sets intention, and registers account." },
+      { num: 4, title: "Final Step Routes to Target", desc: "Onboarding completion invokes authService.navigateAfterLogin(), navigating to /chain?invite=mhr_inv_xyz123 with new habit ready to pair." }
+    ];
+    alertHtml = '<div class="alert-box alert-success">✅ New user sets up habit first, then arrives at acceptance card with an eligible habit.</div>';
+  }
+
+  // Installation state nuances
+  if (installState === 'apk') {
+    alertHtml += '<div class="alert-box alert-warning">⚠️ <strong>Android APK Note:</strong> External web links open in mobile browser because AndroidManifest.xml lacks intent-filters. Recipient experiences flow in mobile web.</div>';
+  } else if (installState === 'pwa') {
+    alertHtml += '<div class="alert-box alert-success">💡 <strong>PWA Note:</strong> If opened from PWA standalone icon or browser with installed app, local storage and cookies maintain continuity.</div>';
+  }
+
+  stepsEl.innerHTML = steps.map(s => `
+    <div class="flow-step">
+      <div class="step-num">${s.num}</div>
+      <div class="step-content">
+        <div class="step-title">${s.title}</div>
+        <div class="step-desc">${s.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  alertEl.innerHTML = alertHtml;
+}
+
+renderFlow();
+</script>
+</body>
+</html>

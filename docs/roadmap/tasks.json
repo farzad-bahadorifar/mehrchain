@@ -3145,32 +3145,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t50-invite-arrival-continuation/index.html v0.1 provides comparison of route continuation across consistent shell and themes; analysis.md documents source fidelity."
         },
         {
           "id": "A2",
           "text": "All three account states and four installation states have a current/proposed path and source/test/unknown classification.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "All 3 account states and 4 installation states documented in 3x4 matrix in analysis.md and verified in simulator."
         },
         {
           "id": "A3",
           "text": "Exact invitation survives the selected continuation; external returnUrl is rejected and acceptance stays deliberate.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "auth.service.ts pendingInviteReturnUrl() ensures exact invite survives login/onboarding while strictly rejecting open redirects; acceptance remains deliberate."
         },
         {
           "id": "A4",
           "text": "PWA/APK optional-install and unavailable email/SMS scenarios have honest fallback/return behavior; limitations are explicit.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "PWA and Android APK limitations are explicitly documented: missing intent-filter in AndroidManifest.xml directs external links to mobile browser."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "checklist.md confirms testing at 320px, 390px, desktop, and dark/light modes without horizontal scroll."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming device deployment."
         }
       ],
       "verify": [
@@ -3181,8 +3187,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/109",
       "id": "T50",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t50-invite-arrival-continuation/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 6 criteria verified."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -3193,6 +3201,41 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/109"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "design/ux/t50-invite-arrival-continuation/index.html v0.1 provides comparison of route continuation across consistent shell and themes; analysis.md documents source fidelity."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "All 3 account states and 4 installation states documented in 3x4 matrix in analysis.md and verified in simulator."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "auth.service.ts pendingInviteReturnUrl() ensures exact invite survives login/onboarding while strictly rejecting open redirects; acceptance remains deliberate."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "PWA and Android APK limitations are explicitly documented: missing intent-filter in AndroidManifest.xml directs external links to mobile browser."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "checklist.md confirms testing at 320px, 390px, desktop, and dark/light modes without horizontal scroll."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A6",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming device deployment."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "design/ux/t50-invite-arrival-continuation/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 6 criteria verified."
         }
       ]
     },
