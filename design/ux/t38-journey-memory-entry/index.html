@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MehrChain · T38: Journey Memories Destination Review</title>
+<style>
+:root {
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --primary-light: rgba(13, 148, 136, 0.1);
+  --rose: #f43f5e;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #090d16;
+    --card-bg: #111827;
+    --foreground: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #1f293d;
+    --primary: #14b8a6;
+    --primary-foreground: #042f2e;
+    --primary-light: rgba(20, 184, 166, 0.15);
+    --rose: #fb7185;
+  }
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --primary-light: rgba(13, 148, 136, 0.1);
+  --rose: #f43f5e;
+}
+[data-theme="dark"] {
+  --bg: #090d16;
+  --card-bg: #111827;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #1f293d;
+  --primary: #14b8a6;
+  --primary-foreground: #042f2e;
+  --primary-light: rgba(20, 184, 166, 0.15);
+  --rose: #fb7185;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--foreground);
+  line-height: 1.5;
+  padding: 24px;
+}
+.header {
+  max-width: 900px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 800; }
+.controls { display: flex; gap: 8px; }
+button.btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.grid {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+.column {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+.col-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.col-header h2 { font-size: 15px; font-weight: 700; }
+.tag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.tag-current { background: #fee2e2; color: #991b1b; }
+.tag-proposed { background: #ccfbf1; color: #0f766e; }
+
+/* Phone Mockup Frame */
+.mockup-frame {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg);
+  padding: 16px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+.stat-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.stat {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+}
+.stat-label { font-size: 10px; color: var(--muted); }
+.stat-val { font-size: 16px; font-weight: 800; color: var(--primary); }
+.calendar-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+.calendar-title { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.cal-day {
+  height: 20px;
+  border-radius: 4px;
+  background: var(--border);
+  opacity: 0.4;
+}
+.cal-day.active { background: var(--primary); opacity: 1; }
+
+.destination-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+}
+.destination-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+.dest-title { font-size: 13px; font-weight: 700; }
+.dest-desc { font-size: 10px; color: var(--muted); }
+.dest-pill {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+/* Memories View Inside Proposed Mockup */
+.memories-view { display: none; }
+.memories-view.active { display: block; }
+.overview-view { display: block; }
+.overview-view.hidden { display: none; }
+.nav-back-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--primary);
+}
+.tab-row {
+  display: flex;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 14px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 6px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.tab-btn.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.memory-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+.mem-title { font-weight: 700; margin-bottom: 2px; }
+.mem-date { font-size: 10px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>T38: Compact Journey Entry to Memories</h1>
+    <p>Replacing long embedded history list with direct Memories destination (Solo / Shared).</p>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+</div>
+
+<div class="grid">
+  <!-- CURRENT COLUMN: Long inline history -->
+  <div class="column">
+    <div class="col-header">
+      <h2>Current Journey View</h2>
+      <span class="tag tag-current">Long Inline List</span>
+    </div>
+    <div class="mockup-frame">
+      <div class="stat-box">
+        <div class="stat"><span class="stat-label">Active Habits</span><p class="stat-val">3</p></div>
+        <div class="stat"><span class="stat-label">Streak</span><p class="stat-val">12d</p></div>
+      </div>
+      <div class="calendar-card">
+        <div class="calendar-title">Activity Calendar</div>
+        <div class="cal-grid">
+          <div class="cal-day active"></div><div class="cal-day active"></div><div class="cal-day"></div>
+          <div class="cal-day active"></div><div class="cal-day active"></div><div class="cal-day active"></div><div class="cal-day"></div>
+        </div>
+      </div>
+      <p style="font-size: 11px; font-weight:700; margin-bottom: 8px;">Full Embedded History List (Causes long page):</p>
+      <div class="memory-card"><div class="mem-title">Morning Yoga (30-Day Sprint)</div><div class="mem-date">Completed · 30 of 30 days</div></div>
+      <div class="memory-card"><div class="mem-title">Daily Reading Attempt 1</div><div class="mem-date">Archived · 14 days completed</div></div>
+      <div class="memory-card"><div class="mem-title">Hydration with @sara</div><div class="mem-date">Shared · Successfully finished</div></div>
+      <div class="memory-card"><div class="mem-title">Walking Spark with @alex</div><div class="mem-date">Shared · Left unfinished</div></div>
+    </div>
+  </div>
+
+  <!-- PROPOSED COLUMN: Compact Journey with Memories Destination -->
+  <div class="column">
+    <div class="col-header">
+      <h2>Proposed Journey View</h2>
+      <span class="tag tag-proposed">Compact Destination</span>
+    </div>
+    <div class="mockup-frame">
+      <!-- OVERVIEW -->
+      <div id="overviewView" class="overview-view">
+        <div class="stat-box">
+          <div class="stat"><span class="stat-label">Active Habits</span><p class="stat-val">3</p></div>
+          <div class="stat"><span class="stat-label">Streak</span><p class="stat-val">12d</p></div>
+        </div>
+        <div class="calendar-card">
+          <div class="calendar-title">Activity Calendar</div>
+          <div class="cal-grid">
+            <div class="cal-day active"></div><div class="cal-day active"></div><div class="cal-day"></div>
+            <div class="cal-day active"></div><div class="cal-day active"></div><div class="cal-day active"></div><div class="cal-day"></div>
+          </div>
+        </div>
+
+        <!-- Memories Direct Destination Entry -->
+        <div class="destination-card" onclick="openMemories()">
+          <div>
+            <div class="dest-title">✨ Memories</div>
+            <div class="dest-desc">Past finite journeys & shared endeavor records</div>
+          </div>
+          <span class="dest-pill">4 memories →</span>
+        </div>
+      </div>
+
+      <!-- MEMORIES DESTINATION -->
+      <div id="memoriesView" class="memories-view">
+        <div class="nav-back-row" onclick="closeMemories()">
+          <span>← Back to Journey Overview</span>
+        </div>
+
+        <!-- Sub Tabs: Solo vs Shared -->
+        <div class="tab-row">
+          <button id="soloTabBtn" class="tab-btn active" onclick="switchMemTab('solo')">Solo Memories (2)</button>
+          <button id="sharedTabBtn" class="tab-btn" onclick="switchMemTab('shared')">Shared Memories (2)</button>
+        </div>
+
+        <!-- Solo List -->
+        <div id="soloList">
+          <div class="memory-card">
+            <div class="mem-title">Morning Yoga (30-Day Sprint)</div>
+            <div class="mem-date">Goal reached · Oct 12 – Nov 11</div>
+          </div>
+          <div class="memory-card">
+            <div class="mem-title">Daily Reading (Attempt 1)</div>
+            <div class="mem-date">Archived · 14 completed days</div>
+          </div>
+        </div>
+
+        <!-- Shared List -->
+        <div id="sharedList" style="display: none;">
+          <div class="memory-card">
+            <div class="mem-title">Hydration with Sara</div>
+            <div class="mem-date">Shared · Successfully finished</div>
+          </div>
+          <div class="memory-card">
+            <div class="mem-title">Walking Spark with Alex</div>
+            <div class="mem-date">Shared · Left unfinished</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+}
+function openMemories() {
+  document.getElementById('overviewView').classList.add('hidden');
+  document.getElementById('memoriesView').classList.add('active');
+}
+function closeMemories() {
+  document.getElementById('memoriesView').classList.remove('active');
+  document.getElementById('overviewView').classList.remove('hidden');
+}
+function switchMemTab(tab) {
+  const soloBtn = document.getElementById('soloTabBtn');
+  const sharedBtn = document.getElementById('sharedTabBtn');
+  const soloList = document.getElementById('soloList');
+  const sharedList = document.getElementById('sharedList');
+  if (tab === 'solo') {
+    soloBtn.classList.add('active');
+    sharedBtn.classList.remove('active');
+    soloList.style.display = 'block';
+    sharedList.style.display = 'none';
+  } else {
+    sharedBtn.classList.add('active');
+    soloBtn.classList.remove('active');
+    soloList.style.display = 'none';
+    sharedList.style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>

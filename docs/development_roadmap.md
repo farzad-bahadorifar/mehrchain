@@ -118,7 +118,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | --- | --- | --- | --- | --- |
 | [T29](roadmap/tasks/T29.md) | Identify why the deployed username route fails | analysis | Blocked | P1 |
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Ready | P1 |
-| [T38](roadmap/tasks/T38.md) | Review compact Journey entry into solo and shared memories | analysis | Ready | P2 |
 | [T39](roadmap/tasks/T39.md) | Review solo memory list and attempt detail | analysis | Ready | P2 |
 | [T40](roadmap/tasks/T40.md) | Review shared memories by ongoing, successful and unfinished outcomes | analysis | Ready | P2 |
 | [T42](roadmap/tasks/T42.md) | Review a voluntary Why offer after Endless progress | analysis | Ready | P2 |

@@ -1545,32 +1545,38 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t38-journey-memory-entry/index.html compares current long inline list vs proposed Memories destination; analysis.md documents source fidelity."
         },
         {
           "id": "A2",
           "text": "Overview has a direct Memories entry and no embedded full history list; calendar/history remain reachable.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t38-journey-memory-entry/checklist.md C1: overview has direct Memories card; activity calendar and stats remain visible."
         },
         {
           "id": "A3",
           "text": "Solo and Shared destinations switch clearly and return to Journey without losing the selected destination.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t38-journey-memory-entry/checklist.md C2: Solo and Shared tabs switch clearly and back button returns to Journey overview."
         },
         {
           "id": "A4",
           "text": "The short-height review distinguishes normal destination scrolling from a long overview.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t38-journey-memory-entry/checklist.md C3: short mobile height 320x568 keeps overview concise while destination list scrolls inside frame."
         },
         {
           "id": "A5",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t38-journey-memory-entry/checklist.md C4: covers 320/390px, desktop, both themes without horizontal page overflow."
         },
         {
           "id": "A6",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t38-journey-memory-entry/decisions.md: approved v0.1 artifact hash and scope; no code implementation claimed."
         }
       ],
       "verify": [
@@ -1581,8 +1587,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/97",
       "id": "T38",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t38-journey-memory-entry/decisions.md: compact Journey overview with Memories destination approved with complete analysis and checklist."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -1593,6 +1601,41 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/97"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "design/ux/t38-journey-memory-entry/index.html compares current long inline list vs proposed Memories destination; analysis.md documents source fidelity."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "design/ux/t38-journey-memory-entry/checklist.md C1: overview has direct Memories card; activity calendar and stats remain visible."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "design/ux/t38-journey-memory-entry/checklist.md C2: Solo and Shared tabs switch clearly and back button returns to Journey overview."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "design/ux/t38-journey-memory-entry/checklist.md C3: short mobile height 320x568 keeps overview concise while destination list scrolls inside frame."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "design/ux/t38-journey-memory-entry/checklist.md C4: covers 320/390px, desktop, both themes without horizontal page overflow."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A6",
+          "evidence": "design/ux/t38-journey-memory-entry/decisions.md: approved v0.1 artifact hash and scope; no code implementation claimed."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "design/ux/t38-journey-memory-entry/decisions.md: compact Journey overview with Memories destination approved with complete analysis and checklist."
         }
       ]
     },
