@@ -2468,7 +2468,8 @@
         {
           "id": "A3",
           "text": "Confirmed sent means a solid readable heart; failed/pending requests never appear saved and retries do not toggle off.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.css & html: added :host ::ng-deep lucide-icon.fill-rose-500 svg, lucide-icon[data-sent='true'] svg { fill: currentColor; } and data-sent binding; verified in chain-card.spec.ts that confirmed sent applies solid fill styling while pending/failed/stale remain unsaved."
         },
         {
           "id": "A4",
@@ -2490,8 +2491,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/107",
       "id": "T48",
-      "status": "InProgress",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/t48-sent-heart-rendering.md and chain-card.spec.ts: confirmed sent heart renders solid fill via scoped SVG rule while unsent, pending, failed, and stale states remain outline/unsaved."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -2527,6 +2530,16 @@
           "date": "2026-11-05",
           "event": "Verified A5",
           "evidence": "Report defines one scoped repair outcome for confirmed nested SVG fill, exact starting template/icon layer, preserved state/eligibility and both-theme success/reload/failure/pending/stale verification; no product repair implemented."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "apps/mehrchain-frontend/src/app/features/chain/components/chain-card/chain-card.css & html: added :host ::ng-deep lucide-icon.fill-rose-500 svg, lucide-icon[data-sent='true'] svg { fill: currentColor; } and data-sent binding; verified in chain-card.spec.ts that confirmed sent applies solid fill styling while pending/failed/stale remain unsaved."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/t48-sent-heart-rendering.md and chain-card.spec.ts: confirmed sent heart renders solid fill via scoped SVG rule while unsent, pending, failed, and stale states remain outline/unsaved."
         }
       ]
     },

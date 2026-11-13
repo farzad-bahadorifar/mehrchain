@@ -6,3 +6,8 @@
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+
+:host ::ng-deep lucide-icon.fill-rose-500 svg,
+:host ::ng-deep lucide-icon[data-sent="true"] svg {
+  fill: currentColor;
+}

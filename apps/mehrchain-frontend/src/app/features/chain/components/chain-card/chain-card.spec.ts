@@ -59,6 +59,9 @@ describe('ChainCardComponent', () => {
     fixture.detectChanges();
     expect(button.disabled).toBe(true);
     expect(button.getAttribute('aria-label')).toBe('Heart sent for this habit today');
+    const heartIcon = button.querySelector('lucide-icon');
+    expect(heartIcon?.getAttribute('data-sent')).toBe('true');
+    expect(heartIcon?.classList.contains('fill-rose-500')).toBe(true);
     fixture.componentRef.setInput('stale', true);
     fixture.detectChanges();
     expect(button.disabled).toBe(true);

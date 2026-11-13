@@ -1,0 +1,631 @@
+{
+  "date": "2026-11-05",
+  "kind": "synthetic API, real local production bundle",
+  "results": [
+    {
+      "theme": "light",
+      "state": "unsent",
+      "documentDark": false,
+      "host": {
+        "class": "w-5 h-5 mx-auto",
+        "fillAttribute": null,
+        "fill": "rgb(0, 0, 0)",
+        "stroke": "none",
+        "color": "rgb(100, 114, 134)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "rgb(100, 114, 134)",
+        "color": "rgb(100, 114, 134)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "rgb(100, 114, 134)",
+        "color": "rgb(100, 114, 134)"
+      },
+      "buttonLabel": "Send heart to A short walk",
+      "disabled": false
+    },
+    {
+      "theme": "light",
+      "state": "pending",
+      "documentDark": false,
+      "host": {
+        "class": "w-5 h-5 mx-auto",
+        "fillAttribute": null,
+        "fill": "rgb(0, 0, 0)",
+        "stroke": "none",
+        "color": "rgb(100, 114, 134)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "rgb(100, 114, 134)",
+        "color": "rgb(100, 114, 134)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "rgb(100, 114, 134)",
+        "color": "rgb(100, 114, 134)"
+      },
+      "buttonLabel": "Saving heart",
+      "disabled": true
+    },
+    {
+      "theme": "light",
+      "state": "failure",
+      "documentDark": false,
+      "host": {
+        "class": "w-5 h-5 mx-auto",
+        "fillAttribute": null,
+        "fill": "rgb(0, 0, 0)",
+        "stroke": "none",
+        "color": "rgb(100, 114, 134)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "rgb(100, 114, 134)",
+        "color": "rgb(100, 114, 134)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "rgb(100, 114, 134)",
+        "color": "rgb(100, 114, 134)"
+      },
+      "buttonLabel": "Send heart to A short walk",
+      "disabled": false
+    },
+    {
+      "theme": "light",
+      "state": "confirmed-sent",
+      "documentDark": false,
+      "host": {
+        "class": "w-5 h-5 mx-auto text-rose-500 fill-rose-500",
+        "fillAttribute": null,
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "none",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "buttonLabel": "Heart sent for this habit today",
+      "disabled": true
+    },
+    {
+      "theme": "light",
+      "state": "reload-sent",
+      "documentDark": false,
+      "host": {
+        "class": "w-5 h-5 mx-auto text-rose-500 fill-rose-500",
+        "fillAttribute": null,
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "none",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "buttonLabel": "Heart sent for this habit today",
+      "disabled": true
+    },
+    {
+      "theme": "light",
+      "state": "diagnostic-css-only",
+      "documentDark": false,
+      "host": {
+        "class": "w-5 h-5 mx-auto text-rose-500 fill-rose-500",
+        "fillAttribute": null,
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "none",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "buttonLabel": "Heart sent for this habit today",
+      "disabled": true
+    },
+    {
+      "theme": "light",
+      "state": "stale",
+      "documentDark": false,
+      "host": {
+        "class": "w-5 h-5 mx-auto",
+        "fillAttribute": null,
+        "fill": "rgb(0, 0, 0)",
+        "stroke": "none",
+        "color": "rgb(100, 114, 134)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "rgb(100, 114, 134)",
+        "color": "rgb(100, 114, 134)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "rgb(100, 114, 134)",
+        "color": "rgb(100, 114, 134)"
+      },
+      "buttonLabel": "Send heart to A short walk",
+      "disabled": true
+    },
+    {
+      "theme": "dark",
+      "state": "unsent",
+      "documentDark": true,
+      "host": {
+        "class": "w-5 h-5 mx-auto",
+        "fillAttribute": null,
+        "fill": "rgb(0, 0, 0)",
+        "stroke": "none",
+        "color": "rgb(167, 184, 205)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "rgb(167, 184, 205)",
+        "color": "rgb(167, 184, 205)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "rgb(167, 184, 205)",
+        "color": "rgb(167, 184, 205)"
+      },
+      "buttonLabel": "Send heart to A short walk",
+      "disabled": false
+    },
+    {
+      "theme": "dark",
+      "state": "pending",
+      "documentDark": true,
+      "host": {
+        "class": "w-5 h-5 mx-auto",
+        "fillAttribute": null,
+        "fill": "rgb(0, 0, 0)",
+        "stroke": "none",
+        "color": "rgb(167, 184, 205)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "rgb(167, 184, 205)",
+        "color": "rgb(167, 184, 205)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "rgb(167, 184, 205)",
+        "color": "rgb(167, 184, 205)"
+      },
+      "buttonLabel": "Saving heart",
+      "disabled": true
+    },
+    {
+      "theme": "dark",
+      "state": "failure",
+      "documentDark": true,
+      "host": {
+        "class": "w-5 h-5 mx-auto",
+        "fillAttribute": null,
+        "fill": "rgb(0, 0, 0)",
+        "stroke": "none",
+        "color": "rgb(167, 184, 205)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "rgb(167, 184, 205)",
+        "color": "rgb(167, 184, 205)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "rgb(167, 184, 205)",
+        "color": "rgb(167, 184, 205)"
+      },
+      "buttonLabel": "Send heart to A short walk",
+      "disabled": false
+    },
+    {
+      "theme": "dark",
+      "state": "confirmed-sent",
+      "documentDark": true,
+      "host": {
+        "class": "w-5 h-5 mx-auto text-rose-500 fill-rose-500",
+        "fillAttribute": null,
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "none",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "buttonLabel": "Heart sent for this habit today",
+      "disabled": true
+    },
+    {
+      "theme": "dark",
+      "state": "reload-sent",
+      "documentDark": true,
+      "host": {
+        "class": "w-5 h-5 mx-auto text-rose-500 fill-rose-500",
+        "fillAttribute": null,
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "none",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "buttonLabel": "Heart sent for this habit today",
+      "disabled": true
+    },
+    {
+      "theme": "dark",
+      "state": "diagnostic-css-only",
+      "documentDark": true,
+      "host": {
+        "class": "w-5 h-5 mx-auto text-rose-500 fill-rose-500",
+        "fillAttribute": null,
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "none",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "oklch(0.645 0.246 16.439)",
+        "stroke": "oklch(0.645 0.246 16.439)",
+        "color": "oklch(0.645 0.246 16.439)"
+      },
+      "buttonLabel": "Heart sent for this habit today",
+      "disabled": true
+    },
+    {
+      "theme": "dark",
+      "state": "stale",
+      "documentDark": true,
+      "host": {
+        "class": "w-5 h-5 mx-auto",
+        "fillAttribute": null,
+        "fill": "rgb(0, 0, 0)",
+        "stroke": "none",
+        "color": "rgb(167, 184, 205)"
+      },
+      "svg": {
+        "class": "lucide lucide-heart w-5 h-5 mx-auto",
+        "fillAttribute": "none",
+        "fill": "none",
+        "stroke": "rgb(167, 184, 205)",
+        "color": "rgb(167, 184, 205)"
+      },
+      "path": {
+        "class": null,
+        "fillAttribute": null,
+        "fill": "none",
+        "stroke": "rgb(167, 184, 205)",
+        "color": "rgb(167, 184, 205)"
+      },
+      "buttonLabel": "Send heart to A short walk",
+      "disabled": true
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "path": "/api/auth/me",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/commitments/sync",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/connections/t48-link/heart",
+      "method": "POST",
+      "theme": "light"
+    },
+    {
+      "path": "/api/commitments/sync",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/connections/t48-link/heart",
+      "method": "POST",
+      "theme": "light"
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/commitments/sync",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/commitments/sync",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "light"
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/commitments/sync",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/connections/t48-link/heart",
+      "method": "POST",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/commitments/sync",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/connections/t48-link/heart",
+      "method": "POST",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/commitments/sync",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/commitments/sync",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/disconnect-receipts",
+      "method": "GET",
+      "theme": "dark"
+    },
+    {
+      "path": "/api/chain/connections",
+      "method": "GET",
+      "theme": "dark"
+    }
+  ]
+}

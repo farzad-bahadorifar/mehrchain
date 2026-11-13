@@ -36,6 +36,7 @@
           class="w-5 h-5 mx-auto"
           [class.text-rose-500]="isHeartSent()"
           [class.fill-rose-500]="isHeartSent()"
+          [attr.data-sent]="isHeartSent() ? 'true' : null"
           aria-hidden="true"
         ></lucide-icon>
       </button>
