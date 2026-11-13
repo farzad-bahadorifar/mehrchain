@@ -121,7 +121,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T38](roadmap/tasks/T38.md) | Review compact Journey entry into solo and shared memories | analysis | Ready | P2 |
 | [T39](roadmap/tasks/T39.md) | Review solo memory list and attempt detail | analysis | Ready | P2 |
 | [T40](roadmap/tasks/T40.md) | Review shared memories by ongoing, successful and unfinished outcomes | analysis | Ready | P2 |
-| [T41](roadmap/tasks/T41.md) | Inventory notification events and actual platform delivery | analysis | Ready | P1 |
 | [T42](roadmap/tasks/T42.md) | Review a voluntary Why offer after Endless progress | analysis | Ready | P2 |
 | [T43](roadmap/tasks/T43.md) | Review one absence reminder and archive-message schedule | analysis | Ready | P1 |
 | [T44](roadmap/tasks/T44.md) | Review a private partner nudge with one exact anti-spam limit | analysis | Ready | P2 |
