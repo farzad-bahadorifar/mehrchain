@@ -12,5 +12,6 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T32 — Maintain atomic roadmap cards from one validated registry](tasks/T32.md): One local command workflow adds defined tasks, rejects unverified completion and renders only unfinished work in the active index with preserved history.
 - [T54 — Repair whole-belly light dragging in Welcome and Profile locally](tasks/T54.md): Locally, only Welcome hero and Profile overview allow a belly-start drag; its full glow travels across the viewport, leaving a dark belly, with visible eye tracking and safe return.
 - [T55 — Keep first-launch app styling ready before rendering locally](tasks/T55.md): The local production document blocks application first paint on its complete generated stylesheet, preventing an unstyled oversized Welcome mascot while CSS is delayed.
+- [T58 — Fix Android transparent navigation bar and remove green bottom inset](tasks/T58.md): The Android system navigation bar renders with a transparent background so no solid green accent bar appears at the bottom of the screen.
 
 Earlier implementation/acceptance records remain in [legacy disposition](legacy.md) and linked history.

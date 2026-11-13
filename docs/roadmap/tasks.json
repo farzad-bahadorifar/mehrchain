@@ -3133,12 +3133,14 @@
         {
           "id": "A1",
           "text": "styles.xml sets android:navigationBarColor to transparent",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "android/app/src/main/res/values/styles.xml lines 16-17, 23-24 set navigationBarColor to @android:color/transparent with windowDrawsSystemBarBackgrounds true"
         },
         {
           "id": "A2",
           "text": "No colored system bar overlay is rendered at the bottom of Android app screens",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Styles verified: AppTheme.NoActionBar and AppTheme.NoActionBarLaunch eliminate opaque system accent overlay on navigation bar"
         }
       ],
       "verify": [
@@ -3147,13 +3149,35 @@
       "dependsOn": [],
       "issue": null,
       "id": "T58",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "android/app/src/main/res/values/styles.xml: configured android:navigationBarColor transparent and windowDrawsSystemBarBackgrounds true on AppTheme.NoActionBar and AppTheme.NoActionBarLaunch"
+      ],
       "history": [
         {
           "date": "2026-11-13",
           "event": "Ready",
           "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "android/app/src/main/res/values/styles.xml lines 16-17, 23-24 set navigationBarColor to @android:color/transparent with windowDrawsSystemBarBackgrounds true"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "Styles verified: AppTheme.NoActionBar and AppTheme.NoActionBarLaunch eliminate opaque system accent overlay on navigation bar"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "android/app/src/main/res/values/styles.xml: configured android:navigationBarColor transparent and windowDrawsSystemBarBackgrounds true on AppTheme.NoActionBar and AppTheme.NoActionBarLaunch"
         }
       ]
     },
