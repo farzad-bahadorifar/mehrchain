@@ -119,7 +119,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T29](roadmap/tasks/T29.md) | Identify why the deployed username route fails | analysis | Blocked | P1 |
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Ready | P1 |
 | [T42](roadmap/tasks/T42.md) | Review a voluntary Why offer after Endless progress | analysis | Ready | P2 |
-| [T43](roadmap/tasks/T43.md) | Review one absence reminder and archive-message schedule | analysis | Ready | P1 |
 | [T44](roadmap/tasks/T44.md) | Review a private partner nudge with one exact anti-spam limit | analysis | Ready | P2 |
 | [T50](roadmap/tasks/T50.md) | Review invite continuation across account and installation states | analysis | Ready | P1 |
 | [T51](roadmap/tasks/T51.md) | Audit responsive frames across the current app route matrix | analysis | Ready | P2 |

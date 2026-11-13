@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MehrChain · T43: Absence Reminder and Archive Schedule</title>
+<style>
+:root {
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --primary-light: rgba(13, 148, 136, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --info: #3b82f6;
+  --info-bg: rgba(59, 130, 246, 0.1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #090d16;
+    --card-bg: #111827;
+    --foreground: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #1f293d;
+    --primary: #14b8a6;
+    --primary-foreground: #042f2e;
+    --primary-light: rgba(20, 184, 166, 0.15);
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.15);
+    --info: #60a5fa;
+    --info-bg: rgba(96, 165, 250, 0.15);
+  }
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --warning: #f59e0b;
+}
+[data-theme="dark"] {
+  --bg: #090d16;
+  --card-bg: #111827;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #1f293d;
+  --primary: #14b8a6;
+  --warning: #fbbf24;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--foreground);
+  line-height: 1.5;
+  padding: 24px;
+}
+.header {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 800; }
+.header p { font-size: 12px; color: var(--muted); }
+.controls { display: flex; gap: 8px; }
+button.btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.timeline-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.timeline-table th, .timeline-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.timeline-table th {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.badge-day1 { background: var(--info-bg); color: var(--info); }
+.badge-day2 { background: var(--warning-bg); color: var(--warning); }
+.badge-archive { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+.scenario-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 12px;
+}
+.banner {
+  border-left: 4px solid var(--primary);
+  background: var(--primary-light);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-size: 12px;
+}
+.banner.warning {
+  border-left-color: var(--warning);
+  background: var(--warning-bg);
+}
+.banner.danger {
+  border-left-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+.banner-title { font-weight: 700; margin-bottom: 2px; }
+.banner-body { color: var(--foreground); }
+.toggle-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.toggle-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.toggle-btn.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>T43: Absence Reminder & Archive Schedule</h1>
+    <p>Settling the timeline for private Why reminders, cancellation on completion, and third-day archival.</p>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+</div>
+
+<div class="container">
+  <!-- 1. The Definitive Timeline Table -->
+  <div class="card">
+    <h2>🗓️ Canonical Timeline Schedule</h2>
+    <table class="timeline-table">
+      <thead>
+        <tr>
+          <th>Timeframe</th>
+          <th>Absence Status</th>
+          <th>Action & In-App / Local Notice</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mon 23:00</strong></td>
+          <td>Completed</td>
+          <td>Active streak intact. Previous day recorded.</td>
+        </tr>
+        <tr>
+          <td><strong>Tue 20:00</strong></td>
+          <td><span class="badge badge-day1">Day 1 Missed</span></td>
+          <td><strong>First Gentle Reminder:</strong> Shows private Why (or neutral text if blank). Suppressed if Spark completed earlier today.</td>
+        </tr>
+        <tr>
+          <td><strong>Wed 20:00</strong></td>
+          <td><span class="badge badge-day2">Day 2 Missed</span></td>
+          <td><strong>Second Check-In:</strong> Gentle reminder of 2-day absence threshold. Re-emphasizes personal intention without guilt.</td>
+        </tr>
+        <tr>
+          <td><strong>Thu 00:00</strong></td>
+          <td><span class="badge badge-archive">Day 3 Midnight</span></td>
+          <td><strong>Attempt Archived:</strong> Endless attempt closes at local midnight. History safely saved to Solo Memories.</td>
+        </tr>
+        <tr>
+          <td><strong>Thu Next Open</strong></td>
+          <td>Archival Notice</td>
+          <td>"Your journey was saved to Memories. Start fresh from Day 1 whenever you are ready." Direct link to Memories.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2. Interactive Simulator -->
+  <div class="card">
+    <h2>🧪 Absence Message Simulator</h2>
+    <div class="toggle-group">
+      <button id="tDay1" class="toggle-btn active" onclick="setDay('day1')">Day 1 Missed (Tue 20:00)</button>
+      <button id="tDay2" class="toggle-btn" onclick="setDay('day2')">Day 2 Missed (Wed 20:00)</button>
+      <button id="tDay3" class="toggle-btn" onclick="setDay('day3')">Day 3 Archived (Thu)</button>
+    </div>
+
+    <div class="toggle-group">
+      <button id="tWhyCustom" class="toggle-btn active" onclick="setWhy(true)">Author Has Why</button>
+      <button id="tWhyBlank" class="toggle-btn" onclick="setWhy(false)">Author Why is Blank</button>
+    </div>
+
+    <div class="toggle-group">
+      <button id="tNotDone" class="toggle-btn active" onclick="setDone(false)">Not Completed Today</button>
+      <button id="tDone" class="toggle-btn" onclick="setDone(true)">Completed Today (Suppressed)</button>
+    </div>
+
+    <div class="scenario-box">
+      <div id="displayState"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentDay = 'day1';
+let hasWhy = true;
+let isCompleted = false;
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+}
+
+function setDay(day) {
+  currentDay = day;
+  ['tDay1','tDay2','tDay3'].forEach(id => document.getElementById(id).classList.remove('active'));
+  if (day === 'day1') document.getElementById('tDay1').classList.add('active');
+  if (day === 'day2') document.getElementById('tDay2').classList.add('active');
+  if (day === 'day3') document.getElementById('tDay3').classList.add('active');
+  updateDisplay();
+}
+
+function setWhy(val) {
+  hasWhy = val;
+  document.getElementById('tWhyCustom').classList.toggle('active', val);
+  document.getElementById('tWhyBlank').classList.toggle('active', !val);
+  updateDisplay();
+}
+
+function setDone(val) {
+  isCompleted = val;
+  document.getElementById('tDone').classList.toggle('active', val);
+  document.getElementById('tNotDone').classList.toggle('active', !val);
+  updateDisplay();
+}
+
+function updateDisplay() {
+  const container = document.getElementById('displayState');
+  if (isCompleted && currentDay !== 'day3') {
+    container.innerHTML = `
+      <div style="font-size: 13px; color: var(--primary); font-weight: 700;">✅ Spark Completed Today</div>
+      <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">
+        The scheduled reminder was automatically suppressed. No notification will be fired or displayed.
+      </p>
+    `;
+    return;
+  }
+
+  if (currentDay === 'day1') {
+    const whyText = hasWhy ? '"To build calm morning clarity before work"' : null;
+    container.innerHTML = `
+      <div style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">In-App Banner / Local Notification (Day 1)</div>
+      <div class="banner">
+        <div class="banner-title">🌟 Quiet reminder for Morning Meditation</div>
+        <div class="banner-body">
+          ${hasWhy 
+            ? `Remember your why: ${whyText}` 
+            : 'Take a quiet moment for yourself today.'}
+        </div>
+      </div>
+      <div style="font-size: 11px; color: var(--muted);">
+        Channel: In-app card on open (Web/PWA) or scheduled local notification (Android/iOS). Tap opens own commitment.
+      </div>
+    `;
+  } else if (currentDay === 'day2') {
+    const whyText = hasWhy ? '"To build calm morning clarity before work"' : null;
+    container.innerHTML = `
+      <div style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">In-App Banner / Local Notification (Day 2)</div>
+      <div class="banner warning">
+        <div class="banner-title">🌱 Check-in: Morning Meditation</div>
+        <div class="banner-body">
+          ${hasWhy 
+            ? `Two days away. Your intention: ${whyText}. A single spark keeps your journey alive.` 
+            : 'Two days away. A single spark keeps your journey alive.'}
+        </div>
+      </div>
+      <div style="font-size: 11px; color: var(--muted);">
+        Repeat Cap: Maximum 1 check-in per day. Suppressed immediately upon Spark completion.
+      </div>
+    `;
+  } else if (currentDay === 'day3') {
+    container.innerHTML = `
+      <div style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">Next-Open Archival Notice (Day 3+)</div>
+      <div class="banner danger">
+        <div class="banner-title">📦 Journey Saved to Memories</div>
+        <div class="banner-body">
+          Your 14-day attempt for <strong>Morning Meditation</strong> has concluded and is preserved in Solo Memories. Start a new attempt from Day 1 whenever you are ready.
+        </div>
+      </div>
+      <button class="btn" style="background: var(--primary); color: var(--primary-foreground); border: none; margin-top: 6px;" onclick="alert('Navigating to /journey/memories/solo/...')">
+        View in Solo Memories →
+      </button>
+    `;
+  }
+}
+
+updateDisplay();
+</script>
+</body>
+</html>

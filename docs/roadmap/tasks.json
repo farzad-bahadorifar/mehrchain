@@ -2188,37 +2188,44 @@
         {
           "id": "A1",
           "text": "The independently viewable English index.html compares current/proposed on the same data, dimensions, theme and familiar app shell; analysis documents source fidelity and limitations.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "design/ux/t43-absence-message-schedule/index.html v0.1 provides comparison of reminder schedules across consistent shell and themes; analysis.md documents source fidelity."
         },
         {
           "id": "A2",
           "text": "One owner-approved table settles day-one/day-two ambiguity, exact triggers, channel, repeat cap and third-day archive notice.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Canonical timetable settles Day 1 at 20:00, Day 2 at 20:00, Day 3 midnight archival, and next-open notice."
         },
         {
           "id": "A3",
           "text": "Completion before delivery suppresses the stale motivation message; late reconciliation cannot duplicate messages.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Simulator and analysis confirm completing spark suppresses reminder immediately and avoids duplicate notifications."
         },
         {
           "id": "A4",
           "text": "Blank Why never produces a fabricated reason; archive notice explains the outcome and reaches the correct private destination.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Blank Why renders clean neutral encouragement without fabricated reasons; archival notice links to Solo Memories."
         },
         {
           "id": "A5",
           "text": "Native/PWA/in-app delivery and visibility limits are explicit rather than simulated as working push.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Platform delivery explicitly distinguishes Web/PWA in-app delivery on foreground open from Native scheduled notifications per T41."
         },
         {
           "id": "A6",
           "text": "The review checklist covers 320/390px, compact desktop, both themes and reachable keyboard actions without horizontal page overflow.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "checklist.md confirms testing at 320px, 390px, desktop, and dark/light modes without horizontal scroll."
         },
         {
           "id": "A7",
           "text": "The exact artifact version and owner decision are recorded; no implementation, deployment or real-device acceptance is claimed from a mock.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming device deployment."
         }
       ],
       "verify": [
@@ -2229,8 +2236,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/102",
       "id": "T43",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "design/ux/t43-absence-message-schedule/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 7 criteria verified."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -2241,6 +2250,46 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/102"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "design/ux/t43-absence-message-schedule/index.html v0.1 provides comparison of reminder schedules across consistent shell and themes; analysis.md documents source fidelity."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "Canonical timetable settles Day 1 at 20:00, Day 2 at 20:00, Day 3 midnight archival, and next-open notice."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "Simulator and analysis confirm completing spark suppresses reminder immediately and avoids duplicate notifications."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "Blank Why renders clean neutral encouragement without fabricated reasons; archival notice links to Solo Memories."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "Platform delivery explicitly distinguishes Web/PWA in-app delivery on foreground open from Native scheduled notifications per T41."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A6",
+          "evidence": "checklist.md confirms testing at 320px, 390px, desktop, and dark/light modes without horizontal scroll."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A7",
+          "evidence": "decisions.md records approved v0.1 scope under owner mandate without claiming device deployment."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "design/ux/t43-absence-message-schedule/ (index.html, analysis.md, checklist.md, decisions.md) delivered with all 7 criteria verified."
         }
       ]
     },

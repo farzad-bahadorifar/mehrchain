@@ -19,6 +19,7 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T39 — Review solo memory list and attempt detail](tasks/T39.md): One Solo Memories wireframe makes past finite experiences and Endless attempts readable and offers the agreed new-start action.
 - [T40 — Review shared memories by ongoing, successful and unfinished outcomes](tasks/T40.md): One Shared Memories wireframe displays the three agreed pair outcomes with readable details and neutral English labels.
 - [T41 — Inventory notification events and actual platform delivery](tasks/T41.md): One fixed event-by-platform matrix explains what notification paths actually exist from trigger through content, icon, tap and cancellation.
+- [T43 — Review one absence reminder and archive-message schedule](tasks/T43.md): One approved timeline and wireframe settle exactly which private Why and archive messages occur during an Endless absence.
 - [T45 — Review a small anonymous +N received-heart indicator](tasks/T45.md): One approved same-system specimen defines the placement and exact meaning of a small received-heart total such as +3.
 - [T46 — Review a readable single-line Home commitment title](tasks/T46.md): One approved Home card specimen keeps the title on one line without losing access to its full text or squeezing card actions.
 - [T47 — Review Chain identity labels without an @ prefix](tasks/T47.md): One approved label/data contract shows Chain names without @ and selects the exact fallback when a username is absent.
