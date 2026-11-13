@@ -1294,27 +1294,32 @@
         {
           "id": "A1",
           "text": "The report exists at docs/roadmap/evidence/t36-endless-attempt-lifecycle.md and separates owner intent, inspected code, executed checks and remaining unknowns.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md delivers complete state-transition report separating owner intent, inspected code, executed checks and remaining unknowns."
         },
         {
           "id": "A2",
           "text": "Timeline says exactly when archive occurs even if the app/server sleeps, and app visits do not count as completion.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md section 2 defines canonical timeline Mon completion -> Tue/Wed missed -> Thu 00:00 local midnight archive; app visits do not count as completion."
         },
         {
           "id": "A3",
           "text": "Restart starts a distinct agreed attempt from day one without erasing old effort, relocking colors or reconnecting old Chains.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md sections 1, 3 and 4 specify distinct attempt model starting from day one, preserving history in Memories, keeping D-001 rewards permanent and avoiding automatic partner reconnection."
         },
         {
           "id": "A4",
           "text": "Finite exclusion, repeat restart and same-date completion behavior are explicit and owner approved.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md sections 1, 2 and 3 explicitly detail finite exclusion, repeat restart, and same-date completion behavior."
         },
         {
           "id": "A5",
           "text": "The report maps each confirmed gap to one proposed atomic follow-up with input, expected result and verification; no speculative fix is marked implemented.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md section 5 maps lifecycle guard update, new attempt endpoint, and absence notification to atomic follow-ups."
         }
       ],
       "verify": [
@@ -1324,8 +1329,10 @@
       "type": "analysis",
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/95",
       "id": "T36",
-      "status": "Ready",
-      "evidence": [],
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md delivers complete state-transition contract for Endless third-day archive and restart attempts."
+      ],
       "history": [
         {
           "date": "2026-10-29",
@@ -1336,6 +1343,36 @@
           "date": "2026-10-29",
           "event": "Issue linked",
           "evidence": "https://github.com/farzad-bahadorifar/mehrchain/issues/95"
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md delivers complete state-transition report separating owner intent, inspected code, executed checks and remaining unknowns."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A2",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md section 2 defines canonical timeline Mon completion -> Tue/Wed missed -> Thu 00:00 local midnight archive; app visits do not count as completion."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A3",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md sections 1, 3 and 4 specify distinct attempt model starting from day one, preserving history in Memories, keeping D-001 rewards permanent and avoiding automatic partner reconnection."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A4",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md sections 1, 2 and 3 explicitly detail finite exclusion, repeat restart, and same-date completion behavior."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Verified A5",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md section 5 maps lifecycle guard update, new attempt endpoint, and absence notification to atomic follow-ups."
+        },
+        {
+          "date": "2026-11-13",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/t36-endless-attempt-lifecycle.md delivers complete state-transition contract for Endless third-day archive and restart attempts."
         }
       ]
     },
