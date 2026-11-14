@@ -73,6 +73,19 @@
         }
       }
 
+      @if (allowDemoMode()) {
+        <!-- Quick Dev Sign-In Button (Development / Offline Test Mode) -->
+        <button
+          type="button"
+          (click)="devLogin.emit()"
+          [disabled]="isLoggingIn()"
+          class="w-full py-3 px-4 mb-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold text-xs border border-amber-500/30 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-sm cursor-pointer"
+        >
+          <lucide-icon name="sparkles" class="w-4 h-4 text-amber-500 shrink-0"></lucide-icon>
+          <span>⚡ Quick Dev Sign-In (Demo Account)</span>
+        </button>
+      }
+
       <!-- 1-Click Google Sign-In Button -->
       <button
         type="button"

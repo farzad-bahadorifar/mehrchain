@@ -33,5 +33,6 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T53 — Label Endless correctly in the Chain sharing selector](tasks/T53.md): The local Chain sharing selector shows Endless instead of -1d for an Endless commitment and keeps finite duration labels correct.
 - [T54 — Repair whole-belly light dragging in Welcome and Profile locally](tasks/T54.md): Locally, only Welcome hero and Profile overview allow a belly-start drag; its full glow travels across the viewport, leaving a dark belly, with visible eye tracking and safe return.
 - [T55 — Keep first-launch app styling ready before rendering locally](tasks/T55.md): The local production document blocks application first paint on its complete generated stylesheet, preventing an unstyled oversized Welcome mascot while CSS is delayed.
+- [T57 — One-click dev sign-in for local development and offline testing](tasks/T57.md): Provide a development-only one-click demo sign-in option in the login modal that establishes an offline test session without server or database connectivity.
 
 Earlier implementation/acceptance records remain in [legacy disposition](legacy.md) and linked history.

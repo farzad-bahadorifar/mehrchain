@@ -120,6 +120,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Ready | P1 |
 | [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Ready | P1 |
 
-Updated: 2026-11-13, Asia/Tehran. Next ID: T57.
+Updated: 2026-11-14, Asia/Tehran. Next ID: T58.
 
 This table is generated; [tasks.json](roadmap/tasks.json) owns task status.
