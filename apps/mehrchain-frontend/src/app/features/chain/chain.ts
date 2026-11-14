@@ -63,6 +63,9 @@ export class ChainComponent {
   readonly inviteError = signal<string | null>(null);
   readonly toastMessage = signal<string | null>(null);
 
+  // View State (T34): Show up (daily completions & support) vs Connect (invites & relationships)
+  readonly activeView = signal<'show-up' | 'connect'>('show-up');
+
   // Incoming invite link parameters
   readonly incomingInvite = signal<ChainInvitePayload | null>(null);
   readonly inviteSelectedCommitmentId = signal<string>('');
@@ -87,6 +90,7 @@ export class ChainComponent {
       this.inviteError.set(null);
       this.quickWhy.set('');
       if (!code) return;
+      this.activeView.set('connect');
       this.chainService
         .getInvite(code)
         .then((invite) => {

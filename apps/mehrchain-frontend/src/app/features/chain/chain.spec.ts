@@ -89,9 +89,31 @@ describe('ChainComponent', () => {
   });
 
   it('keeps invites discoverable without unfinished feature clutter', () => {
+    component.activeView.set('connect');
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-invite-section')).toBeTruthy();
     expect(compiled.textContent).not.toContain('Articles');
     expect(compiled.textContent).not.toContain('Coming Soon');
+  });
+
+  it('defaults to show-up view and switches between Show Up and Connect (T34)', () => {
+    expect(component.activeView()).toBe('show-up');
+    const compiled = fixture.nativeElement as HTMLElement;
+    const tabs = Array.from(compiled.querySelectorAll<HTMLButtonElement>('button[role="tab"]'));
+    expect(tabs.length).toBe(2);
+
+    const connectTab = tabs.find((t) => t.textContent?.includes('Connect'));
+    expect(connectTab).toBeTruthy();
+
+    connectTab?.click();
+    fixture.detectChanges();
+    expect(component.activeView()).toBe('connect');
+    expect(compiled.querySelector('app-invite-section')).toBeTruthy();
+
+    const showUpTab = tabs.find((t) => t.textContent?.includes('Show Up'));
+    showUpTab?.click();
+    fixture.detectChanges();
+    expect(component.activeView()).toBe('show-up');
   });
 });
