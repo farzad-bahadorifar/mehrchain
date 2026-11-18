@@ -1,7 +1,7 @@
 {
   "version": 1,
   "updated": "2026-11-18",
-  "lastId": 68,
+  "lastId": 69,
   "tasks": [
     {
       "id": "T20",
@@ -522,7 +522,7 @@
       "type": "analysis",
       "area": "account-api",
       "priority": "P1",
-      "status": "InProgress",
+      "status": "Blocked",
       "goal": "A sanitized report proves the serving failure class and, when reachable, identifies the incompatible route/revision or actual save error with one repair plan.",
       "scope": [
         "Read direct/proxy /api/version and supported auth routes",
@@ -550,7 +550,8 @@
         {
           "id": "A1",
           "text": "Direct and proxy serving revisions are recorded or explicitly classified unreachable with unblock condition",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Render and Pages both reported a22f417; the Cloudflare production source matched. docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
         },
         {
           "id": "A2",
@@ -572,7 +573,8 @@
       "evidence": [
         "docs/roadmap/evidence/2026-11-18-main-integration.md#remaining-acceptance",
         "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main",
-        "Verified Render's previous startup readiness failure; optional username migration is now applied, and authenticated save and removal passed on an isolated copy. The deployed direct/proxy revisions and authorized live account write remain to be tested. docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
+        "Verified Render's previous startup readiness failure; optional username migration is now applied, and authenticated save and removal passed on an isolated copy. The deployed direct/proxy revisions and authorized live account write remain to be tested. docs/roadmap/evidence/2026-11-18-rc5-rollout.md",
+        "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
       ],
       "history": [
         {
@@ -599,6 +601,16 @@
           "date": "2026-11-18",
           "event": "InProgress",
           "evidence": "Verified Render's previous startup readiness failure; optional username migration is now applied, and authenticated save and removal passed on an isolated copy. The deployed direct/proxy revisions and authorized live account write remain to be tested. docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Verified A1",
+          "evidence": "Render and Pages both reported a22f417; the Cloudflare production source matched. docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Blocked",
+          "evidence": "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
         }
       ],
       "contextRefs": [
@@ -606,7 +618,8 @@
         "D-003",
         "D-004",
         "D-007"
-      ]
+      ],
+      "blockedReason": "Direct and proxy now match and expose the username API. An authorized disposable production account is still required to verify the actual write and final failure disposition. Rehearsal is not a production-account save."
     },
     {
       "id": "T30",
@@ -4967,10 +4980,11 @@
       ],
       "issue": null,
       "id": "T68",
-      "status": "InProgress",
+      "status": "Blocked",
       "evidence": [
         "docs/roadmap/evidence/2026-11-18-rc5-release.md#build-test-and-publish-the-apk",
-        "Database gate passed. Await the main deployment, private official candidate, and test-device result. docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
+        "Database gate passed. Await the main deployment, private official candidate, and test-device result. docs/roadmap/evidence/2026-11-18-rc5-rollout.md",
+        "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
       ],
       "history": [
         {
@@ -4987,6 +5001,90 @@
           "date": "2026-11-18",
           "event": "InProgress",
           "evidence": "Database gate passed. Await the main deployment, private official candidate, and test-device result. docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Blocked",
+          "evidence": "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+        }
+      ],
+      "blockedReason": "Signed-only job 44373433465 failed its canonical identity preflight. The environment has no keystore secrets or pinned certificate variable. Configure the authorized matching key, then rerun signing and test the in-place upgrade on a named Android phone."
+    },
+    {
+      "title": "Expose the signed Android update handler from the Pages root",
+      "type": "bug",
+      "area": "android-updater",
+      "priority": "P1",
+      "goal": "Requesting /updates/android on the root-built Pages site reaches the existing signed release handler instead of loading the Angular welcome screen.",
+      "scope": [
+        "Register the route in the repository-root Pages functions bundle and reuse the existing handler."
+      ],
+      "outOfScope": [
+        "Provision signing secrets, advertise RC builds, or publish an APK."
+      ],
+      "inputs": [
+        "functions/updates/android.js",
+        "apps/mehrchain-frontend/functions/updates/android.js",
+        "scripts/release-policy.test.mjs"
+      ],
+      "contextRefs": [
+        "D-006",
+        "D-010"
+      ],
+      "steps": [
+        "Verify the deployed route fallback.",
+        "Register a root entry point and bundle it.",
+        "Verify shared policy and unchanged signing checks."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "The Pages bundle registers GET /updates/android and both supported project layouts use the same implementation.",
+          "state": "pass",
+          "evidence": "Wrangler compiled the root route; the Node test verifies both project roots share one handler. docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+        },
+        {
+          "id": "A2",
+          "text": "The handler returns structured JSON and still rejects missing signing configuration and prereleases.",
+          "state": "pass",
+          "evidence": "The bundled worker produced JSON HTTP 503 without a certificate; release-policy tests still reject prereleases. docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+        }
+      ],
+      "verify": [
+        "Wrangler Pages Functions build and node --test scripts/release-policy.test.mjs."
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T69",
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+      ],
+      "history": [
+        {
+          "date": "2026-11-18",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-18",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Verified A1",
+          "evidence": "Wrangler compiled the root route; the Node test verifies both project roots share one handler. docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Verified A2",
+          "evidence": "The bundled worker produced JSON HTTP 503 without a certificate; release-policy tests still reject prereleases. docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
         }
       ]
     }

@@ -44,5 +44,6 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T65 — Align the Mero color editor with the Profile design system](tasks/T65.md): The unlocked Colors screen opens a visible draft only from Create or Edit, with named suggestions matching the V2 style and an unchanged earned-color contract.
 - [T66 — Keep the update notice from shifting the app layout](tasks/T66.md): A ready update and Later do not move the current page; Reload installs a ready web build only after confirmation.
 - [T67 — Verify and apply release migrations before the RC5 deployment](tasks/T67.md): The current Render production target passes a fresh recovery rehearsal and the reviewed release migrations before new application code is deployed.
+- [T69 — Expose the signed Android update handler from the Pages root](tasks/T69.md): Requesting /updates/android on the root-built Pages site reaches the existing signed release handler instead of loading the Angular welcome screen.
 
 Earlier implementation/acceptance records remain in [legacy disposition](legacy.md) and linked history.

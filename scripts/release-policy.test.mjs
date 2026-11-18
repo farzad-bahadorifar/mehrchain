@@ -6,6 +6,7 @@ import {
   assetUrl,
 } from '../apps/mehrchain-frontend/release-policy.mjs';
 import { onRequestGet } from '../apps/mehrchain-frontend/functions/updates/android.js';
+import { onRequestGet as onRootRequestGet } from '../functions/updates/android.js';
 
 const certificate = 'b'.repeat(64);
 const manifest = {
@@ -39,6 +40,9 @@ const release = {
 };
 const originalFetch = globalThis.fetch;
 const originalCaches = globalThis.caches;
+test('repository-root Pages project exposes the same Android update handler', () => {
+  assert.equal(onRootRequestGet, onRequestGet);
+});
 afterEach(() => {
   globalThis.fetch = originalFetch;
   globalThis.caches = originalCaches;
