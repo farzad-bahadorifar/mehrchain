@@ -522,7 +522,7 @@
       "type": "analysis",
       "area": "account-api",
       "priority": "P1",
-      "status": "Blocked",
+      "status": "InProgress",
       "goal": "A sanitized report proves the serving failure class and, when reachable, identifies the incompatible route/revision or actual save error with one repair plan.",
       "scope": [
         "Read direct/proxy /api/version and supported auth routes",
@@ -571,7 +571,8 @@
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/88",
       "evidence": [
         "docs/roadmap/evidence/2026-11-18-main-integration.md#remaining-acceptance",
-        "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main"
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main",
+        "Verified Render's previous startup readiness failure; optional username migration is now applied, and authenticated save and removal passed on an isolated copy. The deployed direct/proxy revisions and authorized live account write remain to be tested. docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
       ],
       "history": [
         {
@@ -593,9 +594,13 @@
           "date": "2026-11-18",
           "event": "Blocked",
           "evidence": "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "InProgress",
+          "evidence": "Verified Render's previous startup readiness failure; optional username migration is now applied, and authenticated save and removal passed on an isolated copy. The deployed direct/proxy revisions and authorized live account write remain to be tested. docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
         }
       ],
-      "blockedReason": "Recorded production target lacks optional-username migration and usernameSource. Serving revision and real save could not be observed: Pages refused the connection and Render timed out. Unblock after T67 and compare reachable current API versions, then test actual save on an authorized account.",
       "contextRefs": [
         "D-002",
         "D-003",
@@ -4861,12 +4866,14 @@
         {
           "id": "A1",
           "text": "Current target and recovery point are identified and the isolated populated-copy rehearsal preserves accounts and allowances.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Render matched production; verified persistent recovery and temporary populated child and preserved data in rehearsal: docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
         },
         {
           "id": "A2",
           "text": "Expected optional-username and completion migrations are applied and verified without unresolved drift before the main push.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "Both expected production migrations finished, schema constraints and data preservation verified, and repeat Prisma deploy was a no-op: docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
         }
       ],
       "verify": [
@@ -4875,9 +4882,10 @@
       "dependsOn": [],
       "issue": null,
       "id": "T67",
-      "status": "Blocked",
+      "status": "Done",
       "evidence": [
-        "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main"
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main",
+        "docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
       ],
       "history": [
         {
@@ -4889,9 +4897,28 @@
           "date": "2026-11-18",
           "event": "Blocked",
           "evidence": "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Verified A1",
+          "evidence": "Render matched production; verified persistent recovery and temporary populated child and preserved data in rehearsal: docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Verified A2",
+          "evidence": "Both expected production migrations finished, schema constraints and data preservation verified, and repeat Prisma deploy was a no-op: docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
         }
-      ],
-      "blockedReason": "The stored production target lacks both expected migrations; this host could not verify the current Render binding or create a fresh Neon recovery point because the console is region-blocked. Unblock with authorized console access and a verified pre-change snapshot and populated rehearsal child."
+      ]
     },
     {
       "title": "Accept a same-key Android RC5 upgrade before tagging",
@@ -4940,9 +4967,10 @@
       ],
       "issue": null,
       "id": "T68",
-      "status": "Blocked",
+      "status": "InProgress",
       "evidence": [
-        "docs/roadmap/evidence/2026-11-18-rc5-release.md#build-test-and-publish-the-apk"
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md#build-test-and-publish-the-apk",
+        "Database gate passed. Await the main deployment, private official candidate, and test-device result. docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
       ],
       "history": [
         {
@@ -4954,9 +4982,13 @@
           "date": "2026-11-18",
           "event": "Blocked",
           "evidence": "docs/roadmap/evidence/2026-11-18-rc5-release.md#build-test-and-publish-the-apk"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "InProgress",
+          "evidence": "Database gate passed. Await the main deployment, private official candidate, and test-device result. docs/roadmap/evidence/2026-11-18-rc5-rollout.md"
         }
-      ],
-      "blockedReason": "T67 and the main deploy gate must pass first. Then the official signing environment must produce a candidate and an authorized same-key Android test phone must accept the in-place upgrade."
+      ]
     }
   ]
 }

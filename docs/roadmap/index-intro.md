@@ -108,9 +108,10 @@ moved to T64 without changing its acceptance evidence.
 **Release candidate 1.0.0-rc.5 (Android code 5):** The
 [release handoff](evidence/2026-11-18-rc5-release.md) records the Colors and
 Service Worker checks, reviewed migration order, signed candidate workflow,
-publication commands, and phone checklist. T67 (production database readiness)
-must pass before main is pushed; T68 owns the signed in-place upgrade before
-tagging. The stable-only Android updater intentionally excludes this prerelease.
+publication commands, and phone checklist. T67 passed the
+[production database gate](evidence/2026-11-18-rc5-rollout.md); T68 owns the
+signed in-place upgrade before tagging. The stable-only Android updater
+intentionally excludes this prerelease.
 
 T29 resumes only when its network blocker changes. T30's existing Profile phone
 acceptance remains independent and is not replaced by T51. The November 2 owner

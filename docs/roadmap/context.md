@@ -113,6 +113,11 @@ local tests and historical/live operational observations are distinct evidence.
   optional-username schema or its migration record. This is a release blocker
   on that target, not proof of the serving revision or actual write failure.
   See [database evidence and rollout](evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main).
+- **RC5 release execution:** Render's current binding matched the inspected
+  production database. A previous deployment failed the schema readiness check.
+  Both pending migrations were subsequently applied and the authenticated
+  username route passed on a populated rehearsal copy. This is not evidence of
+  a real production-account save. See [rollout evidence](evidence/2026-11-18-rc5-rollout.md).
 
 ## D-005
 

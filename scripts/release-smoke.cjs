@@ -1,5 +1,6 @@
 // Run only with two disposable, verified accounts. No credentials/tokens are printed.
 const assert = require('node:assert/strict');
+const { randomUUID } = require('node:crypto');
 const base = process.env.SMOKE_API_URL?.replace(/\/$/, '');
 const env = process.env;
 async function request(method, route, token, body, statuses = [200, 201]) {
@@ -32,12 +33,25 @@ async function run() {
   const a = await login(env.SMOKE_A_EMAIL, env.SMOKE_A_PASSWORD);
   const b = await login(env.SMOKE_B_EMAIL, env.SMOKE_B_PASSWORD);
   assert.notEqual(a.user.id, b.user.id);
+  assert.equal(a.user.username, null, 'Use a disposable first account with no username');
   const habits = [];
   let bDeleted = false;
+  const stamp = Date.now();
+  const username = `smoke_${stamp.toString(36)}`;
   try {
     await request('GET', '/commitments', null, undefined, [401]);
     await request('POST', '/auth/google', null, { idToken: 'mock_google_smoke@gmail.com' }, [401]);
-    const stamp = Date.now();
+    const available = await request(
+      'GET',
+      `/auth/username-availability?username=${username}`,
+      a.accessToken,
+    );
+    assert.equal(available.available, true);
+    const selected = await request('PATCH', '/auth/username', a.accessToken, { username });
+    assert.equal(selected.username, username);
+    assert.equal((await request('GET', '/auth/me', a.accessToken)).username, username);
+    const removed = await request('PATCH', '/auth/username', a.accessToken, { username: null });
+    assert.equal(removed.username, null);
     const ha = await request('POST', '/commitments', a.accessToken, {
       title: `Smoke A ${stamp}`,
       category: 'health',
@@ -94,9 +108,33 @@ async function run() {
     );
     assert.ok(ca && cb, 'Both users must see reciprocal persisted connections');
     assert.ok(cb.partnerCommitment.lastCompletedDate, 'Partner Spark must survive fresh API read');
-    await request('POST', `/chain/connections/${ca.id}/heart`, b.accessToken, {}, [404]);
-    const heart = await request('POST', `/chain/connections/${ca.id}/heart`, a.accessToken, {});
+    assert.deepEqual(ca.supportCards, []);
+    await request('POST', `/chain/connections/${ca.id}/heart`, a.accessToken, {}, [400]);
+    await request(
+      'POST',
+      `/chain/connections/${ca.id}/heart`,
+      a.accessToken,
+      { completionId: randomUUID() },
+      [400],
+    );
+    await request('PATCH', `/commitments/${hb.id}/complete`, b.accessToken, {});
+    const completed = (await request('GET', '/chain/connections', a.accessToken)).find(
+      (c) => c.id === ca.id,
+    );
+    assert.equal(completed.supportCards.length, 1);
+    const { completionId } = completed.supportCards[0];
+    assert.ok(completionId);
+    await request('POST', `/chain/connections/${ca.id}/heart`, b.accessToken, { completionId }, [
+      404,
+    ]);
+    const heart = await request('POST', `/chain/connections/${ca.id}/heart`, a.accessToken, {
+      completionId,
+    });
     assert.equal(heart.heartSent, true);
+    const retry = await request('POST', `/chain/connections/${ca.id}/heart`, a.accessToken, {
+      completionId,
+    });
+    assert.equal(retry.supportCards[0].sentAt, heart.supportCards[0].sentAt);
     assert.equal(
       (await request('GET', '/chain/connections', aReload.accessToken)).find((c) => c.id === ca.id)
         .heartSent,
@@ -112,7 +150,10 @@ async function run() {
       );
       console.log('PASS: disposable account deletion and partner chain cleanup');
     } else {
-      await request('DELETE', `/chain/connections/${ca.id}`, a.accessToken);
+      await request('DELETE', `/chain/connections/${ca.id}`, a.accessToken, {
+        generationId: ca.generationId,
+        reason: 'PREFER_NOT_TO_SHARE',
+      });
       assert.equal(
         (await request('GET', '/chain/connections', b.accessToken)).some((c) => c.id === cb.id),
         false,
@@ -120,9 +161,16 @@ async function run() {
       console.log('Deletion gate skipped: set SMOKE_DELETE_B=yes ONLY for a disposable account.');
     }
     console.log(
-      'PASS: auth, ownership, solo persistence, duplicate Spark, real invites, reciprocal chain, Heart',
+      'PASS: auth, username save/removal, ownership, solo persistence, duplicate Spark, invites, and completion-only Heart',
     );
   } finally {
+    try {
+      if ((await request('GET', '/auth/me', a.accessToken)).username === username)
+        await request('PATCH', '/auth/username', a.accessToken, { username: null });
+    } catch {
+      console.error('Username cleanup could not be verified on the disposable account.');
+      process.exitCode = 1;
+    }
     for (const [token, id] of habits) {
       if (bDeleted && token === b.accessToken) continue;
       try {

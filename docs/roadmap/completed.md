@@ -43,5 +43,6 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T63 — Manage active Chain relationships from Connect](tasks/T63.md): Connect lists all active relationships and lets the user inspect or disconnect a link without switching to Show Up.
 - [T65 — Align the Mero color editor with the Profile design system](tasks/T65.md): The unlocked Colors screen opens a visible draft only from Create or Edit, with named suggestions matching the V2 style and an unchanged earned-color contract.
 - [T66 — Keep the update notice from shifting the app layout](tasks/T66.md): A ready update and Later do not move the current page; Reload installs a ready web build only after confirmation.
+- [T67 — Verify and apply release migrations before the RC5 deployment](tasks/T67.md): The current Render production target passes a fresh recovery rehearsal and the reviewed release migrations before new application code is deployed.
 
 Earlier implementation/acceptance records remain in [legacy disposition](legacy.md) and linked history.
