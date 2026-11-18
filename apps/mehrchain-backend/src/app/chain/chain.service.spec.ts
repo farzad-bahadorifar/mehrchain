@@ -24,12 +24,14 @@ describe('ChainService lifecycle', () => {
   let invite: any;
   let connection: any;
   let hearts: Map<string, any>;
+  let completions: { id: string; commitmentId: string; completedAt: Date }[];
   const prisma: any = {
     $transaction: jest.fn(),
     $queryRaw: jest.fn(),
     meroProgress: { upsert: jest.fn(), update: jest.fn() },
     meroAcceptedPartner: { createMany: jest.fn() },
     commitment: { findMany: jest.fn(), update: jest.fn() },
+    commitmentLog: { findMany: jest.fn(), findFirst: jest.fn() },
     chainInvite: {
       findUnique: jest.fn(),
       create: jest.fn(),
@@ -47,8 +49,8 @@ describe('ChainService lifecycle', () => {
     },
     chainHeart: {
       createMany: jest.fn(),
-      findUniqueOrThrow: jest.fn(),
       findMany: jest.fn(),
+      findUnique: jest.fn(),
     },
     chainDisconnectReceipt: {
       create: jest.fn(),
@@ -63,6 +65,25 @@ describe('ChainService lifecycle', () => {
     jest.resetAllMocks();
     jest.useFakeTimers().setSystemTime(now);
     hearts = new Map();
+    completions = [{ id: 'event', commitmentId: 'a', completedAt: now }];
+    prisma.commitmentLog.findFirst.mockImplementation(async ({ where }: any) =>
+      completions.find(
+        (entry) =>
+          entry.id === where.id &&
+          entry.commitmentId === where.commitmentId &&
+          entry.completedAt <= where.completedAt.lte,
+      ),
+    );
+    prisma.commitmentLog.findMany.mockImplementation(async ({ where }: any) =>
+      completions.filter((entry) =>
+        where.OR.some(
+          (criterion: any) =>
+            entry.commitmentId === criterion.commitmentId &&
+            entry.completedAt >= criterion.completedAt.gte &&
+            entry.completedAt <= criterion.completedAt.lte,
+        ),
+      ),
+    );
     const keyFor = (h: any) => `${h.senderId}/${h.recipientCommitmentId}/${h.dayKey}`;
     prisma.chainHeart.createMany.mockImplementation(async ({ data }: any) => {
       const key = keyFor(data);
@@ -70,8 +91,15 @@ describe('ChainService lifecycle', () => {
       hearts.set(key, data);
       return { count: 1 };
     });
-    prisma.chainHeart.findUniqueOrThrow.mockImplementation(async ({ where }: any) =>
-      hearts.get(keyFor(where.senderId_recipientCommitmentId_dayKey)),
+    prisma.chainHeart.findUnique.mockImplementation(async ({ where }: any) =>
+      [...hearts.values()].find((heart) => {
+        const key = where.senderId_recipientCommitmentId_completionId;
+        return (
+          heart.senderId === key.senderId &&
+          heart.recipientCommitmentId === key.recipientCommitmentId &&
+          heart.completionId === key.completionId
+        );
+      }),
     );
     prisma.chainHeart.findMany.mockImplementation(async ({ where }: any) =>
       [...hearts.values()].filter(
@@ -79,7 +107,8 @@ describe('ChainService lifecycle', () => {
           h.senderId === where.senderId &&
           where.OR.some(
             (k: any) =>
-              k.recipientCommitmentId === h.recipientCommitmentId && k.dayKey === h.dayKey,
+              k.completionId?.in.includes(h.completionId) ||
+              (k.recipientCommitmentId === h.recipientCommitmentId && k.dayKey === h.dayKey),
           ),
       ),
     );
@@ -269,26 +298,44 @@ describe('ChainService lifecycle', () => {
 
   it('rejects support after inactivity reconciliation rather than undoing archive', async () => {
     habits[0].lastCompletedDate = new Date('2026-10-12T12:00:00Z');
-    await expect(service.sendHeart('receiver', 'c')).rejects.toThrow('no longer available');
+    await expect(service.sendHeart('receiver', 'c', 'event')).rejects.toThrow(
+      'no longer available',
+    );
     expect(habits[0].isArchived).toBe(true);
     expect(prisma.chainConnection.update).not.toHaveBeenCalled();
   });
 
   it('rejects support on disconnected links and missing connections', async () => {
     connection.status = ChainStatus.DISCONNECTED;
-    await expect(service.sendHeart('receiver', 'c')).rejects.toThrow(BadRequestException);
+    await expect(service.sendHeart('receiver', 'c', 'event')).rejects.toThrow(BadRequestException);
     connection = null;
-    await expect(service.sendHeart('receiver', 'missing')).rejects.toThrow(NotFoundException);
+    await expect(service.sendHeart('receiver', 'missing', 'event')).rejects.toThrow(
+      NotFoundException,
+    );
+  });
+
+  it('rejects missing, cross-habit and pre-link events without consuming allowance or awarding support', async () => {
+    completions.push(
+      { id: 'different-habit', commitmentId: 'b', completedAt: now },
+      { id: 'pre-link', commitmentId: 'a', completedAt: new Date(now.getTime() - 1) },
+    );
+    for (const id of ['', 'made-up', 'different-habit', 'pre-link']) {
+      await expect(service.sendHeart('receiver', 'c', id)).rejects.toBeInstanceOf(
+        BadRequestException,
+      );
+    }
+    expect(prisma.chainHeart.createMany).not.toHaveBeenCalled();
+    expect(prisma.meroProgress.update).not.toHaveBeenCalled();
   });
 
   it('sends once and keeps retries/concurrent requests from undoing or inflating a heart', async () => {
-    expect(await service.sendHeart('receiver', 'c')).toMatchObject({
+    expect(await service.sendHeart('receiver', 'c', 'event')).toMatchObject({
       heartSent: true,
       heartSentAt: now,
     });
     const retries = await Promise.all([
-      service.sendHeart('receiver', 'c'),
-      service.sendHeart('receiver', 'c'),
+      service.sendHeart('receiver', 'c', 'event'),
+      service.sendHeart('receiver', 'c', 'event'),
     ]);
     expect(retries.every((r) => r.heartSent && r.heartSentAt?.getTime() === now.getTime())).toBe(
       true,
@@ -298,7 +345,7 @@ describe('ChainService lifecycle', () => {
   });
 
   it('shares the sender allowance across links and does not revive support cleared by reconnect', async () => {
-    await service.sendHeart('receiver', 'c');
+    await service.sendHeart('receiver', 'c', 'event');
     const otherHabit = { ...habits[1], id: 'b2' };
     habits.push(otherHabit);
     connection = {
@@ -309,7 +356,7 @@ describe('ChainService lifecycle', () => {
       heartSent: false,
       heartSentAt: null,
     };
-    const retry = await service.sendHeart('receiver', 'c2');
+    const retry = await service.sendHeart('receiver', 'c2', 'event');
     expect(retry.heartSent).toBe(true);
     expect(connection.heartSent).toBe(false);
     expect(hearts.size).toBe(1);
@@ -318,11 +365,22 @@ describe('ChainService lifecycle', () => {
 
   it('renews the allowance at the recipient midnight while the sender date stays unchanged', async () => {
     habits[0].user.timeZone = 'Asia/Tehran';
+    completions.push({
+      id: 'evening-event',
+      commitmentId: 'a',
+      completedAt: new Date('2026-10-15T20:20:00Z'),
+    });
     jest.setSystemTime(new Date('2026-10-15T20:29:59Z'));
-    const first = await service.sendHeart('receiver', 'c');
+    const first = await service.sendHeart('receiver', 'c', 'event');
     expect(first.partnerCalendar.currentDayKey).toBe('2026-10-15');
+    await expect(service.sendHeart('receiver', 'c', 'evening-event')).rejects.toThrow(
+      'already sent',
+    );
     jest.setSystemTime(new Date('2026-10-15T20:30:01Z'));
-    const second = await service.sendHeart('receiver', 'c');
+    const replay = await service.sendHeart('receiver', 'c', 'event');
+    expect(replay.supportCards[0].sentAt).toEqual(first.supportCards[0].sentAt);
+    expect(hearts.size).toBe(1);
+    const second = await service.sendHeart('receiver', 'c', 'evening-event');
     expect(second.partnerCalendar.currentDayKey).toBe('2026-10-16');
     expect(second.calendar.currentDayKey).toBe('2026-10-15');
     expect(hearts.size).toBe(2);
@@ -332,7 +390,9 @@ describe('ChainService lifecycle', () => {
   it('rejects private targets and obsolete nudges without persisting reactions', async () => {
     await expect(service.sendNudge('receiver', 'c')).rejects.toThrow('no longer available');
     habits[0].isPublic = false;
-    await expect(service.sendHeart('receiver', 'c')).rejects.toThrow('no longer available');
+    await expect(service.sendHeart('receiver', 'c', 'event')).rejects.toThrow(
+      'no longer available',
+    );
     expect(prisma.chainHeart.createMany).not.toHaveBeenCalled();
     expect(prisma.chainConnection.update).not.toHaveBeenCalled();
   });
@@ -413,7 +473,7 @@ describe('ChainService lifecycle', () => {
   });
 
   it('never stores an explanation for the non-disclosing choice or modifies the heart ledger', async () => {
-    await service.sendHeart('receiver', 'c');
+    await service.sendHeart('receiver', 'c', 'event');
     await service.disconnect('receiver', 'c', {
       generationId: 'generation-1',
       reason: 'PREFER_NOT_TO_SHARE',

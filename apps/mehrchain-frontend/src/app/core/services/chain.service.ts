@@ -340,17 +340,21 @@ export class ChainService {
     connectionId: string,
     action: 'heart' | 'disconnect',
     disconnectRequest?: DisconnectChainRequest,
+    completionId?: string,
   ): Promise<ChainConnection | null> {
     const token = this.authService.getToken();
     const userId = this.authService.currentUser()?.id;
     const session = this.sessionVersion;
+    const generationId = this._connections().find(
+      (connection) => connection.id === connectionId,
+    )?.generationId;
     this.mutationVersion++;
     if (isRemoteToken(token)) {
       const url = `${environment.apiUrl}/chain/connections/${connectionId}`;
       const response = await firstValueFrom(
         action === 'disconnect'
           ? this.http.delete<ChainConnection>(url, { body: disconnectRequest })
-          : this.http.post<ChainConnection>(`${url}/${action}`, {}),
+          : this.http.post<ChainConnection>(`${url}/${action}`, { completionId }),
       );
       if (
         session !== this.sessionVersion ||
@@ -360,6 +364,14 @@ export class ChainService {
         throw new Error('Your session changed. Please reload.');
       const current = this._connections().find((c) => c.id === connectionId);
       if (
+        action === 'heart' &&
+        (!current ||
+          current.status === 'DISCONNECTED' ||
+          current.generationId !== generationId ||
+          response?.generationId !== generationId)
+      )
+        throw new Error('This chain has changed. Please refresh.');
+      if (
         action === 'disconnect' &&
         current?.generationId &&
         current.generationId !== disconnectRequest?.generationId
@@ -367,20 +379,29 @@ export class ChainService {
         throw new Error('This chain has changed. Please refresh.');
       if (
         response?.id !== connectionId ||
-        (action === 'heart' && response.heartSent !== true) ||
+        (action === 'heart' &&
+          !response.supportCards?.some(
+            (card) => card.completionId === completionId && !!card.sentAt,
+          )) ||
         (action === 'disconnect' && response.status !== 'DISCONNECTED')
       )
         throw new Error('The server did not confirm the change. Please refresh and retry.');
       this.mutationVersion++;
       const updated = this._connections().map((c) => {
-        if (c.id === connectionId) return { ...c, ...response };
+        if (c.id === connectionId && action === 'disconnect') return { ...c, ...response };
         if (action !== 'heart' || c.status === 'DISCONNECTED') return c;
+        const confirmed = response.supportCards?.find((card) => card.completionId === completionId);
         return {
           ...c,
           ...(c.partnerCommitmentId === response.partnerCommitmentId && {
             heartSent: true,
             heartSentAt: response.heartSentAt,
             partnerCalendar: response.partnerCalendar,
+            supportCards: c.supportCards?.map((card) =>
+              card.completionId === completionId
+                ? confirmed!
+                : { ...card, allowanceUsed: !card.sentAt },
+            ),
           }),
           ...(c.userCommitmentId === response.userCommitmentId && {
             receivedHeartCount: response.receivedHeartCount,
@@ -397,7 +418,14 @@ export class ChainService {
       c.id !== connectionId
         ? c
         : action === 'heart'
-          ? { ...c, heartSent: true, heartSentAt: c.heartSentAt || new Date().toISOString() }
+          ? {
+              ...c,
+              supportCards: c.supportCards?.map((card) =>
+                card.completionId === completionId
+                  ? { ...card, sentAt: card.sentAt ?? new Date().toISOString() }
+                  : card,
+              ),
+            }
           : { ...c, status: 'DISCONNECTED' as const },
     );
     this._connections.set(updated);
@@ -405,24 +433,29 @@ export class ChainService {
     return updated.find((c) => c.id === connectionId) || null;
   }
 
-  sendHeart(id: string): Promise<ChainConnection | null> {
+  sendHeart(id: string, completionId: string): Promise<ChainConnection | null> {
     const connection = this._connections().find((c) => c.id === id);
-    if (!connection) return Promise.reject(new Error('Please refresh your chain.'));
+    const card = connection?.supportCards?.find((entry) => entry.completionId === completionId);
+    if (!connection || !card || card.allowanceUsed || card.sentAt || this.supportStale())
+      return Promise.reject(new Error('Please refresh your chain.'));
     const target = connection.partnerCommitmentId;
-    const existing = this.heartRequests.get(target);
+    const existing = this.heartRequests.get(completionId);
     if (existing) return existing;
+    if (this.pendingHeartTargets().has(target))
+      return Promise.reject(new Error('Another heart is being saved for this habit.'));
     const session = this.sessionVersion;
     this.pendingHeartTargets.update((ids) => new Set([...ids, target]));
-    const request = this.writeConnection(id, 'heart').finally(() => {
-      if (session !== this.sessionVersion || this.heartRequests.get(target) !== request) return;
-      this.heartRequests.delete(target);
+    const request = this.writeConnection(id, 'heart', undefined, completionId).finally(() => {
+      if (session !== this.sessionVersion || this.heartRequests.get(completionId) !== request)
+        return;
+      this.heartRequests.delete(completionId);
       this.pendingHeartTargets.update((ids) => {
         const next = new Set(ids);
         next.delete(target);
         return next;
       });
     });
-    this.heartRequests.set(target, request);
+    this.heartRequests.set(completionId, request);
     return request;
   }
   async disconnect(id: string, request: DisconnectChainRequest): Promise<void> {
@@ -731,12 +764,6 @@ export class ChainService {
 
   getChainsForCommitment(commitmentId: string): HabitChain[] {
     return this.friendChains().filter((c) => c.myCommitmentId === commitmentId);
-  }
-
-  sendReaction(chainId: string, type: 'heart'): void {
-    if (type === 'heart') {
-      this.sendHeart(chainId);
-    }
   }
 
   addDemoFriendChain(): void {

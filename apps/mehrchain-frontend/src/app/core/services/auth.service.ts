@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { firstValueFrom, timeout } from 'rxjs';
+import { firstValueFrom, timeout, TimeoutError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CommitmentStore } from '../store/commitment.store';
 
@@ -184,13 +184,25 @@ export class AuthService {
         this.commitmentStore.loadForUser(user.id);
         // Authentication is confirmed; let the destination show its guarded loading/retry state.
         void this.commitmentStore.syncWithBackend();
-      } catch (err: any) {
+      } catch (error: unknown) {
         if (this.getToken() !== token) return;
-        if (err.status === 401 || err.status === 403) this.logout();
-        else
+        const status =
+          error && typeof error === 'object' && 'status' in error ? error.status : undefined;
+        if (status === 401 || status === 403) {
+          this.logout();
+          this.sessionError.set(`Your session is no longer valid (HTTP ${status}). Sign in again.`);
+        } else if (error instanceof TimeoutError) {
+          this.sessionError.set('Session verification timed out. Retry the connection.');
+        } else if (status === 0) {
+          this.sessionError.set('Network unavailable. Check your connection, then retry.');
+        } else if (status === 502 || status === 503 || status === 504 || status === 524) {
           this.sessionError.set(
-            'Could not reach the server to restore your session. Please retry.',
+            `The server is temporarily unavailable (HTTP ${status}). Wait a moment, then retry.`,
           );
+        } else {
+          const detail = typeof status === 'number' ? ` (HTTP ${status})` : '';
+          this.sessionError.set(`Could not verify your session${detail}. Retry the connection.`);
+        }
       }
     } catch {
       this.logout();

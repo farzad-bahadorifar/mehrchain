@@ -46,6 +46,7 @@ export class MeroRendererService implements OnDestroy {
   private releaseTimer?: ReturnType<typeof setTimeout>;
   private loading = false;
   private unavailable = false;
+  private contextLost = false;
   private destroyed = false;
   private frame?: number;
   private lastFrame = -Infinity;
@@ -415,6 +416,7 @@ export class MeroRendererService implements OnDestroy {
       this.clearLight();
       this.cancelFrame();
     } else {
+      if (this.contextLost) this.recoverContext();
       this.targets.forEach((target) => (target.dirty = true));
       this.schedule();
     }
@@ -462,7 +464,11 @@ export class MeroRendererService implements OnDestroy {
               [...this.targets].some((target) => target.visible) &&
               !this.document.hidden
             ) {
-              this.scene = createMeroScene(this.policy.detail, () => this.fail());
+              this.scene = createMeroScene(
+                this.policy.detail,
+                () => this.fail(true),
+                () => this.recoverContext(),
+              );
             }
           })
           .catch(() => {
@@ -545,9 +551,20 @@ export class MeroRendererService implements OnDestroy {
     } else if (moving) this.schedule();
   };
 
-  private fail() {
+  private recoverContext() {
+    if (!this.contextLost || this.destroyed) return;
+    this.contextLost = false;
+    this.unavailable = false;
+    this.scene?.dispose();
+    this.scene = undefined;
+    this.targets.forEach((target) => (target.dirty = true));
+    this.schedule();
+  }
+
+  private fail(keepForRestore = false) {
     this.clearLight();
     this.unavailable = true;
+    this.contextLost = keepForRestore;
     this.cancelFrame();
     this.cancelRelease();
     // The WebGL context is offscreen: each target still owns its last valid 2D frame.
@@ -557,8 +574,11 @@ export class MeroRendererService implements OnDestroy {
       }
     });
     this.targets.forEach((target) => this.updateHandle(target));
-    this.scene?.dispose();
-    this.scene = undefined;
+    if (!keepForRestore) {
+      this.scene?.dispose();
+      this.scene = undefined;
+    }
+    this.releaseWhenIdle();
   }
 
   private cancelFrame() {

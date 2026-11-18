@@ -3,6 +3,7 @@ import { ChainComponent } from './chain';
 import { commonTestProviders } from '../../../testing/test-providers';
 import { ChainService } from '../../core/services/chain.service';
 import { CommitmentService } from '../../core/services/commitment.service';
+import { ChainConnection } from '@mehrchain/shared-data';
 
 describe('ChainComponent', () => {
   let component: ChainComponent;
@@ -72,11 +73,11 @@ describe('ChainComponent', () => {
   });
 
   it('should delegate heart and disconnect actions to ChainService', async () => {
-    const sendHeartSpy = vi.spyOn(chainService, 'sendHeart');
+    const sendHeartSpy = vi.spyOn(chainService, 'sendHeart').mockResolvedValue(null);
     const disconnectSpy = vi.spyOn(chainService, 'disconnect');
 
-    component.handleHeart('conn-1');
-    expect(sendHeartSpy).toHaveBeenCalledWith('conn-1');
+    await component.handleHeart('conn-1', 'event');
+    expect(sendHeartSpy).toHaveBeenCalledWith('conn-1', 'event');
 
     const request = { generationId: 'g1', reason: 'PREFER_NOT_TO_SHARE' as const };
     component.handleDisconnect({ connectionId: 'conn-1', request });
@@ -89,9 +90,80 @@ describe('ChainComponent', () => {
   });
 
   it('keeps invites discoverable without unfinished feature clutter', () => {
+    component.activeView.set('connect');
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-invite-section')).toBeTruthy();
     expect(compiled.textContent).not.toContain('Articles');
     expect(compiled.textContent).not.toContain('Coming Soon');
+  });
+
+  it('defaults to show-up view and switches between Show Up and Connect (T34)', () => {
+    expect(component.activeView()).toBe('show-up');
+    const compiled = fixture.nativeElement as HTMLElement;
+    const tabs = Array.from(compiled.querySelectorAll<HTMLButtonElement>('button[role="tab"]'));
+    expect(tabs.length).toBe(2);
+
+    const connectTab = tabs.find((t) => t.textContent?.includes('Connect'));
+    expect(connectTab).toBeTruthy();
+
+    connectTab?.click();
+    fixture.detectChanges();
+    expect(component.activeView()).toBe('connect');
+    expect(compiled.querySelector('app-invite-section')).toBeTruthy();
+
+    const showUpTab = tabs.find((t) => t.textContent?.includes('Show Up'));
+    showUpTab?.click();
+    fixture.detectChanges();
+    expect(component.activeView()).toBe('show-up');
+  });
+
+  it('separates previous-evening completions from relationship management and supports arrow navigation', async () => {
+    const habit = await commitmentService.addCommitment({
+      title: 'Read',
+      category: 'growth',
+      totalDays: -1,
+      isPublic: true,
+    });
+    const linked: ChainConnection = {
+      id: 'linked',
+      generationId: 'generation',
+      userId: 'owner',
+      partnerId: 'partner',
+      userCommitmentId: habit.id,
+      partnerCommitmentId: 'theirs',
+      status: 'ACTIVE',
+      consecutiveMissedDays: 0,
+      heartSent: false,
+      createdAt: '2026-10-17T00:00:00Z',
+      partnerCommitment: { title: 'Evening walk', category: 'health', isCompletedToday: false },
+      supportCards: [
+        {
+          completionId: 'evening',
+          completedAt: '2026-10-17T23:00:00Z',
+          sentAt: null,
+          allowanceUsed: false,
+        },
+      ],
+    };
+    (chainService as any)._connections.set([
+      linked,
+      { ...linked, id: 'incomplete', partnerCommitmentId: 'other', supportCards: [] },
+    ]);
+    chainService.supportStale.set(false);
+    fixture.detectChanges();
+    const page = fixture.nativeElement as HTMLElement;
+    expect(page.querySelectorAll('app-chain-card')).toHaveLength(1);
+    expect(page.querySelector('button[title="Send heart"]')).toBeTruthy();
+    expect(page.querySelector('button[aria-label="Chain details and options"]')).toBeNull();
+    page
+      .querySelector('#chain-tab-show-up')
+      ?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    fixture.detectChanges();
+    expect(component.activeView()).toBe('connect');
+    expect(document.activeElement?.id).toBe('chain-tab-connect');
+    expect(page.querySelectorAll('app-chain-card')).toHaveLength(2);
+    expect(page.querySelectorAll('button[aria-label="Chain details and options"]')).toHaveLength(2);
+    expect(page.querySelector('button[title="Send heart"]')).toBeNull();
   });
 });

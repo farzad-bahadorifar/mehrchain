@@ -13,7 +13,11 @@
   "
 >
   @if (showGlow()) {
-    <div class="mero-belly-glow" [style.background]="effectiveGradient()"></div>
+    <div
+      class="mero-belly-glow"
+      [hidden]="renderState() === 'unavailable'"
+      [style.background]="effectiveGradient()"
+    ></div>
   }
 
   @if (renderState() === 'unavailable') {

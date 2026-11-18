@@ -7,6 +7,7 @@ import { VersionService } from './core/services/version.service';
 import { CommitmentService } from './core/services/commitment.service';
 import { ColdStartBannerComponent } from './shared/components/cold-start-banner/cold-start-banner';
 import { MobileInteractionService } from './core/services/mobile-interaction.service';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ export class App {
   showNavbar = signal(false);
 
   constructor() {
+    inject(ThemeService);
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {

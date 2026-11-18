@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MehrChain · T45: Received-Heart Total (+N) Indicator</title>
+<style>
+:root {
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --rose: #f43f5e;
+  --rose-bg: rgba(244, 63, 94, 0.1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #090d16;
+    --card-bg: #111827;
+    --foreground: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #1f293d;
+    --primary: #14b8a6;
+    --rose: #fb7185;
+    --rose-bg: rgba(251, 113, 133, 0.15);
+  }
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #0d9488;
+  --rose: #f43f5e;
+  --rose-bg: rgba(244, 63, 94, 0.1);
+}
+[data-theme="dark"] {
+  --bg: #090d16;
+  --card-bg: #111827;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #1f293d;
+  --primary: #14b8a6;
+  --rose: #fb7185;
+  --rose-bg: rgba(251, 113, 133, 0.15);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--foreground);
+  line-height: 1.5;
+  padding: 24px;
+}
+.header {
+  max-width: 800px;
+  margin: 0 auto 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 800; }
+.header p { font-size: 12px; color: var(--muted); }
+.controls { display: flex; gap: 8px; }
+button.btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.grid {
+  max-width: 800px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.title { font-size: 15px; font-weight: 700; }
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.current-heart-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--rose);
+  font-weight: 600;
+}
+.proposed-heart-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--rose-bg);
+  color: var(--rose);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+.proposed-heart-pill svg { width: 12px; height: 12px; fill: currentColor; }
+.label-tag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+.tag-current { background: #fee2e2; color: #991b1b; }
+.tag-proposed { background: #ccfbf1; color: #0f766e; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>T45: Anonymous +N Received-Heart Indicator</h1>
+    <p>Comparing current heart count vs modern pill notation (+1, +3, +99).</p>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+</div>
+
+<div class="grid">
+  <!-- CURRENT -->
+  <div>
+    <span class="label-tag tag-current">Current (Bare Numeral)</span>
+    <div class="card">
+      <div class="card-header">
+        <span class="title">Morning Meditation</span>
+      </div>
+      <div class="meta">
+        <span>7 day streak</span>
+        <span class="current-heart-badge">❤️ 3</span>
+        <span>7 / 21 days</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPOSED -->
+  <div>
+    <span class="label-tag tag-proposed">Proposed (+N Pill Indicator)</span>
+    <div class="card">
+      <div class="card-header">
+        <span class="title">Morning Meditation</span>
+      </div>
+      <div class="meta">
+        <span>7 day streak</span>
+        <span class="proposed-heart-pill" title="3 hearts received today" aria-label="3 hearts received today">
+          <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          <span>+3</span>
+        </span>
+        <span>7 / 21 days</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COUNT = 1 PROPOSED -->
+  <div>
+    <span class="label-tag tag-proposed">Count = 1 (+1 Pill)</span>
+    <div class="card">
+      <div class="card-header">
+        <span class="title">Read 10 Pages</span>
+      </div>
+      <div class="meta">
+        <span>3 day streak</span>
+        <span class="proposed-heart-pill" title="1 heart received today" aria-label="1 heart received today">
+          <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          <span>+1</span>
+        </span>
+        <span>Endless</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LARGE COUNT = 99+ PROPOSED -->
+  <div>
+    <span class="label-tag tag-proposed">Large Count (+99)</span>
+    <div class="card">
+      <div class="card-header">
+        <span class="title">Hydration Spark</span>
+      </div>
+      <div class="meta">
+        <span>30 day streak</span>
+        <span class="proposed-heart-pill" title="99 hearts received today" aria-label="99 hearts received today">
+          <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          <span>+99</span>
+        </span>
+        <span>30 / 30 days</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>

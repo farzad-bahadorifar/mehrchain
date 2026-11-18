@@ -57,15 +57,55 @@ export class ChainComponent {
       return bTime - aTime;
     });
   });
+  readonly supportCards = computed(() => {
+    const seen = new Set<string>();
+    return this.sortedConnections()
+      .flatMap((connection) =>
+        (connection.supportCards ?? []).flatMap((completion) => {
+          if (seen.has(completion.completionId)) return [];
+          seen.add(completion.completionId);
+          return [{ connection, completion }];
+        }),
+      )
+      .sort(
+        (first, second) =>
+          new Date(second.completion.completedAt).getTime() -
+          new Date(first.completion.completedAt).getTime(),
+      );
+  });
 
   readonly isLinking = signal(false);
   readonly quickWhy = signal('');
   readonly inviteError = signal<string | null>(null);
   readonly toastMessage = signal<string | null>(null);
 
+  // View State (T34): Show up (daily completions & support) vs Connect (invites & relationships)
+  readonly activeView = signal<'show-up' | 'connect'>('show-up');
+
+  onViewKey(event: KeyboardEvent): void {
+    const current = this.activeView();
+    const next =
+      event.key === 'Home'
+        ? 'show-up'
+        : event.key === 'End'
+          ? 'connect'
+          : ['ArrowLeft', 'ArrowRight'].includes(event.key)
+            ? current === 'show-up'
+              ? 'connect'
+              : 'show-up'
+            : null;
+    if (!next) return;
+    event.preventDefault();
+    this.activeView.set(next);
+    (event.currentTarget as HTMLElement).querySelector<HTMLElement>('#chain-tab-' + next)?.focus();
+  }
+
   // Incoming invite link parameters
   readonly incomingInvite = signal<ChainInvitePayload | null>(null);
   readonly inviteSelectedCommitmentId = signal<string>('');
+  readonly selectedPublicCommitment = computed(() =>
+    this.publicCommitments().find((c) => c.id === this.inviteSelectedCommitmentId()),
+  );
 
   constructor() {
     timer(0, 15000)
@@ -84,15 +124,17 @@ export class ChainComponent {
       this.inviteError.set(null);
       this.quickWhy.set('');
       if (!code) return;
+      this.activeView.set('connect');
       this.chainService
         .getInvite(code)
         .then((invite) => {
           if (this.route.snapshot.queryParams['invite'] !== code) return;
           this.incomingInvite.set({
             inviteCode: invite.inviteCode,
-            inviterName: invite.sender?.username
-              ? `@${invite.sender.username}`
-              : invite.sender?.name || 'Friend',
+            inviterName: (invite.sender?.username
+              ? invite.sender.username
+              : invite.sender?.name || 'Friend'
+            ).replace(/^@+/, ''),
             habitTitle: invite.senderCommitment?.title || 'Habit',
             category: invite.senderCommitment?.category as any,
           });
@@ -119,7 +161,7 @@ export class ChainComponent {
     this.isLinking.set(true);
     try {
       await this.chainService.acceptInvite(invite.inviteCode, id);
-      this.showToast(`Chain connected with @${invite.inviterName}!`);
+      this.showToast(`Chain connected with ${invite.inviterName}!`);
       this.dismissIncomingInvite();
     } catch {
       this.showToast('Could not connect this chain. Please retry.');
@@ -161,14 +203,15 @@ export class ChainComponent {
     });
   }
 
-  async handleHeart(connectionId: string): Promise<void> {
-    this.actionErrors.update((errors) => ({ ...errors, [connectionId]: '' }));
+  async handleHeart(connectionId: string, completionId: string): Promise<void> {
+    this.actionErrors.update((errors) => ({ ...errors, [completionId]: '' }));
     try {
-      await this.chainService.sendHeart(connectionId);
+      await this.chainService.sendHeart(connectionId, completionId);
     } catch {
+      await this.chainService.loadConnections();
       this.actionErrors.update((errors) => ({
         ...errors,
-        [connectionId]: 'Heart was not saved. Please retry.',
+        [completionId]: 'Could not confirm the heart. Check the refreshed card before retrying.',
       }));
     }
   }

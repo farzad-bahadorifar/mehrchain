@@ -166,4 +166,19 @@ describe('OnboardingComponent', () => {
     expect(component.previewOtpCode()).toBe('777888');
     expect(component.verificationCode()).toBe('777888');
   });
+
+  it('should authenticate offline demo user and navigate after handleDevLogin', async () => {
+    const authService = TestBed.inject(AuthService);
+    const loginOfflineSpy = vi.spyOn(authService, 'loginOffline');
+    const navigateSpy = vi.spyOn(authService, 'navigateAfterLogin').mockImplementation(() => {});
+
+    component.openLoginModal();
+    expect(component.isLoginModalOpen()).toBe(true);
+
+    await component.handleDevLogin();
+
+    expect(loginOfflineSpy).toHaveBeenCalledWith('demo_user');
+    expect(component.isLoginModalOpen()).toBe(false);
+    expect(navigateSpy).toHaveBeenCalled();
+  });
 });

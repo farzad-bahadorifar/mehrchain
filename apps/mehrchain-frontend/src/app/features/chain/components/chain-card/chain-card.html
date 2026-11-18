@@ -9,62 +9,81 @@
       </div>
       <div class="min-w-0">
         <p class="font-semibold text-foreground text-sm break-words">
-          {{ connection().partner?.username ? '@' + partnerUsername() : partnerDisplayName() }}
+          {{ partnerDisplayName() }}
         </p>
         <p class="text-sm text-foreground break-words">{{ partnerHabitTitle() }}</p>
-        <p class="mt-1 text-xs text-muted-foreground">{{ stateLabel() }}</p>
+        <p class="mt-1 text-xs text-muted-foreground">
+          @if (stale()) {
+            Refresh required
+          } @else if (completion(); as event) {
+            Completed {{ event.completedAt | date: 'mediumDate' }}
+            @if (event.allowanceUsed) {
+              · Daily heart already sent
+            }
+          } @else {
+            {{ stateLabel() }}
+          }
+        </p>
       </div>
     </div>
     <div class="flex items-center shrink-0" [attr.aria-busy]="pending()">
-      <button
-        type="button"
-        (click)="sendHeart()"
-        [disabled]="pending() || stale() || isHeartSent()"
-        class="min-h-11 min-w-11 rounded-xl text-muted-foreground hover:bg-muted/60 disabled:cursor-default focus-visible:outline-2 focus-visible:outline-primary"
-        [attr.aria-label]="
-          pending()
-            ? 'Saving heart'
-            : isHeartSent()
-              ? 'Heart sent for this habit today'
-              : 'Send heart to ' + partnerHabitTitle()
-        "
-        [attr.aria-describedby]="errorMessage() ? 'chain-error-' + connection().id : null"
-        [title]="isHeartSent() ? 'Heart sent today' : 'Send heart'"
-      >
-        <lucide-icon
-          name="heart"
-          class="w-5 h-5 mx-auto"
-          [class.text-rose-500]="isHeartSent()"
-          [class.fill-rose-500]="isHeartSent()"
-          aria-hidden="true"
-        ></lucide-icon>
-      </button>
-      <button
-        #optionsToggle
-        type="button"
-        (click)="toggleMenu()"
-        class="min-h-11 min-w-11 rounded-xl text-muted-foreground hover:bg-muted/60 focus-visible:outline-2 focus-visible:outline-primary"
-        aria-label="Chain details and options"
-        [attr.aria-expanded]="isMenuOpen()"
-        [attr.aria-controls]="'chain-details-' + connection().id"
-      >
-        <lucide-icon name="more-vertical" class="w-4 h-4 mx-auto" aria-hidden="true"></lucide-icon>
-      </button>
+      @if (completion(); as event) {
+        <button
+          type="button"
+          (click)="sendHeart()"
+          [disabled]="pending() || stale() || isHeartSent() || event.allowanceUsed"
+          class="min-h-11 min-w-11 rounded-xl text-muted-foreground hover:bg-muted/60 disabled:cursor-default focus-visible:outline-2 focus-visible:outline-primary"
+          [attr.aria-label]="
+            pending()
+              ? 'Saving heart'
+              : isHeartSent()
+                ? 'Heart sent for this habit today'
+                : 'Send heart to ' + partnerHabitTitle()
+          "
+          [attr.aria-describedby]="errorMessage() ? 'chain-error-' + event.completionId : null"
+          [title]="isHeartSent() ? 'Heart sent today' : 'Send heart'"
+        >
+          <lucide-icon
+            name="heart"
+            class="w-5 h-5 mx-auto"
+            [class.text-rose-500]="isHeartSent()"
+            [class.fill-rose-500]="isHeartSent()"
+            [attr.data-sent]="isHeartSent() ? 'true' : null"
+            aria-hidden="true"
+          ></lucide-icon>
+        </button>
+      } @else {
+        <button
+          #optionsToggle
+          type="button"
+          (click)="toggleMenu()"
+          class="min-h-11 min-w-11 rounded-xl text-muted-foreground hover:bg-muted/60 focus-visible:outline-2 focus-visible:outline-primary"
+          aria-label="Chain details and options"
+          [attr.aria-expanded]="isMenuOpen()"
+          [attr.aria-controls]="'chain-details-' + connection().id"
+        >
+          <lucide-icon
+            name="more-vertical"
+            class="w-4 h-4 mx-auto"
+            aria-hidden="true"
+          ></lucide-icon>
+        </button>
+      }
     </div>
   </div>
   @if (errorMessage()) {
     <p
-      [id]="'chain-error-' + connection().id"
+      [id]="'chain-error-' + (completion()?.completionId || connection().id)"
       role="alert"
       class="mt-2 text-xs text-rose-600 dark:text-rose-400"
     >
       {{ errorMessage() }}
     </p>
   }
-  @if (isMenuOpen()) {
+  @if (!completion() && isMenuOpen()) {
     <div
       [id]="'chain-details-' + connection().id"
-      (keydown.escape)="closeMenu(); optionsToggle.focus()"
+      (keydown.escape)="closeMenuAndFocus()"
       class="mt-3 pt-3 border-t border-border/50 text-xs text-muted-foreground"
     >
       <p class="break-words">
@@ -131,7 +150,7 @@
           <div class="flex flex-wrap gap-2">
             <button
               type="button"
-              (click)="cancelDisconnect(); optionsToggle.focus()"
+              (click)="cancelDisconnect(); focusOptions()"
               class="min-h-11 px-3 rounded-xl hover:bg-muted/60"
             >
               Cancel

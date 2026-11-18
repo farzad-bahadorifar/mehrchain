@@ -28,7 +28,7 @@ and personal choice; rewards do not replace reliable access, saving and habit ru
 
 | Horizon | Desired improvement | When does it become executable work? |
 | --- | --- | --- |
-| Current foundation | Define support eligibility, experience semantics and actual notification capabilities before their dependent designs. | T33/T35/T41; see the roadmap workstream map. T29's known blocker and independent T30 Profile acceptance remain separate. |
+| Current foundation | Define support eligibility, experience semantics and actual notification capabilities before their dependent designs. | T33's November 3 report records completion-triggered cards and next-morning support; its implementation is still separate. T35/T41 remain foundation analyses. T29's known blocker and independent T30 Profile acceptance remain separate. |
 | Next product designs | Review two Chain views, memory destinations and private motivation inside the approved existing system. | T34/T38-T40/T42-T47/T49/T50 have exact artifacts/dependencies; implementation follows the specific approved version, never a general redesign mandate. |
 | Reported presentation failures | Distinguish a new design choice from a current render/version/viewport defect. | T48/T51/T52 own bounded evidence; T53 owns only the confirmed Endless label bug. |
 | Mero interaction correction | Carry the entire belly light across Welcome/Profile while preserving the mascot and earned colors. | The November 2 owner request superseded T31. D-012 records the exact correction; T54 owns local code, separate T55 owns first-paint styling, and T56 owns installed-PWA cold-start acceptance. No unbounded fluid work is scheduled. |

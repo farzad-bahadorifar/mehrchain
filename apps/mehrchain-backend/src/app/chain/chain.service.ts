@@ -1,4 +1,10 @@
-import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateInviteDto } from './dto/create-invite.dto';
 import { AcceptInviteDto } from './dto/accept-invite.dto';
@@ -20,6 +26,12 @@ const connectionInclude = {
   partnerCommitment: { include: { user: { select: { timeZone: true } } } },
 } satisfies Prisma.ChainConnectionInclude;
 type Connection = Prisma.ChainConnectionGetPayload<{ include: typeof connectionInclude }>;
+type SupportCard = {
+  completionId: string;
+  completedAt: Date;
+  sentAt: Date | null;
+  allowanceUsed: boolean;
+};
 
 @Injectable()
 export class ChainService {
@@ -164,25 +176,71 @@ export class ChainService {
         const incoming = await tx.chainConnection.findMany({
           where: { partnerId: userId, heartSent: true, ...available },
         });
+        const startByHabit = new Map<string, Date>();
+        for (const connection of connections) {
+          const start = startByHabit.get(connection.partnerCommitmentId);
+          if (!start || start > connection.createdAt)
+            startByHabit.set(connection.partnerCommitmentId, connection.createdAt);
+        }
+        const completions = connections.length
+          ? await tx.commitmentLog.findMany({
+              where: {
+                dayKey: { not: null },
+                OR: [...startByHabit].map(([commitmentId, start]) => ({
+                  commitmentId,
+                  completedAt: { gte: start, lte: now },
+                })),
+              },
+              select: { id: true, commitmentId: true, completedAt: true },
+              orderBy: [{ completedAt: 'desc' }, { id: 'asc' }],
+            })
+          : [];
         const sent = connections.length
           ? await tx.chainHeart.findMany({
               where: {
                 senderId: userId,
-                OR: connections.map((c) => ({
-                  recipientCommitmentId: c.partnerCommitmentId,
-                  dayKey: localDay(now, c.partnerCommitment.user.timeZone),
-                })),
+                OR: [
+                  { completionId: { in: completions.map((completion) => completion.id) } },
+                  ...connections.map((connection) => ({
+                    recipientCommitmentId: connection.partnerCommitmentId,
+                    dayKey: localDay(now, connection.partnerCommitment.user.timeZone),
+                  })),
+                ],
               },
             })
           : [];
-        return connections.map((c) =>
-          this.connectionResponse(
-            c,
-            sent.find((h) => h.recipientCommitmentId === c.partnerCommitmentId)?.sentAt ?? null,
+        const sentByCompletion = new Map(sent.map((heart) => [heart.completionId, heart]));
+        return connections.map((connection) => {
+          const dayKey = localDay(now, connection.partnerCommitment.user.timeZone);
+          const daily = sent.find(
+            (heart) =>
+              heart.recipientCommitmentId === connection.partnerCommitmentId &&
+              heart.dayKey === dayKey,
+          );
+          const supportCards: SupportCard[] = [];
+          for (const completion of completions) {
+            if (
+              completion.commitmentId !== connection.partnerCommitmentId ||
+              completion.completedAt < connection.createdAt
+            )
+              continue;
+            const acknowledgement = sentByCompletion.get(completion.id);
+            if (acknowledgement && acknowledgement.dayKey !== dayKey) continue;
+            supportCards.push({
+              completionId: completion.id,
+              completedAt: completion.completedAt,
+              sentAt: acknowledgement?.sentAt ?? null,
+              allowanceUsed: !!daily && !acknowledgement,
+            });
+          }
+          return this.connectionResponse(
+            connection,
+            daily?.sentAt ?? null,
             incoming,
             now,
-          ),
-        );
+            supportCards,
+          );
+        });
       },
     );
   }
@@ -192,6 +250,7 @@ export class ChainService {
     sentAt: Date | null,
     incoming: { userId: string; partnerCommitmentId: string; heartSentAt: Date | null }[],
     now: Date,
+    supportCards: SupportCard[] = [],
   ) {
     const { userCommitment, partnerCommitment, ...row } = c;
     const calendar = commitmentCalendar(userCommitment.user.timeZone, now);
@@ -220,6 +279,7 @@ export class ChainService {
       ...(state || {}),
       heartSent: sentAt !== null,
       heartSentAt: sentAt,
+      supportCards,
       receivedHeartCount,
       calendar,
       partnerCalendar,
@@ -278,32 +338,49 @@ export class ChainService {
     );
   }
 
-  async sendHeart(userId: string, connectionId: string) {
+  async sendHeart(userId: string, connectionId: string, completionId: string) {
     return this.withConnection(userId, connectionId, async (tx, c, now) => {
+      if (!completionId) return new BadRequestException('Select a partner completion.');
+      const completion = await tx.commitmentLog.findFirst({
+        where: {
+          id: completionId,
+          commitmentId: c.partnerCommitmentId,
+          dayKey: { not: null },
+          completedAt: { lte: now },
+        },
+        select: { id: true, completedAt: true },
+      });
+      if (!completion) return new BadRequestException('This completion is not available.');
       const key = {
         senderId: userId,
         recipientCommitmentId: c.partnerCommitmentId,
         dayKey: localDay(now, c.partnerCommitment.user.timeZone),
       };
-      // All paths lock the recipient habit first. The unique ledger key also
-      // enforces the allowance across duplicate links and future write paths.
-      const created = await tx.chainHeart.createMany({
-        data: { ...key, sentAt: now },
-        skipDuplicates: true,
+      const acknowledged = await tx.chainHeart.findUnique({
+        where: {
+          senderId_recipientCommitmentId_completionId: {
+            senderId: userId,
+            recipientCommitmentId: c.partnerCommitmentId,
+            completionId,
+          },
+        },
       });
-      if (created.count) {
+      if (!acknowledged) {
+        if (completion.completedAt < c.createdAt)
+          return new BadRequestException('This completion is not available.');
+        const created = await tx.chainHeart.createMany({
+          data: { ...key, completionId, sentAt: now },
+          skipDuplicates: true,
+        });
+        if (!created.count)
+          return new ConflictException('You have already sent a heart for this habit today.');
         await tx.chainConnection.update({
           where: { id: c.id },
           data: { heartSent: true, heartSentAt: now },
         });
+        await lockMeroAccounts(tx, [userId]);
+        await tx.meroProgress.update({ where: { userId }, data: { hasSentSupport: true } });
       }
-      // A retry never toggles, extends expiry or revives cleared support after
-      // disconnect/restore. Its consumed allowance still lasts the recipient day.
-      const sent = await tx.chainHeart.findUniqueOrThrow({
-        where: { senderId_recipientCommitmentId_dayKey: key },
-      });
-      await lockMeroAccounts(tx, [userId]);
-      await tx.meroProgress.update({ where: { userId }, data: { hasSentSupport: true } });
       const incoming = await tx.chainConnection.findMany({
         where: {
           partnerId: userId,
@@ -314,7 +391,10 @@ export class ChainService {
           partnerCommitment: { isArchived: false, isPublic: true },
         },
       });
-      return this.connectionResponse(c, sent.sentAt, incoming, now);
+      const sentAt = acknowledged?.sentAt ?? now;
+      return this.connectionResponse(c, sentAt, incoming, now, [
+        { completionId, completedAt: completion.completedAt, sentAt, allowanceUsed: false },
+      ]);
     });
   }
 

@@ -62,6 +62,9 @@ export class OnboardingComponent implements OnInit {
   // 5: Duration, Why & Reminder
   // 6: Create Profile & Sign Up
   readonly sessionError = this.authService.sessionError;
+  protected hasSessionToken(): boolean {
+    return !!this.authService.getToken();
+  }
   readonly sessionLoading = this.authService.sessionLoading;
   async retrySession(): Promise<void> {
     await this.authService.retrySession();
@@ -672,6 +675,123 @@ export class OnboardingComponent implements OnInit {
       }
     } catch (err: any) {
       this.loginError.set(err?.message || 'Google sign-in failed.');
+    } finally {
+      this.isLoggingIn.set(false);
+    }
+  }
+
+  async handleDevLogin() {
+    if (!this.allowDemoMode) return;
+    this.loginError.set('');
+    this.isLoggingIn.set(true);
+
+    try {
+      const profile = this.authService.loginOffline('demo_user');
+
+      // Pre-seed sample commitments if the demo user has no existing habits
+      const userStorageKey = `mehrchain_commitments_${profile.id}`;
+      let existingHabits: any[] = [];
+      try {
+        existingHabits = JSON.parse(localStorage.getItem(userStorageKey) || '[]');
+      } catch {
+        existingHabits = [];
+      }
+
+      if (!Array.isArray(existingHabits) || existingHabits.length === 0) {
+        const sampleCommitments = [
+          {
+            id: 'demo_habit_endless',
+            title: 'Morning Mindfulness & Walking',
+            category: 'growth',
+            totalDays: -1,
+            currentDay: 5,
+            currentStreak: 5,
+            isCompletedToday: false,
+            startDate: new Date().toISOString(),
+            why: 'Stay centered and present each morning.',
+            reminderTime: '08:00',
+            isPublic: true,
+            history: [],
+          },
+          {
+            id: 'demo_habit_finite',
+            title: 'Read 20 pages daily',
+            category: 'growth',
+            totalDays: 21,
+            currentDay: 7,
+            currentStreak: 7,
+            isCompletedToday: true,
+            startDate: new Date().toISOString(),
+            why: 'Expand knowledge and focus.',
+            reminderTime: '21:00',
+            isPublic: true,
+            history: [],
+          },
+        ];
+
+        try {
+          localStorage.setItem(userStorageKey, JSON.stringify(sampleCommitments));
+        } catch {
+          /* Local storage unavailable or quota exceeded */
+        }
+        this.commitmentService.loadForUser(profile.id);
+      }
+
+      // Pre-seed a sample chain connection for testing the Chain feature
+      const connectionsStorageKey = `mehrchain_chain_connections_${profile.id}`;
+      let existingConnections: any[] = [];
+      try {
+        existingConnections = JSON.parse(localStorage.getItem(connectionsStorageKey) || '[]');
+      } catch {
+        existingConnections = [];
+      }
+
+      if (!Array.isArray(existingConnections) || existingConnections.length === 0) {
+        const sampleConnection = [
+          {
+            id: 'demo_chain_1',
+            generationId: 'gen_demo_1',
+            userId: profile.id,
+            partnerId: 'partner_sara',
+            userCommitmentId: 'demo_habit_endless',
+            partnerCommitmentId: 'partner_habit_1',
+            status: 'ACTIVE',
+            consecutiveMissedDays: 0,
+            heartSent: false,
+            supportCards: [
+              {
+                completionId: 'demo_completion_1',
+                completedAt: new Date().toISOString(),
+                sentAt: null,
+                allowanceUsed: false,
+              },
+            ],
+            receivedHeartCount: 3,
+            createdAt: new Date().toISOString(),
+            partner: {
+              username: 'sara',
+              name: 'Sara Smith',
+            },
+            partnerCommitment: {
+              title: 'Daily Evening Walk',
+              category: 'health',
+              isCompletedToday: true,
+            },
+          },
+        ];
+
+        try {
+          localStorage.setItem(connectionsStorageKey, JSON.stringify(sampleConnection));
+        } catch {
+          /* Local storage unavailable */
+        }
+      }
+
+      this.isLoginModalOpen.set(false);
+      this.meroService.setState('happy');
+      this.authService.navigateAfterLogin();
+    } catch (err: any) {
+      this.loginError.set(err?.message || 'Dev sign-in failed.');
     } finally {
       this.isLoggingIn.set(false);
     }

@@ -14,14 +14,16 @@
     @if (sessionError()) {
       <div role="alert" class="rounded-xl border border-border/50 bg-card p-3 text-sm">
         <p>{{ sessionError() }}</p>
-        <button
-          type="button"
-          (click)="retrySession()"
-          [disabled]="sessionLoading()"
-          class="mt-2 text-primary font-semibold disabled:opacity-50"
-        >
-          Retry connection
-        </button>
+        @if (hasSessionToken()) {
+          <button
+            type="button"
+            (click)="retrySession()"
+            [disabled]="sessionLoading()"
+            class="min-h-11 text-primary font-semibold disabled:opacity-50"
+          >
+            Retry connection
+          </button>
+        }
       </div>
     }
     @if (sessionLoading()) {
@@ -164,11 +166,13 @@
       [isForgotPasswordMode]="isForgotPasswordMode()"
       [forgotPasswordEmail]="forgotPasswordEmail()"
       [isLoggingIn]="isLoggingIn()"
+      [allowDemoMode]="allowDemoMode"
       (emailChange)="loginEmail.set($event)"
       (passwordChange)="loginPassword.set($event)"
       (togglePassword)="toggleLoginPassword()"
       (login)="handleLogin()"
       (googleLogin)="handleGoogleLogin()"
+      (devLogin)="handleDevLogin()"
       (switchToSignUp)="switchToSignUpFromLogin()"
       (toggleForgotPassword)="toggleForgotPassword($event)"
       (close)="closeLoginModal()"

@@ -184,7 +184,7 @@ describe('Mero shared rendering lifecycle', () => {
     expect(frames.size).toBe(0);
   });
 
-  it('keeps the last real frame on context loss and releases GPU resources', async () => {
+  it('keeps the last real frame on context loss and recreates the scene after restoration', async () => {
     const { handle, ready } = attach();
     await visible(handle);
     frame();
@@ -192,9 +192,28 @@ describe('Mero shared rendering lifecycle', () => {
     factory.mock.calls[0][1]();
     expect(ready).toHaveBeenCalledTimes(1);
     expect(ready).toHaveBeenLastCalledWith('ready');
-    expect(scene.dispose).toHaveBeenCalledOnce();
+    expect(scene.dispose).not.toHaveBeenCalled();
     handle.update(options);
     expect(frames.size).toBe(0);
+    factory.mock.calls[0][2]?.();
+    await vi.waitFor(() => expect(factory).toHaveBeenCalledTimes(2));
+    expect(scene.dispose).toHaveBeenCalledOnce();
+    frame();
+    expect(scene.draw).toHaveBeenCalledTimes(2);
+  });
+
+  it('recovers on foregrounding when the browser never restores the lost context', async () => {
+    const { handle } = attach();
+    await visible(handle);
+    frame();
+    vi.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+    factory.mock.calls[0][1]();
+    document.dispatchEvent(new Event('visibilitychange'));
+    expect(factory).toHaveBeenCalledTimes(1);
+    vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+    document.dispatchEvent(new Event('visibilitychange'));
+    await vi.waitFor(() => expect(factory).toHaveBeenCalledTimes(2));
+    expect(scene.dispose).toHaveBeenCalledOnce();
   });
 
   it('reports unavailability without starting Three.js when WebGL2 is unavailable', () => {
@@ -323,7 +342,7 @@ describe('Mero shared rendering lifecycle', () => {
     const { handle } = attach({ ...options, mood: 'happy', size: 512 });
     await visible(handle);
     frame();
-    expect(factory).toHaveBeenCalledWith('low', expect.any(Function));
+    expect(factory).toHaveBeenCalledWith('low', expect.any(Function), expect.any(Function));
     expect(scene.draw.mock.lastCall?.[1]).toBe(256);
     expect(scene.draw.mock.lastCall?.[5]).toBe(false);
     expect(frames.size).toBe(0);

@@ -21,6 +21,16 @@ The old `20261004210000_production_baseline` history record has a checksum that 
 
 ## Release migration chain
 
+### November 18 Chain completion acknowledgement
+
+The additive release migration `20261118180000_chain_heart_completion` preserves
+existing daily allowances and timestamps; historical rows keep a null event ID.
+The production API now requires the new column to start. Verify the serving
+target privately, back up and rehearse on a disposable copy, then use the release
+wrapper to apply the schema before deploying the new API and frontend. See the
+[rollout and compatibility notes](../openspec/changes/update-chain-completion-support/design.md).
+Do not run the legacy migration directory or infer historical completion IDs.
+
 ### October 21 optional usernames and password access addition
 
 T17 prepares `20261021000000_optional_usernames`, after T06. It makes usernames

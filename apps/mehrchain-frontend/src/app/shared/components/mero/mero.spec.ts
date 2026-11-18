@@ -64,6 +64,7 @@ describe('MeroComponent', () => {
   });
 
   it('uses a neutral accessible label if no model frame can be rendered', async () => {
+    fixture.componentRef.setInput('showGlow', true);
     await fixture.whenStable();
     renderer.attach.mock.lastCall![2]('unavailable');
     fixture.detectChanges();
@@ -72,6 +73,7 @@ describe('MeroComponent', () => {
       'unavailable',
     );
     expect(element.querySelector('.mero--ready')).toBeNull();
+    expect(element.querySelector<HTMLElement>('.mero-belly-glow')?.hidden).toBe(true);
     expect(element.querySelector('.mero-fallback')).toBeNull();
     expect(element.textContent).toContain('Mero');
   });

@@ -1,6 +1,11 @@
 <mc-card variant="elevated" padding="md">
   <div class="flex justify-between items-start gap-3 mb-2">
-    <h3 class="min-w-0 text-lg font-bold text-foreground break-words">{{ commitment().title }}</h3>
+    <h3
+      class="min-w-0 flex-1 text-lg font-bold text-foreground truncate"
+      [title]="commitment().title"
+    >
+      {{ commitment().title }}
+    </h3>
     <button
       #detailsToggle
       type="button"
@@ -25,17 +30,15 @@
     <span>{{ commitment().currentStreak }} day streak</span>
     @if (receivedHeartCount() > 0) {
       <span
-        class="inline-flex items-center gap-1 text-rose-600 dark:text-rose-400"
+        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-semibold"
         role="img"
         [attr.aria-label]="
           receivedHeartCount() +
           (receivedHeartCount() === 1 ? ' heart received today' : ' hearts received today')
         "
       >
-        <lucide-icon name="heart" class="w-4 h-4 fill-current" aria-hidden="true"></lucide-icon>
-        @if (receivedHeartCount() > 1) {
-          <span aria-hidden="true">{{ receivedHeartCount() }}</span>
-        }
+        <lucide-icon name="heart" class="w-3.5 h-3.5 fill-current" aria-hidden="true"></lucide-icon>
+        <span aria-hidden="true">+{{ receivedHeartCount() }}</span>
       </span>
     }
     @if (commitment().totalDays !== -1) {
@@ -50,6 +53,10 @@
       (keydown.escape)="closeMenu(); detailsToggle.focus()"
     >
       <dl class="space-y-2 text-muted-foreground">
+        <div>
+          <dt class="mb-0.5">Habit Title</dt>
+          <dd class="text-foreground font-semibold break-words">{{ commitment().title }}</dd>
+        </div>
         <div class="flex flex-wrap justify-between gap-x-3 gap-y-1">
           <dt>Category</dt>
           <dd class="text-foreground">{{ commitment().category }}</dd>

@@ -7,6 +7,14 @@ import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 import { ChainConnection } from '@mehrchain/shared-data';
 
+const completion = {
+  completionId: 'event',
+  completedAt: '2026-10-18T00:00:00Z',
+  sentAt: null,
+  allowanceUsed: false,
+};
+const confirmed = { ...completion, sentAt: '2026-10-18T01:00:00Z' };
+
 describe('ChainService (Frontend Hybrid)', () => {
   let service: ChainService;
   let httpMock: HttpTestingController;
@@ -101,18 +109,21 @@ describe('ChainService (Frontend Hybrid)', () => {
       createdAt: new Date().toISOString(),
     };
 
+    mockConnection.supportCards = [completion];
     (service as any)._connections.set([mockConnection, { ...mockConnection, id: 'duplicate' }]);
+    service.supportStale.set(false);
 
-    const heartPromise = service.sendHeart('conn-1');
+    const heartPromise = service.sendHeart('conn-1', 'event');
 
     // No success before confirmation.
     expect(service.connections()[0].heartSent).toBe(false);
-    expect(service.sendHeart('duplicate')).toBe(heartPromise);
+    expect(service.sendHeart('duplicate', 'event')).toBe(heartPromise);
     expect(service.pendingHeartTargets().has('comm-2')).toBe(true);
 
     const req = httpMock.expectOne(`${environment.apiUrl}/chain/connections/conn-1/heart`);
     expect(req.request.method).toBe('POST');
-    req.flush({ ...mockConnection, heartSent: true });
+    expect(req.request.body).toEqual({ completionId: 'event' });
+    req.flush({ ...mockConnection, heartSent: true, supportCards: [confirmed] });
 
     await heartPromise;
     expect(service.connections().every((c) => c.heartSent)).toBe(true);
@@ -132,8 +143,11 @@ describe('ChainService (Frontend Hybrid)', () => {
       heartSent: false,
       createdAt: '2026-10-18T00:00:00Z',
     } as ChainConnection;
+    connection.supportCards = [completion];
     (service as any)._connections.set([connection]);
-    const failed = service.sendHeart('c');
+    service.supportStale.set(false);
+    await expect(service.sendHeart('c', 'missing')).rejects.toThrow('refresh');
+    const failed = service.sendHeart('c', 'event');
     const rejected = expect(failed).rejects.toBeTruthy();
     httpMock
       .expectOne(`${environment.apiUrl}/chain/connections/c/heart`)
@@ -141,10 +155,10 @@ describe('ChainService (Frontend Hybrid)', () => {
     await rejected;
     expect(service.connections()[0].heartSent).toBe(false);
     expect(service.pendingHeartTargets().size).toBe(0);
-    const retry = service.sendHeart('c');
+    const retry = service.sendHeart('c', 'event');
     httpMock
       .expectOne(`${environment.apiUrl}/chain/connections/c/heart`)
-      .flush({ ...connection, heartSent: true });
+      .flush({ ...connection, heartSent: true, supportCards: [confirmed] });
     await retry;
     expect(service.connections()[0].heartSent).toBe(true);
   });
@@ -246,15 +260,22 @@ describe('ChainService (Frontend Hybrid)', () => {
     (service as any)._connections.set([connection]);
     const load = service.loadConnections();
     const read = httpMock.expectOne(`${environment.apiUrl}/chain/connections?ngsw-bypass=true`);
-    const heart = service.sendHeart('c');
+    const nextCompletion = { ...completion, completionId: 'next-event' };
+    (service as any)._connections.set([
+      { ...connection, supportCards: [completion, nextCompletion] },
+    ]);
+    service.supportStale.set(false);
+    const heart = service.sendHeart('c', 'event');
     httpMock
       .expectOne(`${environment.apiUrl}/chain/connections/c/heart`)
-      .flush({ ...connection, heartSent: true });
+      .flush({ ...connection, heartSent: true, supportCards: [confirmed] });
     await heart;
     read.flush([connection]);
     await load;
     expect(service.connections()[0].heartSent).toBe(true);
-    const oldWrite = service.sendHeart('c');
+    (service as any)._connections.set([{ ...connection, supportCards: [nextCompletion] }]);
+    service.supportStale.set(false);
+    const oldWrite = service.sendHeart('c', 'next-event');
     const rejected = expect(oldWrite).rejects.toThrow('session changed');
     currentUser.mockReturnValue({
       id: 'new-user',
@@ -264,7 +285,11 @@ describe('ChainService (Frontend Hybrid)', () => {
     });
     httpMock
       .expectOne(`${environment.apiUrl}/chain/connections/c/heart`)
-      .flush({ ...connection, heartSent: true });
+      .flush({
+        ...connection,
+        heartSent: true,
+        supportCards: [{ ...confirmed, completionId: 'next-event' }],
+      });
     await rejected;
   });
 

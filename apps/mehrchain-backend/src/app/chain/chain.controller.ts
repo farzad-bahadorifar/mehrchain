@@ -6,6 +6,7 @@ import { CurrentUser } from '../auth/current-user.decorator';
 import { CreateInviteDto } from './dto/create-invite.dto';
 import { AcceptInviteDto } from './dto/accept-invite.dto';
 import { SendNudgeDto } from './dto/send-nudge.dto';
+import { SendHeartDto } from './dto/send-heart.dto';
 import { DisconnectChainDto } from './dto/disconnect-chain.dto';
 
 @ApiTags('chain')
@@ -60,8 +61,12 @@ export class ChainController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Send one heart per recipient habit day (idempotent)' })
   @Post('connections/:id/heart')
-  sendHeart(@CurrentUser() user: { id: string }, @Param('id') id: string) {
-    return this.chainService.sendHeart(user.id, id);
+  sendHeart(
+    @CurrentUser() user: { id: string },
+    @Param('id') id: string,
+    @Body() dto: SendHeartDto,
+  ) {
+    return this.chainService.sendHeart(user.id, id, dto.completionId);
   }
 
   @ApiBearerAuth()

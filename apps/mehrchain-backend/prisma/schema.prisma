@@ -186,6 +186,7 @@ model CommitmentLog {
   metadata    Json? // Future metrics (e.g. mood, energy level)
 
   @@index([commitmentId])
+  @@index([commitmentId, completedAt])
   @@unique([commitmentId, dayKey])
   @@map("commitment_logs")
 }
@@ -248,12 +249,14 @@ model ChainHeart {
   senderId              String
   recipientCommitmentId String
   dayKey                String
+  completionId          String?
   sentAt                DateTime @default(now())
 
   sender     User       @relation(fields: [senderId], references: [id], onDelete: Cascade)
   recipient  Commitment @relation(fields: [recipientCommitmentId], references: [id], onDelete: Cascade)
 
   @@id([senderId, recipientCommitmentId, dayKey])
+  @@unique([senderId, recipientCommitmentId, completionId])
   @@index([recipientCommitmentId, dayKey])
   @@map("chain_hearts")
 }

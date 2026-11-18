@@ -64,7 +64,7 @@ describe('AuthService (Frontend)', () => {
     await recovery;
     expect(service.getToken()).toBe('remote-owner');
     expect(service.isAuthenticated()).toBe(false);
-    expect(service.sessionError()).toContain('Please retry');
+    expect(service.sessionError()).toContain('HTTP 503');
     expect(service.sessionLoading()).toBe(false);
     const retry = service.retrySession();
     await Promise.resolve();
@@ -73,6 +73,52 @@ describe('AuthService (Frontend)', () => {
     expect(service.currentUser()?.id).toBe('owner');
     expect(service.sessionError()).toBeNull();
   });
+
+  it.each([401, 403, 502, 504])(
+    'reports HTTP %s without trusting a cached session',
+    async (status) => {
+      await service.ready;
+      localStorage.setItem('mehrchain_auth_user_v1', JSON.stringify({ id: 'cached' }));
+      localStorage.setItem('mehrchain_auth_token_v1', 'remote-token');
+      const restore = service.retrySession();
+      await Promise.resolve();
+      httpMock
+        .expectOne((request) => request.url.endsWith('/auth/me'))
+        .flush({ message: 'private upstream details' }, { status, statusText: 'Failure' });
+      await restore;
+      expect(service.sessionError()).toContain(`HTTP ${status}`);
+      expect(service.sessionError()).not.toContain('private');
+      expect(service.isAuthenticated()).toBe(false);
+      expect(service.getToken()).toBe(status < 500 ? null : 'remote-token');
+      expect(mockCommitmentStore.loadForUser).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each(['network', 'deadline'])(
+    'distinguishes %s failure and keeps retry possible',
+    async (failure) => {
+      await service.ready;
+      vi.useFakeTimers();
+      try {
+        localStorage.setItem('mehrchain_auth_user_v1', JSON.stringify({ id: 'cached' }));
+        localStorage.setItem('mehrchain_auth_token_v1', 'remote-token');
+        const restore = service.retrySession();
+        await Promise.resolve();
+        const request = httpMock.expectOne((entry) => entry.url.endsWith('/auth/me'));
+        if (failure === 'network') request.error(new ProgressEvent('error'));
+        else await vi.advanceTimersByTimeAsync(90_000);
+        await restore;
+        expect(service.sessionError()).toContain(
+          failure === 'network' ? 'Network unavailable' : 'timed out',
+        );
+        expect(service.getToken()).toBe('remote-token');
+        expect(service.isAuthenticated()).toBe(false);
+        expect(service.sessionLoading()).toBe(false);
+      } finally {
+        vi.useRealTimers();
+      }
+    },
+  );
 
   it('finishes confirmed login without waiting for the habits request', async () => {
     mockCommitmentStore.syncWithBackend.mockReturnValue(new Promise<void>(() => {}));

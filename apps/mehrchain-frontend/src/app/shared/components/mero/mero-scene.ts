@@ -3,7 +3,11 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createMascot, MascotDetail, MascotMood } from './mero-model';
 
 /** One offscreen WebGL context and one model for all Mero canvases on the page. */
-export function createMeroScene(detail: MascotDetail, onContextLost: () => void) {
+export function createMeroScene(
+  detail: MascotDetail,
+  onContextLost: () => void,
+  onContextRestored?: () => void,
+) {
   const renderer = new THREE.WebGLRenderer({
     alpha: true,
     // Geometry detail can drop on small devices without jagged silhouette edges.
@@ -48,6 +52,8 @@ export function createMeroScene(detail: MascotDetail, onContextLost: () => void)
     onContextLost();
   };
   renderer.domElement.addEventListener('webglcontextlost', lost);
+  const restored = () => onContextRestored?.();
+  renderer.domElement.addEventListener('webglcontextrestored', restored);
   let pixels = 0;
 
   return {
@@ -88,6 +94,7 @@ export function createMeroScene(detail: MascotDetail, onContextLost: () => void)
     },
     dispose() {
       renderer.domElement.removeEventListener('webglcontextlost', lost);
+      renderer.domElement.removeEventListener('webglcontextrestored', restored);
       mascot.dispose();
       environment?.dispose();
       renderer.dispose();

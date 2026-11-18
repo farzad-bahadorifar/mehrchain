@@ -25,12 +25,14 @@ export class LoginModalComponent {
   readonly isForgotPasswordMode = input.required<boolean>();
   readonly forgotPasswordEmail = input.required<string>();
   readonly isLoggingIn = input<boolean>(false);
+  readonly allowDemoMode = input<boolean>(false);
 
   readonly emailChange = output<string>();
   readonly passwordChange = output<string>();
   readonly togglePassword = output<void>();
   readonly login = output<void>();
   readonly googleLogin = output<void>();
+  readonly devLogin = output<void>();
   readonly switchToSignUp = output<void>();
   readonly toggleForgotPassword = output<boolean>();
   readonly close = output<void>();

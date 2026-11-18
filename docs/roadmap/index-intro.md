@@ -18,7 +18,7 @@ Read [decision memory](context.md), [workflow](workflow.md) and
 | [D-002: Resend email](context.md#d-002) | The recorded domain/sender/configuration prerequisites are not ready. Do not rediscover this as an unexplained OTP bug unless conditions change. |
 | [D-003: SMS](context.md#d-003) | Not a current route per the owner. Do not invent a provider-related cause or automatically implement SMS. |
 | [D-004: live username](context.md#d-004) | Timeouts block diagnosis; improved UI copy is not a backend repair. |
-| [D-008: completion-only support](context.md#d-008) | The owner wants hearts after completion; current send guards do not enforce that prerequisite. T33 defines the gap before T34's two-view design. |
+| [D-008: completion-only support](context.md#d-008) | Completion creates a support card and may be acknowledged the next morning. T33/T34 record the approved contract and design; T61-T63 track their implementation. |
 | [D-009: experiences and memories](context.md#d-009) | Finite experiences, joint outcomes and new Endless attempts differ from the current lifecycle. Settle contracts before Journey wireframes or implementation. |
 | [D-011: Why and reminders](context.md#d-011) | Timing and platform delivery are not accepted yet. Inventory first; choose an exact schedule and nudge cap, preserving private optional Why. |
 
@@ -85,12 +85,25 @@ marked complete by adding these cards.
 | Diagnoses and responsive evidence | T48, T50, T51, T52 | Independent bounded reports/flow review; no whole-app repair umbrella |
 | Confirmed sentinel-label bug | T53 | Local Endless label only; independent of proposed domain changes |
 
-**Start with T33** for the support rule; **T35** and **T41** are independent
-foundation analyses. T48/T52 can independently investigate reported rendering/update
-behavior. A Ready card with unmet dependencies is defined but cannot start yet.
+**T33's support analysis is complete** with the November 3 completion-card and
+next-morning acknowledgement decision; see the [report](evidence/t33-completion-support-gate.md).
+**T34, T47 and T49 designs are accepted as of November 5**: Connect/Show up with
+default Show up, no @ in displayed identities, and native invitation selection
+with the complete selected title below it. See their task cards and version
+decision logs. The local T48 SVG repair, T35/T41 foundation analyses, and T52
+update-notice investigation have evidence in the completed ledger; these results
+do not establish deployment or phone acceptance. A Ready card with unmet
+dependencies is defined but cannot start yet.
 Each UI card names its same-system `index.html`, checklist and version decision;
 only an approved result can become a separate implementation card. Pure domain or
 technical reports do not need an invented UI.
+
+**Main integration, November 18:** See the [integration evidence](evidence/2026-11-18-main-integration.md)
+for the local Chain implementation, WebGL recovery, session retry diagnostics,
+Android drawable verification, and remaining live/device gates. The original
+[pre-merge review](evidence/2026-11-18-pre-merge-review.md) is preserved as history.
+T57 retains its main-branch Mero identity; the completed Quick Dev Sign-In record
+moved to T64 without changing its acceptance evidence.
 
 T29 resumes only when its network blocker changes. T30's existing Profile phone
 acceptance remains independent and is not replaced by T51. The November 2 owner
@@ -98,7 +111,6 @@ request supersedes the unexecuted T31 study; its history is retained as Dropped.
 T54 owns the local whole-belly drag repair, T55 the separate local startup-style
 fix, and T56 the installed Android PWA cold-start acceptance after deployment.
 See [D-012](context.md#d-012) and the [interaction evidence](evidence/t54-mero-light.md) /
-[startup evidence](evidence/t55-startup-styles.md). T52 still owns the separate
-update-notice investigation. Future topics use the same intake path. All
+[startup evidence](evidence/t55-startup-styles.md). Future topics use the same intake path. All
 project-authored development material, issue/PR text and application copy must be
 English; see [contributing](../../CONTRIBUTING.md).

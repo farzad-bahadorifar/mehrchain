@@ -34,7 +34,8 @@ describe('ChainCardComponent', () => {
     fixture.componentRef.setInput('connection', { ...connection, receivedHeartCount: 2 });
     fixture.detectChanges();
     const text = fixture.nativeElement.textContent;
-    expect(text).toContain('@sara');
+    expect(text).toContain('Sara Smith');
+    expect(text).not.toContain('@');
     expect(text).toContain('Morning Meditation');
     expect(text).toContain('Not completed today');
     expect(text).not.toContain('supported your habit');
@@ -44,31 +45,42 @@ describe('ChainCardComponent', () => {
   it('sends on click and keeps pending, sent and stale hearts disabled', () => {
     const sent = vi.fn();
     component.heartSend.subscribe(sent);
+    const completion = {
+      completionId: 'event',
+      completedAt: '2026-10-17T23:00:00Z',
+      sentAt: null,
+      allowanceUsed: false,
+    };
+    fixture.componentRef.setInput('completion', completion);
+    fixture.detectChanges();
     const button = fixture.nativeElement.querySelector(
       'button[title="Send heart"]',
     ) as HTMLButtonElement;
     button.click();
-    expect(sent).toHaveBeenCalledWith('conn-1');
+    expect(sent).toHaveBeenCalledWith('event');
     fixture.componentRef.setInput('pending', true);
     fixture.detectChanges();
     component.sendHeart();
     expect(button.disabled).toBe(true);
     expect(sent).toHaveBeenCalledTimes(1);
     fixture.componentRef.setInput('pending', false);
-    fixture.componentRef.setInput('connection', { ...connection, heartSent: true });
+    fixture.componentRef.setInput('completion', { ...completion, sentAt: '2026-10-18T01:00:00Z' });
     fixture.detectChanges();
     expect(button.disabled).toBe(true);
     expect(button.getAttribute('aria-label')).toBe('Heart sent for this habit today');
+    const heartIcon = button.querySelector('lucide-icon');
+    expect(heartIcon?.getAttribute('data-sent')).toBe('true');
+    expect(heartIcon?.classList.contains('fill-rose-500')).toBe(true);
     fixture.componentRef.setInput('stale', true);
     fixture.detectChanges();
     expect(button.disabled).toBe(true);
     expect(fixture.nativeElement.textContent).toContain('Refresh required');
   });
-  it('offers the same heart action at a finite goal', () => {
+  it('never infers heart eligibility from a finite goal alone', () => {
     fixture.componentRef.setInput('connection', { ...connection, status: 'COMPLETED' });
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('Goal reached');
-    expect(fixture.nativeElement.querySelector('button[title="Send heart"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('button[title="Send heart"]')).toBeNull();
     expect(fixture.nativeElement.textContent).not.toContain('Congratulate');
   });
   it('uses server completion state even when the device UTC date matches a timestamp', () => {

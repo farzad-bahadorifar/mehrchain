@@ -32,16 +32,25 @@ describe('CommitmentCard', () => {
     expect(component).toBeTruthy();
   });
 
-  it('shows one anonymous heart, adding a visible numeral only for multiple hearts', () => {
+  it('renders single-line truncated title with accessible title attribute (T46)', () => {
+    const titleEl = fixture.nativeElement.querySelector('h3') as HTMLElement;
+    expect(titleEl).toBeTruthy();
+    expect(titleEl.classList.contains('truncate')).toBe(true);
+    expect(titleEl.getAttribute('title')).toBe('Morning Yoga');
+    expect(titleEl.textContent?.trim()).toBe('Morning Yoga');
+  });
+
+  it('shows anonymous +N received-heart pill indicator (T45)', () => {
     fixture.componentRef.setInput('receivedHeartCount', 1);
     fixture.detectChanges();
     const summary = () => fixture.nativeElement.querySelector('[role="img"]') as HTMLElement | null;
     expect(summary()?.getAttribute('aria-label')).toBe('1 heart received today');
-    expect(summary()?.textContent?.trim()).toBe('');
+    expect(summary()?.textContent?.trim()).toBe('+1');
+    expect(summary()?.classList.contains('rounded-full')).toBe(true);
     fixture.componentRef.setInput('receivedHeartCount', 2);
     fixture.detectChanges();
     expect(summary()?.getAttribute('aria-label')).toBe('2 hearts received today');
-    expect(summary()?.textContent?.trim()).toBe('2');
+    expect(summary()?.textContent?.trim()).toBe('+2');
     fixture.componentRef.setInput('receivedHeartCount', 0);
     fixture.detectChanges();
     expect(summary()).toBeNull();

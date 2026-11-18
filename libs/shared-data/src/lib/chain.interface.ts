@@ -37,6 +37,7 @@ export interface ChainConnection {
   lastNudgeSentAt?: string | Date | null;
   heartSent: boolean;
   heartSentAt?: string | Date | null;
+  supportCards?: ChainSupportCard[];
   // Aggregate for the viewer's own habit; never identifies a supporter.
   receivedHeartCount?: number;
   calendar?: CommitmentCalendar;
@@ -46,6 +47,13 @@ export interface ChainConnection {
   archivedAt?: string | Date | null;
   partner?: ChainPartner;
   partnerCommitment?: ChainPartnerCommitment;
+}
+
+export interface ChainSupportCard {
+  completionId: string;
+  completedAt: string | Date;
+  sentAt: string | Date | null;
+  allowanceUsed: boolean;
 }
 
 export const DISCONNECT_REASONS = {
