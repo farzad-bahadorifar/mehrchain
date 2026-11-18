@@ -41,5 +41,7 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T61 — Enforce completion-only heart acknowledgement in the Chain API](tasks/T61.md): The Chain API lists and acknowledges real partner completion events only, including an eligible completion from the previous evening, without creating repeat hearts.
 - [T62 — Render only real completion cards in Chain Show Up](tasks/T62.md): Show Up presents authoritative acknowledgement cards for completed partner check-ins instead of active relationship rows.
 - [T63 — Manage active Chain relationships from Connect](tasks/T63.md): Connect lists all active relationships and lets the user inspect or disconnect a link without switching to Show Up.
+- [T65 — Align the Mero color editor with the Profile design system](tasks/T65.md): The unlocked Colors screen opens a visible draft only from Create or Edit, with named suggestions matching the V2 style and an unchanged earned-color contract.
+- [T66 — Keep the update notice from shifting the app layout](tasks/T66.md): A ready update and Later do not move the current page; Reload installs a ready web build only after confirmation.
 
 Earlier implementation/acceptance records remain in [legacy disposition](legacy.md) and linked history.

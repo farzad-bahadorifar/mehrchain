@@ -1,7 +1,7 @@
 {
   "version": 1,
   "updated": "2026-11-18",
-  "lastId": 64,
+  "lastId": 68,
   "tasks": [
     {
       "id": "T20",
@@ -570,7 +570,8 @@
       "dependsOn": [],
       "issue": "https://github.com/farzad-bahadorifar/mehrchain/issues/88",
       "evidence": [
-        "docs/roadmap/evidence/2026-11-18-main-integration.md#remaining-acceptance"
+        "docs/roadmap/evidence/2026-11-18-main-integration.md#remaining-acceptance",
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main"
       ],
       "history": [
         {
@@ -587,9 +588,14 @@
           "date": "2026-11-18",
           "event": "Blocked",
           "evidence": "docs/roadmap/evidence/2026-11-18-main-integration.md#remaining-acceptance"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Blocked",
+          "evidence": "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main"
         }
       ],
-      "blockedReason": "November 18 read-only Pages probe received no HTTP result due to TLS negotiation; direct Render version and schema had no HTTP result at the 20-second deadline. Unblock with reachable proxy/direct API and authorized test account if a save is needed.",
+      "blockedReason": "Recorded production target lacks optional-username migration and usernameSource. Serving revision and real save could not be observed: Pages refused the connection and Render timed out. Unblock after T67 and compare reachable current API versions, then test actual save on an authorized account.",
       "contextRefs": [
         "D-002",
         "D-003",
@@ -4665,6 +4671,292 @@
           "evidence": "docs/roadmap/evidence/2026-11-18-main-integration.md#chain-behavior"
         }
       ]
+    },
+    {
+      "title": "Align the Mero color editor with the Profile design system",
+      "type": "bug",
+      "area": "profile-colors",
+      "priority": "P2",
+      "goal": "The unlocked Colors screen opens a visible draft only from Create or Edit, with named suggestions matching the V2 style and an unchanged earned-color contract.",
+      "scope": [
+        "Colors editor, preset suggestions, and touch targets"
+      ],
+      "outOfScope": [
+        "Changing stored colors, earning rules or account theme"
+      ],
+      "inputs": [
+        "apps/mehrchain-frontend/src/app/features/profile/profile.html and profile.ts",
+        "T24 approved V2 studio"
+      ],
+      "contextRefs": [
+        "D-001",
+        "D-005"
+      ],
+      "steps": [
+        "Reuse the approved Profile surface and V2 controls.",
+        "Verify locked, draft, invalid and cancelled states."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Create/Edit opens a clearly uncommitted draft with named selectable swatches; invalid values cannot be submitted.",
+          "state": "pass",
+          "evidence": "Compiled and Angular checks for explicit, valid draft entry and V2 swatches: docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        },
+        {
+          "id": "A2",
+          "text": "Locked accounts have no editor; cancel preserves saved colors and layout fits in both themes.",
+          "state": "pass",
+          "evidence": "Locked fixture remains guarded; light/dark Chrome matrix cancels without changing the saved name: docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        }
+      ],
+      "verify": [
+        "npx nx test mehrchain-frontend --include=**/features/profile/profile.spec.ts",
+        "Compiled Chrome synthetic account at 320, 390 and 544 CSS pixels in both themes."
+      ],
+      "dependsOn": [
+        "T24",
+        "T27"
+      ],
+      "issue": null,
+      "id": "T65",
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+      ],
+      "history": [
+        {
+          "date": "2026-11-18",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-18",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Verified A1",
+          "evidence": "Compiled and Angular checks for explicit, valid draft entry and V2 swatches: docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Verified A2",
+          "evidence": "Locked fixture remains guarded; light/dark Chrome matrix cancels without changing the saved name: docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        }
+      ]
+    },
+    {
+      "title": "Keep the update notice from shifting the app layout",
+      "type": "bug",
+      "area": "web-update",
+      "priority": "P2",
+      "goal": "A ready update and Later do not move the current page; Reload installs a ready web build only after confirmation.",
+      "scope": [
+        "Root update announcement placement and existing web update actions"
+      ],
+      "outOfScope": [
+        "Android stable channel or signing policy changes"
+      ],
+      "inputs": [
+        "apps/mehrchain-frontend/src/app/app.html and app.css",
+        "docs/roadmap/evidence/t52-web-update-viewport.md"
+      ],
+      "contextRefs": [
+        "D-006",
+        "D-010"
+      ],
+      "steps": [
+        "Keep the notice in the existing shell without consuming layout height.",
+        "Switch two production builds on the same origin and verify consent and retained layout."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Showing and dismissing a notice leaves the content box unchanged at a narrow viewport.",
+          "state": "pass",
+          "evidence": "Compiled Chrome measurement at 320 CSS pixels: identical content rectangle before, during, and after Later: docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        },
+        {
+          "id": "A2",
+          "text": "The old worker-controlled build remains on refusal; a confirmed Reload changes to the new bundle.",
+          "state": "pass",
+          "evidence": "Real Angular worker across two builds preserved the old bundle on refusal and activated RC5 only on confirmation: docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        }
+      ],
+      "verify": [
+        "Run the two-build Chromium Service Worker check described in the RC5 handoff and frontend VersionService tests."
+      ],
+      "dependsOn": [
+        "T52"
+      ],
+      "issue": null,
+      "id": "T66",
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+      ],
+      "history": [
+        {
+          "date": "2026-11-18",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-18",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Verified A1",
+          "evidence": "Compiled Chrome measurement at 320 CSS pixels: identical content rectangle before, during, and after Later: docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Verified A2",
+          "evidence": "Real Angular worker across two builds preserved the old bundle on refusal and activated RC5 only on confirmation: docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/2026-11-18-rc5-release.md#verified-locally"
+        }
+      ]
+    },
+    {
+      "title": "Verify and apply release migrations before the RC5 deployment",
+      "type": "verification",
+      "area": "release-database",
+      "priority": "P1",
+      "goal": "The current Render production target passes a fresh recovery rehearsal and the reviewed release migrations before new application code is deployed.",
+      "scope": [
+        "Verify the current Render target, capture recovery point, rehearse and confirm only expected pending migrations"
+      ],
+      "outOfScope": [
+        "Push new application code before the database gate",
+        "Reset schema, infer completion identities or run the audit migration directory"
+      ],
+      "inputs": [
+        "docs/database_migration_procedure.md",
+        "scripts/release-migrate.cjs and apps/mehrchain-backend/prisma/release-migrations",
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md"
+      ],
+      "contextRefs": [
+        "D-004",
+        "D-006"
+      ],
+      "steps": [
+        "Identify Render's current database privately and create a fresh recoverable Neon snapshot.",
+        "Rehearse both pending migrations on an isolated populated copy.",
+        "Confirm schema and migration history on the target after the reviewed deploy."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Current target and recovery point are identified and the isolated populated-copy rehearsal preserves accounts and allowances.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "Expected optional-username and completion migrations are applied and verified without unresolved drift before the main push.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Use the exact RC5 handoff database sequence; retain sanitized status and snapshot references."
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T67",
+      "status": "Blocked",
+      "evidence": [
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main"
+      ],
+      "history": [
+        {
+          "date": "2026-11-18",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Blocked",
+          "evidence": "docs/roadmap/evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main"
+        }
+      ],
+      "blockedReason": "The stored production target lacks both expected migrations; this host could not verify the current Render binding or create a fresh Neon recovery point because the console is region-blocked. Unblock with authorized console access and a verified pre-change snapshot and populated rehearsal child."
+    },
+    {
+      "title": "Accept a same-key Android RC5 upgrade before tagging",
+      "type": "verification",
+      "area": "android-release",
+      "priority": "P1",
+      "goal": "An official signed RC5 tester APK upgrades a prior same-key install on an identified Android phone without data loss.",
+      "scope": [
+        "Signed-candidate Actions artifact, versionCode and certificate verification, upgrade without uninstall"
+      ],
+      "outOfScope": [
+        "Native stable-channel promotion",
+        "Treating a debug artifact as an official upgrade",
+        "Profile or installed-PWA acceptance owned by T30/T56"
+      ],
+      "inputs": [
+        ".github/workflows/build-apk.yml",
+        "scripts/android-release.cjs",
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md"
+      ],
+      "contextRefs": [
+        "D-006"
+      ],
+      "steps": [
+        "Build the official same-key artifact without publishing after the database gate and main push.",
+        "Check the manifest, hash and versionCode; upgrade on a named test device and verify app/session data.",
+        "Tag only the accepted source revision after the release checklist passes."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Actions produces a signed RC5 artifact with identity, certificate and checksum verified.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "A prior same-key install upgrades without uninstall and the app opens with the expected installed version and data.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Use sign_candidate on main and follow the signed upgrade checklist in the RC5 handoff."
+      ],
+      "dependsOn": [
+        "T67"
+      ],
+      "issue": null,
+      "id": "T68",
+      "status": "Blocked",
+      "evidence": [
+        "docs/roadmap/evidence/2026-11-18-rc5-release.md#build-test-and-publish-the-apk"
+      ],
+      "history": [
+        {
+          "date": "2026-11-18",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-18",
+          "event": "Blocked",
+          "evidence": "docs/roadmap/evidence/2026-11-18-rc5-release.md#build-test-and-publish-the-apk"
+        }
+      ],
+      "blockedReason": "T67 and the main deploy gate must pass first. Then the official signing environment must produce a candidate and an authorized same-key Android test phone must accept the in-place upgrade."
     }
   ]
 }

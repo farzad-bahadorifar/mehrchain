@@ -18,6 +18,8 @@ export interface PresetCustomColor {
   hex: string;
 }
 
+const NEW_GLOW_COLOR = '#36b7ad';
+
 export interface ProfileBadge {
   id: string;
   name: string;
@@ -72,6 +74,11 @@ export class ProfileComponent {
   editingSlot = signal(1);
   draftDirty = signal(false);
   colorNameLength = computed(() => Array.from(this.customNameInput()).length);
+  readonly validDraftHex = computed(() => /^#[0-9a-f]{6}$/i.test(this.customColorInput().trim()));
+  readonly readyToSaveGlow = computed(() => {
+    const name = this.customNameInput().trim();
+    return name.length > 0 && Array.from(name).length <= 30 && this.validDraftHex();
+  });
   private destroyed = false;
   private draftSession: string | null = null;
   readonly nextEmptySlot = computed(() => {
@@ -83,16 +90,12 @@ export class ProfileComponent {
   });
 
   readonly PRESET_CUSTOM_COLORS: PresetCustomColor[] = [
-    { name: 'Royal Violet', hex: '#8b5cf6' },
-    { name: 'Cyber Cyan', hex: '#06b6d4' },
-    { name: 'Ruby Glow', hex: '#f43f5e' },
-    { name: 'Emerald Flare', hex: '#10b981' },
-    { name: 'Electric Sunset', hex: '#f97316' },
-    { name: 'Solar Amber', hex: '#f59e0b' },
-    { name: 'Mystic Indigo', hex: '#6366f1' },
-    { name: 'Neon Fuchsia', hex: '#d946ef' },
-    { name: 'Teal Aurora', hex: '#14b8a6' },
-    { name: 'Lime Spark', hex: '#84cc16' },
+    { name: 'Lagoon', hex: NEW_GLOW_COLOR },
+    { name: 'Sea Glass', hex: '#77bba1' },
+    { name: 'Blue Mist', hex: '#77a9d5' },
+    { name: 'Lilac Dusk', hex: '#ab94d9' },
+    { name: 'Soft Coral', hex: '#df9188' },
+    { name: 'Honey Light', hex: '#e4b367' },
   ];
 
   // User details
@@ -187,7 +190,7 @@ export class ProfileComponent {
     const color = state?.colors.find((c) => c.slot === state.selectedSlot) ?? state?.colors[0];
     this.editingSlot.set(color?.slot ?? 1);
     this.customNameInput.set(color?.name ?? 'Custom Aura');
-    this.customColorInput.set(color?.hex ?? '#8b5cf6');
+    this.customColorInput.set(color?.hex ?? NEW_GLOW_COLOR);
     this.draftDirty.set(false);
     this.saveFeedbackMessage.set(null);
   }
@@ -213,7 +216,7 @@ export class ProfileComponent {
         this.draftDirty.set(false);
         this.editingSlot.set(1);
         this.customNameInput.set('Custom Aura');
-        this.customColorInput.set('#8b5cf6');
+        this.customColorInput.set(NEW_GLOW_COLOR);
         this.saveFeedbackMessage.set(null);
       });
     });
@@ -224,7 +227,7 @@ export class ProfileComponent {
         const color = state.colors.find((c) => c.slot === state.selectedSlot) ?? state.colors[0];
         this.editingSlot.set(color?.slot ?? 1);
         this.customNameInput.set(color?.name ?? 'Custom Aura');
-        this.customColorInput.set(color?.hex ?? '#8b5cf6');
+        this.customColorInput.set(color?.hex ?? NEW_GLOW_COLOR);
       });
     });
     void this.customization.refresh();
@@ -244,7 +247,7 @@ export class ProfileComponent {
     const color = this.customization.collection()?.colors.find((c) => c.slot === slot);
     this.editingSlot.set(slot);
     this.customNameInput.set(color?.name ?? 'Custom Aura');
-    this.customColorInput.set(color?.hex ?? '#8b5cf6');
+    this.customColorInput.set(color?.hex ?? NEW_GLOW_COLOR);
     this.draftDirty.set(true);
   }
 

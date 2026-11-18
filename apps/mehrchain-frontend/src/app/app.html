@@ -6,7 +6,7 @@
   <app-cold-start-banner />
   @if (versionService.showUpdateNotice()) {
     <section
-      class="m-4 p-4 rounded-2xl bg-card border border-border text-sm"
+      class="app-update-notice p-3 rounded-2xl bg-card text-foreground border border-border text-sm shadow-soft"
       aria-label="App update"
     >
       <p role="status">
@@ -26,7 +26,7 @@
         </button>
         <button
           type="button"
-          class="min-h-11 px-4 rounded-xl bg-muted"
+          class="min-h-11 px-4 rounded-xl bg-muted text-foreground"
           (click)="versionService.dismissUpdate()"
         >
           Later

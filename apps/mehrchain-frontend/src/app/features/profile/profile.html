@@ -205,7 +205,7 @@
                 (click)="useColor(0)"
                 [disabled]="customization.saving()"
                 [attr.aria-pressed]="collection.selectedSlot === 0"
-                class="px-3 py-2 rounded-xl border border-border text-xs text-foreground disabled:opacity-50"
+                class="min-h-11 px-3 rounded-xl border border-border text-xs text-foreground disabled:opacity-50"
               >
                 Default glow {{ collection.selectedSlot === 0 ? '· Active' : '' }}
               </button>
@@ -214,7 +214,7 @@
                   type="button"
                   (click)="beginEdit(slot)"
                   [disabled]="customization.saving()"
-                  class="px-3 py-2 rounded-xl border border-primary/40 text-primary text-xs disabled:opacity-50"
+                  class="min-h-11 px-3 rounded-xl bg-primary text-primary-foreground text-xs font-semibold disabled:opacity-50"
                 >
                   Create color · Slot {{ slot }}
                 </button>
@@ -222,7 +222,7 @@
             </div>
 
             @if (collection.colors.length) {
-              <ul class="space-y-2 max-h-48 overflow-y-auto" aria-label="Saved colors">
+              <ul class="space-y-2" aria-label="Saved colors">
                 @for (color of collection.colors; track color.slot) {
                   <li
                     class="flex flex-wrap items-center gap-2 rounded-xl border border-border/60 p-2"
@@ -243,7 +243,7 @@
                         (click)="useColor(color.slot)"
                         [disabled]="customization.saving()"
                         [attr.aria-label]="'Use color ' + color.name"
-                        class="text-xs text-primary px-2 py-1 disabled:opacity-50"
+                        class="min-h-11 text-xs text-primary px-2 disabled:opacity-50"
                       >
                         Use
                       </button>
@@ -253,7 +253,7 @@
                       (click)="beginEdit(color.slot)"
                       [disabled]="customization.saving()"
                       [attr.aria-label]="'Edit color ' + color.name"
-                      class="text-xs text-primary px-2 py-1 disabled:opacity-50"
+                      class="min-h-11 text-xs text-primary px-2 disabled:opacity-50"
                     >
                       Edit
                     </button>
@@ -262,82 +262,118 @@
               </ul>
             }
 
-            <form (ngSubmit)="saveCustomGlow()" class="space-y-3 pt-3 border-t border-border/60">
-              <p class="text-xs font-bold text-foreground">Edit slot {{ editingSlot() }}</p>
-              <fieldset [disabled]="customization.saving()" class="space-y-3 disabled:opacity-60">
-                <div class="flex flex-wrap gap-2" aria-label="Color presets">
-                  @for (preset of PRESET_CUSTOM_COLORS; track preset.hex) {
-                    <button
-                      type="button"
-                      (click)="applyPresetCustomColor(preset)"
-                      [attr.aria-label]="preset.name"
-                      [attr.aria-pressed]="customColorInput() === preset.hex"
-                      class="w-7 h-7 rounded-full border-2 border-border focus-visible:outline-2 focus-visible:outline-primary"
-                      [style.backgroundColor]="preset.hex"
-                    ></button>
-                  }
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            @if (draftDirty()) {
+              <form
+                (ngSubmit)="saveCustomGlow()"
+                aria-labelledby="glow-draft-title"
+                class="space-y-3 rounded-2xl bg-background p-3 border border-border"
+              >
+                <div class="flex items-center gap-3">
+                  <span
+                    class="w-8 h-8 shrink-0 rounded-full border border-border"
+                    [style.backgroundColor]="previewGlowColor()"
+                    aria-hidden="true"
+                  ></span>
                   <div>
-                    <label for="mero-color-name" class="block text-xs text-muted-foreground mb-1"
-                      >Color name</label
-                    >
-                    <input
-                      id="mero-color-name"
-                      name="colorName"
-                      type="text"
-                      maxlength="60"
-                      required
-                      [ngModel]="customNameInput()"
-                      (ngModelChange)="customNameInput.set($event); draftDirty.set(true)"
-                      class="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm text-foreground"
-                    />
-                    <p class="mt-1 text-[11px] text-muted-foreground">
-                      {{ colorNameLength() }} / 30 characters
-                    </p>
+                    <h4 id="glow-draft-title" class="text-sm font-bold text-foreground">
+                      Glow preview · Slot {{ editingSlot() }}
+                    </h4>
+                    <p class="text-xs text-muted-foreground">Not applied until you save.</p>
                   </div>
-                  <div>
-                    <label for="mero-color-hex" class="block text-xs text-muted-foreground mb-1"
-                      >Six-digit hex color</label
-                    >
-                    <div class="flex gap-2">
+                </div>
+                <fieldset [disabled]="customization.saving()" class="space-y-3 disabled:opacity-60">
+                  <div
+                    class="grid grid-cols-3 gap-2"
+                    role="group"
+                    aria-label="Suggested glow colors"
+                  >
+                    @for (preset of PRESET_CUSTOM_COLORS; track preset.hex) {
+                      <button
+                        type="button"
+                        (click)="applyPresetCustomColor(preset)"
+                        [attr.aria-label]="preset.name"
+                        [attr.aria-pressed]="customColorInput() === preset.hex"
+                        class="min-h-11 min-w-0 rounded-xl border border-border bg-card p-1 text-[11px] leading-tight text-foreground aria-pressed:border-primary aria-pressed:bg-muted"
+                      >
+                        <span
+                          class="mx-auto mb-1 block size-4 rounded-full border border-border"
+                          [style.backgroundColor]="preset.hex"
+                          aria-hidden="true"
+                        ></span>
+                        {{ preset.name }}
+                      </button>
+                    }
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label for="mero-color-name" class="block text-xs text-muted-foreground mb-1"
+                        >Color name</label
+                      >
                       <input
-                        type="color"
-                        name="colorPicker"
-                        aria-label="Pick a glow color"
-                        [ngModel]="customColorInput()"
-                        (ngModelChange)="customColorInput.set($event); draftDirty.set(true)"
-                        class="w-10 h-10 border border-border rounded-lg bg-background"
-                      />
-                      <input
-                        id="mero-color-hex"
-                        name="colorHex"
+                        id="mero-color-name"
+                        name="colorName"
                         type="text"
-                        maxlength="7"
+                        maxlength="60"
                         required
-                        placeholder="#8b5cf6"
-                        [ngModel]="customColorInput()"
-                        (ngModelChange)="customColorInput.set($event); draftDirty.set(true)"
-                        class="w-full min-w-0 bg-background border border-border rounded-xl px-3 py-2 text-sm font-mono text-foreground"
+                        [ngModel]="customNameInput()"
+                        (ngModelChange)="customNameInput.set($event); draftDirty.set(true)"
+                        class="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm text-foreground"
                       />
+                      <p class="mt-1 text-[11px] text-muted-foreground">
+                        {{ colorNameLength() }} / 30 characters
+                      </p>
+                    </div>
+                    <div>
+                      <label for="mero-color-hex" class="block text-xs text-muted-foreground mb-1"
+                        >Six-digit hex color</label
+                      >
+                      <div class="flex gap-2">
+                        <input
+                          type="color"
+                          name="colorPicker"
+                          aria-label="Pick a glow color"
+                          [ngModel]="previewGlowColor() ?? '#36b7ad'"
+                          (ngModelChange)="customColorInput.set($event); draftDirty.set(true)"
+                          class="w-11 min-h-11 shrink-0 border border-border rounded-lg bg-card"
+                        />
+                        <input
+                          id="mero-color-hex"
+                          name="colorHex"
+                          type="text"
+                          maxlength="7"
+                          required
+                          placeholder="#36b7ad"
+                          [attr.aria-invalid]="!validDraftHex()"
+                          aria-describedby="glow-hex-help"
+                          [ngModel]="customColorInput()"
+                          (ngModelChange)="customColorInput.set($event); draftDirty.set(true)"
+                          class="w-full min-w-0 bg-background border border-border rounded-xl px-3 py-2 text-sm font-mono text-foreground"
+                        />
+                      </div>
+                      <p id="glow-hex-help" class="mt-1 text-xs text-muted-foreground">
+                        @if (!validDraftHex()) {
+                          Enter a color like #36b7ad.
+                        }
+                      </p>
                     </div>
                   </div>
-                </div>
-                <button
-                  type="button"
-                  (click)="cancelColorEdit()"
-                  class="min-h-11 rounded-xl bg-muted text-foreground px-4 py-2 text-xs font-bold mr-2"
-                >
-                  Cancel preview
-                </button>
-                <button
-                  type="submit"
-                  class="min-h-11 rounded-xl bg-primary text-primary-foreground px-4 py-2 text-xs font-bold"
-                >
-                  {{ customization.saving() ? 'Saving…' : 'Save & apply color' }}
-                </button>
-              </fieldset>
-            </form>
+                  <button
+                    type="button"
+                    (click)="cancelColorEdit()"
+                    class="min-h-11 rounded-xl bg-muted text-foreground px-4 py-2 text-xs font-bold mr-2"
+                  >
+                    Cancel preview
+                  </button>
+                  <button
+                    type="submit"
+                    [disabled]="!readyToSaveGlow()"
+                    class="min-h-11 rounded-xl bg-primary text-primary-foreground px-4 py-2 text-xs font-bold disabled:opacity-50"
+                  >
+                    {{ customization.saving() ? 'Saving…' : 'Save & apply color' }}
+                  </button>
+                </fieldset>
+              </form>
+            }
 
             <p class="text-xs text-muted-foreground">
               Next slot: {{ collection.collectionDays }} / {{ collection.nextDayTarget }} days or

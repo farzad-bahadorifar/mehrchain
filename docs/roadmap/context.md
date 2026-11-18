@@ -109,6 +109,10 @@ local tests and historical/live operational observations are distinct evidence.
 - **2026-11-18 recheck:** no HTTP response was obtained from the Pages version,
   direct Render version, or Render schema endpoint. See the
   [integration evidence](evidence/2026-11-18-main-integration.md#remaining-acceptance).
+- **RC5 release preflight:** the stored production target does not have the
+  optional-username schema or its migration record. This is a release blocker
+  on that target, not proof of the serving revision or actual write failure.
+  See [database evidence and rollout](evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main).
 
 ## D-005
 

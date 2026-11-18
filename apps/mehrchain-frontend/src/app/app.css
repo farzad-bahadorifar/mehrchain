@@ -23,6 +23,13 @@
   flex-direction: column;
 }
 
+.app-update-notice {
+  position: fixed;
+  z-index: 45;
+  inset-block-start: max(0.75rem, env(safe-area-inset-top, 0px));
+  inset-inline: max(0.75rem, calc((100% - var(--app-shell-width)) / 2 + 0.75rem));
+}
+
 .app-navigation {
   position: fixed;
   bottom: 0;

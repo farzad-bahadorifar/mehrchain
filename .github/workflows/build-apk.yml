@@ -8,12 +8,16 @@ on:
     branches: [main]
   workflow_dispatch:
     inputs:
+      sign_candidate:
+        description: Build a same-key tester APK artifact without publishing a release
+        type: boolean
+        default: false
       publish_release:
         description: Publish a verified signed APK
         type: boolean
         default: false
       version_tag:
-        description: Must match app-version.json (e.g. v1.0.0-rc.4)
+        description: Must match app-version.json (e.g. v1.0.0-rc.5)
         type: string
         required: false
 
@@ -75,7 +79,8 @@ jobs:
           retention-days: 14
 
   publish:
-    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || inputs.publish_release == true)
+    name: Sign Android APK
+    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && (inputs.publish_release == true || inputs.sign_candidate == true))
     needs: build-apk
     runs-on: ubuntu-latest
     # Official signing is confined to the canonical repository and release environment.
@@ -91,6 +96,8 @@ jobs:
       ANDROID_SIGNING_CERT_SHA256: ${{ vars.ANDROID_SIGNING_CERT_SHA256 }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Require canonical release identity
         env:
           REPOSITORY: ${{ github.repository }}
@@ -98,8 +105,15 @@ jobs:
           STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          CANDIDATE_ONLY: ${{ inputs.sign_candidate }}
+          PUBLISH_RELEASE: ${{ inputs.publish_release }}
         run: |
           test "$REPOSITORY" = 'farzad-bahadorifar/mehrchain'
+          git merge-base --is-ancestor HEAD origin/main
+          if [ "$CANDIDATE_ONLY" = true ] && [ "$PUBLISH_RELEASE" = true ]; then
+            echo 'Choose either sign_candidate or publish_release, not both.'
+            exit 1
+          fi
           test -n "$KEYSTORE"
           test -n "$STORE_PASSWORD"
           test -n "$KEY_ALIAS"
@@ -150,6 +164,7 @@ jobs:
             --out dist/apk/mehrchain-release.apk "$RUNNER_TEMP/aligned.apk"
           node scripts/android-release.cjs verify dist/apk/mehrchain-release.apk "$TOOLS" "$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer"
       - name: Publish verified assets
+        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && inputs.publish_release == true)
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
@@ -163,3 +178,14 @@ jobs:
           draft: false
           prerelease: ${{ steps.version.outputs.prerelease == 'true' }}
           generate_release_notes: true
+      - name: Upload signed candidate without publishing
+        if: github.event_name == 'workflow_dispatch' && inputs.sign_candidate == true && inputs.publish_release != true
+        uses: actions/upload-artifact@v4
+        with:
+          name: mehrchain-signed-candidate-${{ steps.version.outputs.tag }}
+          path: |
+            dist/apk/mehrchain-release.apk
+            dist/apk/release-manifest.json
+            dist/apk/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14

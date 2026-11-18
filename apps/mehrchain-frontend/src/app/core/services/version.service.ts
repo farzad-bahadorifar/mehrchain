@@ -53,12 +53,12 @@ export const APP_CHANGELOG: ReleaseNote[] = [
   {
     version: CURRENT_APP_VERSION,
     title: 'Release preview',
-    date: 'Oct 2026',
+    date: 'Nov 2026',
     isLatest: true,
     highlights: [
-      'Optional Android release downloads and web update notices',
-      'Mobile touch improvements and responsive app layout',
-      'Daily habits, private support and permanent earned colors',
+      'Show Up for completed steps and Connect to manage relationships',
+      'An updated color studio for your earned Mero glows',
+      'A quieter web update notice and clearer session retry messages',
     ],
   },
   {

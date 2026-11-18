@@ -186,6 +186,27 @@ describe('Profile color collection', () => {
     expect(customization.selectColor).not.toHaveBeenCalled();
   });
 
+  it('keeps the studio closed until editing and disables invalid or oversized drafts', () => {
+    unlock();
+    fixture.detectChanges();
+    const page = fixture.nativeElement as HTMLElement;
+    expect(page.querySelector('#glow-draft-title')).toBeNull();
+    component.beginEdit(1);
+    fixture.detectChanges();
+    const submit = page.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    expect(page.querySelectorAll('[aria-label="Suggested glow colors"] button')).toHaveLength(6);
+    expect(submit.disabled).toBe(false);
+    component.customColorInput.set('#incorrect');
+    fixture.detectChanges();
+    expect(submit.disabled).toBe(true);
+    expect(page.querySelector('#mero-color-hex')?.getAttribute('aria-invalid')).toBe('true');
+    component.customColorInput.set('#36b7ad');
+    component.customNameInput.set('✨'.repeat(31));
+    fixture.detectChanges();
+    expect(submit.disabled).toBe(true);
+    expect(customization.saveColor).not.toHaveBeenCalled();
+  });
+
   it('keeps the overview compact and exposes all four real destinations', () => {
     TestBed.inject(ActivatedRoute).snapshot.data['section'] = 'overview';
     const overview = TestBed.createComponent(ProfileComponent);
