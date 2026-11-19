@@ -46,6 +46,7 @@ export async function onRequest(context) {
     headers.delete(proxySecretHeader);
     headers.delete(proxyIpHeader);
     const visitor = request.headers.get('CF-Connecting-IP');
+    if (upstream.origin !== renderOrigin) headers.delete('CF-Connecting-IP');
     if (secret && visitor) {
       headers.set(proxySecretHeader, secret);
       headers.set(proxyIpHeader, visitor);

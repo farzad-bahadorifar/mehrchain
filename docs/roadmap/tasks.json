@@ -5259,16 +5259,17 @@
       "type": "verification",
       "area": "production",
       "priority": "P1",
-      "goal": "An uncached Pages API request reaches the live Render service and sign-in returns the expected application response.",
+      "goal": "An uncached Pages API request reaches the production backend and sign-in returns the expected application response.",
       "scope": [
-        "Production Render ingress, Pages proxy and authorized authentication smoke checks."
+        "Production API ingress, isolated rehearsal of the replacement backend, Pages routing and authorized authentication smoke checks."
       ],
       "outOfScope": [
         "Email domain provisioning, user data changes and Android signing."
       ],
       "inputs": [
         "docs/roadmap/evidence/2026-11-19-production-ingress.md",
-        "Public Pages and Render /api/version routes."
+        "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md",
+        "Public Pages and backend /api/version routes."
       ],
       "contextRefs": [
         "D-002",
@@ -5276,16 +5277,15 @@
         "D-007"
       ],
       "steps": [
-        "Use the captured public timestamps and Ray IDs to identify the Render edge mitigation.",
-        "After the provider restores normal ingress, compare fresh version probes.",
-        "Verify wrong-password and authorized password sign-in through Pages and the expected registration response."
+        "Record the Render edge recurrence and rehearse the replacement with an isolated Neon database.",
+        "Verify the replacement directly and through Cloudflare Pages before assigning the production origin.",
+        "Use the existing production database and session configuration, then verify authorized sign-in and the expected registration response through Pages."
       ],
       "acceptance": [
         {
           "id": "A1",
           "text": "Fresh direct and proxied version responses are JSON and show the deployed backend revision.",
-          "state": "pass",
-          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
+          "state": "pending"
         },
         {
           "id": "A2",
@@ -5295,12 +5295,11 @@
         {
           "id": "A3",
           "text": "Signup reaches the application and returns the expected validation or mail-provider response.",
-          "state": "pass",
-          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
+          "state": "pending"
         }
       ],
       "verify": [
-        "Follow the production probe and support handoff documented in the ingress evidence."
+        "Repeat the direct, proxied and authenticated probes after the production routing change."
       ],
       "dependsOn": [],
       "issue": null,
@@ -5309,7 +5308,7 @@
       "evidence": [
         "docs/roadmap/evidence/2026-11-19-production-ingress.md#live-reproduction",
         "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff",
-        "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
+        "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#deplexo-live-rehearsal"
       ],
       "history": [
         {
@@ -5343,7 +5342,7 @@
           "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
         }
       ],
-      "blockedReason": "Production ingress has recovered after a repeat outage. Render support is investigating. Once reachability is stable, confirm a successful production sign-in with an authorized test account."
+      "blockedReason": "Render's ingress challenge still recurs. Deplexo staging passed direct and local Pages-handler checks. A live Pages rehearsal, production secret transfer and an authorized production sign-in are pending."
     },
     {
       "title": "Publish the separate signed Android 1.0.0 baseline",

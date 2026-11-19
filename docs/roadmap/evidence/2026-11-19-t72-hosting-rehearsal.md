@@ -75,10 +75,31 @@ with a read-only root and no swap. It verifies version, password login, and
 authenticated profile. The trial passed and reported 55.77 MiB in use after
 the authentication smoke, with the container still running and no OOM kill.
 The official Deplexo MCP OAuth endpoints returned the expected discovery and
-registration responses. Account consent and a live connection to isolated
-Neon remain pending.
+registration responses. The owner authorized the connection.
 [Deplexo Free plan](https://deplexo.com/free-hosting)
 [CI resource test](https://github.com/farzad-bahadorifar/mehrchain/actions/runs/44588089063/job/135786385094)
+
+## Deplexo live rehearsal
+
+The reviewed `T72` changes fast-forwarded to `main` at `cfa2623` without an
+origin change. Deplexo built that default branch and started the isolated
+`mehrchain-stage` service. The staging API answered over HTTPS with the test
+Neon database. Live probes returned 200 for the version route, 400 for invalid
+signup data, 401 for an invalid password, 201 for a valid fixture sign-in and
+200 for the authenticated profile. Username save and removal also passed.
+The version response reported `unknown` as the application revision because
+the provider build did not supply a revision argument.
+
+The Pages handler initially received HTTP 403 when it forwarded the incoming
+`CF-Connecting-IP` to the replacement origin. A separate health probe isolated
+that header as the cause. The handler now uses it to derive its authenticated
+visitor header and removes the raw Cloudflare header before forwarding to a
+custom origin. Both local Pages entry points passed their proxy tests. The
+live staging sign-in and profile checks also passed when routed through the
+updated Pages handler running locally.
+
+Cloudflare-hosted rehearsal, production JWT and runtime configuration transfer,
+and the production cutover are pending.
 
 ## Staging database and runtime verification
 
@@ -99,9 +120,9 @@ and protected-profile smoke on a disposable Postgres instance.
 
 ## Rehearse in isolation
 
-1. Use a Back4app Containers Free service for the `T72` branch with the
-   Dockerfile and build context at the repository root. Expose HTTP port
-   `3000` and probe `/api/version`.
+1. Use the reviewed Dockerfile and build context at the repository root.
+   Expose HTTP port `3000` and probe `/api/version`. Use a host with a durable
+   HTTPS address for the production candidate.
 2. Use an isolated, data-free Neon database. For a schema-only branch,
    check the release migration history before any change. On a genuinely empty
    database apply the reviewed chain with `node scripts/release-migrate.cjs deploy`.

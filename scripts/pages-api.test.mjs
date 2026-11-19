@@ -65,6 +65,7 @@ for (const [layout, onRequest] of [
     const upstream = t.mock.method(globalThis, 'fetch', async (outbound) => {
       assert.equal(outbound.url, 'https://candidate.example.test/api/auth/login');
       assert.equal(outbound.headers.get('X-MehrChain-Client-IP'), '192.0.2.1');
+      assert.equal(outbound.headers.has('CF-Connecting-IP'), false);
       assert.equal(outbound.headers.get('X-MehrChain-Proxy-Secret'), secret);
       assert.equal(outbound.redirect, 'manual');
       return new Response(null, {
