@@ -1,3 +1,5 @@
+import { APP_VERSION } from '../../../environments/app-version';
+
 export interface AndroidRelease {
   version: string;
   versionCode: number;
@@ -41,7 +43,7 @@ export function eligibleAndroidRelease(
     Number.isSafeInteger(release.versionCode) &&
     release.versionCode > code &&
     release.versionCode <= 2100000000 &&
-    release.applicationId === 'com.mehrchain.app' &&
+    release.applicationId === APP_VERSION.applicationId &&
     /^[a-f0-9]{64}$/.test(certificate) &&
     release.certificateSha256 === certificate &&
     release.url ===

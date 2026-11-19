@@ -14,7 +14,7 @@ function validateVersion(tag) {
     !Number.isSafeInteger(metadata.androidVersionCode) ||
     metadata.androidVersionCode <= 1 ||
     metadata.androidVersionCode > 2100000000 ||
-    metadata.applicationId !== 'com.mehrchain.app'
+    metadata.applicationId !== 'com.mehrchain.mobile'
   ) {
     throw new Error('Invalid or inconsistent app-version.json/package metadata');
   }

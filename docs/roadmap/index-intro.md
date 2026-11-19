@@ -119,6 +119,9 @@ The [production ingress and Android signing follow-up](evidence/2026-11-19-produ
 records the live upstream 429, the API error handling change, and the exact signer
 of the public RC3 APK.
 
+**Android 1.0.0:** The [signed baseline](evidence/2026-11-19-android-1.0.0.md)
+records the owner-approved separate Android installation and signing identity.
+
 T29 resumes only when its network blocker changes. T30's existing Profile phone
 acceptance remains independent and is not replaced by T51. The November 2 owner
 request supersedes the unexecuted T31 study; its history is retained as Dropped.

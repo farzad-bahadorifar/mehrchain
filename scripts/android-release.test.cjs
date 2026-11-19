@@ -6,8 +6,8 @@ const originalFetch = global.fetch;
 afterEach(() => {
   global.fetch = originalFetch;
 });
-test('shared version matches package metadata and correctly classifies RC tags', () => {
-  assert.equal(validateVersion(`v${version.version}`).prerelease, true);
+test('shared version matches package metadata and classifies release tags', () => {
+  assert.equal(validateVersion(`v${version.version}`).prerelease, version.version.includes('-'));
   assert.throws(() => validateVersion('v99.0.0'), /tag/);
 });
 test('official publication requires a pinned signing certificate', () => {

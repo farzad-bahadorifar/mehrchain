@@ -119,6 +119,9 @@ The [production ingress and Android signing follow-up](roadmap/evidence/2026-11-
 records the live upstream 429, the API error handling change, and the exact signer
 of the public RC3 APK.
 
+**Android 1.0.0:** The [signed baseline](roadmap/evidence/2026-11-19-android-1.0.0.md)
+records the owner-approved separate Android installation and signing identity.
+
 T29 resumes only when its network blocker changes. T30's existing Profile phone
 acceptance remains independent and is not replaced by T51. The November 2 owner
 request supersedes the unexecuted T31 study; its history is retained as Dropped.
@@ -137,9 +140,9 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T29](roadmap/tasks/T29.md) | Identify why the deployed username route fails | analysis | Blocked | P1 |
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Blocked | P1 |
 | [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Blocked | P1 |
-| [T68](roadmap/tasks/T68.md) | Accept a same-key Android RC5 upgrade before tagging | verification | Blocked | P1 |
 | [T72](roadmap/tasks/T72.md) | Restore production API reachability through Pages | verification | Blocked | P1 |
+| [T73](roadmap/tasks/T73.md) | Publish the separate signed Android 1.0.0 baseline | verification | InProgress | P1 |
 
-Updated: 2026-11-19, Asia/Tehran. Next ID: T73.
+Updated: 2026-11-19, Asia/Tehran. Next ID: T74.
 
 This table is generated; [tasks.json](roadmap/tasks.json) owns task status.

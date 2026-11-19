@@ -1,7 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
+import appVersion from './app-version.json';
 
 const config: CapacitorConfig = {
-  appId: 'com.mehrchain.app',
+  appId: appVersion.applicationId,
   appName: 'MehrChain',
   webDir: 'dist/mehrchain-frontend/browser',
   server: {

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "updated": "2026-11-19",
-  "lastId": 72,
+  "lastId": 73,
   "tasks": [
     {
       "id": "T20",
@@ -4980,11 +4980,12 @@
       ],
       "issue": null,
       "id": "T68",
-      "status": "Blocked",
+      "status": "Dropped",
       "evidence": [
         "docs/roadmap/evidence/2026-11-18-rc5-release.md#build-test-and-publish-the-apk",
         "Database gate passed. Await the main deployment, private official candidate, and test-device result. docs/roadmap/evidence/2026-11-18-rc5-rollout.md",
-        "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+        "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight",
+        "docs/roadmap/evidence/2026-11-19-android-1.0.0.md"
       ],
       "history": [
         {
@@ -5006,9 +5007,14 @@
           "date": "2026-11-18",
           "event": "Blocked",
           "evidence": "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Dropped",
+          "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md"
         }
       ],
-      "blockedReason": "Signed-only job 44373433465 failed its canonical identity preflight. The environment has no keystore secrets or pinned certificate variable. Configure the authorized matching key, then rerun signing and test the in-place upgrade on a named Android phone."
+      "dropReason": "The owner replaced the unshipped RC5 in-place upgrade with a separate, permanently signed Android installation in T73. RC3 used a GitHub-hosted debug signer."
     },
     {
       "title": "Expose the signed Android update handler from the Pages root",
@@ -5332,6 +5338,72 @@
         }
       ],
       "blockedReason": "Direct and proxied health recovered, and both forms reached the backend. Complete an authorized successful production sign-in on a test account to finish acceptance."
+    },
+    {
+      "title": "Publish the separate signed Android 1.0.0 baseline",
+      "type": "verification",
+      "area": "android-release",
+      "priority": "P1",
+      "goal": "GitHub Latest contains the verified 1.0.0 signed APK for com.mehrchain.mobile and the stable update endpoint reports its matching manifest.",
+      "scope": [
+        "New install alongside legacy RC3, permanent key, signed candidate smoke, GitHub tag and production Android update feed."
+      ],
+      "outOfScope": [
+        "In-place upgrade from the old debug package, real inbox delivery and iOS release."
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/2026-11-19-android-1.0.0.md",
+        "app-version.json",
+        ".github/workflows/build-apk.yml",
+        "scripts/android-candidate-smoke.sh"
+      ],
+      "contextRefs": [
+        "D-006"
+      ],
+      "steps": [
+        "Configure and back up the new signing identity.",
+        "Validate signed package, launch and coexistence with published RC3.",
+        "Tag the accepted main revision, then verify public assets and feed."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "A signed candidate verifies and launches alongside RC3 on Android.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "The stable GitHub release serves the correct signed APK, checksum and manifest.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "The Pages Android feed reports the new package and matching certificate and digest.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Run the sign_candidate workflow, validate the GitHub release and check /updates/android from production."
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T73",
+      "status": "InProgress",
+      "evidence": [
+        "docs/roadmap/evidence/2026-11-19-android-1.0.0.md"
+      ],
+      "history": [
+        {
+          "date": "2026-11-19",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-19",
+          "event": "InProgress",
+          "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md"
+        }
+      ]
     }
   ]
 }

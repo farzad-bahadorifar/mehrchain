@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { VersionService, CURRENT_APP_VERSION, APP_CHANGELOG } from './version.service';
+import { APP_VERSION } from '../../../environments/app-version';
 import { ApplicationRef } from '@angular/core';
 import { NEVER, Subject } from 'rxjs';
 import { SwUpdate } from '@angular/service-worker';
@@ -55,7 +56,7 @@ describe('platform update lifecycle', () => {
   const installed = vi.fn(async () => ({
     version: '1.0.0-rc.4',
     versionCode: 4,
-    applicationId: 'com.mehrchain.app',
+    applicationId: APP_VERSION.applicationId,
     certificateSha256: 'b'.repeat(64),
     debug: false,
   }));
@@ -72,7 +73,7 @@ describe('platform update lifecycle', () => {
   const release = {
     version: '1.0.1',
     versionCode: 5,
-    applicationId: 'com.mehrchain.app',
+    applicationId: APP_VERSION.applicationId,
     certificateSha256: 'b'.repeat(64),
     url: 'https://github.com/farzad-bahadorifar/mehrchain/releases/download/v1.0.1/mehrchain-release.apk',
     sha256: 'a'.repeat(64),
@@ -180,7 +181,7 @@ describe('platform update lifecycle', () => {
     installed.mockResolvedValueOnce({
       version: '1.0.0-rc.4',
       versionCode: 4,
-      applicationId: 'com.mehrchain.app',
+      applicationId: APP_VERSION.applicationId,
       certificateSha256: 'b'.repeat(64),
       debug: true,
     });

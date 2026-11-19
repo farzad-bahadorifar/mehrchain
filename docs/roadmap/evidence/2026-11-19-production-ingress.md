@@ -42,7 +42,10 @@ created in these checks. The first observed recovery does not establish which
 edge control stopped blocking the earlier requests. An authorized successful
 sign-in and real delivery (D-002) still require separate checks.
 
-Use this draft if the ingress failure returns.
+The owner approved escalation on November 19. The Render Dashboard support
+messenger received the public endpoints, 429 timestamp and Ray IDs. Its agent
+confirmed escalation to the support team for platform-side review. A human
+response and the precise mitigation cause are pending.
 
 > Service `mehrchain-api` in Frankfurt is running and the static Pages site
 > loads. At approximately 2026-11-19 02:35 UTC, a single synthetic POST to

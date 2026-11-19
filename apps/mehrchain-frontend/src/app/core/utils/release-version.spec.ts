@@ -1,4 +1,5 @@
 import { eligibleAndroidRelease, newerStableVersion } from './release-version';
+import { APP_VERSION } from '../../../environments/app-version';
 
 describe('release eligibility', () => {
   it.each([
@@ -16,7 +17,7 @@ describe('release eligibility', () => {
   const valid = {
     version: '1.0.1',
     versionCode: 5,
-    applicationId: 'com.mehrchain.app',
+    applicationId: APP_VERSION.applicationId,
     certificateSha256: 'b'.repeat(64),
     url: 'https://github.com/farzad-bahadorifar/mehrchain/releases/download/v1.0.1/mehrchain-release.apk',
     sha256: 'a'.repeat(64),
@@ -28,6 +29,7 @@ describe('release eligibility', () => {
   });
   it.each([
     { url: 'https://evil.test/mehrchain.apk' },
+    { applicationId: 'com.mehrchain.app' },
     { applicationId: 'another.app' },
     { certificateSha256: 'c'.repeat(64) },
     { url: valid.url + '?redirect=evil' },

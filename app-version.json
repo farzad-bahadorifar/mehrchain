@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-rc.6",
-  "androidVersionCode": 6,
-  "applicationId": "com.mehrchain.app"
+  "version": "1.0.0",
+  "androidVersionCode": 7,
+  "applicationId": "com.mehrchain.mobile"
 }

@@ -52,10 +52,11 @@ const STORAGE_KEY_SEEN_VERSION = 'mehrchain_last_seen_version';
 export const APP_CHANGELOG: ReleaseNote[] = [
   {
     version: CURRENT_APP_VERSION,
-    title: 'Release preview',
+    title: 'MehrChain for Android and web',
     date: 'Nov 2026',
     isLatest: true,
     highlights: [
+      'A signed Android app that installs alongside the earlier preview',
       'Fairer sign-in and signup limits behind shared gateways',
       'Show Up for completed steps and Connect to manage relationships',
       'An updated color studio for your earned Mero glows',

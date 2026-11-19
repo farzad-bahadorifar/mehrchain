@@ -4,6 +4,7 @@ import {
   stableRelease,
   validateRelease,
   assetUrl,
+  APP_ID,
 } from '../apps/mehrchain-frontend/release-policy.mjs';
 import { onRequestGet } from '../apps/mehrchain-frontend/functions/updates/android.js';
 import { onRequestGet as onRootRequestGet } from '../functions/updates/android.js';
@@ -13,7 +14,7 @@ const manifest = {
   schemaVersion: 1,
   version: '1.0.1',
   versionCode: 5,
-  applicationId: 'com.mehrchain.app',
+  applicationId: APP_ID,
   certificateSha256: certificate,
   sha256: 'a'.repeat(64),
   size: 100,
@@ -50,6 +51,7 @@ afterEach(() => {
 test('accepts only a stable APK with matching identity, size, certificate and digest', () => {
   assert.equal(validateRelease(release, manifest, certificate).version, '1.0.1');
   for (const changed of [
+    { applicationId: 'com.mehrchain.app' },
     { applicationId: 'wrong.app' },
     { certificateSha256: 'c'.repeat(64) },
     { sha256: 'd'.repeat(64) },
