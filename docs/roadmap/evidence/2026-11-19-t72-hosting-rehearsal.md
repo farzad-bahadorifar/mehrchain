@@ -12,6 +12,27 @@ smoke uses those CPU and memory limits. Account access and public reachability
 need verification on Back4app itself.
 [Back4app free plan](https://www.back4app.com/pricing/container-as-a-service)
 
+## Back4app account and deployment access
+
+The owner signed into the Back4app dashboard. The Codex terminal reached the
+official Web Deployment MCP endpoint. The Back4app OAuth authorization server
+then returned HTTP 403 during discovery and client registration. Its CloudFront
+response identified a country-based restriction for the terminal connection.
+An earlier OAuth link from that terminal session is expired. Dashboard-based
+deployment remains a separate path to verify.
+[Back4app MCP authentication](https://www.back4app.com/docs/mcp-server)
+
+In the signed-in dashboard, open Web Deployment and import the GitHub repository
+`farzad-bahadorifar/mehrchain` with access scoped to that repository. Select the
+`T72` branch and the Free plan. The candidate implementation and container smoke
+were verified at `f8c926e4f0275361e909d92c729670e406499204`. Provision the test
+service with the isolated Neon credentials in runtime settings.
+[Back4app GitHub integration](https://www.back4app.com/docs-containers/integrate-with-github)
+
+A fresh, uncached request to the live Pages version route returned HTTP 503
+with `API_INGRESS_UNAVAILABLE` during this check. The Back4app deployment,
+its public authentication checks, and the production cutover are pending.
+
 ## Staging database and runtime verification
 
 The available non-production Neon endpoint was distinct from both production
@@ -27,7 +48,7 @@ protected profile retrieval, and username save and removal. A separate
 read-only production check found all nine expected release migrations and no
 unresolved migration records. GitHub Actions also passed the container login
 and protected-profile smoke on a disposable Postgres instance.
-[Container verification](https://github.com/farzad-bahadorifar/mehrchain/actions/runs/44566693017)
+[Container verification](https://github.com/farzad-bahadorifar/mehrchain/actions/runs/44572934482)
 
 ## Rehearse in isolation
 
