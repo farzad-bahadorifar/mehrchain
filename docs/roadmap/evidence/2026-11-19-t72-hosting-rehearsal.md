@@ -108,7 +108,8 @@ The production project remains GitHub-connected on `main` and its Google build
 variable is present. It has no custom origin or proxy proof configured. The
 local JWT setting matches the public development fallback, so copying the
 actual Render signing configuration is required to preserve production sessions.
-Production runtime transfer, cutover and accepted-account sign-in are pending.
+The owner authorized the remaining provider connections. The production
+transfer and public smoke results are recorded below.
 
 ## Staging database and runtime verification
 
@@ -167,3 +168,33 @@ known-good Pages revision. Resume the Render service first if paused.
 Production account credentials, Neon records, JWT secrets and the app signing key
 stay outside the repository and the staging container. The separate email
 delivery prerequisite remains D-002.
+
+## Production cutover result
+
+On November 19, the verified Render runtime supplied the database connection,
+JWT signing key and Google client ID. The database matched the known production
+Neon endpoint and differed from the rehearsal database. No database migration
+was applied. The replacement backend uses a distinct production proxy secret.
+
+Deplexo deployment `4c86c7fd-e557-4a27-9c9b-c672eb556b6e` started successfully
+from `eb7a280f90f598edd679905b3eebe626134fe48b`. The backend rejected the
+stage-only fixture and a synthetic invalid login with HTTP 401. Its protected
+profile returned 401 without a session. Signup with invalid input returned 400.
+The canonical rehearsal hostname was retired as an API endpoint.
+
+Cloudflare Pages production deployment `8a2475f1-c981-4023-86bf-9222969f7dd0`
+bound the public app to the new origin. Fresh direct and proxied version
+requests both returned HTTP 200 and the same application contract and build
+timestamp, `2026-11-19T19:20:52.138Z`. The API revision field reports `unknown`
+because the hosting build did not set the revision argument. The Deplexo
+deployment record identified the source revision above. The live Pages API
+returned JSON 401 for synthetic invalid login and unauthenticated profile,
+and JSON 400 for invalid signup. The existing Google build setting remains
+present. The public Android update feed returned 1.0.0, version code 7, for
+`com.mehrchain.mobile`.
+
+The Render service configuration remains available for rollback. The previous
+successful Pages deployment without the override is
+`7ef24bb0-73d9-4161-bbf7-841f6f13e6af`. Successful sign-in and data retrieval
+with an existing real production account await owner confirmation. The synthetic
+registration probe did not send email.

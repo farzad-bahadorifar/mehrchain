@@ -5284,8 +5284,9 @@
       "acceptance": [
         {
           "id": "A1",
-          "text": "Fresh direct and proxied version responses are JSON and show the deployed backend revision.",
-          "state": "pending"
+          "text": "Fresh direct and proxied version responses are JSON and identify the same build. The backend deployment metadata identifies its source revision.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#production-cutover-result"
         },
         {
           "id": "A2",
@@ -5295,7 +5296,8 @@
         {
           "id": "A3",
           "text": "Signup reaches the application and returns the expected validation or mail-provider response.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#production-cutover-result"
         }
       ],
       "verify": [
@@ -5340,9 +5342,19 @@
           "date": "2026-11-19",
           "event": "Blocked",
           "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#production-cutover-result"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A3",
+          "evidence": "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#production-cutover-result"
         }
       ],
-      "blockedReason": "Render's ingress challenge still recurs. The isolated Deplexo backend passed direct and live Cloudflare Pages authentication checks. Production runtime transfer, cutover and an authorized production sign-in are pending."
+      "blockedReason": "Production Pages now reaches the Deplexo backend with the existing database and session configuration. A successful sign-in using an authorized existing production account remains to be confirmed."
     },
     {
       "title": "Publish the separate signed Android 1.0.0 baseline",
