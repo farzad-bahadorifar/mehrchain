@@ -5278,7 +5278,8 @@
         {
           "id": "A1",
           "text": "Fresh direct and proxied version responses are JSON and show the deployed backend revision.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
         },
         {
           "id": "A2",
@@ -5288,7 +5289,8 @@
         {
           "id": "A3",
           "text": "Signup reaches the application and returns the expected validation or mail-provider response.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
         }
       ],
       "verify": [
@@ -5299,7 +5301,8 @@
       "id": "T72",
       "status": "Blocked",
       "evidence": [
-        "docs/roadmap/evidence/2026-11-19-production-ingress.md#live-reproduction"
+        "docs/roadmap/evidence/2026-11-19-production-ingress.md#live-reproduction",
+        "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
       ],
       "history": [
         {
@@ -5311,9 +5314,24 @@
           "date": "2026-11-19",
           "event": "Blocked",
           "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#live-reproduction"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A3",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Blocked",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
         }
       ],
-      "blockedReason": "The unthrottled public version route returned an upstream error and the Render hostname issued a Cloudflare challenge. Resume on an upstream correction or fresh healthy origin responses, then verify authorized sign-in."
+      "blockedReason": "Direct and proxied health recovered, and both forms reached the backend. Complete an authorized successful production sign-in on a test account to finish acceptance."
     }
   ]
 }

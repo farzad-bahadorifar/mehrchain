@@ -33,6 +33,17 @@ throttling responses. [Cloudflare challenge identification](https://developers.c
 
 ## Render support handoff
 
+After Pages deployed `735064fd`, fresh public and direct probes both returned
+the expected JSON and the Render revision `f54faf65`. At 02:43 UTC the live
+sign-in form received the expected 401 from the API for synthetic credentials.
+At 02:44 UTC the onboarding signup form received the expected 400 for the
+reserved test email domain. No account, email, or other production data was
+created in these checks. The first observed recovery does not establish which
+edge control stopped blocking the earlier requests. An authorized successful
+sign-in and real delivery (D-002) still require separate checks.
+
+Use this draft if the ingress failure returns.
+
 > Service `mehrchain-api` in Frankfurt is running and the static Pages site
 > loads. At approximately 2026-11-19 02:35 UTC, a single synthetic POST to
 > https://mehrchain.pages.dev/api/auth/login returned 429. An uncached GET to
