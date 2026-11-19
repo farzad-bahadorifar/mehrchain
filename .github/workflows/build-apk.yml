@@ -171,7 +171,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: Verify candidate installs next to the legacy APK
         if: inputs.sign_candidate == true
-        uses: ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808 # v2
+        uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
         timeout-minutes: 15
         with:
           api-level: 35
@@ -180,7 +180,7 @@ jobs:
           script: bash scripts/android-candidate-smoke.sh dist/apk/mehrchain-release.apk
       - name: Publish verified assets
         if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && inputs.publish_release == true)
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           target_commitish: ${{ github.sha }}
@@ -193,6 +193,7 @@ jobs:
           draft: false
           prerelease: ${{ steps.version.outputs.prerelease == 'true' }}
           make_latest: ${{ steps.version.outputs.prerelease == 'true' && 'false' || 'true' }}
+          body_path: ${{ steps.version.outputs.tag == 'v1.0.0' && 'docs/releases/v1.0.0.md' || '' }}
           generate_release_notes: true
       - name: Upload signed candidate without publishing
         if: github.event_name == 'workflow_dispatch' && inputs.sign_candidate == true && inputs.publish_release != true
