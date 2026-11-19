@@ -67,9 +67,8 @@ jobs:
       - run: node scripts/release-migrate.cjs deploy
       - name: Build and start the portable backend
         run: |
-          docker build --build-arg NF_GIT_SHA="$GITHUB_SHA" \
-            -f apps/mehrchain-backend/Dockerfile -t mehrchain-backend:smoke .
-          docker run -d --name mehrchain-api --network host -e DATABASE_URL \
+          docker build --build-arg NF_GIT_SHA="$GITHUB_SHA" -t mehrchain-backend:smoke .
+          docker run -d --name mehrchain-api --network host --memory 256m --cpus 0.25 -e DATABASE_URL \
             -e JWT_SECRET=container-smoke-test-fixture mehrchain-backend:smoke
           curl --fail-with-body --show-error --silent --retry 20 --retry-connrefused \
             --retry-delay 1 --max-time 5 http://localhost:3000/api/version | jq -e --arg sha "$GITHUB_SHA" '.revision == $sha'

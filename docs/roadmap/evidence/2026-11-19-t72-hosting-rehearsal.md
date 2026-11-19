@@ -1,11 +1,16 @@
 # T72 alternative backend rehearsal
 
-Northflank Sandbox is the first candidate for the existing NestJS service. Its
-published plan includes an always-on web service and GitHub integration without
-a card. Northflank describes Sandbox as suitable for experimentation. Production
-reachability and the owner's account eligibility require direct verification.
-[Sandbox plan](https://northflank.com/pricing)
-[GitHub integration](https://northflank.com/docs/v1/application/getting-started/link-your-git-account)
+Northflank Sandbox was the first candidate. The owner's CLI authorization screen
+required a card. Northflank's billing documentation also requires a payment
+method to create resources on any plan. No service was created.
+[Northflank billing requirements](https://northflank.com/docs/v1/application/billing/pricing-on-northflank)
+
+Back4app Containers is the next rehearsal candidate. Its published Free plan
+supports deployments from GitHub and a Dockerfile without a card, with 256 MB
+RAM and 0.25 CPU. The backend Dockerfile is at the repository root and the CI
+smoke uses those CPU and memory limits. Account access and public reachability
+need verification on Back4app itself.
+[Back4app free plan](https://www.back4app.com/pricing/container-as-a-service)
 
 ## Staging database and runtime verification
 
@@ -26,10 +31,9 @@ and protected-profile smoke on a disposable Postgres instance.
 
 ## Rehearse in isolation
 
-1. Use a Northflank Cloud Developer Sandbox project and a combined service for
-   the `T72` branch. Select Dockerfile with build context at the repository root
-   and file `/apps/mehrchain-backend/Dockerfile`. Expose HTTP port `3000` and
-   set the readiness path to `/api/version`.
+1. Use a Back4app Containers Free service for the `T72` branch with the
+   Dockerfile and build context at the repository root. Expose HTTP port
+   `3000` and probe `/api/version`.
 2. Use an isolated, data-free Neon database. For a schema-only branch,
    check the release migration history before any change. On a genuinely empty
    database apply the reviewed chain with `node scripts/release-migrate.cjs deploy`.
