@@ -36,6 +36,7 @@ export async function onRequest(context) {
     newHeaders.set('Access-Control-Allow-Origin', '*');
     newHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     newHeaders.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    if (response.status === 429) newHeaders.set('Access-Control-Expose-Headers', 'Retry-After');
 
     return new Response(response.body, {
       status: response.status,

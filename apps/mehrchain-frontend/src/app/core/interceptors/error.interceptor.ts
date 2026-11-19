@@ -11,6 +11,19 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           req.method === 'GET' || req.method === 'HEAD'
             ? 'Unable to connect to the server. Check your connection, then retry. Your input is kept.'
             : 'Unable to connect to the server. Refresh to check before retrying the change. Your input is kept.';
+      } else if (error.status === 429) {
+        const retryAfter = Number(error.headers?.get('Retry-After'));
+        normalizedMessage =
+          Number.isInteger(retryAfter) && retryAfter > 0 && retryAfter <= 3600
+            ? `Too many attempts. Try again in ${retryAfter} seconds. Your input is kept.`
+            : 'Too many attempts. Wait a minute and try again. Your input is kept.';
+      } else if (
+        error.status === 503 &&
+        req.url.endsWith('/auth/register') &&
+        error.error?.message === 'Verification email could not be sent. Please retry later.'
+      ) {
+        normalizedMessage =
+          'Email signup is unavailable right now. Use Continue with Google or try again later.';
       } else if ([502, 503, 504, 524].includes(error.status)) {
         normalizedMessage =
           req.method === 'GET' || req.method === 'HEAD'

@@ -23,12 +23,12 @@ import { UpdateUsernameDto } from './dto/update-username.dto';
 import { RequestPasswordDto, ResetPasswordDto } from './dto/password-reset.dto';
 
 @ApiTags('Authentication')
-@UseGuards(ThrottlerGuard)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @UseGuards(ThrottlerGuard)
   @Throttle({ auth: { ttl: 60000, limit: 3 } })
   @ApiOperation({ summary: 'Register a new user account and send verification email' })
   @ApiResponse({
@@ -42,6 +42,7 @@ export class AuthController {
   }
 
   @Post('verify-email')
+  @UseGuards(ThrottlerGuard)
   @Throttle({ auth: { ttl: 60000, limit: 10 } })
   @ApiOperation({ summary: 'Verify email using 6-digit OTP code and activate account' })
   @ApiResponse({ status: 200, description: 'Account verified successfully with JWT accessToken' })
@@ -51,6 +52,7 @@ export class AuthController {
   }
 
   @Post('resend-verification')
+  @UseGuards(ThrottlerGuard)
   @Throttle({ auth: { ttl: 60000, limit: 3 } })
   @ApiOperation({ summary: 'Resend 6-digit OTP verification code to user email' })
   @ApiResponse({ status: 200, description: 'New verification code sent' })
@@ -61,6 +63,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @UseGuards(ThrottlerGuard)
   @Throttle({ auth: { ttl: 60000, limit: 5 } })
   @ApiOperation({ summary: 'Authenticate with email or current username and password' })
   @ApiResponse({ status: 200, description: 'User successfully authenticated with JWT accessToken' })
@@ -71,6 +74,7 @@ export class AuthController {
   }
 
   @Post('google')
+  @UseGuards(ThrottlerGuard)
   @Throttle({ auth: { ttl: 60000, limit: 10 } })
   @ApiOperation({ summary: 'Authenticate or register user via Google OAuth ID token' })
   @ApiResponse({ status: 200, description: 'User successfully authenticated with JWT accessToken' })
@@ -82,7 +86,7 @@ export class AuthController {
 
   @Get('me')
   @Header('Cache-Control', 'private, no-store')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, ThrottlerGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Retrieve current authenticated user profile' })
   @ApiResponse({ status: 200, description: 'Current authenticated user profile' })
@@ -92,7 +96,7 @@ export class AuthController {
 
   @Get('username-availability')
   @Header('Cache-Control', 'private, no-store')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, ThrottlerGuard)
   @ApiBearerAuth()
   @Throttle({ auth: { ttl: 60000, limit: 20 } })
   usernameAvailability(@Query('username') username: string, @CurrentUser() user: { id: string }) {
@@ -101,7 +105,7 @@ export class AuthController {
 
   @Patch('username')
   @Header('Cache-Control', 'private, no-store')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, ThrottlerGuard)
   @ApiBearerAuth()
   @Throttle({ auth: { ttl: 60000, limit: 5 } })
   updateUsername(@Body() dto: UpdateUsernameDto, @CurrentUser() user: { id: string }) {
@@ -109,6 +113,7 @@ export class AuthController {
   }
 
   @Post('password/request')
+  @UseGuards(ThrottlerGuard)
   @Header('Cache-Control', 'no-store')
   @Throttle({ auth: { ttl: 60000, limit: 3 } })
   requestPassword(@Body() dto: RequestPasswordDto) {
@@ -116,6 +121,7 @@ export class AuthController {
   }
 
   @Post('password/reset')
+  @UseGuards(ThrottlerGuard)
   @Header('Cache-Control', 'no-store')
   @Throttle({ auth: { ttl: 60000, limit: 5 } })
   resetPassword(@Body() dto: ResetPasswordDto) {
@@ -123,7 +129,7 @@ export class AuthController {
   }
 
   @Delete('account')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, ThrottlerGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Permanently delete current authenticated user account and all data' })
   @ApiResponse({ status: 200, description: 'Account permanently deleted' })

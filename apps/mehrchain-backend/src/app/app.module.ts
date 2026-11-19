@@ -4,6 +4,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { authThrottling } from './auth/auth-throttling';
 import { CommitmentsModule } from './commitments/commitments.module';
 import { MailModule } from './mail/mail.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -14,13 +15,7 @@ import { MeroModule } from './mero/mero.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    ThrottlerModule.forRoot([
-      {
-        name: 'auth',
-        ttl: 60000, // 60 seconds window
-        limit: 10, // max 10 requests per window
-      },
-    ]),
+    ThrottlerModule.forRoot(authThrottling(process.env['RENDER'] === 'true')),
     PrismaModule,
     MailModule,
     AuthModule,

@@ -56,6 +56,7 @@ export const APP_CHANGELOG: ReleaseNote[] = [
     date: 'Nov 2026',
     isLatest: true,
     highlights: [
+      'Fairer sign-in and signup limits behind shared gateways',
       'Show Up for completed steps and Connect to manage relationships',
       'An updated color studio for your earned Mero glows',
       'A quieter web update notice and clearer session retry messages',

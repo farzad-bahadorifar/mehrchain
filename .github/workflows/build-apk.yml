@@ -17,7 +17,7 @@ on:
         type: boolean
         default: false
       version_tag:
-        description: Must match app-version.json (e.g. v1.0.0-rc.5)
+        description: Must match app-version.json (e.g. v1.0.0-rc.6)
         type: string
         required: false
 

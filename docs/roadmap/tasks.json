@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated": "2026-11-18",
-  "lastId": 69,
+  "updated": "2026-11-19",
+  "lastId": 70,
   "tasks": [
     {
       "id": "T20",
@@ -5085,6 +5085,85 @@
           "date": "2026-11-18",
           "event": "Done",
           "evidence": "docs/roadmap/evidence/2026-11-18-rc5-rollout.md#first-production-build-and-apk-preflight"
+        }
+      ]
+    },
+    {
+      "title": "Keep one visitor's authentication attempts from blocking another",
+      "type": "bug",
+      "area": "account-api",
+      "priority": "P1",
+      "goal": "Authentication requests that share an ingress are limited fairly without disabling brute-force protection or replaying writes.",
+      "scope": [
+        "Render authentication trackers and shared-worker budgets",
+        "Actionable rate-limit feedback for sign-in and signup"
+      ],
+      "outOfScope": [
+        "Changing email or Google proof requirements",
+        "Provider setup or release signing"
+      ],
+      "inputs": [
+        "apps/mehrchain-backend/src/app/auth/auth.controller.ts",
+        "apps/mehrchain-frontend/src/app/core/interceptors/error.interceptor.ts"
+      ],
+      "contextRefs": [
+        "D-002",
+        "D-007"
+      ],
+      "steps": [
+        "Inspect the ingress trust boundary and add real guard HTTP regression tests.",
+        "Keep tight per-route budgets and expose retry timing.",
+        "Check the built backend and deployed route separately."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Local HTTP tests demonstrate isolated direct visitors and worker identities while aggregate and same-identity limits still reject excess requests.",
+          "state": "pass",
+          "evidence": "Real local guard HTTP tests cover direct and shared ingress, both limits and independently authenticated sessions. docs/roadmap/evidence/2026-11-19-rc6-auth.md"
+        },
+        {
+          "id": "A2",
+          "text": "Auth UI receives a safe wait message on 429, does not retry a write automatically and distinguishes email-provider unavailability.",
+          "state": "pass",
+          "evidence": "Angular tests cover safe 429 timing for login, registration and Google, plus separate mail-unavailable feedback. Existing API retry policy never replays writes. docs/roadmap/evidence/2026-11-19-rc6-auth.md"
+        }
+      ],
+      "verify": [
+        "Run both Nx test targets and production build; run the deployed smoke without using a real identity unless authorized."
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T70",
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/2026-11-19-rc6-auth.md"
+      ],
+      "history": [
+        {
+          "date": "2026-11-19",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-19",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A1",
+          "evidence": "Real local guard HTTP tests cover direct and shared ingress, both limits and independently authenticated sessions. docs/roadmap/evidence/2026-11-19-rc6-auth.md"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A2",
+          "evidence": "Angular tests cover safe 429 timing for login, registration and Google, plus separate mail-unavailable feedback. Existing API retry policy never replays writes. docs/roadmap/evidence/2026-11-19-rc6-auth.md"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/2026-11-19-rc6-auth.md"
         }
       ]
     }

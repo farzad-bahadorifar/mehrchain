@@ -113,6 +113,9 @@ publication commands, and phone checklist. T67 passed the
 signed in-place upgrade before tagging. The stable-only Android updater
 intentionally excludes this prerelease.
 
+**RC6 authentication hotfix:** See the [rate-limit and release evidence](evidence/2026-11-19-rc6-auth.md)
+for T70, the unchanged verification requirements, and the separate web preview tag.
+
 T29 resumes only when its network blocker changes. T30's existing Profile phone
 acceptance remains independent and is not replaced by T51. The November 2 owner
 request supersedes the unexecuted T31 study; its history is retained as Dropped.

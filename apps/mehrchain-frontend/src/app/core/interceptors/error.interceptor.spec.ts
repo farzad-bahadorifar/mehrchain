@@ -35,6 +35,43 @@ describe('errorInterceptor', () => {
     httpMock.verify();
   });
 
+  it.each(['login', 'register', 'google'])(
+    'uses Retry-After rather than generic text during %s',
+    (route) => {
+      const result = vi.fn();
+      http.post(`/api/auth/${route}`, {}).subscribe({ error: result });
+      httpMock
+        .expectOne(`/api/auth/${route}`)
+        .flush(
+          { message: 'Too Many Requests' },
+          { status: 429, statusText: 'Too Many Requests', headers: { 'Retry-After': '28' } },
+        );
+      expect(result).toHaveBeenCalledWith(
+        expect.objectContaining({
+          status: 429,
+          message: 'Too many attempts. Try again in 28 seconds. Your input is kept.',
+        }),
+      );
+    },
+  );
+
+  it('distinguishes unavailable verification email from a rate limit', () => {
+    const result = vi.fn();
+    http.post('/api/auth/register', {}).subscribe({ error: result });
+    httpMock
+      .expectOne('/api/auth/register')
+      .flush(
+        { message: 'Verification email could not be sent. Please retry later.' },
+        { status: 503, statusText: 'Service Unavailable' },
+      );
+    expect(result).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: 503,
+        message: expect.stringContaining('Google'),
+      }),
+    );
+  });
+
   it('should format status 0 as network error', () => {
     http.get('/api/test').subscribe({
       next: () => expect.fail('Should have failed'),

@@ -58,6 +58,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
       path: request.url,
     };
 
+    if (status === HttpStatus.TOO_MANY_REQUESTS) {
+      const retryAfter =
+        response.getHeader('Retry-After-auth') ?? response.getHeader('Retry-After-worker');
+      if (retryAfter !== undefined) response.setHeader('Retry-After', retryAfter);
+      response.setHeader('Cache-Control', 'no-store');
+    }
     response.status(status).json(payload);
   }
 }

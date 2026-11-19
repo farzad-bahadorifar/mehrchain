@@ -113,6 +113,9 @@ publication commands, and phone checklist. T67 passed the
 signed in-place upgrade before tagging. The stable-only Android updater
 intentionally excludes this prerelease.
 
+**RC6 authentication hotfix:** See the [rate-limit and release evidence](roadmap/evidence/2026-11-19-rc6-auth.md)
+for T70, the unchanged verification requirements, and the separate web preview tag.
+
 T29 resumes only when its network blocker changes. T30's existing Profile phone
 acceptance remains independent and is not replaced by T51. The November 2 owner
 request supersedes the unexecuted T31 study; its history is retained as Dropped.
@@ -133,6 +136,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Blocked | P1 |
 | [T68](roadmap/tasks/T68.md) | Accept a same-key Android RC5 upgrade before tagging | verification | Blocked | P1 |
 
-Updated: 2026-11-18, Asia/Tehran. Next ID: T70.
+Updated: 2026-11-19, Asia/Tehran. Next ID: T71.
 
 This table is generated; [tasks.json](roadmap/tasks.json) owns task status.
