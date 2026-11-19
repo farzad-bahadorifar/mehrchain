@@ -47,6 +47,14 @@ messenger received the public endpoints, 429 timestamp and Ray IDs. Its agent
 confirmed escalation to the support team for platform-side review. A human
 response and the precise mitigation cause are pending.
 
+The issue recurred around 05:53 UTC. The public version route indicated
+gateway unavailability and the direct Render challenge showed Ray ID
+`a5ccf38ffe51dba7`. The same support conversation received the follow-up.
+Around 06:00 UTC, the Pages version route responded normally and the deployed
+1.0.0 sign-in form again received the expected 401 for synthetic credentials.
+This establishes intermittent reachability and leaves the human investigation,
+successful real-account sign-in and email-delivery checks open.
+
 > Service `mehrchain-api` in Frankfurt is running and the static Pages site
 > loads. At approximately 2026-11-19 02:35 UTC, a single synthetic POST to
 > https://mehrchain.pages.dev/api/auth/login returned 429. An uncached GET to

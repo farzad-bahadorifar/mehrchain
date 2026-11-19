@@ -5308,6 +5308,7 @@
       "status": "Blocked",
       "evidence": [
         "docs/roadmap/evidence/2026-11-19-production-ingress.md#live-reproduction",
+        "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff",
         "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
       ],
       "history": [
@@ -5335,9 +5336,14 @@
           "date": "2026-11-19",
           "event": "Blocked",
           "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Blocked",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
         }
       ],
-      "blockedReason": "Direct and proxied health recovered, and both forms reached the backend. Complete an authorized successful production sign-in on a test account to finish acceptance."
+      "blockedReason": "Production ingress has recovered after a repeat outage. Render support is investigating. Once reachability is stable, confirm a successful production sign-in with an authorized test account."
     },
     {
       "title": "Publish the separate signed Android 1.0.0 baseline",
@@ -5369,17 +5375,20 @@
         {
           "id": "A1",
           "text": "A signed candidate verifies and launches alongside RC3 on Android.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md#candidate-acceptance"
         },
         {
           "id": "A2",
           "text": "The stable GitHub release serves the correct signed APK, checksum and manifest.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md#published-verification"
         },
         {
           "id": "A3",
           "text": "The Pages Android feed reports the new package and matching certificate and digest.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md#published-verification"
         }
       ],
       "verify": [
@@ -5388,8 +5397,9 @@
       "dependsOn": [],
       "issue": null,
       "id": "T73",
-      "status": "InProgress",
+      "status": "Done",
       "evidence": [
+        "docs/roadmap/evidence/2026-11-19-android-1.0.0.md",
         "docs/roadmap/evidence/2026-11-19-android-1.0.0.md"
       ],
       "history": [
@@ -5401,6 +5411,26 @@
         {
           "date": "2026-11-19",
           "event": "InProgress",
+          "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md#candidate-acceptance"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A2",
+          "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md#published-verification"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A3",
+          "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md#published-verification"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Done",
           "evidence": "docs/roadmap/evidence/2026-11-19-android-1.0.0.md"
         }
       ]

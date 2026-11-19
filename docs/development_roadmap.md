@@ -141,7 +141,6 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Blocked | P1 |
 | [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Blocked | P1 |
 | [T72](roadmap/tasks/T72.md) | Restore production API reachability through Pages | verification | Blocked | P1 |
-| [T73](roadmap/tasks/T73.md) | Publish the separate signed Android 1.0.0 baseline | verification | InProgress | P1 |
 
 Updated: 2026-11-19, Asia/Tehran. Next ID: T74.
 

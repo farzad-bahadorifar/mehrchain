@@ -47,5 +47,6 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T69 — Expose the signed Android update handler from the Pages root](tasks/T69.md): Requesting /updates/android on the root-built Pages site reaches the existing signed release handler instead of loading the Angular welcome screen.
 - [T70 — Keep one visitor's authentication attempts from blocking another](tasks/T70.md): Authentication requests that share an ingress are limited fairly without disabling brute-force protection or replaying writes.
 - [T71 — Distinguish API ingress failures from account rate limits](tasks/T71.md): A proxy-generated or plain-text 429 reports temporary service unavailability. A genuine API 429 retains retry timing.
+- [T73 — Publish the separate signed Android 1.0.0 baseline](tasks/T73.md): GitHub Latest contains the verified 1.0.0 signed APK for com.mehrchain.mobile and the stable update endpoint reports its matching manifest.
 
 Earlier implementation/acceptance records remain in [legacy disposition](legacy.md) and linked history.
