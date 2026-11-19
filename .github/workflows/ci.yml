@@ -99,6 +99,32 @@ jobs:
             http://localhost:3000/api/auth/login | jq -er '.accessToken')
           curl --fail-with-body --show-error --silent --max-time 10 -H "Authorization: Bearer $token" \
             http://localhost:3000/api/auth/me | jq -e '.email == "fixture@example.invalid"'
+      - name: Check the 128 MB hosting candidate
+        id: compact-container
+        continue-on-error: true
+        run: |
+          docker run -d --name mehrchain-api-compact --network host \
+            --memory 128000000 --memory-swap 128000000 --cpus 0.25 \
+            --read-only --tmpfs /tmp:rw,nosuid,nodev,size=16m -e DATABASE_URL -e PORT=3001 \
+            -e JWT_SECRET=container-smoke-test-fixture mehrchain-backend:smoke
+          curl --fail-with-body --show-error --silent --retry 20 --retry-connrefused \
+            --retry-delay 1 --max-time 5 http://localhost:3001/api/version | jq -e --arg sha "$GITHUB_SHA" '.revision == $sha'
+          token=$(curl --fail-with-body --show-error --silent --max-time 10 \
+            -H 'Content-Type: application/json' -d '{"email":"fixture@example.invalid","password":"fixture-password"}' \
+            http://localhost:3001/api/auth/login | jq -er '.accessToken')
+          curl --fail-with-body --show-error --silent --max-time 10 -H "Authorization: Bearer $token" \
+            http://localhost:3001/api/auth/me | jq -e '.email == "fixture@example.invalid"'
+          docker stats --no-stream --format '{{.MemUsage}}' mehrchain-api-compact
+      - name: Record the 128 MB hosting candidate result
+        if: always() && steps.compact-container.outcome != 'skipped'
+        env:
+          CANDIDATE_RESULT: ${{ steps.compact-container.outcome }}
+        run: |
+          printf '128 MB hosting candidate: %s\n' "$CANDIDATE_RESULT" >> "$GITHUB_STEP_SUMMARY"
+          docker inspect --format 'Running={{.State.Running}} OOMKilled={{.State.OOMKilled}}' mehrchain-api-compact || true
+          if [ "$CANDIDATE_RESULT" != success ]; then
+            docker logs mehrchain-api-compact || true
+          fi
       - name: Read fixture container logs on failure
         if: failure()
         run: docker logs mehrchain-api || true

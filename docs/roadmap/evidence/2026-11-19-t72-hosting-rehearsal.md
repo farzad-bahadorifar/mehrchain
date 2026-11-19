@@ -40,6 +40,42 @@ A fresh, uncached request to the live Pages version route returned HTTP 503
 with `API_INGRESS_UNAVAILABLE` during this check. The Back4app deployment,
 its public authentication checks, and the production cutover are pending.
 
+The dashboard accepted the staging variables into the form. On submission,
+Back4app reported that new app creation was temporarily disabled for
+maintenance and confirmed that nothing was created. The local encrypted
+upload copy was removed. The original DPAPI-protected staging settings
+remain available for a new rehearsal.
+
+A new direct probe returned Render's HTTP 429 HTML anti-bot challenge, Ray
+`a5d13692faaa7e3e-FRA`. The corresponding Pages probe returned HTTP 503 and
+`API_INGRESS_UNAVAILABLE`, Ray `a5d1368d4f0e975d-FRA`. These requests used
+the version route without account credentials.
+
+## Additional hosting checks
+
+Railway's documented CLI can upload the reviewed Dockerfile build context and
+accept secret variables on standard input. The terminal reached the Railway
+website and API. Its CLI device authorization request received a Cloudflare
+HTTP 403, so no pairing session or deployment was created. Hostless's public
+OAuth metadata answered normally, but its authenticated MCP entry point also
+returned a Cloudflare HTTP 403 before authorization could begin.
+[Railway CLI deployments](https://docs.railway.com/cli/deploying)
+[Hostless MCP authorization](https://docs.hostless.cloud/mcp)
+
+The no-card trial has a one-time usage grant and is separate from the Free
+plan's recurring $1 allowance. Free services can sleep during inactivity and
+stop for the billing cycle if the allowance is used. The trial can restrict
+outbound access for an unverified account. Verify verified-account egress,
+cold-start behavior and measured resource usage before considering a cutover.
+[Railway Free and trial limits](https://docs.railway.com/pricing/free-plan)
+
+Deplexo documents a no-card, always-on Free container with 128 MB RAM and
+0.25 CPU. The CI trial runs the same Docker image under a 128 MB hard limit
+with a read-only root and no swap. It verifies version, password login, and
+authenticated profile.
+Provider authorization and a live connection to isolated Neon remain pending.
+[Deplexo Free plan](https://deplexo.com/free-hosting)
+
 ## Staging database and runtime verification
 
 The available non-production Neon endpoint was distinct from both production
