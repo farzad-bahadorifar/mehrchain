@@ -98,8 +98,17 @@ custom origin. Both local Pages entry points passed their proxy tests. The
 live staging sign-in and profile checks also passed when routed through the
 updated Pages handler running locally.
 
-Cloudflare-hosted rehearsal, production JWT and runtime configuration transfer,
-and the production cutover are pending.
+After the owner's Cloudflare authorization, a separate direct-upload Pages
+project was created. The deployed Pages Function passed its public readiness,
+invalid-signup, wrong-password, valid sign-in, authenticated profile and username
+save and cleanup checks against the isolated Deplexo and Neon services.
+[Cloudflare rehearsal API](https://mehrchain-t72-rehearsal.pages.dev/api/version)
+
+The production project remains GitHub-connected on `main` and its Google build
+variable is present. It has no custom origin or proxy proof configured. The
+local JWT setting matches the public development fallback, so copying the
+actual Render signing configuration is required to preserve production sessions.
+Production runtime transfer, cutover and accepted-account sign-in are pending.
 
 ## Staging database and runtime verification
 

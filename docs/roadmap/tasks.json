@@ -5342,7 +5342,7 @@
           "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff"
         }
       ],
-      "blockedReason": "Render's ingress challenge still recurs. Deplexo staging passed direct and local Pages-handler checks. A live Pages rehearsal, production secret transfer and an authorized production sign-in are pending."
+      "blockedReason": "Render's ingress challenge still recurs. The isolated Deplexo backend passed direct and live Cloudflare Pages authentication checks. Production runtime transfer, cutover and an authorized production sign-in are pending."
     },
     {
       "title": "Publish the separate signed Android 1.0.0 baseline",
