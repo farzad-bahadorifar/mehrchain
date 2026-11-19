@@ -1,7 +1,5 @@
-import appVersion from '../../app-version.json' with { type: 'json' };
-
 export const REPOSITORY = 'farzad-bahadorifar/mehrchain';
-export const APP_ID = appVersion.applicationId;
+export const APP_ID = 'com.mehrchain.mobile';
 export const STABLE_VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const SHA256 = /^[a-f0-9]{64}$/;
 

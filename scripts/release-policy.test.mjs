@@ -1,5 +1,6 @@
 import { test, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
+import appVersion from '../app-version.json' with { type: 'json' };
 import {
   stableRelease,
   validateRelease,
@@ -43,6 +44,7 @@ const originalFetch = globalThis.fetch;
 const originalCaches = globalThis.caches;
 test('repository-root Pages project exposes the same Android update handler', () => {
   assert.equal(onRootRequestGet, onRequestGet);
+  assert.equal(APP_ID, appVersion.applicationId);
 });
 afterEach(() => {
   globalThis.fetch = originalFetch;
