@@ -13,8 +13,10 @@ reachability and the owner's account eligibility require direct verification.
    the `T72` branch. Select Dockerfile with build context at the repository root
    and file `/apps/mehrchain-backend/Dockerfile`. Expose HTTP port `3000` and
    set the readiness path to `/api/version`.
-2. Create a Neon schema-only branch and check migration status. Install the
-   reviewed migrations on that branch if it is empty. Use a stage-only
+2. Create an isolated, data-free Neon database. For a schema-only branch,
+   check the release migration history before any change. On a genuinely empty
+   database apply the reviewed chain with `node scripts/release-migrate.cjs deploy`.
+   Use a stage-only
    `DATABASE_URL`, stage-only `JWT_SECRET` and a separate stage proxy secret.
    Put these values in runtime secrets. Seed only synthetic test users.
    The image startup checks schema readiness without applying migrations.

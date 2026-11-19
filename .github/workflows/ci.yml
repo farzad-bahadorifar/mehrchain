@@ -64,7 +64,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --legacy-peer-deps
-      - run: npx prisma migrate deploy --schema=apps/mehrchain-backend/prisma/schema.prisma
+      - run: node scripts/release-migrate.cjs deploy
       - name: Build and start the portable backend
         run: |
           docker build --build-arg NF_GIT_SHA="$GITHUB_SHA" \
