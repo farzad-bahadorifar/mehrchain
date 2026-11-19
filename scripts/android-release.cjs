@@ -66,6 +66,18 @@ async function validatePublication(tag, repository) {
   throw new Error('Release history exceeds verification bound; review versionCode manually');
 }
 
+function apkSigningCertificate(verification) {
+  // Build Tools 37 labels digests by scheme. Every APK scheme must use the pinned signer.
+  const fingerprints = new Set(
+    [
+      ...verification.matchAll(
+        /^(?!Source Stamp\b)[^\r\n]+ certificate SHA-256 digest:[ \t]+([a-f0-9]{64})[ \t]*\r?$/gim,
+      ),
+    ].map(([, fingerprint]) => fingerprint.toLowerCase()),
+  );
+  return fingerprints.size === 1 ? [...fingerprints][0] : undefined;
+}
+
 function verifyApk(apk, tools, analyzer, expectedCertificate) {
   validateVersion();
   const certificate = (expectedCertificate || '').toLowerCase().replace(/:/g, '');
@@ -79,10 +91,7 @@ function verifyApk(apk, tools, analyzer, expectedCertificate) {
     '--print-certs',
     apk,
   ]);
-  const fingerprints = [
-    ...verification.matchAll(/Signer #\d+ certificate SHA-256 digest: ([a-fA-F0-9]+)/g),
-  ];
-  if (fingerprints.length !== 1 || fingerprints[0][1].toLowerCase() !== certificate) {
+  if (apkSigningCertificate(verification) !== certificate) {
     throw new Error('APK certificate does not match the pinned release identity');
   }
   for (const [field, expected] of [
@@ -115,7 +124,7 @@ function verifyApk(apk, tools, analyzer, expectedCertificate) {
   );
 }
 
-module.exports = { validateVersion, validatePublication, verifyApk };
+module.exports = { validateVersion, validatePublication, verifyApk, apkSigningCertificate };
 if (require.main === module) {
   (async () => {
     const [mode, ...args] = process.argv.slice(2);
