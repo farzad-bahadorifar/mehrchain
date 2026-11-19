@@ -4,6 +4,7 @@ const { execFileSync } = require('node:child_process');
 const { DefinePlugin } = require('webpack');
 
 function buildRevision() {
+  if (process.env.NF_GIT_SHA) return process.env.NF_GIT_SHA;
   if (process.env.RENDER_GIT_COMMIT) return process.env.RENDER_GIT_COMMIT;
   try {
     return execFileSync('git', ['rev-parse', 'HEAD'], {

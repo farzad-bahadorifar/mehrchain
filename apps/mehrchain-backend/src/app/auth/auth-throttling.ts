@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { isIP } from 'node:net';
 import { ThrottlerModuleOptions, normalizeIp } from '@nestjs/throttler';
 import type { Request } from 'express';
@@ -6,19 +6,26 @@ import type { Request } from 'express';
 type AuthRequest = Request & { user?: { id: string } };
 const workerAddress = normalizeIp('2a06:98c0:3600::103', 128);
 
-function renderVisitor(request: AuthRequest, onRender: boolean): string | undefined {
+function visitorIp(
+  request: AuthRequest,
+  onRender: boolean,
+  proxySecret?: Buffer,
+): string | undefined {
+  const proof = request.headers['x-mehrchain-proxy-secret'];
+  const address = request.headers['x-mehrchain-client-ip'];
+  if (
+    proxySecret &&
+    typeof proof === 'string' &&
+    /^[a-f0-9]{64}$/.test(proof) &&
+    timingSafeEqual(proxySecret, Buffer.from(proof, 'hex')) &&
+    typeof address === 'string' &&
+    isIP(address)
+  )
+    return address;
+
   const header = request.headers['cf-connecting-ip'];
   if (onRender && typeof header === 'string' && isIP(header)) return header;
   return undefined;
-}
-
-function clientKey(request: AuthRequest, onRender: boolean): string {
-  return normalizeIp(renderVisitor(request, onRender) ?? request.ip ?? 'unknown');
-}
-
-function fromSharedWorker(request: AuthRequest, onRender: boolean): boolean {
-  const address = renderVisitor(request, onRender);
-  return !!address && normalizeIp(address, 128) === workerAddress;
 }
 
 function destination(request: AuthRequest): string {
@@ -35,7 +42,17 @@ function destination(request: AuthRequest): string {
   return 'unknown';
 }
 
-export function authThrottling(onRender: boolean): ThrottlerModuleOptions {
+export function authThrottling(onRender: boolean, secret?: string): ThrottlerModuleOptions {
+  if (secret !== undefined && !/^[a-f0-9]{64}$/.test(secret)) {
+    throw new Error('BACKEND_PROXY_SECRET must be a 64-character lowercase hex value');
+  }
+  const proxySecret = secret ? Buffer.from(secret, 'hex') : undefined;
+  const visitor = (request: AuthRequest) => visitorIp(request, onRender, proxySecret);
+  const clientKey = (request: AuthRequest, address = visitor(request)) =>
+    normalizeIp(address ?? request.ip ?? 'unknown');
+  const fromSharedWorker = (address?: string) =>
+    !!address && normalizeIp(address, 128) === workerAddress;
+
   return [
     {
       name: 'auth',
@@ -43,16 +60,17 @@ export function authThrottling(onRender: boolean): ThrottlerModuleOptions {
       limit: 10,
       getTracker: (req) => {
         const request = req as AuthRequest;
-        const client = clientKey(request, onRender);
-        return fromSharedWorker(request, onRender) ? `${client}:${destination(request)}` : client;
+        const address = visitor(request);
+        const client = clientKey(request, address);
+        return fromSharedWorker(address) ? `${client}:${destination(request)}` : client;
       },
     },
     {
       name: 'worker',
       ttl: 60_000,
       limit: 40,
-      skipIf: (context) => !fromSharedWorker(context.switchToHttp().getRequest(), onRender),
-      getTracker: (req) => clientKey(req as AuthRequest, onRender),
+      skipIf: (context) => !fromSharedWorker(visitor(context.switchToHttp().getRequest())),
+      getTracker: (req) => clientKey(req as AuthRequest),
     },
   ];
 }

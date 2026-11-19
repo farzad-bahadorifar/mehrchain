@@ -15,7 +15,9 @@ import { MeroModule } from './mero/mero.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    ThrottlerModule.forRoot(authThrottling(process.env['RENDER'] === 'true')),
+    ThrottlerModule.forRoot(
+      authThrottling(process.env['RENDER'] === 'true', process.env['BACKEND_PROXY_SECRET']),
+    ),
     PrismaModule,
     MailModule,
     AuthModule,

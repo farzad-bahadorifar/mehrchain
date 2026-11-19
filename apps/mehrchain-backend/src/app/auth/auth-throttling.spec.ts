@@ -13,9 +13,9 @@ describe('Authentication rate limits over HTTP', () => {
   let app: INestApplication;
   let origin: string;
 
-  async function start(onRender = true) {
+  async function start(onRender = true, secret?: string) {
     const module = await Test.createTestingModule({
-      imports: [ThrottlerModule.forRoot(authThrottling(onRender))],
+      imports: [ThrottlerModule.forRoot(authThrottling(onRender, secret))],
       controllers: [AuthController],
       providers: [
         {
@@ -120,6 +120,32 @@ describe('Authentication rate limits over HTTP', () => {
       ).toBe(201);
     }
     expect((await post('register', { email: 'another@example.test' }, worker)).status).toBe(429);
+  });
+
+  it('shares no visitor budget when the configured proxy proves the forwarded addresses', async () => {
+    const secret = 'a'.repeat(64);
+    await start(false, secret);
+    const signup = (address: string, proof = secret) =>
+      fetch(`${origin}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-MehrChain-Proxy-Secret': proof,
+          'X-MehrChain-Client-IP': address,
+        },
+        body: JSON.stringify({ email: 'test@example.invalid' }),
+      });
+    for (let attempt = 0; attempt < 3; attempt++) {
+      expect((await signup('198.51.100.1')).status).toBe(201);
+    }
+    expect((await signup('198.51.100.1')).status).toBe(429);
+    expect((await signup('198.51.100.2')).status).toBe(201);
+
+    const badProof = 'b'.repeat(64);
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      expect((await signup(`203.0.113.${attempt}`, badProof)).status).toBe(201);
+    }
+    expect((await signup('203.0.113.4', badProof)).status).toBe(429);
   });
 
   it('keeps authenticated session restore independent for users on the same worker', async () => {

@@ -55,4 +55,42 @@ for (const [layout, onRequest] of [
     assert.equal(response.headers.get('Retry-After'), '28');
     assert.equal(response.headers.get('Access-Control-Expose-Headers'), 'Retry-After');
   });
+
+  test(`${layout} routes only to its configured HTTPS origin and replaces client proof`, async (t) => {
+    const secret = 'a'.repeat(64);
+    const request = login();
+    request.headers.set('CF-Connecting-IP', '192.0.2.1');
+    request.headers.set('X-MehrChain-Client-IP', '192.0.2.9');
+    request.headers.set('X-MehrChain-Proxy-Secret', 'forged');
+    const upstream = t.mock.method(globalThis, 'fetch', async (outbound) => {
+      assert.equal(outbound.url, 'https://candidate.example.test/api/auth/login');
+      assert.equal(outbound.headers.get('X-MehrChain-Client-IP'), '192.0.2.1');
+      assert.equal(outbound.headers.get('X-MehrChain-Proxy-Secret'), secret);
+      assert.equal(outbound.redirect, 'manual');
+      return new Response(null, {
+        status: 307,
+        headers: { Location: 'https://other.example.test' },
+      });
+    });
+    const response = await onRequest({
+      request,
+      env: { BACKEND_ORIGIN: 'https://candidate.example.test', BACKEND_PROXY_SECRET: secret },
+    });
+    assert.equal(response.status, 502);
+    assert.equal(upstream.mock.callCount(), 1);
+    assert.equal(response.headers.get('Location'), null);
+  });
+
+  test(`${layout} rejects an invalid origin or unprotected custom destination`, async (t) => {
+    const upstream = t.mock.method(globalThis, 'fetch', async () => Response.json({}));
+    for (const backend of [
+      'https://candidate.example.test',
+      'http://candidate.example.test',
+      'https://candidate.example.test/api',
+    ]) {
+      const response = await onRequest({ request: login(), env: { BACKEND_ORIGIN: backend } });
+      assert.equal(response.status, 503);
+    }
+    assert.equal(upstream.mock.callCount(), 0);
+  });
 }
