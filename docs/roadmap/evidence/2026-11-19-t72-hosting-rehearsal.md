@@ -7,10 +7,15 @@ method to create resources on any plan. No service was created.
 
 Back4app Containers is the next rehearsal candidate. Its published Free plan
 supports deployments from GitHub and a Dockerfile without a card, with 256 MB
-RAM and 0.25 CPU. The backend Dockerfile is at the repository root and the CI
-smoke uses those CPU and memory limits. Account access and public reachability
-need verification on Back4app itself.
+RAM and 0.25 CPU. The backend Dockerfile is at the repository root and CI
+tests the backend with those CPU and memory limits.
 [Back4app free plan](https://www.back4app.com/pricing/container-as-a-service)
+
+The account's Free plan shows `URL expires`. Back4app Engineering measured a
+60-minute lifetime from deployment start, including build time, after which
+the URL stops responding and the service is destroyed. Use this plan for
+short staging checks only. Production requires a durable HTTPS origin.
+[Back4app free URL measurements](https://www.back4app.com/blog/run-a-bot-webhook-or-cron-24-7-without-a-vps#how-long-does-the-free-plan-keep-it-running)
 
 ## Back4app account and deployment access
 
@@ -26,7 +31,9 @@ In the signed-in dashboard, open Web Deployment and import the GitHub repository
 `farzad-bahadorifar/mehrchain` with access scoped to that repository. Select the
 `T72` branch and the Free plan. The candidate implementation and container smoke
 were verified at `f8c926e4f0275361e909d92c729670e406499204`. Provision the test
-service with the isolated Neon credentials in runtime settings.
+service as `mehrchain-stage` with the isolated Neon credentials in runtime
+settings. Leave automatic deployment and the paid database disabled. The
+owner reached the configure screen with the correct repository selected.
 [Back4app GitHub integration](https://www.back4app.com/docs-containers/integrate-with-github)
 
 A fresh, uncached request to the live Pages version route returned HTTP 503
