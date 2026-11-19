@@ -115,6 +115,9 @@ intentionally excludes this prerelease.
 
 **RC6 authentication hotfix:** See the [rate-limit and release evidence](evidence/2026-11-19-rc6-auth.md)
 for T70, the unchanged verification requirements, and the separate web preview tag.
+The [production ingress and Android signing follow-up](evidence/2026-11-19-production-ingress.md)
+records the live upstream 429, the API error handling change, and the exact signer
+of the public RC3 APK.
 
 T29 resumes only when its network blocker changes. T30's existing Profile phone
 acceptance remains independent and is not replaced by T51. The November 2 owner

@@ -11,6 +11,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           req.method === 'GET' || req.method === 'HEAD'
             ? 'Unable to connect to the server. Check your connection, then retry. Your input is kept.'
             : 'Unable to connect to the server. Refresh to check before retrying the change. Your input is kept.';
+      } else if (
+        (error.status === 503 && error.error?.code === 'API_INGRESS_UNAVAILABLE') ||
+        (error.status === 429 && typeof error.error === 'string')
+      ) {
+        normalizedMessage =
+          'The server is temporarily unavailable. Try again later. Your input is kept.';
       } else if (error.status === 429) {
         const retryAfter = Number(error.headers?.get('Retry-After'));
         normalizedMessage =

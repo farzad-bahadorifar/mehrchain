@@ -27,12 +27,28 @@ export async function onRequest(context) {
     method: request.method,
     headers: headers,
     body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : null,
+    duplex: 'half',
     redirect: 'follow',
   });
 
   try {
     const response = await fetch(modifiedRequest);
     const newHeaders = new Headers(response.headers);
+    const contentType = newHeaders.get('Content-Type') ?? '';
+    if (
+      newHeaders.get('cf-mitigated') === 'challenge' ||
+      (response.status === 429 && !/^application\/json(?:\s*;|$)/i.test(contentType))
+    ) {
+      return new Response(JSON.stringify({ code: 'API_INGRESS_UNAVAILABLE' }), {
+        status: 503,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-store',
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+
     newHeaders.set('Access-Control-Allow-Origin', '*');
     newHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     newHeaders.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');

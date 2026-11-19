@@ -115,6 +115,9 @@ intentionally excludes this prerelease.
 
 **RC6 authentication hotfix:** See the [rate-limit and release evidence](roadmap/evidence/2026-11-19-rc6-auth.md)
 for T70, the unchanged verification requirements, and the separate web preview tag.
+The [production ingress and Android signing follow-up](roadmap/evidence/2026-11-19-production-ingress.md)
+records the live upstream 429, the API error handling change, and the exact signer
+of the public RC3 APK.
 
 T29 resumes only when its network blocker changes. T30's existing Profile phone
 acceptance remains independent and is not replaced by T51. The November 2 owner
@@ -135,7 +138,8 @@ English; see [contributing](../CONTRIBUTING.md).
 | [T30](roadmap/tasks/T30.md) | Check Profile V2 on Android Chrome and installed PWA | verification | Blocked | P1 |
 | [T56](roadmap/tasks/T56.md) | Verify cold-start Welcome styling on installed Android PWA | verification | Blocked | P1 |
 | [T68](roadmap/tasks/T68.md) | Accept a same-key Android RC5 upgrade before tagging | verification | Blocked | P1 |
+| [T72](roadmap/tasks/T72.md) | Restore production API reachability through Pages | verification | Blocked | P1 |
 
-Updated: 2026-11-19, Asia/Tehran. Next ID: T71.
+Updated: 2026-11-19, Asia/Tehran. Next ID: T73.
 
 This table is generated; [tasks.json](roadmap/tasks.json) owns task status.

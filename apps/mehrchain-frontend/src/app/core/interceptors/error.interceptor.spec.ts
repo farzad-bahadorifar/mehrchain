@@ -55,6 +55,21 @@ describe('errorInterceptor', () => {
     },
   );
 
+  it.each([
+    [503, { code: 'API_INGRESS_UNAVAILABLE' }],
+    [429, 'Too Many Requests'],
+  ] as const)('shows service unavailability for an ingress response (%s)', (status, body) => {
+    const result = vi.fn();
+    http.post('/api/auth/login', {}).subscribe({ error: result });
+    httpMock.expectOne('/api/auth/login').flush(body, { status, statusText: 'Unavailable' });
+    expect(result).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status,
+        message: 'The server is temporarily unavailable. Try again later. Your input is kept.',
+      }),
+    );
+  });
+
   it('distinguishes unavailable verification email from a rate limit', () => {
     const result = vi.fn();
     http.post('/api/auth/register', {}).subscribe({ error: result });

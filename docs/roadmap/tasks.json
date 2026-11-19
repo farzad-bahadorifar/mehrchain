@@ -1,7 +1,7 @@
 {
   "version": 1,
   "updated": "2026-11-19",
-  "lastId": 70,
+  "lastId": 72,
   "tasks": [
     {
       "id": "T20",
@@ -5166,6 +5166,154 @@
           "evidence": "docs/roadmap/evidence/2026-11-19-rc6-auth.md"
         }
       ]
+    },
+    {
+      "title": "Distinguish API ingress failures from account rate limits",
+      "type": "bug",
+      "area": "auth",
+      "priority": "P1",
+      "goal": "A proxy-generated or plain-text 429 reports temporary service unavailability. A genuine API 429 retains retry timing.",
+      "scope": [
+        "Both Cloudflare Pages API proxy layouts and the frontend error interceptor."
+      ],
+      "outOfScope": [
+        "Provider mitigation changes, email configuration and changes to authentication limits."
+      ],
+      "inputs": [
+        "functions/api/[[path]].js",
+        "apps/mehrchain-frontend/functions/api/[[path]].js",
+        "apps/mehrchain-frontend/src/app/core/interceptors/error.interceptor.ts",
+        "docs/roadmap/evidence/2026-11-19-production-ingress.md"
+      ],
+      "contextRefs": [
+        "D-006",
+        "D-007"
+      ],
+      "steps": [
+        "Reproduce the public error on the unthrottled version route and sign-in.",
+        "Handle upstream challenge and infrastructure responses while preserving API 429.",
+        "Run proxy, frontend and build checks."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Challenges and non-JSON 429s produce service-unavailable feedback without replaying requests.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#application-handling"
+        },
+        {
+          "id": "A2",
+          "text": "Real API 429 responses preserve retry timing, with production builds passing.",
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#application-handling"
+        }
+      ],
+      "verify": [
+        "node --test scripts/pages-api.test.mjs",
+        "npx nx test mehrchain-frontend --watch=false --skip-nx-cache",
+        "npx nx run-many -t build -p mehrchain-frontend,mehrchain-backend --skip-nx-cache"
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T71",
+      "status": "Done",
+      "evidence": [
+        "docs/roadmap/evidence/2026-11-19-production-ingress.md"
+      ],
+      "history": [
+        {
+          "date": "2026-11-19",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-19",
+          "event": "InProgress",
+          "evidence": "Status updated"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A1",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#application-handling"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Verified A2",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#application-handling"
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md"
+        }
+      ]
+    },
+    {
+      "title": "Restore production API reachability through Pages",
+      "type": "verification",
+      "area": "production",
+      "priority": "P1",
+      "goal": "An uncached Pages API request reaches the live Render service and sign-in returns the expected application response.",
+      "scope": [
+        "Production Render ingress, Pages proxy and authorized authentication smoke checks."
+      ],
+      "outOfScope": [
+        "Email domain provisioning, user data changes and Android signing."
+      ],
+      "inputs": [
+        "docs/roadmap/evidence/2026-11-19-production-ingress.md",
+        "Public Pages and Render /api/version routes."
+      ],
+      "contextRefs": [
+        "D-002",
+        "D-006",
+        "D-007"
+      ],
+      "steps": [
+        "Use the captured public timestamps and Ray IDs to identify the Render edge mitigation.",
+        "After the provider restores normal ingress, compare fresh version probes.",
+        "Verify wrong-password and authorized password sign-in through Pages and the expected registration response."
+      ],
+      "acceptance": [
+        {
+          "id": "A1",
+          "text": "Fresh direct and proxied version responses are JSON and show the deployed backend revision.",
+          "state": "pending"
+        },
+        {
+          "id": "A2",
+          "text": "A single invalid login returns the application 401 and an authorized login succeeds through Pages.",
+          "state": "pending"
+        },
+        {
+          "id": "A3",
+          "text": "Signup reaches the application and returns the expected validation or mail-provider response.",
+          "state": "pending"
+        }
+      ],
+      "verify": [
+        "Follow the production probe and support handoff documented in the ingress evidence."
+      ],
+      "dependsOn": [],
+      "issue": null,
+      "id": "T72",
+      "status": "Blocked",
+      "evidence": [
+        "docs/roadmap/evidence/2026-11-19-production-ingress.md#live-reproduction"
+      ],
+      "history": [
+        {
+          "date": "2026-11-19",
+          "event": "Ready",
+          "evidence": "Explicit task definition supplied."
+        },
+        {
+          "date": "2026-11-19",
+          "event": "Blocked",
+          "evidence": "docs/roadmap/evidence/2026-11-19-production-ingress.md#live-reproduction"
+        }
+      ],
+      "blockedReason": "The unthrottled public version route returned an upstream error and the Render hostname issued a Cloudflare challenge. Resume on an upstream correction or fresh healthy origin responses, then verify authorized sign-in."
     }
   ]
 }

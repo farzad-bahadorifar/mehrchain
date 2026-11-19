@@ -46,5 +46,6 @@ Only the stated deliverable is Done. A local-code task does not claim deployment
 - [T67 — Verify and apply release migrations before the RC5 deployment](tasks/T67.md): The current Render production target passes a fresh recovery rehearsal and the reviewed release migrations before new application code is deployed.
 - [T69 — Expose the signed Android update handler from the Pages root](tasks/T69.md): Requesting /updates/android on the root-built Pages site reaches the existing signed release handler instead of loading the Angular welcome screen.
 - [T70 — Keep one visitor's authentication attempts from blocking another](tasks/T70.md): Authentication requests that share an ingress are limited fairly without disabling brute-force protection or replaying writes.
+- [T71 — Distinguish API ingress failures from account rate limits](tasks/T71.md): A proxy-generated or plain-text 429 reports temporary service unavailability. A genuine API 429 retains retry timing.
 
 Earlier implementation/acceptance records remain in [legacy disposition](legacy.md) and linked history.
