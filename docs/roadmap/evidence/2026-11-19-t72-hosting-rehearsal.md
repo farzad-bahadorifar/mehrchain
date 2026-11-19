@@ -7,13 +7,30 @@ reachability and the owner's account eligibility require direct verification.
 [Sandbox plan](https://northflank.com/pricing)
 [GitHub integration](https://northflank.com/docs/v1/application/getting-started/link-your-git-account)
 
+## Staging database and runtime verification
+
+The available non-production Neon endpoint was distinct from both production
+and the retained recovery endpoint. A new empty database and stage-only
+login role were created there. The stage role has no SELECT permission on the
+existing rehearsal user table. The reviewed release chain initialized the
+new database, which holds one synthetic account. Staging credentials are
+stored in a Windows profile-protected local file outside version control.
+
+Using the production NestJS build locally against that database, HTTP tests
+verified readiness, rejection of a wrong password, successful password login,
+protected profile retrieval, and username save and removal. A separate
+read-only production check found all nine expected release migrations and no
+unresolved migration records. GitHub Actions also passed the container login
+and protected-profile smoke on a disposable Postgres instance.
+[Container verification](https://github.com/farzad-bahadorifar/mehrchain/actions/runs/44566693017)
+
 ## Rehearse in isolation
 
 1. Use a Northflank Cloud Developer Sandbox project and a combined service for
    the `T72` branch. Select Dockerfile with build context at the repository root
    and file `/apps/mehrchain-backend/Dockerfile`. Expose HTTP port `3000` and
    set the readiness path to `/api/version`.
-2. Create an isolated, data-free Neon database. For a schema-only branch,
+2. Use an isolated, data-free Neon database. For a schema-only branch,
    check the release migration history before any change. On a genuinely empty
    database apply the reviewed chain with `node scripts/release-migrate.cjs deploy`.
    Use a stage-only
