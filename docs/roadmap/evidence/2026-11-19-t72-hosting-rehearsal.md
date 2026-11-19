@@ -72,9 +72,13 @@ cold-start behavior and measured resource usage before considering a cutover.
 Deplexo documents a no-card, always-on Free container with 128 MB RAM and
 0.25 CPU. The CI trial runs the same Docker image under a 128 MB hard limit
 with a read-only root and no swap. It verifies version, password login, and
-authenticated profile.
-Provider authorization and a live connection to isolated Neon remain pending.
+authenticated profile. The trial passed and reported 55.77 MiB in use after
+the authentication smoke, with the container still running and no OOM kill.
+The official Deplexo MCP OAuth endpoints returned the expected discovery and
+registration responses. Account consent and a live connection to isolated
+Neon remain pending.
 [Deplexo Free plan](https://deplexo.com/free-hosting)
+[CI resource test](https://github.com/farzad-bahadorifar/mehrchain/actions/runs/44588089063/job/135786385094)
 
 ## Staging database and runtime verification
 
