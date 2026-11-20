@@ -1,5 +1,8 @@
 # Change: T08 bounded access waits and foreground refresh
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](../../../docs/production_deployment.md).
+
 ## Why
 
 Resume events overlap across habit, Chain/inbox and Mero reads. Auth requests can

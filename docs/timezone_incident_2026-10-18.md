@@ -1,5 +1,8 @@
 # Live auth timezone investigation — October 18, 2026
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 ## Confirmed finding
 
 The API serving production still exposes the pre-timezone auth contract. The

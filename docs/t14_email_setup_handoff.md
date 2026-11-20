@@ -1,5 +1,8 @@
 # T14 production email setup — October 21, 2026
 
+> The October 21 inspection describes the former host. Configure current production mail settings on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 The authenticated Render environment was inspected during T12. It contains
 DATABASE_URL, GOOGLE_CLIENT_ID, JWT_SECRET, NODE_ENV and NODE_VERSION, with no
 linked environment groups. RESEND_API_KEY and MAIL_FROM are absent. Initially,
@@ -17,7 +20,7 @@ intended public recipients. To finish:
    Resend and publish the provider's SPF/DKIM records. Wait for verification.
    Resend does not supply a free production sending domain; see its
    [domain requirements](https://resend.com/docs/dashboard/domains/introduction).
-2. Store the sending key privately in Render as RESEND_API_KEY and set MAIL_FROM
+2. Store the sending key privately in Deplexo as `RESEND_API_KEY` and set `MAIL_FROM`
    to an address on that verified domain. Do not commit either value or put it
    in frontend configuration.
 3. Deploy the configuration and verify registration/verification and password

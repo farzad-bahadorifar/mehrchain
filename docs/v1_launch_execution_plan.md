@@ -1,5 +1,8 @@
 # V1 launch execution plan — historical English reference
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 Original review: **2026-10-05**, owner-requested deadline **2026-10-06**, Asia/Tehran.
 This is a historical summary, not the current release plan or current provider
 configuration. The original record, including its later notes, is preserved under

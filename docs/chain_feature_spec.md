@@ -10,7 +10,7 @@
 - Invite links stay reusable until their seven-day expiry or owner cancellation. Acceptance creates reciprocal connections without consuming the link; duplicate connections are rejected.
 - A daily heart has `heartSentAt` in UTC. The owner sees support from the reciprocal row as `heartReceived`, separately from their own `heartSent`. Old hearts expire on reads without depending on a running midnight job.
 - Completion activity updates connections whose **partnerCommitmentId** is the completed habit and returns eligible resting/fading connections to ACTIVE.
-- Missed-day state uses elapsed UTC calendar days, so a sleeping Render service does not lose days or count a repeated job twice. The Chain page refreshes while open every 15 seconds.
+- Missed-day reconciliation derives state from elapsed calendar days and tolerates interrupted or repeated background jobs. The Chain page refreshes while open every 15 seconds.
 - Habit streak restarts after a missed UTC day; accumulated habit progress remains independent.
 
 ---

@@ -1,5 +1,8 @@
 # T00 signup contract review handoff
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 Prepared October 17, 2026 (Asia/Tehran). Changes are uncommitted for owner review.
 No build, test, Prisma generation, HTTP probe, database connection, migration,
 deployment, commit or push was performed. **Production acceptance remains pending.**

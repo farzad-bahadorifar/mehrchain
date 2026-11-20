@@ -1,5 +1,8 @@
 # Historical roadmap — English reference for the pre-V2-implementation registry
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 Captured 2026-10-29, Asia/Tehran, before the owner's later V2 implementation
 approval and atomic-task migration. **This is history, not the current queue.**
 Start with [the active roadmap](development_roadmap.md),

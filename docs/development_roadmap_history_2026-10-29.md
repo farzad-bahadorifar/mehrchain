@@ -1,5 +1,8 @@
 # Historical roadmap snapshot — captured 2026-10-29 (Asia/Tehran)
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 This preserves the full pre-cleanup document, including earlier decisions and execution evidence. It is historical evidence, not current task status or authorization. Use [the active roadmap](development_roadmap.md) and [the wireframe contract](ui_ux_discovery_plan.md) for current work. Relative links remain valid because this file stays in docs/.
 
 ---

@@ -1,5 +1,8 @@
 # T08 review handoff
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 Prepared October 20, 2026 (Asia/Tehran). The working tree was clean; T07 already
 existed in local commit `023b42d`. Its push/deployment state was not queried.
 T08 is left uncommitted in Changes for owner review and GitHub synchronization.

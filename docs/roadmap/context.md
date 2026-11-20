@@ -56,8 +56,9 @@ local tests and historical/live operational observations are distinct evidence.
   The practical prerequisite is an owned/controlled domain or subdomain with DNS
   access. A suitable domain supplied later need not be newly purchased.
 - **Source/date:** [T14 email handoff](../t14_email_setup_handoff.md), live observations
-  dated 2026-10-21; owner constraint reaffirmed 2026-10-29. Live settings were not
-  re-inspected in this documentation update. No key/domain/account change or purchase occurred.
+  dated 2026-10-21 and reaffirmed 2026-10-29. The November 19 move to Deplexo
+  carried over the database, JWT and Google settings. Production email delivery
+  remains a separate gate. See the [deployment guide](../production_deployment.md).
 - The test sender described in that handoff is not evidence of delivery to public
   recipients. A console OTP or successful API response does not prove inbox delivery
   and completed code verification.
@@ -103,9 +104,9 @@ local tests and historical/live operational observations are distinct evidence.
   deliberate removal. **T29 alone owns the live diagnosis** and remains Blocked.
 - **Do not repeat:** reimplement username management/migrations, attribute the error
   to a taken name/Resend/database without a real response, or finish T29 using a demo save.
-- **Reopen when:** network access returns or fresh reliable revision/log/response
-  evidence arrives. A bounded check of the unblock condition is allowed; endlessly
-  repeating the same unsuccessful probe is not. Follow T29 to establish one repair target.
+- **Reopen when:** an authorized production test identity is available on the
+  current Deplexo deployment. Follow T29 to verify the actual username write and
+  establish one repair target if it still fails.
 - **2026-11-18 recheck:** no HTTP response was obtained from the Pages version,
   direct Render version, or Render schema endpoint. See the
   [integration evidence](evidence/2026-11-18-main-integration.md#remaining-acceptance).
@@ -113,11 +114,14 @@ local tests and historical/live operational observations are distinct evidence.
   optional-username schema or its migration record. This is a release blocker
   on that target, not proof of the serving revision or actual write failure.
   See [database evidence and rollout](evidence/2026-11-18-rc5-release.md#database-gate--before-pushing-main).
-- **RC5 release execution:** Render's current binding matched the inspected
+- **RC5 release execution:** the former Render binding matched the inspected
   production database. A previous deployment failed the schema readiness check.
   Both pending migrations were subsequently applied and the authenticated
   username route passed on a populated rehearsal copy. This is not evidence of
   a real production-account save. See [rollout evidence](evidence/2026-11-18-rc5-rollout.md).
+- **2026-11-20 update:** Pages and the direct Deplexo API are reachable. The
+  isolated rehearsal passed username save and removal. Live username writes
+  still require a separate authorized check under T29.
 
 ## D-005
 
@@ -158,8 +162,8 @@ local tests and historical/live operational observations are distinct evidence.
 - Code has bounded safe-read retry. Do not automatically replay writes to hide a
   timeout. Preserve short pending states, retained input and honest confirmation.
 - **Source:** [T15 handoff](../t15_access_recovery_handoff.md), historical October 21
-  observations; [recent local checks](evidence/v2-implementation.md). Current provider
-  policy/pricing was not inspected by this documentation update.
+  observations and [local checks](evidence/v2-implementation.md). For the current
+  Pages/Deplexo/Neon path, see the [cutover evidence](evidence/2026-11-19-t72-hosting-rehearsal.md#production-cutover-result).
 - **Do not repeat:** attribute every 404 to cold start, promise a fixed wake-up
   duration or replay POST/PATCH/DELETE to make an action appear successful.
 - **Reopen when:** measurements on a specified route/network/revision prove a new

@@ -1,5 +1,8 @@
 # V1 testing and release handoff — historical English reference
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 Original last entry: **2026-10-06**, Asia/Tehran. "Tomorrow" in that source meant
 October 7. This reference preserves the historical findings, not current deployment
 readiness. Exact original text is retained as `docs/v1_test_and_release_handoff.md`

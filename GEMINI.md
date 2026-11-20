@@ -93,15 +93,21 @@ docs/short-description
 | `DATABASE_URL` | PostgreSQL connection (Neon) | — |
 | `JWT_SECRET` | JWT signing key | — |
 | `PORT` | Backend HTTP port | `3000` |
-| `RESEND_API_KEY` | Resend email API key (optional) | Console fallback |
+| `GOOGLE_CLIENT_ID` | Deployed Google token audience | — |
+| `BACKEND_PROXY_SECRET` | Shared production proof for Deplexo and Cloudflare Pages | — |
+| `BACKEND_ORIGIN` | Cloudflare Pages origin for `/api/*` | Set in production Pages |
+| `RESEND_API_KEY` | Resend email API key for production OTP | Required for email delivery |
 | `MAIL_FROM` | Sender email address | `MehrChain <onboarding@resend.dev>` |
 
 | Platform | Service | Config File |
 |----------|---------|-------------|
 | Frontend | Cloudflare Pages | — (auto-deploy from `main`) |
-| Backend | Render | `render.yaml` |
-| Database | Neon PostgreSQL | `prisma/schema.prisma` |
+| Backend | Deplexo | Root `Dockerfile` and dashboard runtime variables |
+| Database | Neon PostgreSQL | `apps/mehrchain-backend/prisma/schema.prisma` |
 | Android | Capacitor + GitHub Actions | `capacitor.config.ts`, `.github/workflows/build-apk.yml` |
+
+See the [production deployment guide](docs/production_deployment.md) for the
+current settings and verification steps.
 
 ---
 

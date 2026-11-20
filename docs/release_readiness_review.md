@@ -1,5 +1,8 @@
 # Review of roadmap issues #47–#54
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 October 5, 2026. All implementation changes are local and uncommitted for owner review. No push, deployment, production schema mutation or tester contact was performed.
 
 ## Outcome by issue

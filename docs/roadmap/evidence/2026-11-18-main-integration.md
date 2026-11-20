@@ -1,5 +1,8 @@
 # Main integration verification — 2026-11-18
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](../../production_deployment.md).
+
 Integrated feature tip `a11b26b` with main baseline `2947e41`. Both histories
 are preserved. The four roadmap conflicts were resolved from the union registry,
 then generated views were refreshed. T57 retains its main-branch Mero meaning;

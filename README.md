@@ -107,7 +107,7 @@ mehrchain/                               # Nx 22.5 Monorepo
     
 - **Database & ORM:** PostgreSQL (Neon Serverless) with Prisma ORM
     
-- **Authentication:** Google OAuth token verification, Passport JWT (30-day expiry), bcryptjs, Resend SMTP with OTP
+- **Authentication:** Google OAuth token verification, Passport JWT (30-day expiry), bcryptjs, and Resend for OTP. Production mail delivery has a [separate verification gate](docs/roadmap/context.md#d-002).
     
 - **Error Handling:** Global `AllExceptionsFilter` with normalized API error payloads
     
@@ -116,9 +116,18 @@ mehrchain/                               # Nx 22.5 Monorepo
 - **Testing:** Jest for backend checks.
     
 
+### Production hosting
+
+Cloudflare Pages serves [MehrChain](https://mehrchain.pages.dev) and proxies
+`/api/*` to the backend on **Deplexo**, which uses Neon PostgreSQL. The web app,
+PWA, and Android APK use the same public API address.
+
+See the [production deployment guide](docs/production_deployment.md) for the
+Docker build, runtime settings, and deployment checks.
+
 ## 🗺️ Roadmap & Active Workstreams
 
-Instead of vague milestones, MehrChain tracks every change as an atomic, verifiable task card in the [**Active Roadmap**](https://gemini.google.com/app/docs/development_roadmap.md "null").
+Instead of vague milestones, MehrChain tracks every change as an atomic, verifiable task card in the [**Active Roadmap**](docs/development_roadmap.md).
 
 |   |   |   |
 |---|---|---|
@@ -132,7 +141,7 @@ Instead of vague milestones, MehrChain tracks every change as an atomic, verifia
 
 ## 📚 Technical Documentation
 
-- 📐 [**Development Roadmap**](https://gemini.google.com/app/docs/development_roadmap.md "null") — Current task registry (`T29`–`T53`), review gates, release dependencies, and linked historical evidence.
+- 📐 [**Development Roadmap**](docs/development_roadmap.md) — Current task registry, review gates, release dependencies, and linked historical evidence.
     
 - 🧭 [**Decisions & Known Constraints**](https://gemini.google.com/app/docs/roadmap/context.md "null") — Dated reasons (`D-001` to `D-011`), known blockers, work not to repeat, and explicit reopening conditions.
     

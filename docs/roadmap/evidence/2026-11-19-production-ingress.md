@@ -1,5 +1,8 @@
 # Production API ingress and Android signing follow-up
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](../../production_deployment.md).
+
 ## Live reproduction
 
 On November 19, 2026, at 02:35 UTC, one sign-in attempt with a synthetic

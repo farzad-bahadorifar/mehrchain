@@ -32,7 +32,7 @@ Re-run R7 after each deployed blocker fix. Include at least one mobile browser a
 
 ## Results template
 
-For the initial Iran test, use the PWA and Google sign-in. Without a verified domain, Resend cannot deliver to arbitrary testers. APK Google sign-in remains unverified. Record VPN on/off and whether the failure concerns Pages, Render, or Google, without collecting IP addresses or credentials. Keep the network stable during sign-in. A free Render cold start can take 50 seconds or more; do not repeatedly tap Spark while waiting. Check access on participants' actual networks; access is not guaranteed for every ISP.
+For the initial Iran test, use the PWA and Google sign-in. Without a verified domain, Resend cannot deliver to arbitrary testers. APK Google sign-in remains unverified. Record VPN on/off and whether the failure concerns Pages, Deplexo, or Google. Keep the network stable during sign-in. Wait for Spark to settle before tapping it again. Check access on participants' actual networks and collect no IP addresses or credentials.
 
 | Participant alias | Wave | Device/browser | Auth route | Step | Result | Exact error / reproduction | Fresh read/reload evidence | Severity | Fix revision / retest |
 | ----------------- | ---- | -------------- | ---------- | ---- | ------ | -------------------------- | -------------------------- | -------- | --------------------- |

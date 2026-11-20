@@ -1,5 +1,8 @@
 # T72 alternative backend rehearsal
 
+> Production now runs on Deplexo. This record traces the earlier provider checks and the verified cutover.
+> See the [current deployment guide](../../production_deployment.md).
+
 Northflank Sandbox was the first candidate. The owner's CLI authorization screen
 required a card. Northflank's billing documentation also requires a payment
 method to create resources on any plan. No service was created.
@@ -195,6 +198,11 @@ present. The public Android update feed returned 1.0.0, version code 7, for
 
 The Render service configuration remains available for rollback. The previous
 successful Pages deployment without the override is
-`7ef24bb0-73d9-4161-bbf7-841f6f13e6af`. Successful sign-in and data retrieval
-with an existing real production account await owner confirmation. The synthetic
-registration probe did not send email.
+`7ef24bb0-73d9-4161-bbf7-841f6f13e6af`. The synthetic registration probe did not
+send email.
+
+## Owner sign-in confirmation
+
+On November 20, 2026, the owner confirmed that production sign-in worked after
+the Deplexo cutover. The operator's public wrong-password probe returned JSON
+HTTP 401. The separate production inbox delivery gate remains in D-002.

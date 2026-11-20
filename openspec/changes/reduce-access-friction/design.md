@@ -1,5 +1,8 @@
 ## Decisions
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](../../../docs/production_deployment.md).
+
 - One foreground event source coalesces focus/pageshow/visibility/online bursts
   for 200 ms. Existing per-session habit, Chain and inbox pending reads remain;
   Mero gains its own shared read promise. Requests for distinct resources remain

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-19",
+  "updated": "2026-11-20",
   "lastId": 73,
   "tasks": [
     {
@@ -538,10 +538,10 @@
       "inputs": [
         "docs/roadmap/evidence/username-route-probe.md",
         "auth.controller.ts and AuthService.updateUsername",
-        "Production Pages and Render /api/version, API schema; old error Cannot PATCH"
+        "Production Pages and Deplexo /api/version, API schema, and the previously reported Cannot PATCH error"
       ],
       "steps": [
-        "Wait for direct/proxy network access",
+        "Confirm current Deplexo and Pages reachability before authenticated reproduction",
         "Record sanitized method/path/status and frontend/backend revision",
         "Reproduce availability separately from save with authorized identity if necessary",
         "Identify exact mismatch or response cause; create one narrowly scoped repair task only for that confirmed cause"
@@ -565,7 +565,7 @@
         }
       ],
       "verify": [
-        "Compare /api/version and schema on direct Render and Pages",
+        "Compare the version and schema on direct Deplexo and Pages",
         "Record test-account save result only when authorized identity is available"
       ],
       "dependsOn": [],
@@ -619,7 +619,7 @@
         "D-004",
         "D-007"
       ],
-      "blockedReason": "Direct and proxy now match and expose the username API. An authorized disposable production account is still required to verify the actual write and final failure disposition. Rehearsal is not a production-account save."
+      "blockedReason": "Deplexo and Pages are reachable. An authorized disposable production account is still required to verify the actual username write and final failure disposition."
     },
     {
       "id": "T30",
@@ -4853,9 +4853,9 @@
       "type": "verification",
       "area": "release-database",
       "priority": "P1",
-      "goal": "The current Render production target passes a fresh recovery rehearsal and the reviewed release migrations before new application code is deployed.",
+      "goal": "The production database used during RC5 passes a fresh recovery rehearsal and the reviewed release migrations before the RC5 application code is deployed.",
       "scope": [
-        "Verify the current Render target, capture recovery point, rehearse and confirm only expected pending migrations"
+        "Verify the RC5 database target, capture its recovery point, rehearse and confirm only expected pending migrations"
       ],
       "outOfScope": [
         "Push new application code before the database gate",
@@ -4871,7 +4871,7 @@
         "D-006"
       ],
       "steps": [
-        "Identify Render's current database privately and create a fresh recoverable Neon snapshot.",
+        "Identify the database serving RC5 privately and create a fresh recoverable Neon snapshot.",
         "Rehearse both pending migrations on an isolated populated copy.",
         "Confirm schema and migration history on the target after the reviewed deploy."
       ],
@@ -5101,7 +5101,7 @@
       "priority": "P1",
       "goal": "Authentication requests that share an ingress are limited fairly without disabling brute-force protection or replaying writes.",
       "scope": [
-        "Render authentication trackers and shared-worker budgets",
+        "Ingress authentication trackers and shared-worker budgets",
         "Actionable rate-limit feedback for sign-in and signup"
       ],
       "outOfScope": [
@@ -5277,7 +5277,7 @@
         "D-007"
       ],
       "steps": [
-        "Record the Render edge recurrence and rehearse the replacement with an isolated Neon database.",
+        "Record the former host's edge recurrence and rehearse Deplexo with an isolated Neon database.",
         "Verify the replacement directly and through Cloudflare Pages before assigning the production origin.",
         "Use the existing production database and session configuration, then verify authorized sign-in and the expected registration response through Pages."
       ],
@@ -5291,7 +5291,8 @@
         {
           "id": "A2",
           "text": "A single invalid login returns the application 401 and an authorized login succeeds through Pages.",
-          "state": "pending"
+          "state": "pass",
+          "evidence": "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#owner-sign-in-confirmation"
         },
         {
           "id": "A3",
@@ -5306,11 +5307,12 @@
       "dependsOn": [],
       "issue": null,
       "id": "T72",
-      "status": "Blocked",
+      "status": "Done",
       "evidence": [
         "docs/roadmap/evidence/2026-11-19-production-ingress.md#live-reproduction",
         "docs/roadmap/evidence/2026-11-19-production-ingress.md#render-support-handoff",
-        "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#deplexo-live-rehearsal"
+        "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#deplexo-live-rehearsal",
+        "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#owner-sign-in-confirmation"
       ],
       "history": [
         {
@@ -5352,9 +5354,18 @@
           "date": "2026-11-19",
           "event": "Verified A3",
           "evidence": "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#production-cutover-result"
+        },
+        {
+          "date": "2026-11-20",
+          "event": "Verified A2",
+          "evidence": "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#owner-sign-in-confirmation"
+        },
+        {
+          "date": "2026-11-20",
+          "event": "Done",
+          "evidence": "docs/roadmap/evidence/2026-11-19-t72-hosting-rehearsal.md#owner-sign-in-confirmation"
         }
-      ],
-      "blockedReason": "Production Pages now reaches the Deplexo backend with the existing database and session configuration. A successful sign-in using an authorized existing production account remains to be confirmed."
+      ]
     },
     {
       "title": "Publish the separate signed Android 1.0.0 baseline",

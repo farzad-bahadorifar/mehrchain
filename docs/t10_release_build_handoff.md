@@ -1,5 +1,8 @@
 # T10 — Repair backend shared-module resolution
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 Priority **P0**: release blocker, ahead of T08 measurements and T09 deployed
 acceptance. Registered in the roadmap before editing configuration on October 20,
 2026 (Asia/Tehran). No GitHub issue has been created; the owner handles sync.

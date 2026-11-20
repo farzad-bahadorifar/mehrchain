@@ -1,5 +1,8 @@
 # MehrChain — Technical Audit Scorecard
 
+> This audit describes the September 2026 baseline. Cloudflare Pages and Deplexo now serve production.
+> See the [current deployment guide](production_deployment.md).
+
 > **Audit Date:** September 2026  
 > **Project Version:** v0.9.0-preview  
 > **Overall Grade: B (Solid Foundation with Clear Growth Path)**

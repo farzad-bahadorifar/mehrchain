@@ -1,5 +1,8 @@
 # T29 — live username route probe
 
+> These October 29 probes describe the former host. Follow T29 for the current production username check on Deplexo.
+> See the [current deployment guide](../../production_deployment.md).
+
 Date: 2026-10-29, Asia/Tehran. All requests below were read-only and unauthenticated.
 
 | Endpoint | Result |

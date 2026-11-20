@@ -336,16 +336,16 @@ sequenceDiagram
 graph LR
     subgraph CI["GitHub Actions"]
         Build["Build + Test"]
-        APK["Android APK (Debug)"]
+        APK["Signed Android APK"]
         Release["GitHub Release"]
     end
 
     subgraph Frontend["Frontend Hosting"]
-        Cloudflare["Cloudflare Pages (SPA)"]
+        Cloudflare["Cloudflare Pages (SPA and API proxy)"]
     end
 
     subgraph Backend["Backend Hosting"]
-        Render["Render (Node.js)"]
+        Deplexo["Deplexo (NestJS Docker container)"]
     end
 
     subgraph Data["Database"]
@@ -355,17 +355,22 @@ graph LR
     Build --> APK
     APK --> Release
     Build --> Cloudflare
-    Build --> Render
-    Render --> Neon
+    Build --> Deplexo
+    APK -->|HTTPS API| Cloudflare
+    Cloudflare -->|/api/*| Deplexo
+    Deplexo --> Neon
 ```
 
 | Component | Platform | Tier | Status |
 |-----------|----------|------|--------|
 | Frontend | Cloudflare Pages | Free | ✅ Fully Deployed (Live) |
-| Backend | Render | Free | ✅ Fully Deployed (Live) |
+| Backend | Deplexo | Free | ✅ Live |
 | Database | Neon | Serverless | Configured |
 | Android APK | GitHub Actions | Free | ✅ Working CI/CD pipeline |
 | iOS | — | — | Config only, not built |
+
+See the [production deployment guide](production_deployment.md) for the active
+origin and runtime settings.
 
 ---
 

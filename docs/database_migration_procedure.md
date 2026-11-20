@@ -2,6 +2,10 @@
 
 Updated October 5, 2026 for #47 and #52. No production schema was changed in this work session.
 
+**Current hosting:** Deplexo runs the backend against the same production Neon
+database after the November 19 cutover. Follow the
+[production deployment guide](production_deployment.md) for runtime and routing.
+
 ## October 6 release execution
 
 The actual Render target was privately matched to `mehrchain-db` production in Neon. It was empty (no public tables), unlike the older local `.env` target described below. A pre-change Neon snapshot and a private JSON backup were captured. The empty-database baseline and the new `20261006000000_daily_chain_hearts` migration were rehearsed on a disposable branch, including a second deploy and zero-drift verification. Production was then initialized with this chain; repeat deploy and schema diff both succeeded. The snapshot remains unchanged; a temporary child was connected and verified to reproduce the original empty state. This is an empty-database recovery exercise, not evidence of restoring a populated database or switching a live backend during an outage.
@@ -10,7 +14,7 @@ For a **populated legacy target**, the October 5 procedure below must also accou
 
 ## Verified state (read-only)
 
-The database referenced by the local `.env` contains users (4), commitments (8), commitment_logs (13), chain_connections (0), chain_invites (0), and `_prisma_migrations`. All eight existing ownership foreign keys cascade. This confirms this connection's schema, not that Render currently uses the same database.
+The October 5 database referenced by the local `.env` contained users (4), commitments (8), commitment_logs (13), chain_connections (0), chain_invites (0), and `_prisma_migrations`. All eight existing ownership foreign keys cascaded. Privately verify the database configured in Deplexo before applying any migration.
 
 `prisma migrate diff` against the current canonical schema found exactly:
 
@@ -112,7 +116,7 @@ The old chain is not replayable: the first two migrations create then drop the o
 
 ## Existing database: exact operator steps
 
-1. Privately compare Render's DATABASE_URL target with the database audited above. Export the **direct** Neon branch connection as DATABASE_URL in the operator shell. Never print or commit the URL. Install dependencies with `npm ci --legacy-peer-deps`.
+1. Privately identify the target from Deplexo's `DATABASE_URL` and any current database audit. Export the **direct** Neon connection for that branch as `DATABASE_URL` in the operator shell. Keep the URL out of logs and source control. Install dependencies with `npm ci --legacy-peer-deps`.
 2. Create a Neon recovery branch/snapshot in the console and record its identifier/time privately. Run `node scripts/safe-migrate.js` for a consistent read-only data export to ignored `docs/backups/`. The JSON contains personal data and password hashes; keep it private. A JSON export supplements a restorable Neon snapshot; it is not a complete schema restore.
 3. Capture before-counts, inspect the SQL below and check accepted IDs for orphans. Current invites are empty; recheck at execution time. If orphan IDs exist, stop and agree on recovery instead of deleting them automatically.
 4. Apply only the reviewed additive patch, **not** the full CREATE baseline:
@@ -140,7 +144,7 @@ The old chain is not replayable: the first two migrations create then drop the o
 
    The wrapper also checks zero schema drift before resolving. Do not delete or manually rewrite the legacy history row. The new release chain is explicitly baselined under a different name; keep the old checksum discrepancy in the audit record. A second deploy should report no pending migrations and preserve all rows.
 
-7. Generate Prisma Client, build, then deploy the backend. Render's build runs generation/build without destructive db push. Apply schema migrations explicitly before deployment; Render free-plan startup is not a migration runner.
+7. Apply and verify the reviewed migrations explicitly before deploying. The Deplexo Docker build generates Prisma Client and builds the application. Container startup checks schema readiness.
 
 ## Empty disposable database
 

@@ -1,5 +1,8 @@
 # T18 / T19 implementation and acceptance handoff
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 Date: 2026-10-23 (Asia/Tehran). Base: upstream `main`, `c1301b5`.
 Branch: `codex/t18-t19-updates-mobile`.
 

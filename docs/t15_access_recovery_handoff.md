@@ -1,5 +1,8 @@
 # T15 bounded gateway recovery — October 21, 2026
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 API GET/HEAD requests now retry one transient 502/503/504/524 response after one
 second, using the remaining 90-second request budget. Writes retain a single
 attempt and explicit refresh-before-retry guidance. Unsubscribing cancels a pending

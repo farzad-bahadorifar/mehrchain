@@ -1,5 +1,8 @@
 # T12 release execution — October 21, 2026
 
+> This historical record describes the former hosting setup. Production now runs on Deplexo.
+> See the [current deployment guide](production_deployment.md).
+
 ## Verified production correction
 
 Render's latest failed deployment of `c8d193d89b264d8a7bab30b042a4ef10b49bf57c`
